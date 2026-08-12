@@ -1,5 +1,7 @@
+import csv
 import os
 import time
+from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
@@ -7,6 +9,34 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
+
+CSV_KEYS = [
+    "name",
+    "nameWithOwner",
+    "stargazerCount",
+    "createdAt",
+    "updatedAt",
+    "primaryLanguage",
+    "mergedPullRequestsCount",
+    "releasesCount",
+    "openIssuesCount",
+    "closedIssuesCount",
+]
+
+CSV_HEADER_PT = [
+    "nome",
+    "repositorio",
+    "estrelas",
+    "criado_em",
+    "atualizado_em",
+    "linguagem",
+    "prs_mergeadas",
+    "releases",
+    "issues_abertas",
+    "issues_fechadas",
+]
+
+DEFAULT_CSV_PATH = Path(__file__).resolve().parent.parent / "dados" / "repositorios.csv"
 
 _SEARCH_REPOS_QUERY = """
 query($first: Int!, $after: String) {
@@ -58,7 +88,7 @@ def get_github_token() -> str:
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
         raise RuntimeError(
-            "GITHUB_TOKEN não está definida. Configure um .env a partir de .env.example."
+            "GITHUB_TOKEN não está definida. Configure um .env"
         )
     return token
 
@@ -141,19 +171,15 @@ def fetch_top_repositories(count: int = 100, token: str | None = None) -> list[d
     return repositories
 
 
-# TODO implementar save_to_csv(repositories: list[dict], path: str) -> None
-# usando apenas a stdlib (módulo csv — sem pandas ou bibliotecas externas).
-#
-# Entrada: lista de dicts retornada por fetch_top_repositories(), cada um com as chaves:
-#   name, nameWithOwner, stargazerCount, createdAt, updatedAt, primaryLanguage,
-#   mergedPullRequestsCount, releasesCount, openIssuesCount, closedIssuesCount
-#
-# Saída esperada: arquivo CSV com cabeçalho na primeira linha e uma linha por repositório,
-# separador vírgula, encoding UTF-8. Exemplo de uso:
-#   repos = fetch_top_repositories(count=100)
-#   save_to_csv(repos, "data/repositorios.csv")
-#
-# Observação: primaryLanguage pode ser None; gravar string vazia nesses casos.
+def save_to_csv(repositories: list[dict], path: str) -> None:
+    os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(CSV_HEADER_PT)
+        for repo in repositories:
+            writer.writerow(
+                [repo[key] if repo[key] is not None else "" for key in CSV_KEYS]
+            )
 
 
 if __name__ == "__main__":
@@ -169,6 +195,9 @@ if __name__ == "__main__":
         repos = fetch_top_repositories(count=100)
 
     console.print(f"[bold green]✓[/bold green] [bold]{len(repos)}[/bold] repositórios coletados\n")
+
+    save_to_csv(repos, str(DEFAULT_CSV_PATH))
+    console.print(f"[bold green]✓[/bold green] CSV salvo em [cyan]{DEFAULT_CSV_PATH}[/cyan]\n")
 
     table = Table(title="Top 100 Repositórios GitHub por Estrelas", show_lines=True)
     table.add_column("#", style="dim", width=4, justify="right")
