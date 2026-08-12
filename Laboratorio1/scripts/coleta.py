@@ -10,22 +10,9 @@ load_dotenv()
 
 GITHUB_GRAPHQL_URL = "https://api.github.com/graphql"
 
-CSV_KEYS = [
-    "name",
-    "nameWithOwner",
-    "stargazerCount",
-    "createdAt",
-    "updatedAt",
-    "primaryLanguage",
-    "mergedPullRequestsCount",
-    "releasesCount",
-    "openIssuesCount",
-    "closedIssuesCount",
-]
-
 CSV_HEADER_PT = [
-    "nome",
-    "repositorio",
+    "autor",
+    "nome_repositorio",
     "estrelas",
     "criado_em",
     "atualizado_em",
@@ -177,9 +164,19 @@ def save_to_csv(repositories: list[dict], path: str) -> None:
         writer = csv.writer(f)
         writer.writerow(CSV_HEADER_PT)
         for repo in repositories:
-            writer.writerow(
-                [repo[key] if repo[key] is not None else "" for key in CSV_KEYS]
-            )
+            owner, _, name = repo["nameWithOwner"].partition("/")
+            writer.writerow([
+                owner,
+                name,
+                repo["stargazerCount"],
+                repo["createdAt"],
+                repo["updatedAt"],
+                repo["primaryLanguage"] or "",
+                repo["mergedPullRequestsCount"],
+                repo["releasesCount"],
+                repo["openIssuesCount"],
+                repo["closedIssuesCount"],
+            ])
 
 
 if __name__ == "__main__":
