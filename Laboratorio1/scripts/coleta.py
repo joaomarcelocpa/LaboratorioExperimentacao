@@ -141,7 +141,7 @@ def fetch_top_repositories(count: int = 100, token: str | None = None) -> list[d
     return repositories
 
 
-# TODO (Lab01S01 - João): implementar save_to_csv(repositories: list[dict], path: str) -> None
+# TODO implementar save_to_csv(repositories: list[dict], path: str) -> None
 # usando apenas a stdlib (módulo csv — sem pandas ou bibliotecas externas).
 #
 # Entrada: lista de dicts retornada por fetch_top_repositories(), cada um com as chaves:
