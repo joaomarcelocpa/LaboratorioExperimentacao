@@ -1,3 +1,4 @@
+import concurrent.futures
 import csv
 import os
 import time
@@ -54,6 +55,7 @@ query($first: Int!, $after: String) {
 """
 
 _STATS_BATCH_SIZE = 10
+_STATS_MAX_WORKERS = 3
 
 
 def _build_stats_query(name_with_owners: list[str]) -> str:
@@ -88,7 +90,7 @@ def run_graphql_query(query: str, variables: dict, token: str | None = None) -> 
             headers={"Authorization": f"Bearer {token}"},
             json={"query": query, "variables": variables},
         )
-        if response.status_code in (502, 503):
+        if response.status_code in (502, 503, 504):
             time.sleep(2 ** attempt)
             continue
         break
@@ -143,11 +145,20 @@ def fetch_top_repositories(count: int = 100, token: str | None = None) -> list[d
             break
         after = search["pageInfo"]["endCursor"]
 
-    for i in range(0, len(repositories), _STATS_BATCH_SIZE):
-        batch = repositories[i : i + _STATS_BATCH_SIZE]
-        query = _build_stats_query([r["nameWithOwner"] for r in batch])
-        stats_data = run_graphql_query(query, {}, token=token)
+    resolved_token = token or get_github_token()
+    batches = [
+        repositories[i : i + _STATS_BATCH_SIZE]
+        for i in range(0, len(repositories), _STATS_BATCH_SIZE)
+    ]
 
+    def _fetch_batch_stats(batch: list[dict]) -> dict:
+        query = _build_stats_query([r["nameWithOwner"] for r in batch])
+        return run_graphql_query(query, {}, token=resolved_token)
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=_STATS_MAX_WORKERS) as executor:
+        batch_results = list(executor.map(_fetch_batch_stats, batches))
+
+    for batch, stats_data in zip(batches, batch_results):
         for j, repo in enumerate(batch):
             stats = stats_data[f"r{j}"]
             repo["mergedPullRequestsCount"] = stats["mergedPullRequests"]["totalCount"]
@@ -188,15 +199,15 @@ if __name__ == "__main__":
     login = check_connection()
     console.print(f"[bold green]✓[/bold green] Conectado como [cyan bold]{login}[/cyan bold]\n")
 
-    with console.status("[bold yellow]Coletando 100 repositórios mais populares do GitHub...[/bold yellow]"):
-        repos = fetch_top_repositories(count=100)
+    with console.status("[bold yellow]Coletando 1000 repositórios mais populares do GitHub...[/bold yellow]"):
+        repos = fetch_top_repositories(count=1000)
 
     console.print(f"[bold green]✓[/bold green] [bold]{len(repos)}[/bold] repositórios coletados\n")
 
     save_to_csv(repos, str(DEFAULT_CSV_PATH))
     console.print(f"[bold green]✓[/bold green] CSV salvo em [cyan]{DEFAULT_CSV_PATH}[/cyan]\n")
 
-    table = Table(title="Top 100 Repositórios GitHub por Estrelas", show_lines=True)
+    table = Table(title="Top 1000 Repositórios GitHub por Estrelas", show_lines=True)
     table.add_column("#", style="dim", width=4, justify="right")
     table.add_column("Repositório", min_width=35)
     table.add_column("⭐ Estrelas", justify="right", style="yellow")
