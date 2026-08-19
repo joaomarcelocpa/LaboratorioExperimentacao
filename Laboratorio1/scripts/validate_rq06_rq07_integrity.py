@@ -19,6 +19,7 @@ muda por motivos alheios a código, como estrelas). Até a coleta expor
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 from pathlib import Path
@@ -31,6 +32,10 @@ DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "reposit
 DEFAULT_JSON_OUTPUT_PATH = (
     Path(__file__).resolve().parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.json"
 )
+DEFAULT_CSV_OUTPUT_PATH = (
+    Path(__file__).resolve().parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.csv"
+)
+CSV_HEADER = ["item", "tipo_check", "qtd_nulos", "qtd_violacoes", "status"]
 EXPECTED_ROWS = 1000
 
 # Nomes reais das colunas no CSV gerado por coleta.py (dados/repositorios.csv).
@@ -215,6 +220,92 @@ def imprimir_relatorio(relatorio: dict[str, Any]) -> None:
     print(f"\nStatus final: {relatorio['status']}")
 
 
+def montar_relatorio_csv(relatorio: dict[str, Any]) -> list[dict[str, Any]]:
+    """Achata o relatório em linhas tabulares (item, tipo_check, qtd_nulos, qtd_violacoes, status)."""
+    violacoes_por_coluna: dict[str, int] = {}
+    for erro in relatorio["schema_erros"]:
+        coluna = erro.get("column")
+        violacoes_por_coluna[coluna] = violacoes_por_coluna.get(coluna, 0) + 1
+
+    linhas: list[dict[str, Any]] = []
+    for coluna in SCOPE_COLS:
+        nulos = relatorio["nulos_por_coluna"].get(coluna, 0)
+        violacoes = violacoes_por_coluna.get(coluna, 0)
+        obrigatoria = coluna in REQUIRED_NON_NULL
+        status = "FALHA" if (violacoes > 0 or (obrigatoria and nulos > 0)) else "OK"
+        linhas.append({
+            "item": coluna,
+            "tipo_check": "completude/domínio",
+            "qtd_nulos": nulos,
+            "qtd_violacoes": violacoes,
+            "status": status,
+        })
+
+    qtd_duplicatas = violacoes_por_coluna.get(REPO_KEY_COL, 0)
+    linhas.append({
+        "item": "unicidade (autor/nome_repositorio)",
+        "tipo_check": "unicidade",
+        "qtd_nulos": "",
+        "qtd_violacoes": qtd_duplicatas,
+        "status": "FALHA" if qtd_duplicatas > 0 else "OK",
+    })
+
+    qtd_invariante = violacoes_por_coluna.get(TOTAL_ISSUES_COL, 0)
+    linhas.append({
+        "item": "issues_fechadas <= issues_abertas + issues_fechadas",
+        "tipo_check": "domínio",
+        "qtd_nulos": "",
+        "qtd_violacoes": qtd_invariante,
+        "status": "FALHA" if qtd_invariante > 0 else "OK",
+    })
+
+    qtd_invalido = len(relatorio["pushed_at_invalido"])
+    linhas.append({
+        "item": "atualizado_em parseável",
+        "tipo_check": "domínio",
+        "qtd_nulos": "",
+        "qtd_violacoes": qtd_invalido,
+        "status": "FALHA" if qtd_invalido > 0 else "OK",
+    })
+
+    qtd_futuro = len(relatorio["pushed_at_futuro"])
+    linhas.append({
+        "item": "atualizado_em não está no futuro",
+        "tipo_check": "domínio",
+        "qtd_nulos": "",
+        "qtd_violacoes": qtd_futuro,
+        "status": "FALHA" if qtd_futuro > 0 else "OK",
+    })
+
+    linhas.append({
+        "item": f"volume ({relatorio['arquivo_linhas']}/{relatorio['linhas_esperadas']} linhas)",
+        "tipo_check": "volume",
+        "qtd_nulos": "",
+        "qtd_violacoes": 0 if relatorio["volume_ok"] else 1,
+        "status": "OK" if relatorio["volume_ok"] else "FALHA",
+    })
+
+    linhas.append({
+        "item": "STATUS_GERAL",
+        "tipo_check": "",
+        "qtd_nulos": "",
+        "qtd_violacoes": "",
+        "status": relatorio["status"],
+    })
+
+    return linhas
+
+
+def escrever_relatorio_csv(relatorio: dict[str, Any], caminho: Path) -> None:
+    """Grava o relatório achatado (`montar_relatorio_csv`) em `caminho`, no formato CSV usado pelos demais validadores."""
+    linhas = montar_relatorio_csv(relatorio)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    with open(caminho, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_HEADER)
+        writer.writeheader()
+        writer.writerows(linhas)
+
+
 def validar_arquivo(caminho: Path, *, strict: bool = False) -> dict[str, Any]:
     """Lê o CSV em `caminho` e roda o relatório de integridade sobre ele."""
     try:
@@ -238,16 +329,21 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT_PATH, help="Caminho do CSV de entrada")
     parser.add_argument("--json", type=Path, default=DEFAULT_JSON_OUTPUT_PATH, help="Caminho para salvar o relatório em JSON")
+    parser.add_argument("--csv", type=Path, default=DEFAULT_CSV_OUTPUT_PATH, help="Caminho para salvar o relatório em CSV")
     parser.add_argument("--strict", action="store_true", help="Trata número de linhas != 1000 como erro")
     args = parser.parse_args(argv)
 
     relatorio = validar_arquivo(args.input, strict=args.strict)
     imprimir_relatorio(relatorio)
 
+    if args.csv:
+        escrever_relatorio_csv(relatorio, args.csv)
+        print(f"Relatório (CSV) salvo em {args.csv}")
+
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         args.json.write_text(json.dumps(relatorio, indent=2, ensure_ascii=False), encoding="utf-8")
-        print(f"\nRelatório salvo em {args.json}")
+        print(f"Relatório (JSON) salvo em {args.json}")
 
     return 0 if relatorio["status"] == "OK" else 1
 

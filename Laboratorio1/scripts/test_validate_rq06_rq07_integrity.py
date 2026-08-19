@@ -2,7 +2,7 @@
 import pandas as pd
 import pytest
 
-from validate_rq06_rq07_integrity import COLS, gerar_relatorio
+from validate_rq06_rq07_integrity import COLS, gerar_relatorio, montar_relatorio_csv
 
 C = COLS
 
@@ -62,3 +62,18 @@ def test_atualizado_em_no_futuro_falha():
 
     assert relatorio["status"] == "FALHA"
     assert len(relatorio["pushed_at_futuro"]) == 1
+
+
+def test_relatorio_csv_inclui_status_geral_e_nulos_por_coluna():
+    df = pd.DataFrame([
+        _linha_valida(),
+        _linha_valida(**{C["nome_repositorio"]: "other", C["linguagem"]: None}),
+    ])
+
+    relatorio = gerar_relatorio(df)
+    linhas = montar_relatorio_csv(relatorio)
+    por_item = {linha["item"]: linha for linha in linhas}
+
+    assert por_item["STATUS_GERAL"]["status"] == relatorio["status"]
+    assert por_item[C["linguagem"]]["qtd_nulos"] == 1
+    assert por_item[C["linguagem"]]["status"] == "OK"

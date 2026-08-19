@@ -1,0 +1,15 @@
+item,tipo_check,qtd_nulos,qtd_violacoes,status
+autor,completude/domínio,0,0,OK
+nome_repositorio,completude/domínio,0,0,OK
+issues_abertas,completude/domínio,0,0,OK
+issues_fechadas,completude/domínio,0,0,OK
+prs_mergeadas,completude/domínio,0,0,OK
+releases,completude/domínio,0,0,OK
+atualizado_em,completude/domínio,0,0,OK
+linguagem,completude/domínio,87,0,OK
+unicidade (autor/nome_repositorio),unicidade,,0,OK
+issues_fechadas <= issues_abertas + issues_fechadas,domínio,,0,OK
+atualizado_em parseável,domínio,,0,OK
+atualizado_em não está no futuro,domínio,,0,OK
+volume (1000/1000 linhas),volume,,0,OK
+STATUS_GERAL,,,,OK
