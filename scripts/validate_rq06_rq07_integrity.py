@@ -16,7 +16,7 @@ from typing import Any
 import pandas as pd
 import pandera.pandas as pa
 
-DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "data" / "repos_raw.csv"
+DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "miguel" / "repos_raw.csv"
 EXPECTED_ROWS = 1000
 
 # Mapeia nomes lógicos para os nomes reais das colunas no CSV coletado via GraphQL.
