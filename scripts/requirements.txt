@@ -1,3 +1,0 @@
-pandas
-pandera
-pytest

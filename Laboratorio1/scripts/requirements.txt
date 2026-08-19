@@ -2,3 +2,5 @@ requests
 python-dotenv
 pytest
 rich
+pandas
+pandera
