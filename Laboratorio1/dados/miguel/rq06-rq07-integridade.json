@@ -1,0 +1,20 @@
+{
+  "arquivo_linhas": 1000,
+  "linhas_esperadas": 1000,
+  "volume_ok": true,
+  "schema_ok": true,
+  "schema_erros": [],
+  "nulos_por_coluna": {
+    "autor": 0,
+    "nome_repositorio": 0,
+    "issues_abertas": 0,
+    "issues_fechadas": 0,
+    "prs_mergeadas": 0,
+    "releases": 0,
+    "atualizado_em": 0,
+    "linguagem": 87
+  },
+  "pushed_at_invalido": [],
+  "pushed_at_futuro": [],
+  "status": "OK"
+}

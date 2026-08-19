@@ -8,15 +8,16 @@ C = COLS
 
 
 def _linha_valida(**overrides):
-    """Monta uma linha base válida, sobrescrevendo campos pontuais."""
+    """Monta uma linha base válida (colunas reais de repositorios.csv), sobrescrevendo campos pontuais."""
     linha = {
-        C["name_with_owner"]: "octocat/hello-world",
-        C["closed_issues"]: 10,
-        C["total_issues"]: 20,
-        C["merged_prs"]: 5,
-        C["releases_count"]: 3,
-        C["pushed_at"]: "2026-01-01T00:00:00Z",
-        C["primary_language"]: "Python",
+        C["autor"]: "octocat",
+        C["nome_repositorio"]: "hello-world",
+        C["issues_abertas"]: 10,
+        C["issues_fechadas"]: 10,
+        C["prs_mergeadas"]: 5,
+        C["releases"]: 3,
+        C["atualizado_em"]: "2026-01-01T00:00:00Z",
+        C["linguagem"]: "Python",
     }
     linha.update(overrides)
     return linha
@@ -25,7 +26,7 @@ def _linha_valida(**overrides):
 def test_nulo_em_coluna_obrigatoria_falha():
     df = pd.DataFrame([
         _linha_valida(),
-        _linha_valida(**{C["closed_issues"]: None, C["name_with_owner"]: "octocat/other"}),
+        _linha_valida(**{C["issues_fechadas"]: None, C["nome_repositorio"]: "other"}),
     ])
 
     relatorio = gerar_relatorio(df)
@@ -34,13 +35,14 @@ def test_nulo_em_coluna_obrigatoria_falha():
     assert relatorio["schema_ok"] is False
 
 
-def test_closed_issues_maior_que_total_issues_falha():
+def test_issues_fechadas_maior_que_total_de_issues_falha():
+    """issues_abertas negativo faz total (abertas+fechadas) cair abaixo de fechadas."""
     df = pd.DataFrame([
         _linha_valida(),
         _linha_valida(**{
-            C["name_with_owner"]: "octocat/other",
-            C["closed_issues"]: 30,
-            C["total_issues"]: 20,
+            C["nome_repositorio"]: "other",
+            C["issues_abertas"]: -5,
+            C["issues_fechadas"]: 10,
         }),
     ])
 
@@ -50,10 +52,10 @@ def test_closed_issues_maior_que_total_issues_falha():
     assert relatorio["schema_ok"] is False
 
 
-def test_pushed_at_no_futuro_falha():
+def test_atualizado_em_no_futuro_falha():
     agora = pd.Timestamp("2026-01-01T00:00:00Z")
     df = pd.DataFrame([
-        _linha_valida(**{C["pushed_at"]: "2026-06-01T00:00:00Z"}),
+        _linha_valida(**{C["atualizado_em"]: "2026-06-01T00:00:00Z"}),
     ])
 
     relatorio = gerar_relatorio(df, agora=agora)
