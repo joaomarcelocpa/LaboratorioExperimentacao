@@ -5,6 +5,14 @@ desde pushedAt, agrupados por linguagem primária). A integridade dos dados
 já foi validada em etapa anterior (scripts/miguel/validate_rq06_rq07_integrity.py) —
 este script calcula métricas e visualiza, não repete checks de integridade.
 
+RQ07 tem duas camadas: a descritiva (calcular_rq07 — mediana por linguagem,
+o que os gráficos mostram) e a conclusiva (calcular_rq07_teste_hipotese — Mann-
+Whitney U comparando linguagens populares vs. demais, para responder "recebem
+mais X?" com significância estatística em vez de só "parece maior no
+gráfico"). "Populares" aqui é o TOP_N_LINGUAGENS por nº de repositórios nesta
+amostra (mesmo corte dos gráficos) — o repositório não tem uma lista externa
+(ex. GitHub Octoverse) para usar como fonte oficial.
+
 As colunas reais vêm de `coleta.py` (Laboratorio1/dados/repositorios.csv), que
 não expõe um `totalIssues` bruto: é derivado aqui de issues_abertas +
 issues_fechadas (ver COLS). Pelo mesmo motivo descrito no validador, `pushedAt`
@@ -25,6 +33,7 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy.stats import mannwhitneyu
 
 DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "repositorios.csv"
 DEFAULT_OUTDIR = Path(__file__).resolve().parent.parent.parent / "dados" / "miguel" / "graficos"
@@ -126,8 +135,10 @@ def calcular_rq06(df: pd.DataFrame) -> dict[str, Any]:
     }
 
 
-def calcular_rq07(df: pd.DataFrame, agora: pd.Timestamp | None = None) -> list[dict[str, Any]]:
-    """RQ07: mediana de mergedPRs, releasesCount e dias desde pushedAt, por primaryLanguage."""
+def _montar_trabalho_rq07(df: pd.DataFrame, agora: pd.Timestamp | None = None) -> pd.DataFrame:
+    """Monta o DataFrame por repositório (linguagem, mergedPRs, releasesCount, dias_desde_push)
+    usado tanto pela camada descritiva (calcular_rq07) quanto pela conclusiva
+    (calcular_rq07_teste_hipotese)."""
     referencia = agora if agora is not None else pd.Timestamp.now(tz="UTC")
 
     linguagem = df[COLS["primaryLanguage"]].astype("object")
@@ -136,12 +147,17 @@ def calcular_rq07(df: pd.DataFrame, agora: pd.Timestamp | None = None) -> list[d
     pushed_at = pd.to_datetime(df[COLS["pushedAt"]], errors="coerce", utc=True)
     dias_desde_push = (referencia - pushed_at).dt.days
 
-    trabalho = pd.DataFrame({
+    return pd.DataFrame({
         "linguagem": linguagem,
         "mergedPRs": pd.to_numeric(df[COLS["mergedPRs"]], errors="coerce"),
         "releasesCount": pd.to_numeric(df[COLS["releasesCount"]], errors="coerce"),
         "dias_desde_push": dias_desde_push,
     })
+
+
+def calcular_rq07(df: pd.DataFrame, agora: pd.Timestamp | None = None) -> list[dict[str, Any]]:
+    """RQ07 (descritiva): mediana de mergedPRs, releasesCount e dias desde pushedAt, por primaryLanguage."""
+    trabalho = _montar_trabalho_rq07(df, agora)
 
     resultado = [
         {
@@ -155,6 +171,46 @@ def calcular_rq07(df: pd.DataFrame, agora: pd.Timestamp | None = None) -> list[d
     ]
     resultado.sort(key=lambda r: r["n"], reverse=True)
     return resultado
+
+
+def calcular_rq07_teste_hipotese(
+    df: pd.DataFrame,
+    agora: pd.Timestamp | None = None,
+    top_n: int = TOP_N_LINGUAGENS,
+) -> dict[str, Any]:
+    """RQ07 (conclusiva): Mann-Whitney U (linguagens populares vs. demais) para mergedPRs,
+    releasesCount e dias_desde_push — transforma "parece maior no gráfico" em uma diferença
+    estatisticamente significativa (ou não), com p-valor.
+
+    "Populares" = TOP `top_n` linguagens por nº de repositórios nesta amostra (mesmo corte
+    usado nos gráficos); repositórios sem linguagem detectada são excluídos do teste.
+    """
+    trabalho = _montar_trabalho_rq07(df, agora)
+    trabalho = trabalho[trabalho["linguagem"] != SEM_LINGUAGEM]
+
+    populares = set(trabalho["linguagem"].value_counts().head(top_n).index)
+    eh_popular = trabalho["linguagem"].isin(populares)
+
+    metricas: dict[str, Any] = {}
+    for coluna in ("mergedPRs", "releasesCount", "dias_desde_push"):
+        valores_populares = trabalho.loc[eh_popular, coluna].dropna()
+        valores_demais = trabalho.loc[~eh_popular, coluna].dropna()
+        estatistica, p_valor = mannwhitneyu(valores_populares, valores_demais, alternative="two-sided")
+        metricas[coluna] = {
+            "u_statistic": float(estatistica),
+            "p_value": float(p_valor),
+            "significativo_0_05": bool(p_valor < 0.05),
+            "mediana_populares": float(valores_populares.median()),
+            "mediana_demais": float(valores_demais.median()),
+            "n_populares": int(len(valores_populares)),
+            "n_demais": int(len(valores_demais)),
+        }
+
+    return {
+        "top_n_linguagens_populares": top_n,
+        "linguagens_populares": sorted(populares),
+        "metricas": metricas,
+    }
 
 
 def plotar_rq06_hist(rq06: dict[str, Any], outdir: Path) -> Path:
@@ -284,7 +340,12 @@ def plotar_rq07_atualizacao(rq07: list[dict[str, Any]], outdir: Path) -> Path:
     )
 
 
-def exportar_analysis_data(rq06: dict[str, Any], rq07: list[dict[str, Any]], outdir: Path) -> Path:
+def exportar_analysis_data(
+    rq06: dict[str, Any],
+    rq07: list[dict[str, Any]],
+    rq07_teste: dict[str, Any],
+    outdir: Path,
+) -> Path:
     """Grava analysis_data.json com os números exatos usados nos PNGs (fonte de verdade do dashboard)."""
     dados = {
         "rq06": {k: rq06[k] for k in (
@@ -292,6 +353,7 @@ def exportar_analysis_data(rq06: dict[str, Any], rq07: list[dict[str, Any]], out
             "n_considerados", "n_excluidos_zero_issues", "histogram",
         )},
         "rq07": {"por_linguagem": rq07},
+        "rq07_teste_hipotese": rq07_teste,
     }
     caminho = outdir / "analysis_data.json"
     caminho.write_text(json.dumps(dados, indent=2, ensure_ascii=False), encoding="utf-8")
@@ -305,6 +367,7 @@ def gerar_analise(caminho_csv: Path, outdir: Path) -> list[Path]:
 
     rq06 = calcular_rq06(df)
     rq07 = calcular_rq07(df)
+    rq07_teste = calcular_rq07_teste_hipotese(df)
 
     caminhos = [
         plotar_rq06_hist(rq06, outdir),
@@ -312,7 +375,7 @@ def gerar_analise(caminho_csv: Path, outdir: Path) -> list[Path]:
         plotar_rq07_prs(rq07, outdir),
         plotar_rq07_releases(rq07, outdir),
         plotar_rq07_atualizacao(rq07, outdir),
-        exportar_analysis_data(rq06, rq07, outdir),
+        exportar_analysis_data(rq06, rq07, rq07_teste, outdir),
     ]
     return caminhos
 

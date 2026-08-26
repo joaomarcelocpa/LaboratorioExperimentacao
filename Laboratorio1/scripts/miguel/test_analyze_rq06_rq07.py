@@ -1,7 +1,14 @@
 """Testes das funções de cálculo (RQ06/RQ07) usadas para gerar os gráficos finais."""
 import pandas as pd
 
-from analyze_rq06_rq07 import COLS, ISSUES_ABERTAS_COL, SEM_LINGUAGEM, calcular_rq06, calcular_rq07
+from analyze_rq06_rq07 import (
+    COLS,
+    ISSUES_ABERTAS_COL,
+    SEM_LINGUAGEM,
+    calcular_rq06,
+    calcular_rq07,
+    calcular_rq07_teste_hipotese,
+)
 
 C = COLS
 
@@ -51,3 +58,26 @@ def test_calcular_rq07_agrupa_sem_linguagem_e_ordena_por_n():
     assert por_linguagem[SEM_LINGUAGEM]["mediana_prs"] == 5.0
     assert por_linguagem["Go"]["n"] == 1
     assert por_linguagem["Go"]["mediana_dias_push"] == 2.0
+
+
+def test_calcular_rq07_teste_hipotese_separa_populares_por_top_n_e_ignora_sem_linguagem():
+    df = pd.DataFrame([
+        _linha(**{C["primaryLanguage"]: "A", C["mergedPRs"]: 100}),
+        _linha(**{C["primaryLanguage"]: "A", C["mergedPRs"]: 110}),
+        _linha(**{C["primaryLanguage"]: "A", C["mergedPRs"]: 120}),
+        _linha(**{C["primaryLanguage"]: "B", C["mergedPRs"]: 90}),
+        _linha(**{C["primaryLanguage"]: "B", C["mergedPRs"]: 95}),
+        _linha(**{C["primaryLanguage"]: "C", C["mergedPRs"]: 1}),
+        _linha(**{C["primaryLanguage"]: "D", C["mergedPRs"]: 2}),
+        _linha(**{C["primaryLanguage"]: None, C["mergedPRs"]: 9999}),  # sem linguagem: ignorado
+    ])
+
+    teste = calcular_rq07_teste_hipotese(df, top_n=2)
+
+    assert teste["linguagens_populares"] == ["A", "B"]
+    metrica = teste["metricas"]["mergedPRs"]
+    assert metrica["n_populares"] == 5
+    assert metrica["n_demais"] == 2
+    assert metrica["mediana_populares"] == 100.0
+    assert metrica["mediana_demais"] == 1.5
+    assert 0.0 <= metrica["p_value"] <= 1.0

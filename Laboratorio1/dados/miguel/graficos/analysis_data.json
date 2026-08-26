@@ -133,7 +133,7 @@
         "n": 20,
         "mediana_prs": 389.5,
         "mediana_releases": 9.5,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 7.0
       },
       {
         "linguagem": "Ruby",
@@ -210,14 +210,14 @@
         "n": 4,
         "mediana_prs": 380.0,
         "mediana_releases": 1.0,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 7.0
       },
       {
         "linguagem": "PHP",
         "n": 4,
         "mediana_prs": 10641.0,
         "mediana_releases": 577.0,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 6.5
       },
       {
         "linguagem": "Vim Script",
@@ -238,7 +238,7 @@
         "n": 2,
         "mediana_prs": 1264.5,
         "mediana_releases": 25.5,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 7.0
       },
       {
         "linguagem": "Dockerfile",
@@ -259,7 +259,7 @@
         "n": 2,
         "mediana_prs": 3010.5,
         "mediana_releases": 169.5,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 6.5
       },
       {
         "linguagem": "PowerShell",
@@ -273,7 +273,7 @@
         "n": 2,
         "mediana_prs": 5.0,
         "mediana_releases": 0.0,
-        "mediana_dias_push": 6.0
+        "mediana_dias_push": 7.0
       },
       {
         "linguagem": "TeX",
@@ -367,5 +367,49 @@
         "mediana_dias_push": 6.0
       }
     ]
+  },
+  "rq07_teste_hipotese": {
+    "top_n_linguagens_populares": 10,
+    "linguagens_populares": [
+      "C",
+      "C++",
+      "Go",
+      "Java",
+      "JavaScript",
+      "Jupyter Notebook",
+      "Python",
+      "Rust",
+      "Shell",
+      "TypeScript"
+    ],
+    "metricas": {
+      "mergedPRs": {
+        "u_statistic": 51535.5,
+        "p_value": 0.14181797970340068,
+        "significativo_0_05": false,
+        "mediana_populares": 997.0,
+        "mediana_demais": 658.0,
+        "n_populares": 793,
+        "n_demais": 120
+      },
+      "releasesCount": {
+        "u_statistic": 57013.0,
+        "p_value": 0.0004226765766414836,
+        "significativo_0_05": true,
+        "mediana_populares": 57.0,
+        "mediana_demais": 21.5,
+        "n_populares": 793,
+        "n_demais": 120
+      },
+      "dias_desde_push": {
+        "u_statistic": 46094.5,
+        "p_value": 0.512036471246719,
+        "significativo_0_05": false,
+        "mediana_populares": 6.0,
+        "mediana_demais": 6.0,
+        "n_populares": 793,
+        "n_demais": 120
+      }
+    }
   }
 }

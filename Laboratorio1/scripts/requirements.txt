@@ -5,3 +5,4 @@ rich
 pandas
 pandera
 matplotlib
+scipy

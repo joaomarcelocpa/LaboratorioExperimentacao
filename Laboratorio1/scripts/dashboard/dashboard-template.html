@@ -646,6 +646,58 @@ const RQ0607 = __RQ0607_DATA__;
     const container = document.getElementById("table-rq07-all");
     container.innerHTML = "";
     container.appendChild(wrap);
+
+    buildRQ07Teste();
+  }
+
+  // Camada conclusiva de RQ07: Mann-Whitney U (populares vs. demais), calculado em
+  // scripts/miguel/analyze_rq06_rq07.py — aqui só exibe o que já está em analysis_data.json.
+  const RQ07_TESTE_METRIC_LABELS = {
+    mergedPRs: "PRs mergeadas (RQ02)",
+    releasesCount: "Releases (RQ03)",
+    dias_desde_push: "Dias desde pushedAt (RQ04)",
+  };
+
+  function fmtP(p) {
+    return p < 0.001 ? "< 0,001" : fmt(p, 3);
+  }
+
+  function buildRQ07Teste() {
+    const teste = RQ0607.rq07_teste_hipotese;
+    document.getElementById("note-rq07-teste").textContent =
+      `"Populares" = top ${teste.top_n_linguagens_populares} linguagens por nº de repositórios nesta amostra `
+      + `(sem lista externa disponível no repositório): ${teste.linguagens_populares.join(", ")}.`;
+
+    const table = document.createElement("table");
+    table.className = "data-table";
+    table.innerHTML = "<thead><tr><th>Métrica</th><th class=\"num\">Mediana populares</th><th class=\"num\">Mediana demais</th><th class=\"num\">p-valor</th><th>Significativo (α=0,05)</th></tr></thead>";
+    const tbody = document.createElement("tbody");
+    Object.keys(RQ07_TESTE_METRIC_LABELS).forEach(chave => {
+      const m = teste.metricas[chave];
+      const tr = document.createElement("tr");
+      const tdLabel = document.createElement("td");
+      tdLabel.textContent = RQ07_TESTE_METRIC_LABELS[chave];
+      const tdPop = document.createElement("td");
+      tdPop.className = "num"; tdPop.textContent = fmt(m.mediana_populares, 0);
+      const tdDemais = document.createElement("td");
+      tdDemais.className = "num"; tdDemais.textContent = fmt(m.mediana_demais, 0);
+      const tdP = document.createElement("td");
+      tdP.className = "num"; tdP.textContent = fmtP(m.p_value);
+      const tdSig = document.createElement("td");
+      const badge = document.createElement("span");
+      badge.className = "kpi-caption " + (m.significativo_0_05 ? "good" : "");
+      badge.textContent = m.significativo_0_05 ? "Sim, p < 0,05" : "Não";
+      tdSig.appendChild(badge);
+      tr.appendChild(tdLabel); tr.appendChild(tdPop); tr.appendChild(tdDemais); tr.appendChild(tdP); tr.appendChild(tdSig);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    wrap.appendChild(table);
+    const container = document.getElementById("table-rq07-teste");
+    container.innerHTML = "";
+    container.appendChild(wrap);
   }
 
   function setTableView(id, showTable) {
@@ -929,6 +981,11 @@ const RQ0607 = __RQ0607_DATA__;
           <div class="card-title">Todas as linguagens</div>
           <div id="table-rq07-all"></div>
         </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">Teste estatístico — Mann-Whitney U (linguagens populares vs. demais)</div>
+        <div class="card-note" id="note-rq07-teste"></div>
+        <div id="table-rq07-teste" style="margin-top:10px;"></div>
       </div>
     </section>
   `;
