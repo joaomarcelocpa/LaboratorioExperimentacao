@@ -25,7 +25,7 @@
     <div class="topbar-inner">
       <div class="brand">
         <div class="brand-title">Repositórios Populares</div>
-        <div class="brand-sub">RQ01–RQ03, RQ06–RQ07 · maturidade e atividade de 1000 repositórios do GitHub</div>
+        <div class="brand-sub">RQ01–RQ07 · maturidade e atividade de 1000 repositórios do GitHub</div>
       </div>
       <div class="nav-cluster">
         <button class="step-btn" id="prevBtn" aria-label="RQ anterior">‹</button>
@@ -34,6 +34,8 @@
           <button class="tab-btn" role="tab" data-tab="rq01">RQ01</button>
           <button class="tab-btn" role="tab" data-tab="rq02">RQ02</button>
           <button class="tab-btn" role="tab" data-tab="rq03">RQ03</button>
+          <button class="tab-btn" role="tab" data-tab="rq04">RQ04</button>
+          <button class="tab-btn" role="tab" data-tab="rq05">RQ05</button>
           <button class="tab-btn" role="tab" data-tab="rq06">RQ06</button>
           <button class="tab-btn" role="tab" data-tab="rq07">RQ07</button>
         </div>
@@ -47,7 +49,7 @@
   <main id="views"></main>
 
   <footer class="app-footer">
-    Fonte: dados/repositorios.csv (n = <span id="footN"></span>) · Metodologia RQ01-03: scripts/joao/validador-joao.py (outliers por IQR, 1.5×) · Metodologia RQ06-07: scripts/miguel/analyze_rq06_rq07.py · Idade calculada em relação a 2026-08-18.
+    Fonte: dados/repositorios.csv (n = <span id="footN"></span>) · Metodologia RQ01-03: scripts/joao/validador-joao.py (outliers por IQR, 1.5×) · Metodologia RQ04-05: scripts/bernardo/validador-bernardo.py (outliers por IQR, 1.5×) · Metodologia RQ06-07: scripts/miguel/analyze_rq06_rq07.py · Idade calculada em relação a 2026-08-18 · Dias desde atualização (RQ04) em relação a 2026-08-26.
   </footer>
 </div>
 
@@ -135,13 +137,27 @@ const RQ0607 = __RQ0607_DATA__;
   const idadesSorted = repos.map(r => r.idade).sort((a, b) => a - b);
   const prsSorted = repos.map(r => r.prs).sort((a, b) => a - b);
   const relSorted = repos.map(r => r.releases).sort((a, b) => a - b);
+  const atualizacaoSorted = repos.map(r => r.diasAtualizacao).sort((a, b) => a - b);
 
   const statIdade = { mediana: median(idadesSorted), media: mean(idadesSorted) };
   const statPrs = Object.assign({ mediana: median(prsSorted), media: mean(prsSorted) }, quartiles(prsSorted));
   const statRel = Object.assign({ mediana: median(relSorted), media: mean(relSorted) }, quartiles(relSorted));
+  const statAtualizacao = Object.assign({ mediana: median(atualizacaoSorted), media: mean(atualizacaoSorted) }, quartiles(atualizacaoSorted));
 
   const prsOutliers = repos.filter(r => r.prs < statPrs.lo || r.prs > statPrs.hi);
   const relOutliers = repos.filter(r => r.releases < statRel.lo || r.releases > statRel.hi);
+  const atualizacaoOutliers = repos.filter(r => r.diasAtualizacao < statAtualizacao.lo || r.diasAtualizacao > statAtualizacao.hi);
+
+  // ---------- RQ05: linguagens (contagem por linguagem, top N) ----------
+  const SEM_LINGUAGEM_BR = "(sem linguagem)";
+  const linguagemCounts = {};
+  repos.forEach(r => {
+    const lang = r.linguagem || SEM_LINGUAGEM_BR;
+    linguagemCounts[lang] = (linguagemCounts[lang] || 0) + 1;
+  });
+  const linguagensOrdenadas = Object.keys(linguagemCounts)
+    .map(lang => ({ linguagem: lang, n: linguagemCounts[lang], pct: (linguagemCounts[lang] / repos.length) * 100 }))
+    .sort((a, b) => b.n - a.n);
 
   // ---------- SVG helpers ----------
   const SVGNS = "http://www.w3.org/2000/svg";
@@ -485,13 +501,25 @@ const RQ0607 = __RQ0607_DATA__;
     document.getElementById("tablebtn-rq01").addEventListener("click", () => toggleTableView("rq01"));
   }
 
-  // ================= RQ02 / RQ03 shared =================
+  // ================= RQ02 / RQ03 / RQ04 shared =================
+  // `hipotese` é opcional (RQ04): desenha uma 3ª ref-line com o limiar da hipótese
+  // e preenche um <div> de legenda "kpi-caption" com o veredito (mesmo texto usado
+  // em scripts/bernardo/graficos-bernardo.py::plot_rq04_atualizacao).
   function buildAssymRQ(cfg) {
-    const { id, values, stat, outliers, valueKey, valueLabel, kpiPrefix } = cfg;
+    const { id, values, stat, outliers, valueKey, valueLabel, kpiPrefix, hipotese } = cfg;
     document.getElementById(kpiPrefix + "-mediana").textContent = fmt(stat.mediana, 0);
     document.getElementById(kpiPrefix + "-media").textContent = fmt(stat.media, 0);
     document.getElementById(kpiPrefix + "-outliers").textContent = fmt(outliers.length, 0);
     document.getElementById(kpiPrefix + "-outliers-cap").textContent = fmt((outliers.length / values.length) * 100, 1) + "% da amostra, acima de " + fmt(stat.hi, 0);
+
+    if (hipotese) {
+      const cap = document.getElementById(kpiPrefix + "-hipotese-cap");
+      const confirmada = stat.mediana <= hipotese.value;
+      cap.textContent = confirmada
+        ? `Confirmada: mediana ${fmt(stat.mediana, 0)} ≤ ${fmt(hipotese.value, 0)}`
+        : `Não confirmada: mediana ${fmt(stat.mediana, 0)} > ${fmt(hipotese.value, 0)}`;
+      cap.className = "kpi-caption " + (confirmada ? "good" : "warn");
+    }
 
     let mode = "foco";
     const focoMax = niceCeiling(stat.hi);
@@ -501,12 +529,14 @@ const RQ0607 = __RQ0607_DATA__;
       const min = 0, max = mode === "foco" ? focoMax : fullMax;
       const visible = values.filter(v => v <= max).length;
       const hidden = values.length - visible;
+      const refLines = [
+        { value: stat.mediana, cls: "ref-median" },
+        { value: stat.media, cls: "ref-mean" },
+      ];
+      if (hipotese) refLines.push({ value: hipotese.value, cls: "ref-target" });
       const bins = renderHistogram(document.getElementById("chart-" + id), {
         values, min, max, binCount: 24,
-        refLines: [
-          { value: stat.mediana, cls: "ref-median" },
-          { value: stat.media, cls: "ref-mean" },
-        ],
+        refLines,
         xTickFmt: v => fmt(v, 0),
         valueLabel: valueLabel,
       });
@@ -515,10 +545,12 @@ const RQ0607 = __RQ0607_DATA__;
       note.textContent = hidden > 0
         ? `Eixo até ${fmt(max, 0)} · ${hidden} repositório${hidden === 1 ? "" : "s"} acima disso não aparecem na barra (veja a tabela ao lado).`
         : `Eixo até ${fmt(max, 0)} · todos os ${values.length} repositórios estão representados.`;
-      renderLegend(document.getElementById("legend-" + id), [
+      const legendItems = [
         { color: "var(--ink)", label: "Mediana", value: fmt(stat.mediana, 0) },
         { color: "var(--ink-secondary)", label: "Média", value: fmt(stat.media, 0), dash: true },
-      ]);
+      ];
+      if (hipotese) legendItems.push({ color: "var(--ref-target)", label: "Hipótese", value: fmt(hipotese.value, 0), dash: true });
+      renderLegend(document.getElementById("legend-" + id), legendItems);
     }
     draw();
 
@@ -534,6 +566,56 @@ const RQ0607 = __RQ0607_DATA__;
 
     outlierTable(document.getElementById("outliers-" + id), repos, valueKey, valueLabel);
     document.getElementById("tablebtn-" + id).addEventListener("click", () => toggleTableView(id));
+  }
+
+  // ================= RQ05 =================
+  // Contagem de repositórios por linguagem primária, calculada no cliente a
+  // partir de REPOS (mesma fonte de RQ01-03) — não precisa de JSON agregado
+  // porque é uma contagem simples por repositório, como scripts/bernardo/
+  // validador-bernardo.py::validar_rq05.
+  const RQ05_HIPOTESE = ["Python", "JavaScript", "TypeScript"];
+
+  function buildRQ05() {
+    const top = linguagensOrdenadas[0];
+    document.getElementById("kpi-rq05-top").innerHTML = top.linguagem + '<span class="unit"> · ' + fmt(top.pct, 1) + "%</span>";
+
+    const top3 = linguagensOrdenadas.slice(0, 3);
+    const top3Pct = top3.reduce((acc, r) => acc + r.pct, 0);
+    const top3SaoHipotese = top3.every(r => RQ05_HIPOTESE.includes(r.linguagem));
+    document.getElementById("kpi-rq05-top3").innerHTML = fmt(top3Pct, 1) + '<span class="unit">% da amostra</span>';
+    const cap = document.getElementById("kpi-rq05-cap");
+    cap.textContent = top3SaoHipotese
+      ? `Confirmada: ${top3.map(r => r.linguagem).join(", ")} lideram, como esperado`
+      : `Parcialmente confirmada: top 3 é ${top3.map(r => r.linguagem).join(", ")}`;
+    cap.className = "kpi-caption " + (top3SaoHipotese ? "good" : "warn");
+
+    const semLinguagem = linguagensOrdenadas.find(r => r.linguagem === SEM_LINGUAGEM_BR);
+    document.getElementById("kpi-rq05-sem").textContent = fmt(semLinguagem ? semLinguagem.n : 0, 0);
+
+    const items = linguagensOrdenadas.slice(0, 15).map(r => ({ label: `${r.linguagem} (${fmt(r.pct, 1)}%)`, value: r.n }));
+    renderBarChart(document.getElementById("chart-rq05"), {
+      items, xTickFmt: v => fmt(v, 0), valueLabel: "repositórios por linguagem",
+    });
+
+    const table = document.createElement("table");
+    table.className = "data-table";
+    table.innerHTML = "<thead><tr><th>Linguagem</th><th class=\"num\">Repositórios</th><th class=\"num\">%</th></tr></thead>";
+    const tbody = document.createElement("tbody");
+    linguagensOrdenadas.forEach(r => {
+      const tr = document.createElement("tr");
+      const tdLang = document.createElement("td"); tdLang.textContent = r.linguagem;
+      const tdN = document.createElement("td"); tdN.className = "num"; tdN.textContent = fmt(r.n, 0);
+      const tdPct = document.createElement("td"); tdPct.className = "num"; tdPct.textContent = fmt(r.pct, 1) + "%";
+      tr.appendChild(tdLang); tr.appendChild(tdN); tr.appendChild(tdPct);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    wrap.appendChild(table);
+    const container = document.getElementById("table-rq05-all");
+    container.innerHTML = "";
+    container.appendChild(wrap);
   }
 
   // ================= RQ06 =================
@@ -739,6 +821,17 @@ const RQ0607 = __RQ0607_DATA__;
     document.getElementById("ov-rel-verdict").textContent = `Confirmada: ciclo de entrega ativo, com ${relOutliers.length} outliers de manutenção intensa.`;
     renderSpark(document.getElementById("ov-rel-spark"), relSorted, 0, niceCeiling(statRel.hi));
 
+    document.getElementById("ov-rq04-stat").innerHTML = fmt(statAtualizacao.mediana, 0) + '<span class="unit"> dias (mediana)</span>';
+    document.getElementById("ov-rq04-verdict").textContent = statAtualizacao.mediana <= 30
+      ? `Confirmada: atualização recente, mediana de ${fmt(statAtualizacao.mediana, 0)} dias.`
+      : `Não confirmada: mediana de ${fmt(statAtualizacao.mediana, 0)} dias, acima do limiar de 30.`;
+    renderSpark(document.getElementById("ov-rq04-spark"), atualizacaoSorted, 0, niceCeiling(statAtualizacao.hi));
+
+    const rq05Top = linguagensOrdenadas[0];
+    document.getElementById("ov-rq05-stat").innerHTML = rq05Top.linguagem + '<span class="unit"> lidera · ' + fmt(rq05Top.pct, 1) + "%</span>";
+    document.getElementById("ov-rq05-verdict").textContent =
+      `${fmt(linguagensOrdenadas.slice(0, 3).reduce((a, r) => a + r.pct, 0), 1)}% da amostra concentrada nas 3 linguagens mais comuns.`;
+
     document.getElementById("ov-rq06-stat").innerHTML = fmt(rq06.median * 100, 0) + '<span class="unit">% issues fechadas (mediana)</span>';
     document.getElementById("ov-rq06-verdict").textContent =
       `Mediana de ${fmt(rq06.median * 100, 0)}% de issues fechadas (${rq06.n_excluidos_zero_issues} repositórios sem issues excluídos do cálculo).`;
@@ -752,7 +845,7 @@ const RQ0607 = __RQ0607_DATA__;
   }
 
   // ---------- tabs ----------
-  const tabOrder = ["overview", "rq01", "rq02", "rq03", "rq06", "rq07"];
+  const tabOrder = ["overview", "rq01", "rq02", "rq03", "rq04", "rq05", "rq06", "rq07"];
   let currentTab = "overview";
   const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
 
@@ -810,6 +903,19 @@ const RQ0607 = __RQ0607_DATA__;
           <span class="overview-stat" id="ov-rel-stat"></span>
           <svg class="spark" id="ov-rel-spark"></svg>
           <span class="overview-verdict" id="ov-rel-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq04">
+          <span class="overview-tag">RQ04</span>
+          <span class="overview-q">São atualizados com frequência?</span>
+          <span class="overview-stat" id="ov-rq04-stat"></span>
+          <svg class="spark" id="ov-rq04-spark"></svg>
+          <span class="overview-verdict" id="ov-rq04-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq05">
+          <span class="overview-tag">RQ05</span>
+          <span class="overview-q">Usam as linguagens mais populares?</span>
+          <span class="overview-stat" id="ov-rq05-stat"></span>
+          <span class="overview-verdict" id="ov-rq05-verdict"></span>
         </button>
         <button class="overview-card" data-goto="rq06">
           <span class="overview-tag">RQ06</span>
@@ -926,6 +1032,67 @@ const RQ0607 = __RQ0607_DATA__;
       </div>
     </section>
 
+    <section class="view" id="view-rq04">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ04</div>
+        <h1 class="view-title">Repositórios populares são atualizados com frequência?</h1>
+        <p class="view-desc">Hipótese: última atualização recente, mediana de no máximo alguns dias — em torno de 30 dias como limiar de referência —, já que projetos com muitas estrelas atraem contribuidores e mantenedores ativos.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana</div><div class="kpi-value" id="kpi-rq04-mediana"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Média</div><div class="kpi-value" id="kpi-rq04-media"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Hipótese</div><div class="kpi-value">30<span class="unit">dias</span></div><div class="kpi-caption" id="kpi-rq04-hipotese-cap"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Outliers (IQR)</div><div class="kpi-value" id="kpi-rq04-outliers"></div><div class="kpi-caption" id="kpi-rq04-outliers-cap"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Distribuição de dias desde a atualização</div><div class="card-note" id="note-rq04"></div></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="seg-group" id="seg-rq04">
+                <button class="seg-btn" data-mode="foco" aria-pressed="true">Foco na maioria</button>
+                <button class="seg-btn" data-mode="completo" aria-pressed="false">Distribuição completa</button>
+              </div>
+              <button class="link-btn" id="tablebtn-rq04" aria-pressed="false">Ver como tabela</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-rq04"></div>
+          <div class="chart-wrap" id="table-rq04" style="display:none"></div>
+          <div class="chart-legend" id="legend-rq04"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Top 10 · há mais tempo sem atualização</div>
+          <div id="outliers-rq04"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq05">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ05</div>
+        <h1 class="view-title">Repositórios populares usam as linguagens mais populares?</h1>
+        <p class="view-desc">Hipótese: linguagens de propósito geral e alta adoção — Python e JavaScript/TypeScript — dominam a lista, por serem as mais usadas pela comunidade open source e favorecerem mais contribuidores.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Linguagem líder</div><div class="kpi-value" id="kpi-rq05-top"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Top 3 combinado</div><div class="kpi-value" id="kpi-rq05-top3"></div><div class="kpi-caption" id="kpi-rq05-cap"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Sem linguagem</div><div class="kpi-value" id="kpi-rq05-sem"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Repositórios</div><div class="kpi-value">1000</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Top 15 linguagens</div><div class="card-note">Nº de repositórios por linguagem primária</div></div>
+          </div>
+          <div class="chart-wrap" id="chart-rq05"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Todas as linguagens</div>
+          <div id="table-rq05-all"></div>
+        </div>
+      </div>
+    </section>
+
     <section class="view" id="view-rq06">
       <div class="view-head">
         <div class="view-eyebrow">RQ06</div>
@@ -998,6 +1165,12 @@ const RQ0607 = __RQ0607_DATA__;
   buildRQ01();
   buildAssymRQ({ id: "rq02", values: prsSorted, stat: statPrs, outliers: prsOutliers, valueKey: "prs", valueLabel: "PRs mergeadas", kpiPrefix: "kpi-prs" });
   buildAssymRQ({ id: "rq03", values: relSorted, stat: statRel, outliers: relOutliers, valueKey: "releases", valueLabel: "releases", kpiPrefix: "kpi-rel" });
+  buildAssymRQ({
+    id: "rq04", values: atualizacaoSorted, stat: statAtualizacao, outliers: atualizacaoOutliers,
+    valueKey: "diasAtualizacao", valueLabel: "dias desde a atualização", kpiPrefix: "kpi-rq04",
+    hipotese: { value: 30 },
+  });
+  buildRQ05();
   buildRQ06();
   buildRQ07();
 

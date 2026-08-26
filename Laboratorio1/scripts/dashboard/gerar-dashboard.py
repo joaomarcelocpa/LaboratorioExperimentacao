@@ -17,10 +17,12 @@ HTML é montado a partir de três peças, todas em scripts/dashboard/:
 
 Para complementar o dashboard com outras RQs, edite dashboard-template.html
 (e dashboard.css, se precisar de estilos novos) — os dados de cada
-repositório (autor, repo, estrelas, idade, prs, releases) já ficam
-disponíveis no array `REPOS.repos` dentro do HTML gerado; cada integrante
-pode consumir os mesmos campos ou estender o JSON aqui embaixo com colunas
-adicionais do CSV para sua(s) RQ(s).
+repositório (autor, repo, estrelas, idade, prs, releases, diasAtualizacao,
+linguagem) já ficam disponíveis no array `REPOS.repos` dentro do HTML
+gerado; cada integrante pode consumir os mesmos campos ou estender o JSON
+aqui embaixo com colunas adicionais do CSV para sua(s) RQ(s).
+  - diasAtualizacao (RQ04) e linguagem (RQ05) seguem a mesma REFERENCE_DATE/
+    metodologia de scripts/bernardo/validador-bernardo.py.
 """
 
 import csv
@@ -39,12 +41,18 @@ DEFAULT_OUTPUT_PATH = REPO_ROOT / "dashboard.html"
 # Data de referência usada para calcular a idade dos repositórios (ver rqs-hipoteses.md).
 REFERENCE_DATE = datetime(2026, 8, 18, tzinfo=timezone.utc)
 
+# Data de referência para "dias desde atualizado_em" (RQ04) — mesma data usada em
+# scripts/bernardo/graficos-bernardo.py e próxima da coleta (dados/repositorios.csv
+# tem atualizado_em posterior a 2026-08-18, então REFERENCE_DATE geraria valores
+# negativos aqui).
+REFERENCE_DATE_ATUALIZACAO = datetime(2026, 8, 26, tzinfo=timezone.utc)
+
 PLACEHOLDER = "__REPOS_DATA__"
 PLACEHOLDER_RQ0607 = "__RQ0607_DATA__"
 CSS_LINK_TAG = '<link rel="stylesheet" href="dashboard.css">'
 
 
-def _parse_criado_em(value):
+def _parse_data(value):
     if not value:
         return None
     try:
@@ -71,8 +79,14 @@ def extrair_repos(input_path=DEFAULT_INPUT_PATH):
 
     repos = []
     for row in rows:
-        criado_em = _parse_criado_em(row.get("criado_em", ""))
+        criado_em = _parse_data(row.get("criado_em", ""))
         idade = round((REFERENCE_DATE - criado_em).days / 365.25, 3) if criado_em else None
+
+        atualizado_em = _parse_data(row.get("atualizado_em", ""))
+        dias_atualizacao = (REFERENCE_DATE_ATUALIZACAO - atualizado_em).days if atualizado_em else None
+
+        linguagem = row.get("linguagem", "").strip() or None
+
         repos.append(
             {
                 "autor": row.get("autor", ""),
@@ -81,6 +95,8 @@ def extrair_repos(input_path=DEFAULT_INPUT_PATH):
                 "idade": idade,
                 "prs": _parse_numeric(row.get("prs_mergeadas", "")),
                 "releases": _parse_numeric(row.get("releases", "")),
+                "diasAtualizacao": dias_atualizacao,
+                "linguagem": linguagem,
             }
         )
     return repos
