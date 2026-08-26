@@ -13,7 +13,7 @@
 - [x] Identificar outliers em `atualizado_em`
 - [x] Contar distribuição de `linguagem`
 
-**Metodologia:** cálculo feito com o script [`scripts/validador-bernardo.py`](../../scripts/validador-bernardo.py) sobre `dados/repositorios.csv` (1000 repositórios); outliers detectados pelo método IQR (1.5×IQR); percentuais calculados sobre o total de 1000 repositórios.
+**Metodologia:** cálculo feito com o script [`../../scripts/bernardo/validador-bernardo.py`](../../scripts/bernardo/validador-bernardo.py) sobre `dados/repositorios.csv` (1000 repositórios); outliers detectados pelo método IQR (1.5×IQR); percentuais calculados sobre o total de 1000 repositórios.
 
 ## Resultados
 

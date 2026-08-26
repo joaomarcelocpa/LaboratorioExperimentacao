@@ -14,7 +14,7 @@
 - [x] Identificar valores ausentes
 - [x] Identificar outliers
 
-**Metodologia:** cálculo feito com o script [`scripts/validador-joao.py`](../../scripts/validador-joao.py) sobre `dados/repositorios.csv` (1000 repositórios) e outliers detectados pelo método IQR (1.5×IQR).
+**Metodologia:** cálculo feito com o script [`../../scripts/joao/validador-joao.py`](../../scripts/joao/validador-joao.py) sobre `dados/repositorios.csv` (1000 repositórios) e outliers detectados pelo método IQR (1.5×IQR).
 
 ## Resultados
 

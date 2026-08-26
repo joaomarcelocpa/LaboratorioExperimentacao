@@ -28,12 +28,12 @@ from typing import Any
 import pandas as pd
 import pandera.pandas as pa
 
-DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "repositorios.csv"
+DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "repositorios.csv"
 DEFAULT_JSON_OUTPUT_PATH = (
-    Path(__file__).resolve().parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.json"
+    Path(__file__).resolve().parent.parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.json"
 )
 DEFAULT_CSV_OUTPUT_PATH = (
-    Path(__file__).resolve().parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.csv"
+    Path(__file__).resolve().parent.parent.parent / "dados" / "miguel" / "rq06-rq07-integridade.csv"
 )
 CSV_HEADER = ["item", "tipo_check", "qtd_nulos", "qtd_violacoes", "status"]
 EXPECTED_ROWS = 1000

@@ -4,3 +4,4 @@ pytest
 rich
 pandas
 pandera
+matplotlib

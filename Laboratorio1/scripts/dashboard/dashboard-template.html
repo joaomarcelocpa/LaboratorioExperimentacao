@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Repositórios Populares</title>
+<script>
+  // Aplica o tema salvo antes da primeira pintura, para não haver flash claro/escuro.
+  (function () {
+    try {
+      const saved = localStorage.getItem("dashboard-theme");
+      if (saved === "light" || saved === "dark") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) { /* localStorage indisponível — segue o tema do sistema */ }
+  })();
+</script>
+<link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+<div id="tooltip" role="status" aria-live="polite"></div>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-title">Repositórios Populares</div>
+        <div class="brand-sub">RQ01–RQ03 · maturidade e atividade de 1000 repositórios do GitHub</div>
+      </div>
+      <div class="nav-cluster">
+        <button class="step-btn" id="prevBtn" aria-label="RQ anterior">‹</button>
+        <div class="tabs" role="tablist" aria-label="Navegação entre RQs">
+          <button class="tab-btn" role="tab" data-tab="overview">Visão geral</button>
+          <button class="tab-btn" role="tab" data-tab="rq01">RQ01</button>
+          <button class="tab-btn" role="tab" data-tab="rq02">RQ02</button>
+          <button class="tab-btn" role="tab" data-tab="rq03">RQ03</button>
+        </div>
+        <button class="step-btn" id="nextBtn" aria-label="Próxima RQ">›</button>
+        <div class="nav-divider"></div>
+        <button class="theme-toggle" id="themeToggle" type="button"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="views"></main>
+
+  <footer class="app-footer">
+    Fonte: dados/repositorios.csv (n = <span id="footN"></span>) · Metodologia: scripts/joao/validador-joao.py (outliers por IQR, 1.5×) · Idade calculada em relação a 2026-08-18.
+  </footer>
+</div>
+
+<script>
+const REPOS = __REPOS_DATA__;
+</script>
+<script>
+(function () {
+  "use strict";
+
+  const repos = REPOS.repos;
+  document.getElementById("footN").textContent = REPOS.n;
+
+  // ---------- theme toggle ----------
+  (function setupThemeToggle() {
+    const STORAGE_KEY = "dashboard-theme";
+    const btn = document.getElementById("themeToggle");
+    const SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
+    const MOON = '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>';
+
+    function storedTheme() {
+      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+    }
+    function saveTheme(v) {
+      try { localStorage.setItem(STORAGE_KEY, v); } catch (e) { /* ignore */ }
+    }
+    function systemPrefersDark() {
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function activeTheme() {
+      const stamped = document.documentElement.getAttribute("data-theme");
+      return stamped === "light" || stamped === "dark" ? stamped : (systemPrefersDark() ? "dark" : "light");
+    }
+    function paint(theme) {
+      btn.innerHTML = theme === "dark" ? MOON : SUN;
+      btn.setAttribute("aria-label", theme === "dark" ? "Mudar para modo claro" : "Mudar para modo escuro");
+    }
+
+    paint(activeTheme());
+    btn.addEventListener("click", () => {
+      const next = activeTheme() === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      saveTheme(next);
+      paint(next);
+    });
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        if (!storedTheme()) paint(activeTheme());
+      });
+    }
+  })();
+
+  // ---------- stats helpers ----------
+  function median(sorted) {
+    const n = sorted.length;
+    if (n === 0) return null;
+    const mid = Math.floor(n / 2);
+    return n % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  }
+  function mean(arr) { return arr.reduce((a, b) => a + b, 0) / arr.length; }
+  function quartiles(sorted) {
+    const n = sorted.length;
+    const lower = sorted.slice(0, Math.floor(n / 2));
+    const upper = sorted.slice(Math.floor((n + 1) / 2));
+    const q1 = median(lower), q3 = median(upper);
+    const iqr = q3 - q1;
+    return { q1, q3, iqr, lo: q1 - 1.5 * iqr, hi: q3 + 1.5 * iqr };
+  }
+  function niceCeiling(value) {
+    if (value <= 10) return Math.ceil(value);
+    const digits = String(Math.floor(value)).length;
+    const magnitude = Math.pow(10, digits - 1);
+    const step = magnitude / 2;
+    return Math.ceil(value / step) * step;
+  }
+  function fmt(n, decimals) {
+    return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: decimals || 0, minimumFractionDigits: decimals || 0 });
+  }
+
+  const idadesSorted = repos.map(r => r.idade).sort((a, b) => a - b);
+  const prsSorted = repos.map(r => r.prs).sort((a, b) => a - b);
+  const relSorted = repos.map(r => r.releases).sort((a, b) => a - b);
+
+  const statIdade = { mediana: median(idadesSorted), media: mean(idadesSorted) };
+  const statPrs = Object.assign({ mediana: median(prsSorted), media: mean(prsSorted) }, quartiles(prsSorted));
+  const statRel = Object.assign({ mediana: median(relSorted), media: mean(relSorted) }, quartiles(relSorted));
+
+  const prsOutliers = repos.filter(r => r.prs < statPrs.lo || r.prs > statPrs.hi);
+  const relOutliers = repos.filter(r => r.releases < statRel.lo || r.releases > statRel.hi);
+
+  // ---------- SVG helpers ----------
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  const tooltip = document.getElementById("tooltip");
+  function showTooltip(evt, html) {
+    tooltip.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.innerHTML = html; // built from trusted, locally-formatted strings only
+    tooltip.appendChild(wrap);
+    const x = evt.clientX !== undefined ? evt.clientX : (evt.target.getBoundingClientRect().left + evt.target.getBoundingClientRect().width / 2);
+    const y = evt.clientY !== undefined ? evt.clientY : evt.target.getBoundingClientRect().top;
+    tooltip.style.left = x + "px";
+    tooltip.style.top = (y - 12) + "px";
+    tooltip.classList.add("show");
+  }
+  function hideTooltip() { tooltip.classList.remove("show"); }
+
+  function makeBins(values, min, max, count) {
+    const width = (max - min) / count;
+    const bins = Array.from({ length: count }, (_, i) => ({ x0: min + i * width, x1: min + (i + 1) * width, count: 0 }));
+    for (const v of values) {
+      if (v < min || v > max) continue;
+      let idx = Math.floor((v - min) / width);
+      if (idx >= count) idx = count - 1;
+      if (idx < 0) idx = 0;
+      bins[idx].count++;
+    }
+    return bins;
+  }
+
+  function niceStep(range, count) {
+    const rough = range / count;
+    const mag = Math.pow(10, Math.floor(Math.log10(rough)));
+    const norm = rough / mag;
+    if (norm < 1.5) return mag;
+    if (norm < 3) return 2 * mag;
+    if (norm < 7) return 5 * mag;
+    return 10 * mag;
+  }
+  // Ticks always reach (>=) maxVal — the last tick is rounded UP to the next step,
+  // never down, so a bar for the true max never grows taller than the plot area.
+  function niceAxisTicks(maxVal, count) {
+    if (maxVal <= 0) return [0, 1];
+    const step = niceStep(maxVal, count);
+    const niceMax = Math.ceil(maxVal / step) * step;
+    const ticks = [];
+    for (let t = 0; t <= niceMax + step * 0.001; t += step) ticks.push(Math.round(t * 1000) / 1000);
+    return ticks;
+  }
+
+  /**
+   * Renders a histogram into `container` (a div). Returns the bins used, for the table view.
+   */
+  function renderHistogram(container, opts) {
+    const { values, min, max, binCount, refLines, xTickFmt, valueLabel } = opts;
+    container.innerHTML = "";
+    const bins = makeBins(values, min, max, binCount);
+    const maxCount = Math.max(1, ...bins.map(b => b.count));
+
+    const W = 640, H = 300;
+    const margin = { top: 14, right: 14, bottom: 34, left: 46 };
+    const plotW = W - margin.left - margin.right;
+    const plotH = H - margin.top - margin.bottom;
+
+    const svg = svgEl("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Histograma de " + valueLabel });
+
+    const yTicks = niceAxisTicks(maxCount, 4);
+    const yMax = yTicks[yTicks.length - 1] || maxCount;
+    yTicks.forEach(t => {
+      const y = margin.top + plotH - (t / yMax) * plotH;
+      svg.appendChild(svgEl("line", { class: "gridline", x1: margin.left, x2: margin.left + plotW, y1: y, y2: y }));
+      const lbl = svgEl("text", { class: "axis-label", x: margin.left - 8, y: y + 3, "text-anchor": "end" });
+      lbl.textContent = fmt(t, 0);
+      svg.appendChild(lbl);
+    });
+
+    const barGap = 2;
+    const barSlot = plotW / binCount;
+    bins.forEach((b, i) => {
+      const h = (b.count / yMax) * plotH;
+      const x = margin.left + i * barSlot;
+      const y = margin.top + plotH - h;
+      const rect = svgEl("rect", {
+        class: "bar", x: x + barGap / 2, y: y, width: Math.max(0, barSlot - barGap), height: Math.max(0, h),
+        rx: 2, ry: 2, tabindex: "0",
+        "aria-label": `${xTickFmt(b.x0)} a ${xTickFmt(b.x1)}: ${b.count} repositórios`
+      });
+      const tt = () => `${xTickFmt(b.x0)} – ${xTickFmt(b.x1)}<br><span class="tt-value">${b.count}</span> repositório${b.count === 1 ? "" : "s"}`;
+      rect.addEventListener("pointermove", (e) => showTooltip(e, tt()));
+      rect.addEventListener("pointerenter", (e) => showTooltip(e, tt()));
+      rect.addEventListener("pointerleave", hideTooltip);
+      rect.addEventListener("focus", (e) => showTooltip(e, tt()));
+      rect.addEventListener("blur", hideTooltip);
+      svg.appendChild(rect);
+    });
+
+    // x-axis ticks: round numbers (0, 5, 10... or 0, 500, 1000...), not arbitrary fractions
+    const xStep = niceStep(max - min, 6);
+    const xTicks = [];
+    for (let t = min; t <= max + xStep * 0.001; t += xStep) xTicks.push(Math.round(t * 1000) / 1000);
+    xTicks.forEach((val, i) => {
+      const x = margin.left + ((val - min) / (max - min)) * plotW;
+      const anchor = i === 0 ? "start" : (i === xTicks.length - 1 ? "end" : "middle");
+      const lbl = svgEl("text", { class: "axis-label", x: x, y: margin.top + plotH + 18, "text-anchor": anchor });
+      lbl.textContent = xTickFmt(val);
+      svg.appendChild(lbl);
+    });
+    svg.appendChild(svgEl("line", { class: "axis-line", x1: margin.left, x2: margin.left + plotW, y1: margin.top + plotH, y2: margin.top + plotH }));
+
+    (refLines || []).forEach(rl => {
+      if (rl.value < min || rl.value > max) return;
+      const x = margin.left + ((rl.value - min) / (max - min)) * plotW;
+      svg.appendChild(svgEl("line", { class: "ref-line " + rl.cls, x1: x, x2: x, y1: margin.top, y2: margin.top + plotH }));
+    });
+
+    container.appendChild(svg);
+    return bins;
+  }
+
+  function renderLegend(container, items) {
+    container.innerHTML = "";
+    items.forEach(it => {
+      const row = document.createElement("div");
+      row.className = "legend-item";
+      const sw = document.createElement("span");
+      sw.className = "legend-swatch";
+      sw.style.background = it.color;
+      if (it.dash) sw.style.backgroundImage = `repeating-linear-gradient(90deg, ${it.color} 0 4px, transparent 4px 7px)`;
+      if (it.dash) sw.style.background = "transparent";
+      row.appendChild(sw);
+      const txt = document.createElement("span");
+      txt.textContent = it.label + ": ";
+      const strong = document.createElement("strong");
+      strong.textContent = it.value;
+      row.appendChild(txt);
+      row.appendChild(strong);
+      container.appendChild(row);
+    });
+  }
+
+  function renderBinTable(container, bins, xTickFmt) {
+    container.innerHTML = "";
+    const table = document.createElement("table");
+    table.className = "data-table";
+    table.innerHTML = "<thead><tr><th>Faixa</th><th class=\"num\">Repositórios</th></tr></thead>";
+    const tbody = document.createElement("tbody");
+    bins.forEach(b => {
+      if (b.count === 0) return;
+      const tr = document.createElement("tr");
+      const tdRange = document.createElement("td");
+      tdRange.textContent = xTickFmt(b.x0) + " – " + xTickFmt(b.x1);
+      const tdCount = document.createElement("td");
+      tdCount.className = "num";
+      tdCount.textContent = fmt(b.count, 0);
+      tr.appendChild(tdRange); tr.appendChild(tdCount);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    wrap.appendChild(table);
+    container.appendChild(wrap);
+  }
+
+  function outlierTable(container, list, valueKey, valueLabel) {
+    container.innerHTML = "";
+    const sorted = list.slice().sort((a, b) => b[valueKey] - a[valueKey]).slice(0, 10);
+    const table = document.createElement("table");
+    table.className = "data-table";
+    const thead = document.createElement("thead");
+    thead.innerHTML = `<tr><th>Repositório</th><th class="num">${valueLabel}</th></tr>`;
+    table.appendChild(thead);
+    const tbody = document.createElement("tbody");
+    sorted.forEach(r => {
+      const tr = document.createElement("tr");
+      const tdRepo = document.createElement("td");
+      const nameEl = document.createElement("div");
+      nameEl.className = "repo-name";
+      nameEl.textContent = r.repo;
+      const authorEl = document.createElement("div");
+      authorEl.className = "repo-author";
+      authorEl.textContent = r.autor;
+      tdRepo.appendChild(nameEl); tdRepo.appendChild(authorEl);
+      const tdVal = document.createElement("td");
+      tdVal.className = "num";
+      tdVal.textContent = fmt(r[valueKey], 0);
+      tr.appendChild(tdRepo); tr.appendChild(tdVal);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    wrap.appendChild(table);
+    container.appendChild(wrap);
+  }
+
+  // ---------- mini sparkline (overview) ----------
+  function renderSpark(container, values, min, max) {
+    const bins = makeBins(values, min, max, 16);
+    const maxCount = Math.max(1, ...bins.map(b => b.count));
+    const W = 200, H = 40;
+    const svg = svgEl("svg", { class: "spark", viewBox: `0 0 ${W} ${H}`, "aria-hidden": "true" });
+    const slot = W / bins.length;
+    bins.forEach((b, i) => {
+      const h = (b.count / maxCount) * (H - 2);
+      svg.appendChild(svgEl("rect", { class: "spark-bar", x: i * slot + 1, y: H - h, width: Math.max(0, slot - 2), height: h, rx: 1 }));
+    });
+    container.appendChild(svg);
+  }
+
+  // ================= RQ01 =================
+  function buildRQ01() {
+    document.getElementById("kpi-idade-mediana").innerHTML = fmt(statIdade.mediana, 1) + '<span class="unit">anos</span>';
+    document.getElementById("kpi-idade-media").innerHTML = fmt(statIdade.media, 1) + '<span class="unit">anos</span>';
+    const diff = statIdade.mediana - 8;
+    const cap = document.getElementById("kpi-idade-cap");
+    cap.textContent = (diff >= 0 ? "+" : "") + fmt(diff, 1) + " anos vs. hipótese de 8";
+    cap.className = "kpi-caption " + (diff >= 0 ? "good" : "warn");
+
+    const min = 0, max = niceCeiling(Math.max(...idadesSorted));
+    const bins = renderHistogram(document.getElementById("chart-rq01"), {
+      values: idadesSorted, min, max, binCount: 22,
+      refLines: [
+        { value: statIdade.mediana, cls: "ref-median" },
+        { value: statIdade.media, cls: "ref-mean" },
+        { value: 8, cls: "ref-target" },
+      ],
+      xTickFmt: v => fmt(v, 0),
+      valueLabel: "idade em anos",
+    });
+    window.__rq01Bins = bins;
+    renderLegend(document.getElementById("legend-rq01"), [
+      { color: "var(--ink)", label: "Mediana", value: fmt(statIdade.mediana, 1) + " anos" },
+      { color: "var(--ink-secondary)", label: "Média", value: fmt(statIdade.media, 1) + " anos", dash: true },
+      { color: "var(--ref-target)", label: "Hipótese", value: "8 anos", dash: true },
+    ]);
+
+    const buckets = [
+      { lo: 0, hi: 3, label: "0–3" }, { lo: 3, hi: 6, label: "3–6" }, { lo: 6, hi: 9, label: "6–9" },
+      { lo: 9, hi: 12, label: "9–12" }, { lo: 12, hi: 16, label: "12–16" }, { lo: 16, hi: Infinity, label: "16+" },
+    ];
+    buckets.forEach(b => b.count = idadesSorted.filter(v => v >= b.lo && v < b.hi).length);
+    const maxB = Math.max(...buckets.map(b => b.count));
+    const list = document.getElementById("bucket-list");
+    list.innerHTML = "";
+    buckets.forEach(b => {
+      const row = document.createElement("div");
+      row.className = "bucket-row";
+      row.innerHTML = `<span class="bucket-range">${b.label} anos</span>
+        <span class="bucket-track"><span class="bucket-fill" style="width:${(b.count / maxB) * 100}%"></span></span>
+        <span class="bucket-count">${b.count}</span>`;
+      list.appendChild(row);
+    });
+
+    document.getElementById("tablebtn-rq01").addEventListener("click", () => toggleTableView("rq01"));
+  }
+
+  // ================= RQ02 / RQ03 shared =================
+  function buildAssymRQ(cfg) {
+    const { id, values, stat, outliers, valueKey, valueLabel, kpiPrefix } = cfg;
+    document.getElementById(kpiPrefix + "-mediana").textContent = fmt(stat.mediana, 0);
+    document.getElementById(kpiPrefix + "-media").textContent = fmt(stat.media, 0);
+    document.getElementById(kpiPrefix + "-outliers").textContent = fmt(outliers.length, 0);
+    document.getElementById(kpiPrefix + "-outliers-cap").textContent = fmt((outliers.length / values.length) * 100, 1) + "% da amostra, acima de " + fmt(stat.hi, 0);
+
+    let mode = "foco";
+    const focoMax = niceCeiling(stat.hi);
+    const fullMax = niceCeiling(Math.max(...values));
+
+    function draw() {
+      const min = 0, max = mode === "foco" ? focoMax : fullMax;
+      const visible = values.filter(v => v <= max).length;
+      const hidden = values.length - visible;
+      const bins = renderHistogram(document.getElementById("chart-" + id), {
+        values, min, max, binCount: 24,
+        refLines: [
+          { value: stat.mediana, cls: "ref-median" },
+          { value: stat.media, cls: "ref-mean" },
+        ],
+        xTickFmt: v => fmt(v, 0),
+        valueLabel: valueLabel,
+      });
+      window["__" + id + "Bins"] = bins;
+      const note = document.getElementById("note-" + id);
+      note.textContent = hidden > 0
+        ? `Eixo até ${fmt(max, 0)} · ${hidden} repositório${hidden === 1 ? "" : "s"} acima disso não aparecem na barra (veja a tabela ao lado).`
+        : `Eixo até ${fmt(max, 0)} · todos os ${values.length} repositórios estão representados.`;
+      renderLegend(document.getElementById("legend-" + id), [
+        { color: "var(--ink)", label: "Mediana", value: fmt(stat.mediana, 0) },
+        { color: "var(--ink-secondary)", label: "Média", value: fmt(stat.media, 0), dash: true },
+      ]);
+    }
+    draw();
+
+    const segBtns = document.querySelectorAll("#seg-" + id + " .seg-btn");
+    segBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        mode = btn.dataset.mode;
+        segBtns.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+        draw();
+        setTableView(id, false);
+      });
+    });
+
+    outlierTable(document.getElementById("outliers-" + id), repos, valueKey, valueLabel);
+    document.getElementById("tablebtn-" + id).addEventListener("click", () => toggleTableView(id));
+  }
+
+  function setTableView(id, showTable) {
+    const chartWrap = document.getElementById("chart-" + id);
+    const tableWrap = document.getElementById("table-" + id);
+    const btn = document.getElementById("tablebtn-" + id);
+    if (showTable) {
+      renderBinTable(tableWrap, window["__" + id + "Bins"] || [], v => fmt(v, id === "rq01" ? 1 : 0));
+      chartWrap.style.display = "none";
+      tableWrap.style.display = "block";
+      btn.textContent = "Ver como gráfico";
+      btn.setAttribute("aria-pressed", "true");
+    } else {
+      chartWrap.style.display = "block";
+      tableWrap.style.display = "none";
+      btn.textContent = "Ver como tabela";
+      btn.setAttribute("aria-pressed", "false");
+    }
+  }
+  function toggleTableView(id) {
+    const tableWrap = document.getElementById("table-" + id);
+    const isShown = tableWrap.style.display === "block";
+    setTableView(id, !isShown);
+  }
+
+  // ================= Overview =================
+  function buildOverview() {
+    document.getElementById("ov-idade-stat").innerHTML = fmt(statIdade.mediana, 1) + '<span class="unit"> anos (mediana)</span>';
+    document.getElementById("ov-idade-verdict").textContent = statIdade.mediana >= 8
+      ? "Confirmada: repositórios maduros, acima do limiar de 8 anos."
+      : `Parcialmente confirmada: maduros, mas ${fmt(8 - statIdade.mediana, 1)} anos abaixo do limiar de 8.`;
+    renderSpark(document.getElementById("ov-idade-spark"), idadesSorted, 0, niceCeiling(Math.max(...idadesSorted)));
+
+    document.getElementById("ov-prs-stat").innerHTML = fmt(statPrs.mediana, 0) + '<span class="unit"> PRs (mediana)</span>';
+    document.getElementById("ov-prs-verdict").textContent = `Confirmada: alto volume típico, com ${prsOutliers.length} outliers puxando a média para ${fmt(statPrs.media, 0)}.`;
+    renderSpark(document.getElementById("ov-prs-spark"), prsSorted, 0, niceCeiling(statPrs.hi));
+
+    document.getElementById("ov-rel-stat").innerHTML = fmt(statRel.mediana, 0) + '<span class="unit"> releases (mediana)</span>';
+    document.getElementById("ov-rel-verdict").textContent = `Confirmada: ciclo de entrega ativo, com ${relOutliers.length} outliers de manutenção intensa.`;
+    renderSpark(document.getElementById("ov-rel-spark"), relSorted, 0, niceCeiling(statRel.hi));
+  }
+
+  // ---------- tabs ----------
+  const tabOrder = ["overview", "rq01", "rq02", "rq03"];
+  let currentTab = "overview";
+  const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
+
+  function setTab(name) {
+    currentTab = name;
+    tabBtns.forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    // queried live (not cached) because these nodes are injected into #views below,
+    // after this function is defined but before it is first called
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + name));
+    document.getElementById("prevBtn").disabled = tabOrder.indexOf(name) === 0;
+    document.getElementById("nextBtn").disabled = tabOrder.indexOf(name) === tabOrder.length - 1;
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+  tabBtns.forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    const i = tabOrder.indexOf(currentTab);
+    if (i > 0) setTab(tabOrder[i - 1]);
+  });
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    const i = tabOrder.indexOf(currentTab);
+    if (i < tabOrder.length - 1) setTab(tabOrder[i + 1]);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+    if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+  });
+
+  // ---------- build views HTML ----------
+  document.getElementById("views").innerHTML = `
+    <section class="view" id="view-overview">
+      <div class="view-head">
+        <div class="view-eyebrow">Visão geral</div>
+        <h1 class="view-title">Repositórios populares são maduros e ativos?</h1>
+        <p class="view-desc">Três hipóteses testadas sobre os 1000 repositórios mais populares do GitHub. Clique em um cartão para ver os detalhes de cada RQ.</p>
+      </div>
+      <div class="overview-grid">
+        <button class="overview-card" data-goto="rq01">
+          <span class="overview-tag">RQ01</span>
+          <span class="overview-q">Repositórios populares são maduros?</span>
+          <span class="overview-stat" id="ov-idade-stat"></span>
+          <svg class="spark" id="ov-idade-spark"></svg>
+          <span class="overview-verdict" id="ov-idade-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq02">
+          <span class="overview-tag">RQ02</span>
+          <span class="overview-q">Recebem muitas contribuições aceitas?</span>
+          <span class="overview-stat" id="ov-prs-stat"></span>
+          <svg class="spark" id="ov-prs-spark"></svg>
+          <span class="overview-verdict" id="ov-prs-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq03">
+          <span class="overview-tag">RQ03</span>
+          <span class="overview-q">Têm releases frequentes?</span>
+          <span class="overview-stat" id="ov-rel-stat"></span>
+          <svg class="spark" id="ov-rel-spark"></svg>
+          <span class="overview-verdict" id="ov-rel-verdict"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq01">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ01</div>
+        <h1 class="view-title">Repositórios populares são maduros?</h1>
+        <p class="view-desc">Hipótese: idade mediana acima de 8 anos, já que construir uma base de milhares de estrelas normalmente leva tempo.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana</div><div class="kpi-value" id="kpi-idade-mediana"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Média</div><div class="kpi-value" id="kpi-idade-media"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Hipótese</div><div class="kpi-value">8<span class="unit">anos</span></div><div class="kpi-caption" id="kpi-idade-cap"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Repositórios</div><div class="kpi-value">1000</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Distribuição da idade</div><div class="card-note">Anos desde a criação do repositório</div></div>
+            <button class="link-btn" id="tablebtn-rq01" aria-pressed="false">Ver como tabela</button>
+          </div>
+          <div class="chart-wrap" id="chart-rq01"></div>
+          <div class="chart-wrap" id="table-rq01" style="display:none"></div>
+          <div class="chart-legend" id="legend-rq01"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Repositórios por faixa etária</div>
+          <div class="bucket-list" id="bucket-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq02">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ02</div>
+        <h1 class="view-title">Repositórios populares recebem muitas contribuições aceitas?</h1>
+        <p class="view-desc">Hipótese: alto volume de PRs mergeadas, já que projetos populares atraem colaboradores externos e mantenedores ativos.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana</div><div class="kpi-value" id="kpi-prs-mediana"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Média</div><div class="kpi-value" id="kpi-prs-media"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Outliers (IQR)</div><div class="kpi-value" id="kpi-prs-outliers"></div><div class="kpi-caption" id="kpi-prs-outliers-cap"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Repositórios</div><div class="kpi-value">1000</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Distribuição de PRs mergeadas</div><div class="card-note" id="note-rq02"></div></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="seg-group" id="seg-rq02">
+                <button class="seg-btn" data-mode="foco" aria-pressed="true">Foco na maioria</button>
+                <button class="seg-btn" data-mode="completo" aria-pressed="false">Distribuição completa</button>
+              </div>
+              <button class="link-btn" id="tablebtn-rq02" aria-pressed="false">Ver como tabela</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-rq02"></div>
+          <div class="chart-wrap" id="table-rq02" style="display:none"></div>
+          <div class="chart-legend" id="legend-rq02"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Top 10 · mais PRs mergeadas</div>
+          <div id="outliers-rq02"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq03">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ03</div>
+        <h1 class="view-title">Repositórios populares têm releases frequentes?</h1>
+        <p class="view-desc">Hipótese: releases frequentes, refletindo manutenção ativa e um ciclo constante de entrega de novas versões.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana</div><div class="kpi-value" id="kpi-rel-mediana"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Média</div><div class="kpi-value" id="kpi-rel-media"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Outliers (IQR)</div><div class="kpi-value" id="kpi-rel-outliers"></div><div class="kpi-caption" id="kpi-rel-outliers-cap"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Repositórios</div><div class="kpi-value">1000</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Distribuição de releases</div><div class="card-note" id="note-rq03"></div></div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <div class="seg-group" id="seg-rq03">
+                <button class="seg-btn" data-mode="foco" aria-pressed="true">Foco na maioria</button>
+                <button class="seg-btn" data-mode="completo" aria-pressed="false">Distribuição completa</button>
+              </div>
+              <button class="link-btn" id="tablebtn-rq03" aria-pressed="false">Ver como tabela</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chart-rq03"></div>
+          <div class="chart-wrap" id="table-rq03" style="display:none"></div>
+          <div class="chart-legend" id="legend-rq03"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Top 10 · mais releases</div>
+          <div id="outliers-rq03"></div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  document.querySelectorAll(".overview-card").forEach(btn => {
+    btn.addEventListener("click", () => setTab(btn.dataset.goto));
+  });
+
+  buildOverview();
+  buildRQ01();
+  buildAssymRQ({ id: "rq02", values: prsSorted, stat: statPrs, outliers: prsOutliers, valueKey: "prs", valueLabel: "PRs mergeadas", kpiPrefix: "kpi-prs" });
+  buildAssymRQ({ id: "rq03", values: relSorted, stat: statRel, outliers: relOutliers, valueKey: "releases", valueLabel: "releases", kpiPrefix: "kpi-rel" });
+
+  setTab("overview");
+})();
+</script>
+</body>
+</html>

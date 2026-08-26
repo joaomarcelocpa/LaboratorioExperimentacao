@@ -4,9 +4,9 @@ from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
 
-DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "repositorios.csv"
-DEFAULT_OUTPUT_RQ04_PATH = Path(__file__).resolve().parent.parent / "dados" / "bernardo" / "rq04-validada.csv"
-DEFAULT_OUTPUT_RQ05_PATH = Path(__file__).resolve().parent.parent / "dados" / "bernardo" / "rq05-linguagens.csv"
+DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "repositorios.csv"
+DEFAULT_OUTPUT_RQ04_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "bernardo" / "rq04-validada.csv"
+DEFAULT_OUTPUT_RQ05_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "bernardo" / "rq05-linguagens.csv"
 
 TODAY = datetime.now(tz=timezone.utc)
 

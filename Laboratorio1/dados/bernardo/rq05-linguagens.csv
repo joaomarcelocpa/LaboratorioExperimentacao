@@ -1,11 +1,11 @@
 linguagem,quantidade,percentual
-Python,229,22.9
+Python,227,22.7
 TypeScript,174,17.4
 JavaScript,111,11.1
 Go,76,7.6
-Rust,57,5.7
+Rust,58,5.8
+C++,41,4.1
 Java,41,4.1
-C++,40,4.0
 Jupyter Notebook,24,2.4
 C,21,2.1
 Shell,20,2.0

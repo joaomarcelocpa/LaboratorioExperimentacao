@@ -3,8 +3,8 @@ import statistics
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
-DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "repositorios.csv"
-DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent.parent / "dados" / "joao" / "rqs-validadas.csv"
+DEFAULT_INPUT_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "repositorios.csv"
+DEFAULT_OUTPUT_PATH = Path(__file__).resolve().parent.parent.parent / "dados" / "joao" / "rqs-validadas.csv"
 
 COLUMNS = ["criado_em", "prs_mergeadas", "releases"]
 
