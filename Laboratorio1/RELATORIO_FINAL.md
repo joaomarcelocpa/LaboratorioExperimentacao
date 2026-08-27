@@ -9,6 +9,7 @@
 | **Laboratório** | Laboratório 01 — Características de repositórios populares |
 | **Grupo (trio)** | Bernardo de Resende · João Marcelo · Miguel Diniz |
 | **Link do repositório / GitHub Projects** | [https://github.com/joaomarcelocpa/LaboratorioExperimentacao/tree/main/Laboratorio1](https://github.com/joaomarcelocpa/LaboratorioExperimentacao/tree/main/Laboratorio1) <br> [https://github.com/users/joaomarcelocpa/projects/2/views/1](https://github.com/users/joaomarcelocpa/projects/2/views/1) |
+| **Dashboard (GitHub Pages)** | [https://joaomarcelocpa.github.io/LaboratorioExperimentacao/Laboratorio1/dashboard.html](https://joaomarcelocpa.github.io/LaboratorioExperimentacao/Laboratorio1/dashboard.html) |
 | **Data de entrega** | 27/08/2026 |
 
 # 1. Introdução
