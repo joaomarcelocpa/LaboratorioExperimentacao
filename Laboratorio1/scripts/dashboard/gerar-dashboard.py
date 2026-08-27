@@ -83,7 +83,11 @@ def extrair_repos(input_path=DEFAULT_INPUT_PATH):
         idade = round((REFERENCE_DATE - criado_em).days / 365.25, 3) if criado_em else None
 
         atualizado_em = _parse_data(row.get("atualizado_em", ""))
-        dias_atualizacao = (REFERENCE_DATE_ATUALIZACAO - atualizado_em).days if atualizado_em else None
+        dias_atualizacao = (
+            round((REFERENCE_DATE_ATUALIZACAO - atualizado_em).total_seconds() / 86400, 2)
+            if atualizado_em
+            else None
+        )
 
         linguagem = row.get("linguagem", "").strip() or None
 

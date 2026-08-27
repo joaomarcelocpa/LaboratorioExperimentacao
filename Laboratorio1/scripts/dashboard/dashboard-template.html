@@ -344,7 +344,7 @@ const RQ0607 = __RQ0607_DATA__;
     container.appendChild(wrap);
   }
 
-  function outlierTable(container, list, valueKey, valueLabel) {
+  function outlierTable(container, list, valueKey, valueLabel, decimals) {
     container.innerHTML = "";
     const sorted = list.slice().sort((a, b) => b[valueKey] - a[valueKey]).slice(0, 10);
     const table = document.createElement("table");
@@ -365,7 +365,7 @@ const RQ0607 = __RQ0607_DATA__;
       tdRepo.appendChild(nameEl); tdRepo.appendChild(authorEl);
       const tdVal = document.createElement("td");
       tdVal.className = "num";
-      tdVal.textContent = fmt(r[valueKey], 0);
+      tdVal.textContent = fmt(r[valueKey], decimals || 0);
       tr.appendChild(tdRepo); tr.appendChild(tdVal);
       tbody.appendChild(tr);
     });
@@ -506,27 +506,29 @@ const RQ0607 = __RQ0607_DATA__;
   // e preenche um <div> de legenda "kpi-caption" com o veredito (mesmo texto usado
   // em scripts/bernardo/graficos-bernardo.py::plot_rq04_atualizacao).
   function buildAssymRQ(cfg) {
-    const { id, values, stat, outliers, valueKey, valueLabel, kpiPrefix, hipotese } = cfg;
-    document.getElementById(kpiPrefix + "-mediana").textContent = fmt(stat.mediana, 0);
-    document.getElementById(kpiPrefix + "-media").textContent = fmt(stat.media, 0);
+    const { id, values, stat, outliers, valueKey, valueLabel, kpiPrefix, hipotese, xMin, decimals } = cfg;
+    const dec = decimals || 0;
+    document.getElementById(kpiPrefix + "-mediana").textContent = fmt(stat.mediana, dec);
+    document.getElementById(kpiPrefix + "-media").textContent = fmt(stat.media, dec);
     document.getElementById(kpiPrefix + "-outliers").textContent = fmt(outliers.length, 0);
-    document.getElementById(kpiPrefix + "-outliers-cap").textContent = fmt((outliers.length / values.length) * 100, 1) + "% da amostra, acima de " + fmt(stat.hi, 0);
+    document.getElementById(kpiPrefix + "-outliers-cap").textContent = fmt((outliers.length / values.length) * 100, 1) + "% da amostra, acima de " + fmt(stat.hi, dec);
 
     if (hipotese) {
       const cap = document.getElementById(kpiPrefix + "-hipotese-cap");
       const confirmada = stat.mediana <= hipotese.value;
       cap.textContent = confirmada
-        ? `Confirmada: mediana ${fmt(stat.mediana, 0)} ≤ ${fmt(hipotese.value, 0)}`
-        : `Não confirmada: mediana ${fmt(stat.mediana, 0)} > ${fmt(hipotese.value, 0)}`;
+        ? `Confirmada: mediana ${fmt(stat.mediana, dec)} ≤ ${fmt(hipotese.value, 0)}`
+        : `Não confirmada: mediana ${fmt(stat.mediana, dec)} > ${fmt(hipotese.value, 0)}`;
       cap.className = "kpi-caption " + (confirmada ? "good" : "warn");
     }
 
     let mode = "foco";
+    const baseMin = xMin || 0;
     const focoMax = niceCeiling(stat.hi);
     const fullMax = niceCeiling(Math.max(...values));
 
     function draw() {
-      const min = 0, max = mode === "foco" ? focoMax : fullMax;
+      const min = baseMin, max = mode === "foco" ? focoMax : fullMax;
       const visible = values.filter(v => v <= max).length;
       const hidden = values.length - visible;
       const refLines = [
@@ -537,17 +539,17 @@ const RQ0607 = __RQ0607_DATA__;
       const bins = renderHistogram(document.getElementById("chart-" + id), {
         values, min, max, binCount: 24,
         refLines,
-        xTickFmt: v => fmt(v, 0),
+        xTickFmt: v => fmt(v, dec),
         valueLabel: valueLabel,
       });
       window["__" + id + "Bins"] = bins;
       const note = document.getElementById("note-" + id);
       note.textContent = hidden > 0
-        ? `Eixo até ${fmt(max, 0)} · ${hidden} repositório${hidden === 1 ? "" : "s"} acima disso não aparecem na barra (veja a tabela ao lado).`
-        : `Eixo até ${fmt(max, 0)} · todos os ${values.length} repositórios estão representados.`;
+        ? `Eixo até ${fmt(max, dec)} · ${hidden} repositório${hidden === 1 ? "" : "s"} acima disso não aparecem na barra (veja a tabela ao lado).`
+        : `Eixo até ${fmt(max, dec)} · todos os ${values.length} repositórios estão representados.`;
       const legendItems = [
-        { color: "var(--ink)", label: "Mediana", value: fmt(stat.mediana, 0) },
-        { color: "var(--ink-secondary)", label: "Média", value: fmt(stat.media, 0), dash: true },
+        { color: "var(--ink)", label: "Mediana", value: fmt(stat.mediana, dec) },
+        { color: "var(--ink-secondary)", label: "Média", value: fmt(stat.media, dec), dash: true },
       ];
       if (hipotese) legendItems.push({ color: "var(--ref-target)", label: "Hipótese", value: fmt(hipotese.value, 0), dash: true });
       renderLegend(document.getElementById("legend-" + id), legendItems);
@@ -564,7 +566,7 @@ const RQ0607 = __RQ0607_DATA__;
       });
     });
 
-    outlierTable(document.getElementById("outliers-" + id), repos, valueKey, valueLabel);
+    outlierTable(document.getElementById("outliers-" + id), repos, valueKey, valueLabel, dec);
     document.getElementById("tablebtn-" + id).addEventListener("click", () => toggleTableView(id));
   }
 
@@ -821,11 +823,11 @@ const RQ0607 = __RQ0607_DATA__;
     document.getElementById("ov-rel-verdict").textContent = `Confirmada: ciclo de entrega ativo, com ${relOutliers.length} outliers de manutenção intensa.`;
     renderSpark(document.getElementById("ov-rel-spark"), relSorted, 0, niceCeiling(statRel.hi));
 
-    document.getElementById("ov-rq04-stat").innerHTML = fmt(statAtualizacao.mediana, 0) + '<span class="unit"> dias (mediana)</span>';
+    document.getElementById("ov-rq04-stat").innerHTML = fmt(statAtualizacao.mediana, 1) + '<span class="unit"> dias (mediana)</span>';
     document.getElementById("ov-rq04-verdict").textContent = statAtualizacao.mediana <= 30
-      ? `Confirmada: atualização recente, mediana de ${fmt(statAtualizacao.mediana, 0)} dias.`
-      : `Não confirmada: mediana de ${fmt(statAtualizacao.mediana, 0)} dias, acima do limiar de 30.`;
-    renderSpark(document.getElementById("ov-rq04-spark"), atualizacaoSorted, 0, niceCeiling(statAtualizacao.hi));
+      ? `Confirmada: atualização recente, mediana de ${fmt(statAtualizacao.mediana, 1)} dias.`
+      : `Não confirmada: mediana de ${fmt(statAtualizacao.mediana, 1)} dias, acima do limiar de 30.`;
+    renderSpark(document.getElementById("ov-rq04-spark"), atualizacaoSorted, Math.floor(atualizacaoSorted[0]), niceCeiling(Math.max(...atualizacaoSorted)));
 
     const rq05Top = linguagensOrdenadas[0];
     document.getElementById("ov-rq05-stat").innerHTML = rq05Top.linguagem + '<span class="unit"> lidera · ' + fmt(rq05Top.pct, 1) + "%</span>";
@@ -1169,6 +1171,7 @@ const RQ0607 = __RQ0607_DATA__;
     id: "rq04", values: atualizacaoSorted, stat: statAtualizacao, outliers: atualizacaoOutliers,
     valueKey: "diasAtualizacao", valueLabel: "dias desde a atualização", kpiPrefix: "kpi-rq04",
     hipotese: { value: 30 },
+    xMin: Math.floor(atualizacaoSorted[0]), decimals: 1,
   });
   buildRQ05();
   buildRQ06();

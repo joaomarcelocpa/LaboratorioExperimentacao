@@ -50,7 +50,7 @@ def carregar_dados(input_path=DEFAULT_INPUT_PATH):
         if raw and raw.strip():
             try:
                 dt = datetime.strptime(raw, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
-                dias_atualizacao.append((REFERENCE_DATE - dt).days)
+                dias_atualizacao.append((REFERENCE_DATE - dt).total_seconds() / 86400)
             except ValueError:
                 pass
 
@@ -67,14 +67,6 @@ def _limites_iqr(values):
     q3 = statistics.median(ordered[(n + 1) // 2 :])
     iqr = q3 - q1
     return q1, q3, q1 - 1.5 * iqr, q3 + 1.5 * iqr
-
-
-def _teto_legivel(valor):
-    if valor <= 10:
-        return math.ceil(valor)
-    magnitude = 10 ** (len(str(int(valor))) - 1)
-    passo = magnitude / 2
-    return math.ceil(valor / passo) * passo
 
 
 def _estilizar_eixo(ax):
@@ -100,42 +92,43 @@ def _rodape(fig, n_amostra):
 def plot_rq04_atualizacao(dias, output_dir):
     mediana = statistics.median(dias)
     media = statistics.mean(dias)
+    minimo, maximo = min(dias), max(dias)
     _, _, _, limite_sup = _limites_iqr(dias)
     outliers = [v for v in dias if v > limite_sup]
     limiar_hipotese = 30
 
-    if outliers:
-        teto = _teto_legivel(limite_sup)
-        visiveis = [v for v in dias if v <= teto]
-        n_ocultos = len(dias) - len(visiveis)
-        subtitulo = f"Distribuição de dias desde atualizado_em · eixo truncado em {teto} dias"
-    else:
-        margem = max(1, int((max(dias) - min(dias)) * 0.2) or max(dias) // 5 or 2)
-        teto = max(dias) + margem
-        visiveis = dias
-        n_ocultos = 0
-        subtitulo = "Distribuição de dias desde atualizado_em (sem outliers)"
+    # A amostra inteira cai bem abaixo da hipótese de 30 dias: `atualizado_em`
+    # é o `updatedAt` do GitHub (proxy de `pushedAt`, que a coleta não grava —
+    # ver scripts/miguel/analyze_rq06_rq07.py), e essa coleta ocorreu numa
+    # janela de poucos dias, então o intervalo observado é naturalmente
+    # estreito. Por isso o eixo foca no intervalo real dos dados em vez de
+    # começar em zero ou truncar cauda longa — aqui não há uma.
+    amplitude = maximo - minimo
+    margem = max(amplitude * 0.08, 0.15)
+    x_min = max(0, minimo - margem)
+    x_max = maximo + margem
 
-    n_bins = min(30, max(5, max(dias) - min(dias) + 1))
+    largura_bin = max(amplitude / 40, 0.02)
+    n_bins = max(10, math.ceil((x_max - x_min) / largura_bin))
 
     fig, ax = plt.subplots(figsize=(9, 5.5))
-    ax.hist(visiveis, bins=n_bins, color=COLOR_BLUE, edgecolor=COLOR_SURFACE, linewidth=0.6, zorder=3)
+    ax.hist(dias, bins=n_bins, range=(x_min, x_max), color=COLOR_BLUE,
+            edgecolor=COLOR_SURFACE, linewidth=0.6, zorder=3)
     _estilizar_eixo(ax)
-    ax.set_xlim(0, teto)
+    ax.set_xlim(x_min, x_max)
+    ax.xaxis.set_major_formatter(lambda v, _pos: f"{v:.1f}")
 
     ax.axvline(mediana, color=COLOR_PRIMARY_INK, linewidth=1.8, zorder=4)
     ax.axvline(media, color=COLOR_SECONDARY_INK, linewidth=1.4, linestyle="--", zorder=4)
-    if limiar_hipotese <= teto:
-        ax.axvline(limiar_hipotese, color=COLOR_ORANGE, linewidth=1.4, linestyle=":", zorder=4)
 
     legenda_linhas = [
-        f"— mediana: {mediana:.0f} dias",
-        f"-- média: {media:.0f} dias",
+        f"— mediana: {mediana:.2f} dias",
+        f"-- média: {media:.2f} dias",
+        f"min–máx: {minimo:.2f}–{maximo:.2f} dias",
+        "",
+        f"{len(outliers)} outliers (IQR)",
+        f"hipótese ({limiar_hipotese} dias): folga ampla",
     ]
-    if limiar_hipotese <= teto:
-        legenda_linhas.append(f"·· hipótese: {limiar_hipotese} dias")
-    if outliers:
-        legenda_linhas += ["", f"{len(outliers)} outliers (IQR)", f"({n_ocultos} fora do gráfico)"]
 
     ax.text(
         0.985, 0.97, "\n".join(legenda_linhas), transform=ax.transAxes, fontsize=9.5,
@@ -143,14 +136,24 @@ def plot_rq04_atualizacao(dias, output_dir):
         bbox=dict(boxstyle="round,pad=0.45", facecolor=COLOR_SURFACE, edgecolor=COLOR_GRID),
     )
 
-    ax.set_xlabel("Dias desde a última atualização")
+    ax.set_xlabel("Dias desde a última atualização (atualizado_em)")
     ax.set_ylabel("Nº de repositórios")
     fig.suptitle("RQ04 — Repositórios populares são atualizados com frequência?",
                  fontsize=14, fontweight="bold", x=0.01, ha="left")
-    ax.set_title(subtitulo, fontsize=10.5, color=COLOR_SECONDARY_INK, loc="left", pad=12)
+    ax.set_title(
+        f"Distribuição de dias desde atualizado_em · amostra entre "
+        f"{minimo:.1f} e {maximo:.1f} dias (limiar da hipótese: {limiar_hipotese} dias)",
+        fontsize=10.5, color=COLOR_SECONDARY_INK, loc="left", pad=12,
+    )
 
+    fig.text(
+        0.01, 0.055,
+        "Nota: atualizado_em é o campo updatedAt do GitHub (proxy de pushedAt — a coleta não grava o último push\n"
+        "separadamente) e ocorreu numa janela curta, então o intervalo observado aqui é naturalmente estreito.",
+        fontsize=7.5, color=COLOR_MUTED, ha="left", linespacing=1.4,
+    )
     _rodape(fig, len(dias))
-    fig.tight_layout(rect=(0, 0.03, 1, 1))
+    fig.tight_layout(rect=(0, 0.11, 1, 1))
 
     output_dir.mkdir(parents=True, exist_ok=True)
     caminho = output_dir / "rq04_atualizacao.png"
