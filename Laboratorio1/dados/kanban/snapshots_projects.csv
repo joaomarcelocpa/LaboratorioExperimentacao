@@ -1,0 +1,16 @@
+sprint,data_snapshot,issue_numero,titulo,status,assignees,url
+Lab01S03,2026-08-26T22:55:56.061961+00:00,1,Sprint 1 - Configuração da conexão com API do GitHub,Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/1
+Lab01S03,2026-08-26T22:55:56.061961+00:00,16,Sprint 2 - Script de validação de dados RQ6 e RQ7,Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/16
+Lab01S03,2026-08-26T22:55:56.061961+00:00,19,"Sprint 3 - Script para plotar gráficos das RQs 1, 2 e 3",Done,joaomarcelocpa,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/19
+Lab01S03,2026-08-26T22:55:56.061961+00:00,15,Sprint 2 - RQ06 — Sistemas populares possuem um alto percentual de issues fechadas?,Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/15
+Lab01S03,2026-08-26T22:55:56.061961+00:00,14,"Sprint 2 - RQ07 — Linguagens mais populares recebem mais contribuição, releases e atualizações?",Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/14
+Lab01S03,2026-08-26T22:55:56.061961+00:00,3,Sprint 1 - Gravar informações da extração em arquivo CSV,Done,joaomarcelocpa,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/3
+Lab01S03,2026-08-26T22:55:56.061961+00:00,6,Sprint 2 - Paginação na busca de 1000 repositórios,Done,bernardordm,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/6
+Lab01S03,2026-08-26T22:55:56.061961+00:00,12,"Sprint 2 - RQs 01, 02 e 03 - Script de validação de consistência",Done,joaomarcelocpa,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/12
+Lab01S03,2026-08-26T22:55:56.061961+00:00,13,"Sprint 2 - RQ01, RQ02, RQ03 — validação e hipóteses",Done,joaomarcelocpa,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/13
+Lab01S03,2026-08-26T22:55:56.061961+00:00,17,Sprint 2 - RQs 04 e 05 - Script de validação de consistência,Done,bernardordm,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/17
+Lab01S03,2026-08-26T22:55:56.061961+00:00,18,"Sprint 2 - RQ04, RQ05 — validação e hipóteses",Done,bernardordm,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/18
+Lab01S03,2026-08-26T22:55:56.061961+00:00,20,Sprint 3 - Script para plotar gráficos das RQs 4 e 5,Done,bernardordm,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/20
+Lab01S03,2026-08-26T22:55:56.061961+00:00,21,Sprint 3 - Script para plotar gráficos das RQs 6 e 7,Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/21
+Lab01S03,2026-08-26T22:55:56.061961+00:00,22,Sprint 3 - Elaborar relatório final para o projeto,To Do,DevMiguelDiniz;bernardordm;joaomarcelocpa,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/22
+Lab01S03,2026-08-26T22:55:56.061961+00:00,23,Sprint 3 - Icrementação da dashboard,Done,DevMiguelDiniz,https://github.com/joaomarcelocpa/LaboratorioExperimentacao/issues/23
