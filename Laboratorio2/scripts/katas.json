@@ -1,0 +1,47 @@
+{
+  "katas": [
+    {
+      "id": "F1",
+      "nome": "Final Value of Variable After Performing Operations",
+      "numero_leetcode": 2011,
+      "dificuldade": "facil",
+      "link": "https://leetcode.com/problems/final-value-of-variable-after-performing-operations/"
+    },
+    {
+      "id": "F2",
+      "nome": "Find Winner on a Tic Tac Toe Game",
+      "numero_leetcode": 1275,
+      "dificuldade": "facil",
+      "link": "https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game/"
+    },
+    {
+      "id": "M1",
+      "nome": "Additive Number",
+      "numero_leetcode": 306,
+      "dificuldade": "media",
+      "link": "https://leetcode.com/problems/additive-number/"
+    },
+    {
+      "id": "M2",
+      "nome": "Maximum Binary Tree",
+      "numero_leetcode": 654,
+      "dificuldade": "media",
+      "link": "https://leetcode.com/problems/maximum-binary-tree/"
+    },
+    {
+      "id": "D1",
+      "nome": "Longest Cycle in a Graph",
+      "numero_leetcode": 2360,
+      "dificuldade": "dificil",
+      "link": "https://leetcode.com/problems/longest-cycle-in-a-graph/"
+    },
+    {
+      "id": "D2",
+      "nome": "Longest Path With Different Adjacent Characters",
+      "numero_leetcode": 2246,
+      "dificuldade": "dificil",
+      "link": "https://leetcode.com/problems/longest-path-with-different-adjacent-characters/"
+    }
+  ],
+  "integrantes": ["Bernardo", "João", "Miguel"]
+}
