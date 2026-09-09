@@ -5,26 +5,25 @@ Métricas coletadas por arquivo Python:
   - cc  : complexidade ciclomática (por função/método)
   - mi  : índice de manutenibilidade
   - raw : linhas de código (LOC, LLOC, SLOC, comentários, em branco)
+  - dup : duplicação de código (blocos de >= MIN_DUP_LINES linhas repetidos)
 
-Uso:
-  python metricas_radon.py <caminho>          # arquivo ou diretório
-  python metricas_radon.py <caminho> -o saida.json
 """
 
 import argparse
+import hashlib
 import json
-import sys
 from pathlib import Path
 
 from radon.complexity import cc_visit, average_complexity, cc_rank
 from radon.metrics import mi_visit
 from radon.raw import analyze
 
+_MIN_DUP_LINES = 5
+
 
 def _analisar_arquivo(caminho: Path) -> dict:
     codigo = caminho.read_text(encoding="utf-8", errors="replace")
 
-    # complexidade ciclomática por bloco (função/método/classe)
     blocos_cc = cc_visit(codigo)
     cc_por_bloco = [
         {
@@ -38,10 +37,8 @@ def _analisar_arquivo(caminho: Path) -> dict:
     ]
     cc_media = average_complexity(blocos_cc) if blocos_cc else 0.0
 
-    # índice de manutenibilidade
     mi_resultado = mi_visit(codigo, multi=True)
 
-    # métricas brutas de linhas
     raw = analyze(codigo)
 
     return {
@@ -64,7 +61,68 @@ def _analisar_arquivo(caminho: Path) -> dict:
     }
 
 
-def analisar(caminho: str) -> list[dict]:
+def _linhas_significativas(caminho: Path) -> list[tuple[int, str]]:
+    """Retorna (numero_linha, conteudo) das linhas não-vazias e não-comentário."""
+    try:
+        linhas = caminho.read_text(encoding="utf-8", errors="replace").splitlines()
+        return [
+            (i + 1, l.strip())
+            for i, l in enumerate(linhas)
+            if l.strip() and not l.strip().startswith("#")
+        ]
+    except Exception:
+        return []
+
+
+def _detectar_duplicatas(arquivos: list[Path]) -> dict:
+    """
+    Detecta blocos duplicados (>= _MIN_DUP_LINES linhas) dentro e entre arquivos
+    usando janela deslizante com hash MD5. Equivalente funcional ao jscpd/PMD CPD
+    para Python.
+    """
+    linhas_sig = {arq: _linhas_significativas(arq) for arq in arquivos}
+
+    window_map: dict[str, list] = {}
+    for arq, linhas in linhas_sig.items():
+        n = len(linhas)
+        for i in range(n - _MIN_DUP_LINES + 1):
+            bloco = tuple(c for _, c in linhas[i : i + _MIN_DUP_LINES])
+            h = hashlib.md5("".join(bloco).encode()).hexdigest()
+            window_map.setdefault(h, []).append(
+                (arq, linhas[i][0], linhas[i + _MIN_DUP_LINES - 1][0])
+            )
+
+    dup_lines: dict[Path, set] = {arq: set() for arq in arquivos}
+    for ocorrencias in window_map.values():
+        if len(ocorrencias) >= 2:
+            for arq, ln_inicio, ln_fim in ocorrencias:
+                dup_lines[arq].update(range(ln_inicio, ln_fim + 1))
+
+    # calcula stats por arquivo e totais
+    por_arquivo = {}
+    total_sig = 0
+    total_dup = 0
+    for arq, linhas in linhas_sig.items():
+        nums = {n for n, _ in linhas}
+        sig = len(nums)
+        dup = len(nums & dup_lines[arq])
+        pct = round(100 * dup / sig, 2) if sig > 0 else 0.0
+        por_arquivo[str(arq)] = {
+            "linhas_significativas": sig,
+            "linhas_duplicadas": dup,
+            "percentual": pct,
+        }
+        total_sig += sig
+        total_dup += dup
+
+    return {
+        "min_linhas_bloco": _MIN_DUP_LINES,
+        "percentual_global": round(100 * total_dup / total_sig, 2) if total_sig > 0 else 0.0,
+        "por_arquivo": por_arquivo,
+    }
+
+
+def analisar(caminho: str) -> dict:
     alvo = Path(caminho)
     if not alvo.exists():
         raise FileNotFoundError(f"Caminho não encontrado: {caminho}")
@@ -75,14 +133,17 @@ def analisar(caminho: str) -> list[dict]:
         else [alvo]
     )
 
-    resultados = []
+    metricas = []
     for arq in arquivos:
         try:
-            resultados.append(_analisar_arquivo(arq))
+            metricas.append(_analisar_arquivo(arq))
         except Exception as exc:
-            resultados.append({"arquivo": str(arq), "erro": str(exc)})
+            metricas.append({"arquivo": str(arq), "erro": str(exc)})
 
-    return resultados
+    return {
+        "arquivos": metricas,
+        "duplicacao": _detectar_duplicatas(arquivos),
+    }
 
 
 def main():
@@ -91,8 +152,8 @@ def main():
     parser.add_argument("-o", "--output", help="Arquivo JSON de saída (padrão: stdout)")
     args = parser.parse_args()
 
-    resultados = analisar(args.caminho)
-    saida = json.dumps(resultados, ensure_ascii=False, indent=2)
+    resultado = analisar(args.caminho)
+    saida = json.dumps(resultado, ensure_ascii=False, indent=2)
 
     if args.output:
         Path(args.output).write_text(saida, encoding="utf-8")
