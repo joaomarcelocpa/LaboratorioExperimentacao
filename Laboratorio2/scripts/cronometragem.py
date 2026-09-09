@@ -126,6 +126,7 @@ class TrialApp:
         self.status_var = tk.StringVar(value="")
         self.timer_var = tk.StringVar(value="00:00")
         self.erro_var = tk.StringVar(value="")
+        self.salvo_var = tk.StringVar(value="")
 
         self._build_form_widgets()
         self._build_timer_widgets()
@@ -154,6 +155,8 @@ class TrialApp:
         self.iniciar_btn = ttk.Button(frame, text="Iniciar", command=self.start_trial, state="disabled")
         self.iniciar_btn.grid(row=4, column=0, columnspan=2, pady=8)
 
+        ttk.Label(frame, textvariable=self.salvo_var).grid(row=5, column=0, columnspan=2)
+
         for var in (self.integrante_var, self.kata_var, self.dificuldade_var):
             var.trace_add("write", lambda *_: self._update_iniciar_state())
 
@@ -174,7 +177,8 @@ class TrialApp:
     def _build_finish_widgets(self):
         frame = ttk.Frame(self.root, padding=12)
         self.finish_frame = frame
-        ttk.Label(frame, textvariable=self.status_var).grid(row=0, column=0, columnspan=2)
+        self.status_label = ttk.Label(frame, textvariable=self.status_var)
+        self.status_label.grid(row=0, column=0, columnspan=2)
         ttk.Label(frame, text="Testes de aceitação que passaram").grid(row=1, column=0, sticky="w")
         ttk.Entry(frame, textvariable=self.testes_var).grid(row=1, column=1, sticky="ew")
         ttk.Label(frame, textvariable=self.erro_var, foreground="red").grid(row=2, column=0, columnspan=2)
@@ -184,7 +188,6 @@ class TrialApp:
         self.timer_frame.grid_forget()
         self.finish_frame.grid_forget()
         self.form_frame.grid(row=0, column=0, sticky="nsew")
-        self.integrante_var.set("")
         self.kata_var.set("")
         self.dificuldade_var.set("")
         self.usou_ia_var.set(False)
@@ -202,6 +205,7 @@ class TrialApp:
         self.finish_frame.grid(row=0, column=0, sticky="nsew")
 
     def start_trial(self):
+        self.salvo_var.set("")
         self.start_time = self.clock()
         self.censurado = False
         self._show_timer_state()
@@ -230,6 +234,7 @@ class TrialApp:
         if censurado:
             texto += " — CENSURADO (35 min)"
         self.status_var.set(texto)
+        self.status_label.configure(foreground="red" if censurado else "")
         self._show_finish_state()
 
     def save_trial(self):
@@ -257,7 +262,7 @@ class TrialApp:
         append_trial_to_csv(row, path)
         salvo_em = str(path)
         self._show_form_state()
-        self.status_var.set(f"Trial salvo em {salvo_em}")
+        self.salvo_var.set(f"Trial salvo em {salvo_em}")
 
 
 def main():
