@@ -4,8 +4,11 @@ Registra, por trial: integrante, kata, dificuldade, uso de IA, tempo gasto,
 censura (estouro dos 35 min) e testes de aceitação que passaram.
 """
 
+import csv
 import re
 import unicodedata
+from datetime import datetime
+from pathlib import Path
 
 TIME_LIMIT_SECONDS = 35 * 60
 
@@ -45,3 +48,56 @@ def validate_trial_form(integrante: str, kata: str, dificuldade: str, testes_pas
     except (TypeError, ValueError):
         errors.append("Testes passados deve ser um número inteiro.")
     return errors
+
+
+CSV_HEADER = [
+    "integrante",
+    "kata",
+    "dificuldade",
+    "usou_ia",
+    "tempo_segundos",
+    "tempo_formatado",
+    "censurado",
+    "testes_passados",
+    "data_hora",
+]
+
+DEFAULT_DADOS_DIR = Path(__file__).resolve().parent.parent / "dados"
+
+
+def build_trial_row(
+    integrante: str,
+    kata: str,
+    dificuldade: str,
+    usou_ia: bool,
+    tempo_segundos: float,
+    censurado: bool,
+    testes_passados: str,
+    now: datetime,
+) -> dict:
+    return {
+        "integrante": integrante,
+        "kata": kata,
+        "dificuldade": dificuldade,
+        "usou_ia": "sim" if usou_ia else "nao",
+        "tempo_segundos": int(round(tempo_segundos)),
+        "tempo_formatado": format_duration(tempo_segundos),
+        "censurado": "sim" if censurado else "nao",
+        "testes_passados": int(testes_passados),
+        "data_hora": now.isoformat(timespec="seconds"),
+    }
+
+
+def dados_path_for(integrante: str, base_dir: Path = DEFAULT_DADOS_DIR) -> Path:
+    return Path(base_dir) / slugify(integrante) / "trials.csv"
+
+
+def append_trial_to_csv(row: dict, path) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    file_exists = path.exists()
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=CSV_HEADER)
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(row)
