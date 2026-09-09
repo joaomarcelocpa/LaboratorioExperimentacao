@@ -1,4 +1,4 @@
-from cronometragem import TIME_LIMIT_SECONDS, format_duration, is_censored
+from cronometragem import TIME_LIMIT_SECONDS, format_duration, is_censored, DIFICULDADES, slugify, validate_trial_form
 
 
 def test_is_censored_false_below_limit():
@@ -37,3 +37,53 @@ def test_format_duration_at_time_limit():
 
 def test_format_duration_truncates_fractional_seconds():
     assert format_duration(59.9) == "00:59"
+
+
+def test_slugify_lowercases_and_joins_with_underscore():
+    assert slugify("Miguel Diniz") == "miguel_diniz"
+
+
+def test_slugify_strips_accents():
+    assert slugify("João") == "joao"
+
+
+def test_slugify_falls_back_when_nothing_left():
+    assert slugify("   ") == "integrante"
+
+
+def test_dificuldades_are_the_three_expected_levels():
+    assert DIFICULDADES == ["facil", "medio", "dificil"]
+
+
+def test_validate_trial_form_accepts_valid_input():
+    assert validate_trial_form("Miguel", "two-sum", "facil", "5") == []
+
+
+def test_validate_trial_form_rejects_empty_integrante():
+    errors = validate_trial_form("", "two-sum", "facil", "5")
+    assert "Integrante é obrigatório." in errors
+
+
+def test_validate_trial_form_rejects_empty_kata():
+    errors = validate_trial_form("Miguel", "  ", "facil", "5")
+    assert "Kata é obrigatório." in errors
+
+
+def test_validate_trial_form_rejects_invalid_dificuldade():
+    errors = validate_trial_form("Miguel", "two-sum", "muito-dificil", "5")
+    assert "Dificuldade deve ser facil, medio ou dificil." in errors
+
+
+def test_validate_trial_form_rejects_negative_testes_passados():
+    errors = validate_trial_form("Miguel", "two-sum", "facil", "-1")
+    assert "Testes passados não pode ser negativo." in errors
+
+
+def test_validate_trial_form_rejects_non_numeric_testes_passados():
+    errors = validate_trial_form("Miguel", "two-sum", "facil", "abc")
+    assert "Testes passados deve ser um número inteiro." in errors
+
+
+def test_validate_trial_form_reports_multiple_errors_at_once():
+    errors = validate_trial_form("", "", "invalida", "abc")
+    assert len(errors) == 4
