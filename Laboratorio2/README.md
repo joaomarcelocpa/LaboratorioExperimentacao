@@ -33,41 +33,57 @@ Uso ou não de assistente de IA (Claude) durante a resolução do kata.
 
 ## 5. Objetos experimentais (katas)
 
-Foram selecionados 6 katas do LeetCode, priorizando baixo número de resoluções (`Accepted`) e
-tags mais específicas, com o objetivo de reduzir o risco de a IA (ou o próprio integrante)
-já conhecer a solução de memória.
+Foram selecionados 6 katas do LeetCode (3 fáceis e 3 médios), priorizando baixo número de
+resoluções (`Accepted`) e tags mais específicas, com o objetivo de reduzir o risco de a IA
+(ou o próprio integrante) já conhecer a solução de memória.
 
 | ID | Kata | Nº LeetCode | Dificuldade | Link |
 |----|------|-------------|-------------|------|
 | F1 | Final Value of Variable After Performing Operations | 2011 | Fácil | https://leetcode.com/problems/final-value-of-variable-after-performing-operations/ |
 | F2 | Find Winner on a Tic Tac Toe Game | 1275 | Fácil | https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game/ |
+| F3 | Count Prefixes of a Given String | 2255 | Fácil | https://leetcode.com/problems/count-prefixes-of-a-given-string/ |
 | M1 | Additive Number | 306 | Média | https://leetcode.com/problems/additive-number/ |
 | M2 | Maximum Binary Tree | 654 | Média | https://leetcode.com/problems/maximum-binary-tree/ |
-| D1 | Longest Cycle in a Graph | 2360 | Difícil | https://leetcode.com/problems/longest-cycle-in-a-graph/ |
-| D2 | Longest Path With Different Adjacent Characters | 2246 | Difícil | https://leetcode.com/problems/longest-path-with-different-adjacent-characters/ |
+| M3 | Least Number of Unique Integers after K Removals | 1481 | Média | https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/ |
+
+Os katas difíceis usados na versão anterior do desenho (Longest Cycle in a Graph — #2360 e
+Longest Path With Different Adjacent Characters — #2246) foram removidos. No lugar deles,
+entraram um novo kata fácil (F3) e um novo kata médio (M3).
 
 A lista estruturada está versionada em `katas.json`.
 
 ## 6. Tipo de projeto experimental
 
-Foi adotado um desenho **crossover / within-subject contrabalanceado**: cada integrante do
-trio resolve todos os 6 katas, sendo 3 com IA e 3 sem IA. Para cada par de katas de mesma
-dificuldade, um kata é resolvido com IA e o outro sem IA — nunca os dois no mesmo tratamento.
-Essa divisão foi sorteada de forma reprodutível pelo script `sortear_distribuicao.py`
-(seed fixa), a partir do `katas.json`.
+Os 6 katas foram agrupados em **3 pares** (cada par contendo 1 kata fácil + 1 kata médio):
+Par X, Par Y e Par Z.
 
-Esse desenho garante que cada integrante sirva de controle de si mesmo, eliminando a
-variação individual de habilidade como fator de confusão na comparação entre tratamentos.
+O desenho adota um **rodízio contrabalanceado entre o trio**: cada integrante resolve um par
+manualmente e outro par com IA, de forma que cada par acabe sendo resolvido **uma vez na mão
+e uma vez com IA**, sempre por integrantes diferentes:
 
-**Limitação conhecida**: como existem apenas 2 katas por faixa de dificuldade, e o trio tem
-3 integrantes, o princípio da casa dos pombos garante que pelo menos dois integrantes
-terão a mesma combinação (kata X com IA / kata Y sem IA) em pelo menos uma dificuldade.
-O contrabalanceamento, portanto, não é perfeito, mas é o melhor possível dado o tamanho do
-conjunto de katas.
+| Integrante | Na mão | Com IA |
+|---|---|---|
+| A | Par X | Par Y |
+| B | Par Z | Par X |
+| C | Par Y | Par Z |
+
+Cada integrante realiza, portanto, **4 trials** (2 na mão + 2 com IA) em vez dos 6 do desenho
+anterior. Continua sendo um desenho **within-subject** no sentido de que cada integrante
+passa pelos dois tratamentos (com e sem IA) — mas o tratamento não é mais aplicado sobre o
+mesmo conjunto de katas para a mesma pessoa: cada kata é resolvido por uma pessoa na mão e
+por outra pessoa diferente com IA.
+
+Essa mudança substitui o desenho anterior (cada integrante resolvendo todos os 6 katas), que
+apresentava uma limitação: com apenas 2 katas por dificuldade e 3 integrantes, pelo menos
+dois integrantes acabavam repetindo a mesma combinação de tratamento por dificuldade,
+tornando a divisão desproporcional entre katas. O rodízio por pares resolve isso: cada kata
+é sempre testado exatamente uma vez em cada tratamento, nunca duas vezes no mesmo.
 
 ## 7. Quantidade de medições
 
-6 katas × 3 integrantes = **18 trials no total**, sendo 9 com IA e 9 sem IA.
+6 katas × 2 tratamentos (mão/IA) = **12 trials no total**, sendo 6 com IA e 6 sem IA
+(cada kata é resolvido exatamente uma vez em cada tratamento). Cada integrante realiza
+4 trials (2 na mão + 2 com IA).
 
 ## 8. Regras de execução do trial
 
@@ -82,9 +98,16 @@ conjunto de katas.
 
 ## 9. Ameaças à validade
 
-- **Efeito de aprendizado**: como cada integrante resolve 6 katas em sequência, é possível
-  que fique mais rápido ao longo do experimento simplesmente por prática, e não por causa
-  da IA. Mitigado parcialmente pela ordem contrabalanceada entre integrantes.
+- **Diferença de habilidade individual entre integrantes**: como cada kata é resolvido na
+  mão por uma pessoa e com IA por outra pessoa diferente (rodízio entre o trio), a
+  comparação entre tratamentos deixa de ser 100% controlada pela habilidade individual —
+  diferente de um desenho onde a mesma pessoa resolve o mesmo kata nos dois tratamentos.
+  Uma eventual diferença de desempenho entre integrantes pode se misturar ao efeito da IA.
+  Essa é uma limitação assumida em troca de uma divisão proporcional entre os tratamentos
+  (cada kata testado exatamente uma vez em cada tratamento).
+- **Efeito de aprendizado**: como cada integrante resolve 4 katas ao longo do experimento, é
+  possível que fique mais rápido nos últimos simplesmente por prática, e não por causa da IA.
+  Mitigado parcialmente pela ordem contrabalanceada entre integrantes.
 - **Familiaridade prévia com a ferramenta de IA**: integrantes que já usam o Claude no dia
   a dia podem ter vantagem no uso da ferramenta em si, independentemente da dificuldade do
   kata.
@@ -97,7 +120,7 @@ conjunto de katas.
 ## 10. Ambiente
 
 - **Linguagem**: Python
-- **Assistente de IA**: Claude Sonnet 5
+- **Assistente de IA**: Claude (versão gratuita)
 - **Ferramenta de métricas estáticas**: Radon (`cc`, `mi`, `raw`)
-- **Scripts de apoio**: `sortear_distribuicao.py` (distribuição dos katas), script de
-  cronometragem (Issue #24) e script de métricas (Issue #25)
+- **Scripts de apoio**: `sortear_distribuicao.py` (a ser ajustado para o novo esquema de
+  rodízio por pares), script de cronometragem (Issue #24) e script de métricas (Issue #25)
