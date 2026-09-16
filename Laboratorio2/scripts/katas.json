@@ -15,6 +15,13 @@
       "link": "https://leetcode.com/problems/find-winner-on-a-tic-tac-toe-game/"
     },
     {
+      "id": "F3",
+      "nome": "Count Prefixes of a Given String",
+      "numero_leetcode": 2255,
+      "dificuldade": "facil",
+      "link": "https://leetcode.com/problems/count-prefixes-of-a-given-string/"
+    },
+    {
       "id": "M1",
       "nome": "Additive Number",
       "numero_leetcode": 306,
@@ -29,19 +36,12 @@
       "link": "https://leetcode.com/problems/maximum-binary-tree/"
     },
     {
-      "id": "D1",
-      "nome": "Longest Cycle in a Graph",
-      "numero_leetcode": 2360,
-      "dificuldade": "dificil",
-      "link": "https://leetcode.com/problems/longest-cycle-in-a-graph/"
-    },
-    {
-      "id": "D2",
-      "nome": "Longest Path With Different Adjacent Characters",
-      "numero_leetcode": 2246,
-      "dificuldade": "dificil",
-      "link": "https://leetcode.com/problems/longest-path-with-different-adjacent-characters/"
+      "id": "M3",
+      "nome": "Least Number of Unique Integers after K Removals",
+      "numero_leetcode": 1481,
+      "dificuldade": "media",
+      "link": "https://leetcode.com/problems/least-number-of-unique-integers-after-k-removals/"
     }
   ],
-  "integrantes": ["Bernardo", "João", "Miguel"]
+  "integrantes": ["A", "B", "C"]
 }
