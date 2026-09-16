@@ -1,2 +1,5 @@
 integrante,kata,dificuldade,usou_ia,tempo_segundos,tempo_formatado,censurado,testes_passados,data_hora
-Miguel,306. Additive Number,medio,nao,1642,27:22,nao,2,2026-09-16T15:51:49
+Miguel,306. Additive Number,medio,nao,1642,27:22,nao,50/50,2026-09-16T15:51:49
+Miguel,2255. Count Prefixes of a Given String,facil,nao,276,04:35,nao,123/123,2026-09-16T16:07:28
+Miguel,2011. Final Value of Variable After Performing Operations,facil,sim,69,01:08,nao,259,2026-09-16T16:16:23
+Miguel,654. Maximum Binary Tree,medio,sim,81,01:20,nao,107,2026-09-16T16:18:30

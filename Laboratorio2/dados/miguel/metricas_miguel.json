@@ -1,0 +1,162 @@
+{
+  "arquivos": [
+    {
+      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\additiveNumber.py",
+      "cc": {
+        "media": 8.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 9,
+            "rank": "B"
+          },
+          {
+            "nome": "isAdditiveNumber",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 8,
+            "rank": "B"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 50.34
+      },
+      "raw": {
+        "loc": 37,
+        "lloc": 29,
+        "sloc": 26,
+        "comentarios": 0,
+        "linhas_em_branco": 11,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\countPrefixes.py",
+      "cc": {
+        "media": 3.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 4,
+            "rank": "A"
+          },
+          {
+            "nome": "countPrefixes",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 3,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 76.29
+      },
+      "raw": {
+        "loc": 8,
+        "lloc": 7,
+        "sloc": 7,
+        "comentarios": 0,
+        "linhas_em_branco": 1,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\finalValueOfVariable.py",
+      "cc": {
+        "media": 3.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 4,
+            "rank": "A"
+          },
+          {
+            "nome": "finalValueAfterOperations",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 3,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 81.6
+      },
+      "raw": {
+        "loc": 3,
+        "lloc": 3,
+        "sloc": 3,
+        "comentarios": 0,
+        "linhas_em_branco": 0,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\maxBinaryTree.py",
+      "cc": {
+        "media": 6.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 7,
+            "rank": "B"
+          },
+          {
+            "nome": "constructMaximumBinaryTree",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 6,
+            "rank": "B"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 65.17
+      },
+      "raw": {
+        "loc": 16,
+        "lloc": 12,
+        "sloc": 11,
+        "comentarios": 0,
+        "linhas_em_branco": 5,
+        "multi_linha": 0
+      }
+    }
+  ],
+  "duplicacao": {
+    "min_linhas_bloco": 5,
+    "percentual_global": 0.0,
+    "por_arquivo": {
+      "Laboratorio2\\dados\\miguel\\katas\\additiveNumber.py": {
+        "linhas_significativas": 26,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2\\dados\\miguel\\katas\\countPrefixes.py": {
+        "linhas_significativas": 7,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2\\dados\\miguel\\katas\\finalValueOfVariable.py": {
+        "linhas_significativas": 3,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2\\dados\\miguel\\katas\\maxBinaryTree.py": {
+        "linhas_significativas": 11,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      }
+    }
+  }
+}
