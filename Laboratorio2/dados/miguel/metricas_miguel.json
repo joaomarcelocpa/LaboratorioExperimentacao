@@ -1,7 +1,7 @@
 {
   "arquivos": [
     {
-      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\additiveNumber.py",
+      "arquivo": "katas\\miguel\\additiveNumber.py",
       "cc": {
         "media": 8.5,
         "blocos": [
@@ -24,6 +24,24 @@
       "mi": {
         "valor": 50.34
       },
+      "hal": {
+        "total": {
+          "volume": 230.62,
+          "dificuldade": 3.88,
+          "esforco": 893.67,
+          "bugs_estimados": 0.0769,
+          "tempo_estimado_seg": 49.65
+        },
+        "por_funcao": [
+          {
+            "nome": "isAdditiveNumber",
+            "volume": 230.62,
+            "dificuldade": 3.88,
+            "esforco": 893.67,
+            "bugs_estimados": 0.0769
+          }
+        ]
+      },
       "raw": {
         "loc": 37,
         "lloc": 29,
@@ -34,7 +52,7 @@
       }
     },
     {
-      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\countPrefixes.py",
+      "arquivo": "katas\\miguel\\countPrefixes.py",
       "cc": {
         "media": 3.5,
         "blocos": [
@@ -57,6 +75,24 @@
       "mi": {
         "valor": 76.29
       },
+      "hal": {
+        "total": {
+          "volume": 4.75,
+          "dificuldade": 0.5,
+          "esforco": 2.38,
+          "bugs_estimados": 0.0016,
+          "tempo_estimado_seg": 0.13
+        },
+        "por_funcao": [
+          {
+            "nome": "countPrefixes",
+            "volume": 4.75,
+            "dificuldade": 0.5,
+            "esforco": 2.38,
+            "bugs_estimados": 0.0016
+          }
+        ]
+      },
       "raw": {
         "loc": 8,
         "lloc": 7,
@@ -67,7 +103,7 @@
       }
     },
     {
-      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\finalValueOfVariable.py",
+      "arquivo": "katas\\miguel\\finalValueOfVariable.py",
       "cc": {
         "media": 3.5,
         "blocos": [
@@ -90,6 +126,24 @@
       "mi": {
         "valor": 81.6
       },
+      "hal": {
+        "total": {
+          "volume": 11.61,
+          "dificuldade": 1.0,
+          "esforco": 11.61,
+          "bugs_estimados": 0.0039,
+          "tempo_estimado_seg": 0.64
+        },
+        "por_funcao": [
+          {
+            "nome": "finalValueAfterOperations",
+            "volume": 11.61,
+            "dificuldade": 1.0,
+            "esforco": 11.61,
+            "bugs_estimados": 0.0039
+          }
+        ]
+      },
       "raw": {
         "loc": 3,
         "lloc": 3,
@@ -100,7 +154,7 @@
       }
     },
     {
-      "arquivo": "Laboratorio2\\dados\\miguel\\katas\\maxBinaryTree.py",
+      "arquivo": "katas\\miguel\\maxBinaryTree.py",
       "cc": {
         "media": 6.5,
         "blocos": [
@@ -123,6 +177,24 @@
       "mi": {
         "valor": 65.17
       },
+      "hal": {
+        "total": {
+          "volume": 30.0,
+          "dificuldade": 1.8,
+          "esforco": 54.0,
+          "bugs_estimados": 0.01,
+          "tempo_estimado_seg": 3.0
+        },
+        "por_funcao": [
+          {
+            "nome": "constructMaximumBinaryTree",
+            "volume": 30.0,
+            "dificuldade": 1.8,
+            "esforco": 54.0,
+            "bugs_estimados": 0.01
+          }
+        ]
+      },
       "raw": {
         "loc": 16,
         "lloc": 12,
@@ -137,22 +209,22 @@
     "min_linhas_bloco": 5,
     "percentual_global": 0.0,
     "por_arquivo": {
-      "Laboratorio2\\dados\\miguel\\katas\\additiveNumber.py": {
+      "katas\\miguel\\additiveNumber.py": {
         "linhas_significativas": 26,
         "linhas_duplicadas": 0,
         "percentual": 0.0
       },
-      "Laboratorio2\\dados\\miguel\\katas\\countPrefixes.py": {
+      "katas\\miguel\\countPrefixes.py": {
         "linhas_significativas": 7,
         "linhas_duplicadas": 0,
         "percentual": 0.0
       },
-      "Laboratorio2\\dados\\miguel\\katas\\finalValueOfVariable.py": {
+      "katas\\miguel\\finalValueOfVariable.py": {
         "linhas_significativas": 3,
         "linhas_duplicadas": 0,
         "percentual": 0.0
       },
-      "Laboratorio2\\dados\\miguel\\katas\\maxBinaryTree.py": {
+      "katas\\miguel\\maxBinaryTree.py": {
         "linhas_significativas": 11,
         "linhas_duplicadas": 0,
         "percentual": 0.0
