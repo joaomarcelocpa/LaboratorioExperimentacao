@@ -1,0 +1,5 @@
+integrante,kata,dificuldade,usou_ia,tempo_segundos,tempo_formatado,censurado,testes_passados,data_hora
+Bernardo,1275. Find Winner on a Tic Tac Toe Game,facil,nao,623,10:23,nao,83/83,2026-09-16T17:12:05
+Bernardo,2255. Count Prefixes of a Given String,facil,sim,58,00:58,nao,123,2026-09-16T17:28:14
+Bernardo,1481. Least Number of Unique Integers after K Removals,medio,nao,974,16:14,nao,81/81,2026-09-16T18:02:37
+Bernardo,306. Additive Number,medio,sim,96,01:31,nao,50,2026-09-16T18:25:49

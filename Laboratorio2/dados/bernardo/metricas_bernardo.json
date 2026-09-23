@@ -1,0 +1,234 @@
+{
+  "arquivos": [
+    {
+      "arquivo": "Laboratorio2/katas/bernardo/ai-easy.py",
+      "cc": {
+        "media": 3.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 4,
+            "rank": "A"
+          },
+          {
+            "nome": "countPrefixes",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 3,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 100.0
+      },
+      "hal": {
+        "total": {
+          "volume": 0,
+          "dificuldade": 0,
+          "esforco": 0,
+          "bugs_estimados": 0.0,
+          "tempo_estimado_seg": 0.0
+        },
+        "por_funcao": [
+          {
+            "nome": "countPrefixes",
+            "volume": 0,
+            "dificuldade": 0,
+            "esforco": 0,
+            "bugs_estimados": 0.0
+          }
+        ]
+      },
+      "raw": {
+        "loc": 3,
+        "lloc": 3,
+        "sloc": 3,
+        "comentarios": 0,
+        "linhas_em_branco": 0,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/bernardo/ai-medium.py",
+      "cc": {
+        "media": 6.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 7,
+            "rank": "B"
+          },
+          {
+            "nome": "isAdditiveNumber",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 6,
+            "rank": "B"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 53.96
+      },
+      "hal": {
+        "total": {
+          "volume": 95.91,
+          "dificuldade": 2.69,
+          "esforco": 258.21,
+          "bugs_estimados": 0.032,
+          "tempo_estimado_seg": 14.35
+        },
+        "por_funcao": [
+          {
+            "nome": "isAdditiveNumber",
+            "volume": 95.91,
+            "dificuldade": 2.69,
+            "esforco": 258.21,
+            "bugs_estimados": 0.032
+          }
+        ]
+      },
+      "raw": {
+        "loc": 28,
+        "lloc": 27,
+        "sloc": 24,
+        "comentarios": 0,
+        "linhas_em_branco": 4,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/bernardo/manual-easy.py",
+      "cc": {
+        "media": 10.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 11,
+            "rank": "C"
+          },
+          {
+            "nome": "tictactoe",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 10,
+            "rank": "B"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 52.34
+      },
+      "hal": {
+        "total": {
+          "volume": 299.32,
+          "dificuldade": 5.12,
+          "esforco": 1534.02,
+          "bugs_estimados": 0.0998,
+          "tempo_estimado_seg": 85.22
+        },
+        "por_funcao": [
+          {
+            "nome": "tictactoe",
+            "volume": 299.32,
+            "dificuldade": 5.12,
+            "esforco": 1534.02,
+            "bugs_estimados": 0.0998
+          }
+        ]
+      },
+      "raw": {
+        "loc": 36,
+        "lloc": 21,
+        "sloc": 26,
+        "comentarios": 0,
+        "linhas_em_branco": 10,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/bernardo/manual-medium.py",
+      "cc": {
+        "media": 5.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 6,
+            "rank": "B"
+          },
+          {
+            "nome": "findLeastNumOfUniqueInts",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 5,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 60.25
+      },
+      "hal": {
+        "total": {
+          "volume": 98.1,
+          "dificuldade": 4.36,
+          "esforco": 428.07,
+          "bugs_estimados": 0.0327,
+          "tempo_estimado_seg": 23.78
+        },
+        "por_funcao": [
+          {
+            "nome": "findLeastNumOfUniqueInts",
+            "volume": 98.1,
+            "dificuldade": 4.36,
+            "esforco": 428.07,
+            "bugs_estimados": 0.0327
+          }
+        ]
+      },
+      "raw": {
+        "loc": 19,
+        "lloc": 14,
+        "sloc": 14,
+        "comentarios": 0,
+        "linhas_em_branco": 5,
+        "multi_linha": 0
+      }
+    }
+  ],
+  "duplicacao": {
+    "min_linhas_bloco": 5,
+    "percentual_global": 0.0,
+    "por_arquivo": {
+      "Laboratorio2/katas/bernardo/ai-easy.py": {
+        "linhas_significativas": 3,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/bernardo/ai-medium.py": {
+        "linhas_significativas": 24,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/bernardo/manual-easy.py": {
+        "linhas_significativas": 26,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/bernardo/manual-medium.py": {
+        "linhas_significativas": 14,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      }
+    }
+  }
+}
