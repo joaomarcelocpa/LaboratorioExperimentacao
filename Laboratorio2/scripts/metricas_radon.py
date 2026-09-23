@@ -4,6 +4,7 @@ Script de análise de métricas de código usando Radon.
 Métricas coletadas por arquivo Python:
   - cc  : complexidade ciclomática (por função/método)
   - mi  : índice de manutenibilidade
+  - hal : métricas de Halstead (volume, dificuldade, esforço, bugs estimados)
   - raw : linhas de código (LOC, LLOC, SLOC, comentários, em branco)
   - dup : duplicação de código (blocos de >= MIN_DUP_LINES linhas repetidos)
 
@@ -15,10 +16,35 @@ import json
 from pathlib import Path
 
 from radon.complexity import cc_visit, average_complexity, cc_rank
-from radon.metrics import mi_visit
+from radon.metrics import h_visit, mi_visit
 from radon.raw import analyze
 
 _MIN_DUP_LINES = 5
+
+
+def _halstead(codigo: str) -> dict:
+    relatorio = h_visit(codigo)
+    total = relatorio.total
+
+    return {
+        "total": {
+            "volume": round(total.volume, 2),
+            "dificuldade": round(total.difficulty, 2),
+            "esforco": round(total.effort, 2),
+            "bugs_estimados": round(total.bugs, 4),
+            "tempo_estimado_seg": round(total.time, 2),
+        },
+        "por_funcao": [
+            {
+                "nome": nome,
+                "volume": round(metrica.volume, 2),
+                "dificuldade": round(metrica.difficulty, 2),
+                "esforco": round(metrica.effort, 2),
+                "bugs_estimados": round(metrica.bugs, 4),
+            }
+            for nome, metrica in relatorio.functions
+        ],
+    }
 
 
 def _analisar_arquivo(caminho: Path) -> dict:
@@ -50,6 +76,7 @@ def _analisar_arquivo(caminho: Path) -> dict:
         "mi": {
             "valor": round(mi_resultado, 2),
         },
+        "hal": _halstead(codigo),
         "raw": {
             "loc": raw.loc,
             "lloc": raw.lloc,
