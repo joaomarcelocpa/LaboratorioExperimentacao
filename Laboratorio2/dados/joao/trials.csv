@@ -1,0 +1,5 @@
+integrante,kata,dificuldade,usou_ia,tempo_segundos,tempo_formatado,censurado,testes_passados,data_hora
+Joao,2011. Final Value of Variable After Performing Operations,facil,nao,324,05:24,nao,259/259,2026-09-16T00:00:00
+Joao,1275. Find Winner on a Tic Tac Toe Game,facil,sim,43,00:43,nao,101/101,2026-09-16T00:00:00
+Joao,654. Maximum Binary Tree,medio,nao,1427,23:47,nao,107/107,2026-09-16T00:00:00
+Joao,1481. Least Number of Unique Integers after K Removals,medio,sim,61,01:01,nao,43/43,2026-09-16T00:00:00

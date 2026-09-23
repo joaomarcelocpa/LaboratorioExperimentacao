@@ -1,0 +1,248 @@
+{
+  "arquivos": [
+    {
+      "arquivo": "Laboratorio2/katas/joao/ai-easy.py",
+      "cc": {
+        "media": 11.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 12,
+            "rank": "C"
+          },
+          {
+            "nome": "tictactoe",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 11,
+            "rank": "C"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 54.3
+      },
+      "hal": {
+        "total": {
+          "volume": 290.0,
+          "dificuldade": 4.5,
+          "esforco": 1305.0,
+          "bugs_estimados": 0.0967,
+          "tempo_estimado_seg": 72.5
+        },
+        "por_funcao": [
+          {
+            "nome": "tictactoe",
+            "volume": 290.0,
+            "dificuldade": 4.5,
+            "esforco": 1305.0,
+            "bugs_estimados": 0.0967
+          }
+        ]
+      },
+      "raw": {
+        "loc": 21,
+        "lloc": 17,
+        "sloc": 17,
+        "comentarios": 0,
+        "linhas_em_branco": 4,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/joao/ai-medium.py",
+      "cc": {
+        "media": 3.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 4,
+            "complexidade": 4,
+            "rank": "A"
+          },
+          {
+            "nome": "findLeastNumOfUniqueInts",
+            "tipo": "M",
+            "linha": 5,
+            "complexidade": 3,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 65.59
+      },
+      "hal": {
+        "total": {
+          "volume": 23.26,
+          "dificuldade": 1.5,
+          "esforco": 34.9,
+          "bugs_estimados": 0.0078,
+          "tempo_estimado_seg": 1.94
+        },
+        "por_funcao": [
+          {
+            "nome": "findLeastNumOfUniqueInts",
+            "volume": 23.26,
+            "dificuldade": 1.5,
+            "esforco": 34.9,
+            "bugs_estimados": 0.0078
+          }
+        ]
+      },
+      "raw": {
+        "loc": 18,
+        "lloc": 13,
+        "sloc": 13,
+        "comentarios": 0,
+        "linhas_em_branco": 5,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/joao/manual-easy.py",
+      "cc": {
+        "media": 6.5,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 7,
+            "rank": "B"
+          },
+          {
+            "nome": "finalValueAfterOperations",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 6,
+            "rank": "B"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 63.24
+      },
+      "hal": {
+        "total": {
+          "volume": 100.08,
+          "dificuldade": 2.29,
+          "esforco": 228.75,
+          "bugs_estimados": 0.0334,
+          "tempo_estimado_seg": 12.71
+        },
+        "por_funcao": [
+          {
+            "nome": "finalValueAfterOperations",
+            "volume": 100.08,
+            "dificuldade": 2.29,
+            "esforco": 228.75,
+            "bugs_estimados": 0.0334
+          }
+        ]
+      },
+      "raw": {
+        "loc": 13,
+        "lloc": 10,
+        "sloc": 10,
+        "comentarios": 0,
+        "linhas_em_branco": 3,
+        "multi_linha": 0
+      }
+    },
+    {
+      "arquivo": "Laboratorio2/katas/joao/manual-medium.py",
+      "cc": {
+        "media": 3.0,
+        "blocos": [
+          {
+            "nome": "Solution",
+            "tipo": "C",
+            "linha": 1,
+            "complexidade": 4,
+            "rank": "A"
+          },
+          {
+            "nome": "constructMaximumBinaryTree",
+            "tipo": "M",
+            "linha": 2,
+            "complexidade": 1,
+            "rank": "A"
+          },
+          {
+            "nome": "build",
+            "tipo": "M",
+            "linha": 5,
+            "complexidade": 4,
+            "rank": "A"
+          }
+        ]
+      },
+      "mi": {
+        "valor": 61.16
+      },
+      "hal": {
+        "total": {
+          "volume": 72.65,
+          "dificuldade": 2.62,
+          "esforco": 190.7,
+          "bugs_estimados": 0.0242,
+          "tempo_estimado_seg": 10.59
+        },
+        "por_funcao": [
+          {
+            "nome": "constructMaximumBinaryTree",
+            "volume": 4.75,
+            "dificuldade": 0.5,
+            "esforco": 2.38,
+            "bugs_estimados": 0.0016
+          },
+          {
+            "nome": "build",
+            "volume": 57.06,
+            "dificuldade": 3.0,
+            "esforco": 171.18,
+            "bugs_estimados": 0.019
+          }
+        ]
+      },
+      "raw": {
+        "loc": 18,
+        "lloc": 14,
+        "sloc": 14,
+        "comentarios": 0,
+        "linhas_em_branco": 4,
+        "multi_linha": 0
+      }
+    }
+  ],
+  "duplicacao": {
+    "min_linhas_bloco": 5,
+    "percentual_global": 0.0,
+    "por_arquivo": {
+      "Laboratorio2/katas/joao/ai-easy.py": {
+        "linhas_significativas": 17,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/joao/ai-medium.py": {
+        "linhas_significativas": 13,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/joao/manual-easy.py": {
+        "linhas_significativas": 10,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      },
+      "Laboratorio2/katas/joao/manual-medium.py": {
+        "linhas_significativas": 14,
+        "linhas_duplicadas": 0,
+        "percentual": 0.0
+      }
+    }
+  }
+}
