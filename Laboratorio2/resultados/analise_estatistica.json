@@ -1,0 +1,433 @@
+{
+  "rq1_tempo": {
+    "rq": "RQ1 - Tempo até passar em todos os testes de aceitação (segundos)",
+    "manual": {
+      "mediana": 798.5,
+      "q1": 398.75,
+      "q3": 1313.75,
+      "iqr": 915.0,
+      "n": 6
+    },
+    "ia": {
+      "mediana": 65.0,
+      "q1": 58.75,
+      "q3": 78.0,
+      "iqr": 19.25,
+      "n": 6
+    },
+    "wilcoxon_pareado_por_kata": {
+      "aplicavel": true,
+      "estatistica": 0.0,
+      "p_valor": 0.0312,
+      "significativo_a_5pct": true
+    },
+    "trials_censurados": 0
+  },
+  "rq2_defeitos": {
+    "rq": "RQ2 - Taxa de sucesso dos testes de aceitação ao final do time-box (%)",
+    "manual": {
+      "mediana": 100.0,
+      "q1": 100.0,
+      "q3": 100.0,
+      "iqr": 0.0,
+      "n": 6
+    },
+    "ia": {
+      "mediana": 100.0,
+      "q1": 100.0,
+      "q3": 100.0,
+      "iqr": 0.0,
+      "n": 6
+    },
+    "wilcoxon_pareado_por_kata": {
+      "aplicavel": false,
+      "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"
+    },
+    "testes_falhando_total": 0
+  },
+  "rq3_estrutura": {
+    "rq": "RQ3 - Complexidade ciclomática e duplicação do código produzido",
+    "cc_media": {
+      "metrica": "Complexidade ciclomática média (Radon cc)",
+      "manual": {
+        "mediana": 6.0,
+        "q1": 4.0,
+        "q3": 8.0,
+        "iqr": 4.0,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 5.0,
+        "q1": 3.5,
+        "q3": 6.5,
+        "iqr": 3.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 6.0,
+        "p_valor": 0.6845,
+        "significativo_a_5pct": false,
+        "aviso_amostra_pequena": [
+          "Sample size too small for normal approximation."
+        ]
+      }
+    },
+    "mi": {
+      "metrica": "Índice de manutenibilidade (Radon mi)",
+      "manual": {
+        "mediana": 60.7,
+        "q1": 54.32,
+        "q3": 62.72,
+        "iqr": 8.4,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 65.38,
+        "q1": 57.02,
+        "q3": 77.6,
+        "iqr": 20.58,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "loc": {
+      "metrica": "Linhas de código (LOC) - métrica de controle",
+      "manual": {
+        "mediana": 18.5,
+        "q1": 14.25,
+        "q3": 31.75,
+        "iqr": 17.5,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 17.0,
+        "q1": 6.25,
+        "q3": 20.25,
+        "iqr": 14.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "duplicacao_pct": {
+      "metrica": "Duplicação de código (%)",
+      "manual": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": false,
+        "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"
+      }
+    },
+    "cc_normalizada_por_100_loc": {
+      "metrica": "Complexidade ciclomática média por 100 LOC",
+      "manual": {
+        "mediana": 29.06,
+        "q1": 24.46,
+        "q3": 40.11,
+        "iqr": 15.64,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 47.69,
+        "q1": 27.56,
+        "q3": 101.19,
+        "iqr": 73.63,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 2.0,
+        "p_valor": 0.0938,
+        "significativo_a_5pct": false
+      }
+    }
+  },
+  "aprofundamento_halstead": {
+    "rq": "Aprofundamento - Métricas de Halstead (além da especificação, que só pede MI opcional)",
+    "hal_volume": {
+      "metrica": "Halstead - Volume",
+      "manual": {
+        "mediana": 99.09,
+        "q1": 79.01,
+        "q3": 197.99,
+        "iqr": 118.97,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 26.63,
+        "q1": 14.52,
+        "q3": 79.43,
+        "iqr": 64.91,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "hal_dificuldade": {
+      "metrica": "Halstead - Dificuldade",
+      "manual": {
+        "mediana": 3.25,
+        "q1": 2.37,
+        "q3": 4.24,
+        "iqr": 1.87,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 1.65,
+        "q1": 1.12,
+        "q3": 2.47,
+        "iqr": 1.34,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "hal_esforco": {
+      "metrica": "Halstead - Esforço",
+      "manual": {
+        "mediana": 328.41,
+        "q1": 200.21,
+        "q3": 777.27,
+        "iqr": 577.06,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 44.45,
+        "q1": 17.43,
+        "q3": 207.16,
+        "iqr": 189.72,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "hal_bugs_estimados": {
+      "metrica": "Halstead - Bugs estimados (estimativa estática, não empírica)",
+      "manual": {
+        "mediana": 0.03,
+        "q1": 0.03,
+        "q3": 0.07,
+        "iqr": 0.04,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 0.01,
+        "q1": 0.0,
+        "q3": 0.03,
+        "iqr": 0.02,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    }
+  },
+  "aprofundamento_loc": {
+    "rq": "Aprofundamento - Classificação de LOC por tipo (além da especificação, que só pede LOC total)",
+    "loc": {
+      "metrica": "LOC total",
+      "manual": {
+        "mediana": 18.5,
+        "q1": 14.25,
+        "q3": 31.75,
+        "iqr": 17.5,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 17.0,
+        "q1": 6.25,
+        "q3": 20.25,
+        "iqr": 14.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "ncloc": {
+      "metrica": "NCLOC (total - branco - comentário)",
+      "manual": {
+        "mediana": 14.0,
+        "q1": 11.0,
+        "q3": 23.0,
+        "iqr": 12.0,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 12.0,
+        "q1": 5.0,
+        "q3": 16.0,
+        "iqr": 11.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    },
+    "loc_branco": {
+      "metrica": "LOC em branco",
+      "manual": {
+        "mediana": 4.5,
+        "q1": 3.25,
+        "q3": 8.75,
+        "iqr": 5.5,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 4.0,
+        "q1": 1.0,
+        "q3": 4.75,
+        "iqr": 3.75,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 1.5,
+        "p_valor": 0.1041,
+        "significativo_a_5pct": false,
+        "aviso_amostra_pequena": [
+          "Sample size too small for normal approximation."
+        ]
+      }
+    },
+    "loc_comentario": {
+      "metrica": "LOC comentário",
+      "manual": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": false,
+        "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"
+      }
+    },
+    "loc_diretivas": {
+      "metrica": "LOC diretivas (import)",
+      "manual": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 0.0,
+        "q1": 0.0,
+        "q3": 0.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.3173,
+        "significativo_a_5pct": false,
+        "aviso_amostra_pequena": [
+          "Sample size too small for normal approximation."
+        ]
+      }
+    },
+    "loc_decl": {
+      "metrica": "LOC declarativas (assinatura de classe/função)",
+      "manual": {
+        "mediana": 2.0,
+        "q1": 2.0,
+        "q3": 2.75,
+        "iqr": 0.75,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 2.0,
+        "q1": 2.0,
+        "q3": 2.0,
+        "iqr": 0.0,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 1.5,
+        "p_valor": 1.0,
+        "significativo_a_5pct": false,
+        "aviso_amostra_pequena": [
+          "Sample size too small for normal approximation."
+        ]
+      }
+    },
+    "loc_exec": {
+      "metrica": "LOC executáveis",
+      "manual": {
+        "mediana": 11.5,
+        "q1": 8.75,
+        "q3": 20.25,
+        "iqr": 11.5,
+        "n": 6
+      },
+      "ia": {
+        "mediana": 9.5,
+        "q1": 3.0,
+        "q3": 13.75,
+        "iqr": 10.75,
+        "n": 6
+      },
+      "wilcoxon_pareado_por_kata": {
+        "aplicavel": true,
+        "estatistica": 0.0,
+        "p_valor": 0.0312,
+        "significativo_a_5pct": true
+      }
+    }
+  }
+}

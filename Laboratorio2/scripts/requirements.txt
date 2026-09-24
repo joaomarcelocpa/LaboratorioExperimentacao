@@ -1,1 +1,5 @@
 radon
+pandas
+matplotlib
+seaborn
+scipy

@@ -1,0 +1,13 @@
+integrante,kata_id,kata_nome,numero_leetcode,dificuldade,tratamento,tempo_segundos,censurado,testes_passados,testes_total,taxa_sucesso,cc_media,mi,loc,sloc,duplicacao_pct,hal_volume,hal_dificuldade,hal_esforco,hal_bugs_estimados,loc_branco,loc_comentario,ncloc,loc_diretivas,loc_decl,loc_exec
+Miguel,F1,Final Value of Variable After Performing Operations,2011,facil,ia,69,False,259,259,100.0,3.5,81.6,3,3,0.0,11.61,1.0,11.61,0.0039,0,0,3,0,2,1
+Joao,F1,Final Value of Variable After Performing Operations,2011,facil,manual,324,False,259,259,100.0,6.5,63.24,13,10,0.0,100.08,2.29,228.75,0.0334,3,0,10,0,2,8
+Joao,F2,Find Winner on a Tic Tac Toe Game,1275,facil,ia,43,False,101,101,100.0,11.5,54.3,21,17,0.0,290.0,4.5,1305.0,0.0967,4,0,17,0,2,15
+Bernardo,F2,Find Winner on a Tic Tac Toe Game,1275,facil,manual,623,False,83,83,100.0,10.5,52.34,36,26,0.0,299.32,5.12,1534.02,0.0998,10,0,26,0,2,24
+Bernardo,F3,Count Prefixes of a Given String,2255,facil,ia,58,False,123,123,100.0,3.5,100.0,3,3,0.0,0,0,0,0.0,0,0,3,0,2,1
+Miguel,F3,Count Prefixes of a Given String,2255,facil,manual,276,False,123,123,100.0,3.5,76.29,8,7,0.0,4.75,0.5,2.38,0.0016,1,0,7,0,2,5
+Bernardo,M1,Additive Number,306,media,ia,96,False,50,50,100.0,6.5,53.96,28,24,0.0,95.91,2.69,258.21,0.032,4,0,24,0,4,20
+Miguel,M1,Additive Number,306,media,manual,1642,False,50,50,100.0,8.5,50.34,37,26,0.0,230.62,3.88,893.67,0.0769,11,0,26,0,3,23
+Miguel,M2,Maximum Binary Tree,654,media,ia,81,False,107,107,100.0,6.5,65.17,16,11,0.0,30.0,1.8,54.0,0.01,5,0,11,0,2,9
+Joao,M2,Maximum Binary Tree,654,media,manual,1427,False,107,107,100.0,3.0,61.16,18,14,0.0,72.65,2.62,190.7,0.0242,4,0,14,0,3,11
+Joao,M3,Least Number of Unique Integers after K Removals,1481,media,ia,61,False,43,43,100.0,3.5,65.59,18,13,0.0,23.26,1.5,34.9,0.0078,5,0,13,1,2,10
+Bernardo,M3,Least Number of Unique Integers after K Removals,1481,media,manual,974,False,81,81,100.0,5.5,60.25,19,14,0.0,98.1,4.36,428.07,0.0327,5,0,14,0,2,12

@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Assistentes de IA vs. Codificação Manual</title>
+<script>
+  // Aplica o tema salvo antes da primeira pintura, para não haver flash claro/escuro.
+  (function () {
+    try {
+      const saved = localStorage.getItem("dashboard-theme");
+      if (saved === "light" || saved === "dark") {
+        document.documentElement.setAttribute("data-theme", saved);
+      }
+    } catch (e) { /* localStorage indisponível — segue o tema do sistema */ }
+  })();
+</script>
+<style>
+:root {
+  --surface: #fcfcfb;
+  --surface-card: #ffffff;
+  --surface-sunken: #f2f4f3;
+  --ink: #0b0b0b;
+  --ink-secondary: #52514e;
+  --ink-muted: #898781;
+  --accent: #0f8a7c;
+  --accent-wash: #e6f5f2;
+  --accent-strong: #0a5c53;
+  --ref-target: #eb6834;
+  --critical: #c9403f;
+  --manual: #4c72b0;
+  --manual-wash: #eaf0fa;
+  --ia: #dd8452;
+  --ia-wash: #fcf1e9;
+  --grid: #e1e0d9;
+  --border: rgba(11, 11, 11, 0.10);
+  --border-strong: rgba(11, 11, 11, 0.16);
+  --shadow: 0 1px 2px rgba(11, 11, 11, 0.04), 0 6px 16px rgba(11, 11, 11, 0.05);
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --radius: 14px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface: #161918;
+    --surface-card: #1d2120;
+    --surface-sunken: #121514;
+    --ink: #ffffff;
+    --ink-secondary: #c1c7c4;
+    --ink-muted: #8d938f;
+    --accent: #35c2ae;
+    --accent-wash: #10312d;
+    --accent-strong: #8fe4d6;
+    --ref-target: #f08454;
+    --critical: #ec7a72;
+    --manual: #7fa2d8;
+    --manual-wash: #1a2434;
+    --ia: #f0a877;
+    --ia-wash: #332318;
+    --grid: #2a2e2c;
+    --border: rgba(255, 255, 255, 0.10);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --surface: #161918;
+  --surface-card: #1d2120;
+  --surface-sunken: #121514;
+  --ink: #ffffff;
+  --ink-secondary: #c1c7c4;
+  --ink-muted: #8d938f;
+  --accent: #35c2ae;
+  --accent-wash: #10312d;
+  --accent-strong: #8fe4d6;
+  --ref-target: #f08454;
+  --critical: #ec7a72;
+  --manual: #7fa2d8;
+  --manual-wash: #1a2434;
+  --ia: #f0a877;
+  --ia-wash: #332318;
+  --grid: #2a2e2c;
+  --border: rgba(255, 255, 255, 0.10);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--surface);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; font-weight: 650; }
+p { margin: 0; }
+button { font-family: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.app { max-width: 1180px; margin: 0 auto; padding: 0 24px 64px; }
+
+/* ---------- Topbar ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--surface);
+  border-bottom: 2px solid var(--accent);
+  padding: 18px 0 14px;
+  margin-bottom: 28px;
+}
+.topbar-inner {
+  max-width: 1180px; margin: 0 auto; padding: 0 24px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;
+}
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand-title { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+.brand-sub { font-size: 12.5px; color: var(--ink-muted); }
+
+.nav-cluster { display: flex; align-items: center; gap: 8px; }
+.tabs { display: flex; gap: 4px; background: var(--surface-sunken); padding: 4px; border-radius: 10px; }
+.tab-btn {
+  border: none; background: transparent; color: var(--ink-secondary);
+  font-size: 13.5px; font-weight: 600; padding: 7px 14px; border-radius: 7px;
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn[aria-selected="true"] {
+  background: var(--surface-card); color: var(--accent); box-shadow: var(--shadow);
+}
+.step-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-strong);
+  background: var(--surface-card); color: var(--ink-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+  transition: background 0.15s, color 0.15s;
+}
+.step-btn:hover { color: var(--accent); background: var(--accent-wash); }
+.step-btn:disabled { opacity: 0.35; cursor: default; }
+.step-btn:disabled:hover { color: var(--ink-secondary); background: var(--surface-card); }
+.nav-divider { width: 1px; height: 22px; background: var(--border-strong); margin: 0 2px; }
+.theme-toggle {
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border-strong);
+  background: var(--surface-card); color: var(--ink-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.theme-toggle:hover { color: var(--accent); background: var(--accent-wash); }
+.theme-toggle svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Views ---------- */
+.view { display: none; }
+.view.active { display: block; animation: fade-in 0.18s ease; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(3px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .view.active { animation: none; } }
+
+.view-head { margin-bottom: 22px; max-width: 720px; }
+.view-eyebrow {
+  font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 6px;
+}
+.view-title { font-size: 24px; margin-bottom: 6px; }
+.view-desc { font-size: 14px; color: var(--ink-secondary); }
+
+/* ---------- KPI row ---------- */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 22px; }
+.kpi-card {
+  background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 14px 16px; box-shadow: var(--shadow);
+}
+.kpi-label { font-size: 12px; color: var(--ink-muted); margin-bottom: 6px; }
+.kpi-value { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
+.kpi-value .unit { font-size: 14px; font-weight: 600; color: var(--ink-secondary); margin-left: 3px; }
+.kpi-value.manual { color: var(--manual); }
+.kpi-value.ia { color: var(--ia); }
+.kpi-caption { font-size: 12.5px; color: var(--ink-muted); margin-top: 4px; }
+.kpi-caption.good { color: #0ca36f; }
+.kpi-caption.warn { color: var(--ref-target); }
+.kpi-caption.neutral { color: var(--ink-secondary); }
+
+/* ---------- Grid layout ---------- */
+.grid-2 { display: grid; grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .grid-2 { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--surface-card); border: 1px solid var(--border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 18px 20px 20px;
+}
+.card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 4px; flex-wrap: wrap; }
+.card-title { font-size: 15px; font-weight: 700; }
+.card-note { font-size: 12.5px; color: var(--ink-muted); margin-top: 2px; }
+
+.seg-group { display: flex; gap: 2px; background: var(--surface-sunken); padding: 3px; border-radius: 8px; flex-wrap: wrap; }
+.seg-btn {
+  border: none; background: transparent; color: var(--ink-secondary); font-size: 12px; font-weight: 600;
+  padding: 5px 10px; border-radius: 6px; cursor: pointer;
+}
+.seg-btn[aria-pressed="true"] { background: var(--surface-card); color: var(--accent); box-shadow: var(--shadow); }
+
+.chart-wrap { margin-top: 10px; }
+svg.chart { width: 100%; height: auto; display: block; overflow: visible; }
+.gridline { stroke: var(--grid); stroke-width: 1; }
+.axis-line { stroke: var(--border-strong); stroke-width: 1; }
+.axis-label { fill: var(--ink-muted); font-size: 10.5px; }
+.pair-line { stroke: var(--ink-muted); stroke-width: 1.4; opacity: 0.55; }
+.pair-dot { cursor: pointer; transition: r 0.1s; stroke: var(--surface-card); stroke-width: 1.5; }
+.pair-dot:hover, .pair-dot:focus { r: 7; outline: none; }
+.pair-dot.manual { fill: var(--manual); }
+.pair-dot.ia { fill: var(--ia); }
+.pair-label { fill: var(--ink-secondary); font-size: 11px; font-weight: 600; }
+
+.chart-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border); }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-secondary); }
+.legend-swatch { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+.legend-item strong { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.data-table th, table.data-table td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--border); }
+table.data-table th { color: var(--ink-muted); font-weight: 600; font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.03em; }
+table.data-table td.num, table.data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.data-table tbody tr:hover { background: var(--accent-wash); }
+table.data-table tbody tr:last-child td { border-bottom: none; }
+.table-scroll { overflow-x: auto; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.badge.good { background: var(--accent-wash); color: var(--accent-strong); }
+.badge.neutral { background: var(--surface-sunken); color: var(--ink-muted); }
+
+/* ---------- Overview ---------- */
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.overview-card {
+  text-align: left; cursor: pointer; background: var(--surface-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 10px;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.overview-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.overview-tag { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; text-transform: uppercase; }
+.overview-q { font-size: 15.5px; font-weight: 700; }
+.overview-stat { font-size: 26px; font-weight: 700; margin-top: 2px; }
+.overview-stat .unit { font-size: 13px; color: var(--ink-secondary); font-weight: 600; }
+.overview-verdict { font-size: 12.5px; color: var(--ink-secondary); }
+
+/* ---------- Tooltip ---------- */
+#tooltip {
+  position: fixed; z-index: 100; pointer-events: none; background: var(--ink); color: var(--surface);
+  font-size: 12.5px; padding: 7px 10px; border-radius: 7px; box-shadow: var(--shadow);
+  opacity: 0; transform: translate(-50%, -100%); transition: opacity 0.08s; max-width: 220px;
+}
+#tooltip.show { opacity: 1; }
+#tooltip .tt-value { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+footer.app-footer { margin-top: 36px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 12px; color: var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<div id="tooltip" role="status" aria-live="polite"></div>
+
+<div class="app">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-title">Assistentes de IA vs. Codificação Manual</div>
+        <div class="brand-sub">Lab 2 · RQ1–RQ3 · 6 katas, 12 trials, rodízio contrabalanceado</div>
+      </div>
+      <div class="nav-cluster">
+        <button class="step-btn" id="prevBtn" aria-label="RQ anterior">‹</button>
+        <div class="tabs" role="tablist" aria-label="Navegação entre RQs">
+          <button class="tab-btn" role="tab" data-tab="overview">Visão geral</button>
+          <button class="tab-btn" role="tab" data-tab="rq1">RQ1 · Tempo</button>
+          <button class="tab-btn" role="tab" data-tab="rq2">RQ2 · Defeitos</button>
+          <button class="tab-btn" role="tab" data-tab="rq3">RQ3 · Estrutura</button>
+          <button class="tab-btn" role="tab" data-tab="aprof">Halstead &amp; LOC</button>
+        </div>
+        <button class="step-btn" id="nextBtn" aria-label="Próxima RQ">›</button>
+        <div class="nav-divider"></div>
+        <button class="theme-toggle" id="themeToggle" type="button"></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="views"></main>
+
+  <footer class="app-footer">
+    Fonte: resultados/dados_consolidados.csv (n = <span id="footN"></span> trials) · Estatística: resultados/analise_estatistica.json (scripts/analise_estatistica.py, mediana/IQR + Wilcoxon pareado por kata) · Pareamento por kata: cada kata resolvido 1× manual e 1× com IA, por integrantes diferentes (ver README.md, seção 6).
+  </footer>
+</div>
+
+<script>
+const TRIALS = {"n": 12, "trials": [{"integrante": "Miguel", "kata_id": "F1", "kata_nome": "Final Value of Variable After Performing Operations", "numero_leetcode": 2011, "dificuldade": "facil", "tratamento": "ia", "tempo_segundos": 69, "censurado": false, "testes_passados": 259, "testes_total": 259, "taxa_sucesso": 100.0, "cc_media": 3.5, "mi": 81.6, "loc": 3, "sloc": 3, "duplicacao_pct": 0.0, "hal_volume": "11.61", "hal_dificuldade": "1.0", "hal_esforco": "11.61", "hal_bugs_estimados": "0.0039", "loc_branco": "0", "loc_comentario": "0", "ncloc": "3", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "1"}, {"integrante": "Joao", "kata_id": "F1", "kata_nome": "Final Value of Variable After Performing Operations", "numero_leetcode": 2011, "dificuldade": "facil", "tratamento": "manual", "tempo_segundos": 324, "censurado": false, "testes_passados": 259, "testes_total": 259, "taxa_sucesso": 100.0, "cc_media": 6.5, "mi": 63.24, "loc": 13, "sloc": 10, "duplicacao_pct": 0.0, "hal_volume": "100.08", "hal_dificuldade": "2.29", "hal_esforco": "228.75", "hal_bugs_estimados": "0.0334", "loc_branco": "3", "loc_comentario": "0", "ncloc": "10", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "8"}, {"integrante": "Joao", "kata_id": "F2", "kata_nome": "Find Winner on a Tic Tac Toe Game", "numero_leetcode": 1275, "dificuldade": "facil", "tratamento": "ia", "tempo_segundos": 43, "censurado": false, "testes_passados": 101, "testes_total": 101, "taxa_sucesso": 100.0, "cc_media": 11.5, "mi": 54.3, "loc": 21, "sloc": 17, "duplicacao_pct": 0.0, "hal_volume": "290.0", "hal_dificuldade": "4.5", "hal_esforco": "1305.0", "hal_bugs_estimados": "0.0967", "loc_branco": "4", "loc_comentario": "0", "ncloc": "17", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "15"}, {"integrante": "Bernardo", "kata_id": "F2", "kata_nome": "Find Winner on a Tic Tac Toe Game", "numero_leetcode": 1275, "dificuldade": "facil", "tratamento": "manual", "tempo_segundos": 623, "censurado": false, "testes_passados": 83, "testes_total": 83, "taxa_sucesso": 100.0, "cc_media": 10.5, "mi": 52.34, "loc": 36, "sloc": 26, "duplicacao_pct": 0.0, "hal_volume": "299.32", "hal_dificuldade": "5.12", "hal_esforco": "1534.02", "hal_bugs_estimados": "0.0998", "loc_branco": "10", "loc_comentario": "0", "ncloc": "26", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "24"}, {"integrante": "Bernardo", "kata_id": "F3", "kata_nome": "Count Prefixes of a Given String", "numero_leetcode": 2255, "dificuldade": "facil", "tratamento": "ia", "tempo_segundos": 58, "censurado": false, "testes_passados": 123, "testes_total": 123, "taxa_sucesso": 100.0, "cc_media": 3.5, "mi": 100.0, "loc": 3, "sloc": 3, "duplicacao_pct": 0.0, "hal_volume": "0", "hal_dificuldade": "0", "hal_esforco": "0", "hal_bugs_estimados": "0.0", "loc_branco": "0", "loc_comentario": "0", "ncloc": "3", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "1"}, {"integrante": "Miguel", "kata_id": "F3", "kata_nome": "Count Prefixes of a Given String", "numero_leetcode": 2255, "dificuldade": "facil", "tratamento": "manual", "tempo_segundos": 276, "censurado": false, "testes_passados": 123, "testes_total": 123, "taxa_sucesso": 100.0, "cc_media": 3.5, "mi": 76.29, "loc": 8, "sloc": 7, "duplicacao_pct": 0.0, "hal_volume": "4.75", "hal_dificuldade": "0.5", "hal_esforco": "2.38", "hal_bugs_estimados": "0.0016", "loc_branco": "1", "loc_comentario": "0", "ncloc": "7", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "5"}, {"integrante": "Bernardo", "kata_id": "M1", "kata_nome": "Additive Number", "numero_leetcode": 306, "dificuldade": "media", "tratamento": "ia", "tempo_segundos": 96, "censurado": false, "testes_passados": 50, "testes_total": 50, "taxa_sucesso": 100.0, "cc_media": 6.5, "mi": 53.96, "loc": 28, "sloc": 24, "duplicacao_pct": 0.0, "hal_volume": "95.91", "hal_dificuldade": "2.69", "hal_esforco": "258.21", "hal_bugs_estimados": "0.032", "loc_branco": "4", "loc_comentario": "0", "ncloc": "24", "loc_diretivas": "0", "loc_decl": "4", "loc_exec": "20"}, {"integrante": "Miguel", "kata_id": "M1", "kata_nome": "Additive Number", "numero_leetcode": 306, "dificuldade": "media", "tratamento": "manual", "tempo_segundos": 1642, "censurado": false, "testes_passados": 50, "testes_total": 50, "taxa_sucesso": 100.0, "cc_media": 8.5, "mi": 50.34, "loc": 37, "sloc": 26, "duplicacao_pct": 0.0, "hal_volume": "230.62", "hal_dificuldade": "3.88", "hal_esforco": "893.67", "hal_bugs_estimados": "0.0769", "loc_branco": "11", "loc_comentario": "0", "ncloc": "26", "loc_diretivas": "0", "loc_decl": "3", "loc_exec": "23"}, {"integrante": "Miguel", "kata_id": "M2", "kata_nome": "Maximum Binary Tree", "numero_leetcode": 654, "dificuldade": "media", "tratamento": "ia", "tempo_segundos": 81, "censurado": false, "testes_passados": 107, "testes_total": 107, "taxa_sucesso": 100.0, "cc_media": 6.5, "mi": 65.17, "loc": 16, "sloc": 11, "duplicacao_pct": 0.0, "hal_volume": "30.0", "hal_dificuldade": "1.8", "hal_esforco": "54.0", "hal_bugs_estimados": "0.01", "loc_branco": "5", "loc_comentario": "0", "ncloc": "11", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "9"}, {"integrante": "Joao", "kata_id": "M2", "kata_nome": "Maximum Binary Tree", "numero_leetcode": 654, "dificuldade": "media", "tratamento": "manual", "tempo_segundos": 1427, "censurado": false, "testes_passados": 107, "testes_total": 107, "taxa_sucesso": 100.0, "cc_media": 3.0, "mi": 61.16, "loc": 18, "sloc": 14, "duplicacao_pct": 0.0, "hal_volume": "72.65", "hal_dificuldade": "2.62", "hal_esforco": "190.7", "hal_bugs_estimados": "0.0242", "loc_branco": "4", "loc_comentario": "0", "ncloc": "14", "loc_diretivas": "0", "loc_decl": "3", "loc_exec": "11"}, {"integrante": "Joao", "kata_id": "M3", "kata_nome": "Least Number of Unique Integers after K Removals", "numero_leetcode": 1481, "dificuldade": "media", "tratamento": "ia", "tempo_segundos": 61, "censurado": false, "testes_passados": 43, "testes_total": 43, "taxa_sucesso": 100.0, "cc_media": 3.5, "mi": 65.59, "loc": 18, "sloc": 13, "duplicacao_pct": 0.0, "hal_volume": "23.26", "hal_dificuldade": "1.5", "hal_esforco": "34.9", "hal_bugs_estimados": "0.0078", "loc_branco": "5", "loc_comentario": "0", "ncloc": "13", "loc_diretivas": "1", "loc_decl": "2", "loc_exec": "10"}, {"integrante": "Bernardo", "kata_id": "M3", "kata_nome": "Least Number of Unique Integers after K Removals", "numero_leetcode": 1481, "dificuldade": "media", "tratamento": "manual", "tempo_segundos": 974, "censurado": false, "testes_passados": 81, "testes_total": 81, "taxa_sucesso": 100.0, "cc_media": 5.5, "mi": 60.25, "loc": 19, "sloc": 14, "duplicacao_pct": 0.0, "hal_volume": "98.1", "hal_dificuldade": "4.36", "hal_esforco": "428.07", "hal_bugs_estimados": "0.0327", "loc_branco": "5", "loc_comentario": "0", "ncloc": "14", "loc_diretivas": "0", "loc_decl": "2", "loc_exec": "12"}]};
+const ANALISE = {"rq1_tempo": {"rq": "RQ1 - Tempo até passar em todos os testes de aceitação (segundos)", "manual": {"mediana": 798.5, "q1": 398.75, "q3": 1313.75, "iqr": 915.0, "n": 6}, "ia": {"mediana": 65.0, "q1": 58.75, "q3": 78.0, "iqr": 19.25, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}, "trials_censurados": 0}, "rq2_defeitos": {"rq": "RQ2 - Taxa de sucesso dos testes de aceitação ao final do time-box (%)", "manual": {"mediana": 100.0, "q1": 100.0, "q3": 100.0, "iqr": 0.0, "n": 6}, "ia": {"mediana": 100.0, "q1": 100.0, "q3": 100.0, "iqr": 0.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": false, "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"}, "testes_falhando_total": 0}, "rq3_estrutura": {"rq": "RQ3 - Complexidade ciclomática e duplicação do código produzido", "cc_media": {"metrica": "Complexidade ciclomática média (Radon cc)", "manual": {"mediana": 6.0, "q1": 4.0, "q3": 8.0, "iqr": 4.0, "n": 6}, "ia": {"mediana": 5.0, "q1": 3.5, "q3": 6.5, "iqr": 3.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 6.0, "p_valor": 0.6845, "significativo_a_5pct": false, "aviso_amostra_pequena": ["Sample size too small for normal approximation."]}}, "mi": {"metrica": "Índice de manutenibilidade (Radon mi)", "manual": {"mediana": 60.7, "q1": 54.32, "q3": 62.72, "iqr": 8.4, "n": 6}, "ia": {"mediana": 65.38, "q1": 57.02, "q3": 77.6, "iqr": 20.58, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "loc": {"metrica": "Linhas de código (LOC) - métrica de controle", "manual": {"mediana": 18.5, "q1": 14.25, "q3": 31.75, "iqr": 17.5, "n": 6}, "ia": {"mediana": 17.0, "q1": 6.25, "q3": 20.25, "iqr": 14.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "duplicacao_pct": {"metrica": "Duplicação de código (%)", "manual": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "ia": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": false, "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"}}, "cc_normalizada_por_100_loc": {"metrica": "Complexidade ciclomática média por 100 LOC", "manual": {"mediana": 29.06, "q1": 24.46, "q3": 40.11, "iqr": 15.64, "n": 6}, "ia": {"mediana": 47.69, "q1": 27.56, "q3": 101.19, "iqr": 73.63, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 2.0, "p_valor": 0.0938, "significativo_a_5pct": false}}}, "aprofundamento_halstead": {"rq": "Aprofundamento - Métricas de Halstead (além da especificação, que só pede MI opcional)", "hal_volume": {"metrica": "Halstead - Volume", "manual": {"mediana": 99.09, "q1": 79.01, "q3": 197.99, "iqr": 118.97, "n": 6}, "ia": {"mediana": 26.63, "q1": 14.52, "q3": 79.43, "iqr": 64.91, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "hal_dificuldade": {"metrica": "Halstead - Dificuldade", "manual": {"mediana": 3.25, "q1": 2.37, "q3": 4.24, "iqr": 1.87, "n": 6}, "ia": {"mediana": 1.65, "q1": 1.12, "q3": 2.47, "iqr": 1.34, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "hal_esforco": {"metrica": "Halstead - Esforço", "manual": {"mediana": 328.41, "q1": 200.21, "q3": 777.27, "iqr": 577.06, "n": 6}, "ia": {"mediana": 44.45, "q1": 17.43, "q3": 207.16, "iqr": 189.72, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "hal_bugs_estimados": {"metrica": "Halstead - Bugs estimados (estimativa estática, não empírica)", "manual": {"mediana": 0.03, "q1": 0.03, "q3": 0.07, "iqr": 0.04, "n": 6}, "ia": {"mediana": 0.01, "q1": 0.0, "q3": 0.03, "iqr": 0.02, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}}, "aprofundamento_loc": {"rq": "Aprofundamento - Classificação de LOC por tipo (além da especificação, que só pede LOC total)", "loc": {"metrica": "LOC total", "manual": {"mediana": 18.5, "q1": 14.25, "q3": 31.75, "iqr": 17.5, "n": 6}, "ia": {"mediana": 17.0, "q1": 6.25, "q3": 20.25, "iqr": 14.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "ncloc": {"metrica": "NCLOC (total - branco - comentário)", "manual": {"mediana": 14.0, "q1": 11.0, "q3": 23.0, "iqr": 12.0, "n": 6}, "ia": {"mediana": 12.0, "q1": 5.0, "q3": 16.0, "iqr": 11.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}, "loc_branco": {"metrica": "LOC em branco", "manual": {"mediana": 4.5, "q1": 3.25, "q3": 8.75, "iqr": 5.5, "n": 6}, "ia": {"mediana": 4.0, "q1": 1.0, "q3": 4.75, "iqr": 3.75, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 1.5, "p_valor": 0.1041, "significativo_a_5pct": false, "aviso_amostra_pequena": ["Sample size too small for normal approximation."]}}, "loc_comentario": {"metrica": "LOC comentário", "manual": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "ia": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": false, "motivo": "todas as diferenças pareadas são zero (sem variação entre tratamentos)"}}, "loc_diretivas": {"metrica": "LOC diretivas (import)", "manual": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "ia": {"mediana": 0.0, "q1": 0.0, "q3": 0.0, "iqr": 0.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.3173, "significativo_a_5pct": false, "aviso_amostra_pequena": ["Sample size too small for normal approximation."]}}, "loc_decl": {"metrica": "LOC declarativas (assinatura de classe/função)", "manual": {"mediana": 2.0, "q1": 2.0, "q3": 2.75, "iqr": 0.75, "n": 6}, "ia": {"mediana": 2.0, "q1": 2.0, "q3": 2.0, "iqr": 0.0, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 1.5, "p_valor": 1.0, "significativo_a_5pct": false, "aviso_amostra_pequena": ["Sample size too small for normal approximation."]}}, "loc_exec": {"metrica": "LOC executáveis", "manual": {"mediana": 11.5, "q1": 8.75, "q3": 20.25, "iqr": 11.5, "n": 6}, "ia": {"mediana": 9.5, "q1": 3.0, "q3": 13.75, "iqr": 10.75, "n": 6}, "wilcoxon_pareado_por_kata": {"aplicavel": true, "estatistica": 0.0, "p_valor": 0.0312, "significativo_a_5pct": true}}}};
+</script>
+<script>
+(function () {
+  "use strict";
+
+  const trials = TRIALS.trials;
+  document.getElementById("footN").textContent = TRIALS.n;
+
+  // ---------- theme toggle ----------
+  (function setupThemeToggle() {
+    const STORAGE_KEY = "dashboard-theme";
+    const btn = document.getElementById("themeToggle");
+    const SUN = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>';
+    const MOON = '<svg viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>';
+
+    function storedTheme() {
+      try { return localStorage.getItem(STORAGE_KEY); } catch (e) { return null; }
+    }
+    function saveTheme(v) {
+      try { localStorage.setItem(STORAGE_KEY, v); } catch (e) { /* ignore */ }
+    }
+    function systemPrefersDark() {
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function activeTheme() {
+      const stamped = document.documentElement.getAttribute("data-theme");
+      return stamped === "light" || stamped === "dark" ? stamped : (systemPrefersDark() ? "dark" : "light");
+    }
+    function paint(theme) {
+      btn.innerHTML = theme === "dark" ? MOON : SUN;
+      btn.setAttribute("aria-label", theme === "dark" ? "Mudar para modo claro" : "Mudar para modo escuro");
+    }
+
+    paint(activeTheme());
+    btn.addEventListener("click", () => {
+      const next = activeTheme() === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", next);
+      saveTheme(next);
+      paint(next);
+    });
+    if (window.matchMedia) {
+      window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
+        if (!storedTheme()) paint(activeTheme());
+      });
+    }
+  })();
+
+  // ---------- helpers ----------
+  function fmt(n, decimals) {
+    return Number(n).toLocaleString("pt-BR", { maximumFractionDigits: decimals ?? 1, minimumFractionDigits: decimals ?? 0 });
+  }
+  function fmtP(p) {
+    return p < 0.001 ? "< 0,001" : fmt(p, 4);
+  }
+  function katasByTratamento(campo) {
+    const porKata = {};
+    trials.forEach(t => {
+      porKata[t.kata_id] = porKata[t.kata_id] || { kata_id: t.kata_id, kata_nome: t.kata_nome, dificuldade: t.dificuldade };
+      porKata[t.kata_id][t.tratamento] = t[campo];
+    });
+    return Object.values(porKata).sort((a, b) => a.kata_id.localeCompare(b.kata_id));
+  }
+
+  const SVGNS = "http://www.w3.org/2000/svg";
+  function svgEl(tag, attrs) {
+    const el = document.createElementNS(SVGNS, tag);
+    for (const k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+
+  const tooltip = document.getElementById("tooltip");
+  function showTooltip(evt, html) {
+    tooltip.innerHTML = "";
+    const wrap = document.createElement("div");
+    wrap.innerHTML = html; // built from trusted, locally-formatted strings only
+    tooltip.appendChild(wrap);
+    const x = evt.clientX !== undefined ? evt.clientX : (evt.target.getBoundingClientRect().left + evt.target.getBoundingClientRect().width / 2);
+    const y = evt.clientY !== undefined ? evt.clientY : evt.target.getBoundingClientRect().top;
+    tooltip.style.left = x + "px";
+    tooltip.style.top = (y - 12) + "px";
+    tooltip.classList.add("show");
+  }
+  function hideTooltip() { tooltip.classList.remove("show"); }
+
+  function niceCeiling(value) {
+    if (value <= 10) return Math.ceil(value);
+    const digits = String(Math.floor(value)).length;
+    const magnitude = Math.pow(10, digits - 1);
+    const step = magnitude / 2;
+    return Math.ceil(value / step) * step;
+  }
+  function niceStep(range, count) {
+    const rough = range / count;
+    const mag = Math.pow(10, Math.floor(Math.log10(rough || 1)));
+    const norm = rough / mag;
+    if (norm < 1.5) return mag;
+    if (norm < 3) return 2 * mag;
+    if (norm < 7) return 5 * mag;
+    return 10 * mag;
+  }
+  function niceAxisTicks(maxVal, count) {
+    if (maxVal <= 0) return [0, 1];
+    const step = niceStep(maxVal, count);
+    const niceMax = Math.ceil(maxVal / step) * step;
+    const ticks = [];
+    for (let t = 0; t <= niceMax + step * 0.001; t += step) ticks.push(Math.round(t * 1000) / 1000);
+    return ticks;
+  }
+
+  /**
+   * Gráfico pareado: um ponto "Manual" e um ponto "Com IA" por kata, ligados
+   * por uma linha — evidencia o pareamento por kata usado no Wilcoxon (n=6),
+   * em vez de um histograma (que precisaria de uma amostra bem maior).
+   */
+  function renderPairedChart(container, opts) {
+    const { pares, yFmt, valueLabel, yMax: yMaxOverride } = opts;
+    container.innerHTML = "";
+
+    const maxVal = Math.max(...pares.map(p => Math.max(p.manual, p.ia)));
+    const W = 640, H = 320;
+    const margin = { top: 16, right: 100, bottom: 34, left: 46 };
+    const plotW = W - margin.left - margin.right;
+    const plotH = H - margin.top - margin.bottom;
+
+    const svg = svgEl("svg", { class: "chart", viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Gráfico pareado de " + valueLabel });
+
+    const yTicks = niceAxisTicks(yMaxOverride || niceCeiling(maxVal), 5);
+    const yMax = yTicks[yTicks.length - 1] || maxVal;
+    const yScale = v => margin.top + plotH - (v / yMax) * plotH;
+
+    yTicks.forEach(t => {
+      const y = yScale(t);
+      svg.appendChild(svgEl("line", { class: "gridline", x1: margin.left, x2: margin.left + plotW, y1: y, y2: y }));
+      const lbl = svgEl("text", { class: "axis-label", x: margin.left - 8, y: y + 3, "text-anchor": "end" });
+      lbl.textContent = yFmt(t);
+      svg.appendChild(lbl);
+    });
+
+    const xManual = margin.left + plotW * 0.28;
+    const xIa = margin.left + plotW * 0.72;
+    [["Manual", xManual], ["Com IA", xIa]].forEach(([label, x]) => {
+      const lbl = svgEl("text", { class: "axis-label", x, y: margin.top + plotH + 18, "text-anchor": "middle" });
+      lbl.textContent = label;
+      svg.appendChild(lbl);
+    });
+    svg.appendChild(svgEl("line", { class: "axis-line", x1: margin.left, x2: margin.left + plotW, y1: margin.top + plotH, y2: margin.top + plotH }));
+
+    pares.forEach(p => {
+      const yM = yScale(p.manual), yI = yScale(p.ia);
+      svg.appendChild(svgEl("line", { class: "pair-line", x1: xManual, x2: xIa, y1: yM, y2: yI }));
+
+      const label = svgEl("text", { class: "pair-label", x: xIa + 10, y: yI + 3.5 });
+      label.textContent = p.kata_id;
+      svg.appendChild(label);
+
+      [[xManual, yM, p.manual, "manual", "Manual"], [xIa, yI, p.ia, "ia", "Com IA"]].forEach(([x, y, val, cls, tratLabel]) => {
+        const dot = svgEl("circle", { class: "pair-dot " + cls, cx: x, cy: y, r: 5.5, tabindex: "0",
+          "aria-label": `${p.kata_id} (${tratLabel}): ${yFmt(val)}` });
+        const tt = () => `${p.kata_nome}<br>${tratLabel}: <span class="tt-value">${yFmt(val)}</span>`;
+        dot.addEventListener("pointerenter", (e) => showTooltip(e, tt()));
+        dot.addEventListener("pointermove", (e) => showTooltip(e, tt()));
+        dot.addEventListener("pointerleave", hideTooltip);
+        dot.addEventListener("focus", (e) => showTooltip(e, tt()));
+        dot.addEventListener("blur", hideTooltip);
+        svg.appendChild(dot);
+      });
+    });
+
+    container.appendChild(svg);
+  }
+
+  function renderPairTable(container, pares, campo, label, fmtFn) {
+    container.innerHTML = "";
+    const table = document.createElement("table");
+    table.className = "data-table";
+    table.innerHTML = `<thead><tr><th>Kata</th><th class="num">Manual</th><th class="num">Com IA</th></tr></thead>`;
+    const tbody = document.createElement("tbody");
+    pares.forEach(p => {
+      const tr = document.createElement("tr");
+      const tdKata = document.createElement("td");
+      const nameEl = document.createElement("div");
+      nameEl.textContent = p.kata_id + " — " + p.kata_nome;
+      nameEl.style.fontWeight = "600";
+      tdKata.appendChild(nameEl);
+      const tdManual = document.createElement("td"); tdManual.className = "num"; tdManual.textContent = fmtFn(p.manual);
+      const tdIa = document.createElement("td"); tdIa.className = "num"; tdIa.textContent = fmtFn(p.ia);
+      tr.appendChild(tdKata); tr.appendChild(tdManual); tr.appendChild(tdIa);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    const wrap = document.createElement("div");
+    wrap.className = "table-scroll";
+    wrap.appendChild(table);
+    container.appendChild(wrap);
+  }
+
+  function sigBadge(wilcoxon) {
+    if (!wilcoxon.aplicavel) return `<span class="badge neutral">Sem variação</span>`;
+    return wilcoxon.significativo_a_5pct
+      ? `<span class="badge good">Sim, p = ${fmtP(wilcoxon.p_valor)}</span>`
+      : `<span class="badge neutral">Não, p = ${fmtP(wilcoxon.p_valor)}</span>`;
+  }
+
+  // ================= RQ1 — Tempo =================
+  function buildRQ1() {
+    const rq1 = ANALISE.rq1_tempo;
+    document.getElementById("kpi-rq1-manual").innerHTML = fmt(rq1.manual.mediana / 60, 1) + '<span class="unit">min</span>';
+    document.getElementById("kpi-rq1-ia").innerHTML = fmt(rq1.ia.mediana / 60, 1) + '<span class="unit">min</span>';
+    const razao = rq1.manual.mediana / rq1.ia.mediana;
+    document.getElementById("kpi-rq1-razao").innerHTML = fmt(razao, 1) + '<span class="unit">× mais rápido</span>';
+    document.getElementById("kpi-rq1-sig").innerHTML = sigBadge(rq1.wilcoxon_pareado_por_kata);
+    document.getElementById("kpi-rq1-sig-cap").textContent = "Wilcoxon pareado por kata, α = 0,05";
+
+    const pares = katasByTratamento("tempo_segundos").map(p => ({ ...p, manual: p.manual / 60, ia: p.ia / 60 }));
+    renderPairedChart(document.getElementById("chart-rq1"), {
+      pares, yFmt: v => fmt(v, 0), valueLabel: "tempo em minutos",
+    });
+    renderPairTable(document.getElementById("table-rq1"), pares, "tempo_min", "Tempo (min)", v => fmt(v, 1) + " min");
+  }
+
+  // ================= RQ2 — Defeitos =================
+  function buildRQ2() {
+    const rq2 = ANALISE.rq2_defeitos;
+    document.getElementById("kpi-rq2-manual").innerHTML = fmt(rq2.manual.mediana, 0) + '<span class="unit">%</span>';
+    document.getElementById("kpi-rq2-ia").innerHTML = fmt(rq2.ia.mediana, 0) + '<span class="unit">%</span>';
+    document.getElementById("kpi-rq2-falhas").textContent = fmt(rq2.testes_falhando_total, 0);
+    document.getElementById("kpi-rq2-censurados").textContent = fmt(ANALISE.rq1_tempo.trials_censurados, 0);
+
+    const cap = document.getElementById("kpi-rq2-sig-cap");
+    if (rq2.wilcoxon_pareado_por_kata.aplicavel) {
+      document.getElementById("kpi-rq2-sig").innerHTML = sigBadge(rq2.wilcoxon_pareado_por_kata);
+      cap.textContent = "Wilcoxon pareado por kata, α = 0,05";
+    } else {
+      document.getElementById("kpi-rq2-sig").innerHTML = `<span class="badge neutral">Não aplicável</span>`;
+      cap.textContent = "Todas as 12 execuções chegaram a 100% de sucesso (efeito teto) — sem variação para testar.";
+    }
+
+    const pares = katasByTratamento("taxa_sucesso");
+    renderPairTable(document.getElementById("table-rq2"), pares, "taxa_sucesso", "Taxa de sucesso", v => fmt(v, 0) + "%");
+  }
+
+  // ================= RQ3 — Estrutura =================
+  const RQ3_METRICAS = {
+    cc_media: { label: "Complexidade ciclomática", unit: "", campo: "cc_media", decimals: 1 },
+    cc_normalizada_por_100_loc: { label: "CC por 100 LOC", unit: "", campo: "_cc_por_100_loc", decimals: 1 },
+    mi: { label: "Manutenibilidade (MI)", unit: "", campo: "mi", decimals: 1 },
+    loc: { label: "LOC (controle)", unit: "", campo: "loc", decimals: 0 },
+    duplicacao_pct: { label: "Duplicação", unit: "%", campo: "duplicacao_pct", decimals: 0 },
+  };
+
+  function drawRQ3(chave) {
+    const meta = RQ3_METRICAS[chave];
+    const dados = ANALISE.rq3_estrutura[chave];
+
+    document.getElementById("kpi-rq3-titulo").textContent = meta.label;
+    document.getElementById("kpi-rq3-manual").innerHTML = fmt(dados.manual.mediana, meta.decimals) + `<span class="unit">${meta.unit}</span>`;
+    document.getElementById("kpi-rq3-ia").innerHTML = fmt(dados.ia.mediana, meta.decimals) + `<span class="unit">${meta.unit}</span>`;
+    document.getElementById("kpi-rq3-sig").innerHTML = sigBadge(dados.wilcoxon_pareado_por_kata);
+    document.getElementById("kpi-rq3-sig-cap").textContent = dados.wilcoxon_pareado_por_kata.aplicavel
+      ? "Wilcoxon pareado por kata, α = 0,05"
+      : "Sem variação entre pares — Wilcoxon não aplicável.";
+
+    let pares;
+    if (chave === "cc_normalizada_por_100_loc") {
+      pares = katasByTratamento("cc_media").map((p, i) => {
+        const locPair = katasByTratamento("loc")[i];
+        return {
+          ...p,
+          manual: p.manual / locPair.manual * 100,
+          ia: p.ia / locPair.ia * 100,
+        };
+      });
+    } else {
+      pares = katasByTratamento(meta.campo);
+    }
+    renderPairedChart(document.getElementById("chart-rq3"), {
+      pares, yFmt: v => fmt(v, meta.decimals), valueLabel: meta.label,
+    });
+    renderPairTable(document.getElementById("table-rq3"), pares, meta.campo, meta.label, v => fmt(v, meta.decimals) + (meta.unit || ""));
+  }
+
+  function buildRQ3() {
+    const segBtns = document.querySelectorAll("#seg-rq3 .seg-btn");
+    segBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        segBtns.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+        drawRQ3(btn.dataset.metric);
+      });
+    });
+    drawRQ3("cc_media");
+  }
+
+  // ================= Aprofundamento — Halstead & LOC (além da especificação) =================
+  const APROF_METRICAS = {
+    hal_volume: { label: "Halstead - Volume", unit: "", decimals: 1, fonte: "aprofundamento_halstead" },
+    hal_dificuldade: { label: "Halstead - Dificuldade", unit: "", decimals: 2, fonte: "aprofundamento_halstead" },
+    hal_esforco: { label: "Halstead - Esforço", unit: "", decimals: 1, fonte: "aprofundamento_halstead" },
+    hal_bugs_estimados: { label: "Halstead - Bugs estimados", unit: "", decimals: 4, fonte: "aprofundamento_halstead" },
+    ncloc: { label: "LOC - NCLOC", unit: "", decimals: 1, fonte: "aprofundamento_loc" },
+    loc_branco: { label: "LOC - Em branco", unit: "", decimals: 1, fonte: "aprofundamento_loc" },
+    loc_diretivas: { label: "LOC - Diretivas (import)", unit: "", decimals: 1, fonte: "aprofundamento_loc" },
+    loc_decl: { label: "LOC - Declarativas", unit: "", decimals: 1, fonte: "aprofundamento_loc" },
+    loc_exec: { label: "LOC - Executáveis", unit: "", decimals: 1, fonte: "aprofundamento_loc" },
+  };
+
+  function drawAprofundamento(chave) {
+    const meta = APROF_METRICAS[chave];
+    const dados = ANALISE[meta.fonte][chave];
+
+    document.getElementById("kpi-aprof-titulo").textContent = meta.label;
+    document.getElementById("kpi-aprof-manual").innerHTML = fmt(dados.manual.mediana, meta.decimals) + `<span class="unit">${meta.unit}</span>`;
+    document.getElementById("kpi-aprof-ia").innerHTML = fmt(dados.ia.mediana, meta.decimals) + `<span class="unit">${meta.unit}</span>`;
+    document.getElementById("kpi-aprof-sig").innerHTML = sigBadge(dados.wilcoxon_pareado_por_kata);
+    document.getElementById("kpi-aprof-sig-cap").textContent = dados.wilcoxon_pareado_por_kata.aplicavel
+      ? "Wilcoxon pareado por kata, α = 0,05"
+      : "Sem variação entre pares — Wilcoxon não aplicável.";
+
+    const pares = katasByTratamento(chave);
+    renderPairedChart(document.getElementById("chart-aprof"), {
+      pares, yFmt: v => fmt(v, meta.decimals), valueLabel: meta.label,
+    });
+    renderPairTable(document.getElementById("table-aprof"), pares, chave, meta.label, v => fmt(v, meta.decimals));
+  }
+
+  function buildAprofundamento() {
+    const segBtns = document.querySelectorAll("#seg-aprof .seg-btn");
+    segBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        segBtns.forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+        drawAprofundamento(btn.dataset.metric);
+      });
+    });
+    drawAprofundamento("hal_esforco");
+  }
+
+  // ================= Overview =================
+  function buildOverview() {
+    const rq1 = ANALISE.rq1_tempo, rq2 = ANALISE.rq2_defeitos, rq3 = ANALISE.rq3_estrutura;
+
+    document.getElementById("ov-rq1-stat").innerHTML = fmt(rq1.manual.mediana / rq1.ia.mediana, 1) + '<span class="unit">× mais rápido com IA</span>';
+    document.getElementById("ov-rq1-verdict").textContent =
+      `Significativo (p = ${fmtP(rq1.wilcoxon_pareado_por_kata.p_valor)}) — mediana caiu de ${fmt(rq1.manual.mediana / 60, 1)} para ${fmt(rq1.ia.mediana / 60, 1)} min.`;
+
+    document.getElementById("ov-rq2-stat").innerHTML = fmt(rq2.manual.mediana, 0) + '<span class="unit">% de sucesso em ambos</span>';
+    document.getElementById("ov-rq2-verdict").textContent = "Sem diferença observável — efeito teto (todas as execuções passaram em 100% dos testes).";
+
+    const locSig = rq3.loc.wilcoxon_pareado_por_kata.significativo_a_5pct;
+    const miSig = rq3.mi.wilcoxon_pareado_por_kata.significativo_a_5pct;
+    document.getElementById("ov-rq3-stat").innerHTML = (locSig && miSig ? "LOC e MI" : "Parcialmente") + '<span class="unit"> significativos</span>';
+    document.getElementById("ov-rq3-verdict").textContent =
+      "Complexidade ciclomática bruta sem diferença significativa; LOC menor e MI maior com IA; duplicação 0% em todos os trials.";
+
+    const hal = ANALISE.aprofundamento_halstead;
+    const loc = ANALISE.aprofundamento_loc;
+    document.getElementById("ov-aprof-stat").innerHTML = fmt(hal.hal_esforco.manual.mediana / hal.hal_esforco.ia.mediana, 1) + '<span class="unit">× menos esforço com IA</span>';
+    document.getElementById("ov-aprof-verdict").textContent =
+      `Halstead: as 4 métricas deram significativas. LOC: a redução é no código executável ` +
+      `(p=${fmtP(loc.loc_exec.wilcoxon_pareado_por_kata.p_valor)}), não nas declarações ` +
+      `(p=${fmtP(loc.loc_decl.wilcoxon_pareado_por_kata.p_valor)}) nem nas diretivas.`;
+  }
+
+  // ---------- tabs ----------
+  const tabOrder = ["overview", "rq1", "rq2", "rq3", "aprof"];
+  let currentTab = "overview";
+  const tabBtns = Array.from(document.querySelectorAll(".tab-btn"));
+
+  function setTab(name) {
+    currentTab = name;
+    tabBtns.forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+    document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === "view-" + name));
+    document.getElementById("prevBtn").disabled = tabOrder.indexOf(name) === 0;
+    document.getElementById("nextBtn").disabled = tabOrder.indexOf(name) === tabOrder.length - 1;
+    window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  }
+  tabBtns.forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab)));
+  document.getElementById("prevBtn").addEventListener("click", () => {
+    const i = tabOrder.indexOf(currentTab);
+    if (i > 0) setTab(tabOrder[i - 1]);
+  });
+  document.getElementById("nextBtn").addEventListener("click", () => {
+    const i = tabOrder.indexOf(currentTab);
+    if (i < tabOrder.length - 1) setTab(tabOrder[i + 1]);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (e.key === "ArrowRight") document.getElementById("nextBtn").click();
+    if (e.key === "ArrowLeft") document.getElementById("prevBtn").click();
+  });
+
+  // ---------- build views HTML ----------
+  document.getElementById("views").innerHTML = `
+    <section class="view" id="view-overview">
+      <div class="view-head">
+        <div class="view-eyebrow">Visão geral</div>
+        <h1 class="view-title">O uso de IA muda tempo, defeitos e estrutura do código?</h1>
+        <p class="view-desc">3 questões de pesquisa testadas em 6 katas, cada um resolvido uma vez na mão e uma vez com IA por integrantes diferentes (rodízio contrabalanceado). Clique em um cartão para ver os detalhes.</p>
+      </div>
+      <div class="overview-grid">
+        <button class="overview-card" data-goto="rq1">
+          <span class="overview-tag">RQ1 · Tempo</span>
+          <span class="overview-q">IA reduz o tempo até passar nos testes?</span>
+          <span class="overview-stat" id="ov-rq1-stat"></span>
+          <span class="overview-verdict" id="ov-rq1-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq2">
+          <span class="overview-tag">RQ2 · Defeitos</span>
+          <span class="overview-q">IA reduz a quantidade de testes falhando?</span>
+          <span class="overview-stat" id="ov-rq2-stat"></span>
+          <span class="overview-verdict" id="ov-rq2-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="rq3">
+          <span class="overview-tag">RQ3 · Estrutura</span>
+          <span class="overview-q">IA altera complexidade ou duplicação do código?</span>
+          <span class="overview-stat" id="ov-rq3-stat"></span>
+          <span class="overview-verdict" id="ov-rq3-verdict"></span>
+        </button>
+        <button class="overview-card" data-goto="aprof">
+          <span class="overview-tag">Além da especificação</span>
+          <span class="overview-q">O que Halstead e a composição do LOC dizem?</span>
+          <span class="overview-stat" id="ov-aprof-stat"></span>
+          <span class="overview-verdict" id="ov-aprof-verdict"></span>
+        </button>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq1">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ1</div>
+        <h1 class="view-title">O uso de IA reduz o tempo de resolução?</h1>
+        <p class="view-desc">Tempo até passar em todos os testes de aceitação ("time-to-green"), em minutos. Pareado por kata (n=6): cada kata foi resolvido uma vez na mão e uma vez com IA, por integrantes diferentes.</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana — Manual</div><div class="kpi-value manual" id="kpi-rq1-manual"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Com IA</div><div class="kpi-value ia" id="kpi-rq1-ia"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Ganho de velocidade</div><div class="kpi-value" id="kpi-rq1-razao"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Significativo?</div><div class="kpi-value" id="kpi-rq1-sig"></div><div class="kpi-caption" id="kpi-rq1-sig-cap"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <div><div class="card-title">Tempo por kata — Manual vs. Com IA</div><div class="card-note">Cada linha liga o trial manual ao trial com IA do mesmo kata</div></div>
+          </div>
+          <div class="chart-wrap" id="chart-rq1"></div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--manual)"></span>Manual</div>
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--ia)"></span>Com IA</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Valores por kata</div>
+          <div class="chart-wrap" id="table-rq1"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq2">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ2</div>
+        <h1 class="view-title">O uso de IA reduz a quantidade de defeitos?</h1>
+        <p class="view-desc">Taxa de testes de aceitação passando ao final do time-box de 35 min (nenhum trial foi censurado).</p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card"><div class="kpi-label">Mediana — Manual</div><div class="kpi-value manual" id="kpi-rq2-manual"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Com IA</div><div class="kpi-value ia" id="kpi-rq2-ia"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Testes falhando (total)</div><div class="kpi-value" id="kpi-rq2-falhas"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Trials censurados</div><div class="kpi-value" id="kpi-rq2-censurados"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Significativo?</div><div class="kpi-value" id="kpi-rq2-sig"></div><div class="kpi-caption" id="kpi-rq2-sig-cap"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Taxa de sucesso por kata</div>
+        <div class="card-note">Todas as 12 execuções atingiram 100% — efeito teto: com o time-box de 35 min, tanto manual quanto IA foram suficientes para os 6 katas.</div>
+        <div class="chart-wrap" id="table-rq2"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-rq3">
+      <div class="view-head">
+        <div class="view-eyebrow">RQ3</div>
+        <h1 class="view-title">O uso de IA altera a estrutura do código?</h1>
+        <p class="view-desc">Complexidade ciclomática, manutenibilidade e duplicação (Radon), sempre com LOC como métrica de controle. Escolha a métrica abaixo.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="seg-group" id="seg-rq3">
+          <button class="seg-btn" data-metric="cc_media" aria-pressed="true">Complexidade (cc)</button>
+          <button class="seg-btn" data-metric="cc_normalizada_por_100_loc" aria-pressed="false">CC / 100 LOC</button>
+          <button class="seg-btn" data-metric="mi" aria-pressed="false">Manutenibilidade (MI)</button>
+          <button class="seg-btn" data-metric="loc" aria-pressed="false">LOC (controle)</button>
+          <button class="seg-btn" data-metric="duplicacao_pct" aria-pressed="false">Duplicação</button>
+        </div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card" style="grid-column: 1 / -1"><div class="kpi-label">Métrica selecionada</div><div class="kpi-value" id="kpi-rq3-titulo" style="font-size:16px"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Manual</div><div class="kpi-value manual" id="kpi-rq3-manual"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Com IA</div><div class="kpi-value ia" id="kpi-rq3-ia"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Significativo?</div><div class="kpi-value" id="kpi-rq3-sig"></div><div class="kpi-caption" id="kpi-rq3-sig-cap"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Métrica por kata — Manual vs. Com IA</div>
+          <div class="chart-wrap" id="chart-rq3"></div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--manual)"></span>Manual</div>
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--ia)"></span>Com IA</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Valores por kata</div>
+          <div class="chart-wrap" id="table-rq3"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" id="view-aprof">
+      <div class="view-head">
+        <div class="view-eyebrow">Além da especificação</div>
+        <h1 class="view-title">Métricas de Halstead e composição do LOC</h1>
+        <p class="view-desc">A especificação pede só cc/duplicação/LOC total (MI como opcional) para RQ3. Como aprofundamento, também analisamos as métricas de Halstead — já coletadas pelo Radon desde a Sprint 1, mas não usadas em nenhuma análise até esta sprint — e o LOC quebrado por tipo (diretivas, declarativas, executáveis, em branco), via AST.</p>
+      </div>
+      <div class="card" style="margin-bottom:16px">
+        <div class="seg-group" id="seg-aprof">
+          <button class="seg-btn" data-metric="hal_esforco" aria-pressed="true">Halstead: Esforço</button>
+          <button class="seg-btn" data-metric="hal_volume" aria-pressed="false">Halstead: Volume</button>
+          <button class="seg-btn" data-metric="hal_dificuldade" aria-pressed="false">Halstead: Dificuldade</button>
+          <button class="seg-btn" data-metric="hal_bugs_estimados" aria-pressed="false">Halstead: Bugs estimados</button>
+          <button class="seg-btn" data-metric="ncloc" aria-pressed="false">LOC: NCLOC</button>
+          <button class="seg-btn" data-metric="loc_branco" aria-pressed="false">LOC: Em branco</button>
+          <button class="seg-btn" data-metric="loc_diretivas" aria-pressed="false">LOC: Diretivas</button>
+          <button class="seg-btn" data-metric="loc_decl" aria-pressed="false">LOC: Declarativas</button>
+          <button class="seg-btn" data-metric="loc_exec" aria-pressed="false">LOC: Executáveis</button>
+        </div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-card" style="grid-column: 1 / -1"><div class="kpi-label">Métrica selecionada</div><div class="kpi-value" id="kpi-aprof-titulo" style="font-size:16px"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Manual</div><div class="kpi-value manual" id="kpi-aprof-manual"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Mediana — Com IA</div><div class="kpi-value ia" id="kpi-aprof-ia"></div></div>
+        <div class="kpi-card"><div class="kpi-label">Significativo?</div><div class="kpi-value" id="kpi-aprof-sig"></div><div class="kpi-caption" id="kpi-aprof-sig-cap"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">Métrica por kata — Manual vs. Com IA</div>
+          <div class="chart-wrap" id="chart-aprof"></div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--manual)"></span>Manual</div>
+            <div class="legend-item"><span class="legend-swatch" style="background:var(--ia)"></span>Com IA</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Valores por kata</div>
+          <div class="chart-wrap" id="table-aprof"></div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  document.querySelectorAll(".overview-card").forEach(card => {
+    card.addEventListener("click", () => setTab(card.dataset.goto));
+  });
+
+  buildOverview();
+  buildRQ1();
+  buildRQ2();
+  buildRQ3();
+  buildAprofundamento();
+  setTab("overview");
+})();
+</script>
+</body>
+</html>
