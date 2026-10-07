@@ -1,5 +1,6 @@
 """Orquestrador do pipeline (#39): etapas injetadas, sem rede."""
 from datetime import date
+from pathlib import Path
 from types import SimpleNamespace
 
 import pandas as pd
@@ -205,3 +206,24 @@ def test_cli_janela_placeholder_recusa(tmp_path, capsys):
     )
     assert cli.main(["--config", str(cfg)]) == 2
     assert "placeholder" in capsys.readouterr().err
+
+
+def test_funil_fecha_com_limite(tmp_path):
+    from coleta.filtros import df_funil, funil_fecha, sortear
+
+    def selecionar(cfg, pasta):
+        aprovados = ["o/a", "o/b", "o/c", "o/d", "o/e"]
+        amostra, _, etapa = sortear(aprovados, cfg.n_repos, cfg.seed)
+        funil = df_funil([
+            {"etapa": "usa_actions", "entraram": 6, "sairam": 1, "motivo": "sem Actions"},
+            etapa,
+        ])
+        funil.to_csv(Path(pasta) / "funil.csv", index=False)
+        return pd.DataFrame({"repo": amostra})
+
+    e = _etapas([], selecionar=selecionar)
+    r = executar(_cfg(), limite=3, pasta=tmp_path, etapas=e)
+    funil = pd.read_csv(tmp_path / "funil.csv")
+    assert len(r["repos"]) == 3
+    assert funil_fecha(funil, 3)
+    assert funil["etapa"].iloc[-1] == "sorteio"

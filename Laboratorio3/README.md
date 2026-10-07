@@ -53,6 +53,56 @@ docker build -t lab03-dora .
 docker run --rm -e GITHUB_TOKEN -v "${PWD}/data:/app/data" lab03-dora --config config.yaml
 ```
 
+## Comando único
+
+```bash
+export GITHUB_TOKEN=...        # nunca commitado; veja "Configuração"
+python -m pipeline --config config.yaml              # amostra de n_repos (100)
+python -m pipeline --config config.yaml --limite 10  # rodada curta de medição
+```
+
+O comando faz tudo: busca fatiada de candidatos, filtros e funil, sorteio com
+semente fixa, coleta (releases, commits entre releases, deployments, workflow
+runs, issues de bug, metadados) e cálculo das métricas. `--limite N` troca o
+`n_repos` do config **antes** do sorteio, então `funil.csv` fecha com N.
+
+Um repositório que falha é registrado e os demais seguem; o resumo no fim da
+execução lista quem falhou. A coleta recusa rodar com a janela ainda marcada
+como `placeholder: true`.
+
+### Saídas (`data/processed/`)
+
+| Arquivo | O que é |
+|---|---|
+| `candidatos.csv` | candidatos da busca fatiada, já sem forks, arquivados e duplicatas |
+| `funil.csv` | por etapa: entraram, saíram e motivo; a soma fecha na amostra final |
+| `descartes.csv` | cada repositório descartado, com etapa e motivo |
+| `repos.csv` | metadados e fatores de release da amostra |
+| `releases.csv`, `tags.csv` | releases (sem draft) e tags com data do commit |
+| `releases_ignoradas.csv` | releases sem comparação possível (sem anterior, 404) |
+| `commits.csv` | commits entre releases consecutivas |
+| `deployments.csv` | deployments em ambientes de produção |
+| `runs.csv`, `run_attempts.csv` | workflow runs de push no default branch e tentativas anteriores |
+| `episodios.csv` | episódios de falha do CI, com censura e flag de só-flaky |
+| `issues_bug.csv` | issues de bug (sem PRs) com a tag citada |
+| `metricas.csv` | uma linha por repositório: as métricas DORA e seus proxies |
+| `metricas_mensais.csv` | CFR de CI e recuperação por repositório e mês (RQ 08b) |
+| `custo_api.csv` | chamadas por endpoint: as que saíram da máquina e as do cache |
+| `fatias_saturadas.csv` | só se existir: fatias que bateram o teto de 1.000 resultados |
+
+As colunas de cada arquivo estão em
+[docs/dicionario_dados.md](docs/dicionario_dados.md). Métrica sem dado vale
+vazio (NaN), nunca zero.
+
+### Planejando uma coleta maior
+
+Depois de uma rodada curta, estime o custo para 300 repositórios a partir do
+`custo_api.csv` e do tempo medido (extrapolação linear, ordem de grandeza):
+
+```bash
+python -m pipeline.estimativa --medido 10 --segundos 600 --alvo 300
+```
+
 ## Cache e retomada
 
 Toda resposta da API é guardada em `data/raw/cache.sqlite`, com chave
