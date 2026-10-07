@@ -64,8 +64,8 @@ python -m pipeline --config config.yaml              # amostra de n_repos (100)
 python -m pipeline --config config.yaml --limite 10  # rodada curta de medição
 ```
 
-O comando faz tudo: busca fatiada de candidatos, filtros e funil, sorteio com
-semente fixa, coleta (releases, commits entre releases, deployments, workflow
+O comando faz tudo: busca fatiada de candidatos, filtros e funil (examinados em
+ordem aleatória fixada pela semente, até fechar a amostra), coleta (releases, commits entre releases, deployments, workflow
 runs, issues de bug, metadados) e cálculo das métricas. `--limite N` troca o
 `n_repos` do config **antes** do sorteio, então `funil.csv` fecha com N.
 
@@ -78,8 +78,8 @@ como `placeholder: true`.
 | Arquivo | O que é |
 |---|---|
 | `candidatos.csv` | candidatos da busca fatiada, já sem forks, arquivados e duplicatas |
-| `funil.csv` | por etapa: entraram, saíram e motivo; a soma fecha na amostra final |
-| `descartes.csv` | cada repositório descartado, com etapa e motivo |
+| `funil.csv` | por etapa: entraram, saíram e motivo; a soma fecha na amostra final (veja "Como a amostra é escolhida") |
+| `descartes.csv` | cada repositório descartado nos filtros, com etapa e motivo (não lista os `nao_examinados`) |
 | `repos.csv` | metadados e fatores de release da amostra |
 | `releases.csv`, `tags.csv` | releases (sem draft) e tags com data do commit |
 | `releases_ignoradas.csv` | releases sem comparação possível (sem anterior, 404) |
@@ -97,6 +97,29 @@ como `placeholder: true`.
 As colunas de cada arquivo estão em
 [docs/dicionario_dados.md](docs/dicionario_dados.md). Métrica sem dado vale
 vazio (NaN), nunca zero.
+
+### Como a amostra é escolhida
+
+Examinar dezenas de milhares de candidatos custaria dias de cota (a cota é de
+5.000 chamadas por hora), então a seleção faz duas coisas que **não mudam quem
+pode entrar na amostra**:
+
+1. **Sem push na janela** (`sem_push_na_janela`): a busca já traz `pushed_at`.
+   Repositório sem push desde `janela.inicio` não pode ter ≥ `min_runs` runs de
+   push na janela, então seria descartado de qualquer jeito, sem gastar chamada.
+   Candidato sem `pushed_at` fica.
+2. **Filtro preguiçoso**: os candidatos são examinados em ordem aleatória fixada
+   por `seed`, e o exame para quando `n_repos` são aprovados. As primeiras N
+   aprovações de uma ordem aleatória fixa são uma amostra uniforme do conjunto
+   aprovado, e a mesma semente reproduz a mesma amostra.
+
+Consequência para o `funil.csv`: depois das etapas de limpeza vem a linha
+`nao_examinados` (candidatos que ficaram para trás porque a amostra já tinha
+fechado), e `usa_actions`, `min_releases` e `min_runs` contam **só os
+examinados**. Para dizer no artigo quantos candidatos "passam nos filtros", use a
+taxa entre os examinados (aprovados ÷ examinados), não o total de candidatos.
+`candidatos.csv` guarda todos, então os não examinados são os que não aparecem
+em `descartes.csv` nem em `repos.csv`.
 
 ### Planejando uma coleta maior
 

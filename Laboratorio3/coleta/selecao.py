@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import logging
 import re
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -115,10 +116,27 @@ def buscar_candidatos(faixas: list[str]) -> list[dict]:
     return brutos
 
 
+def _ultimo_push(item: dict) -> datetime | None:
+    texto = item.get("pushed_at")
+    if not texto:
+        return None
+    try:
+        return datetime.fromisoformat(texto.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def limpar_candidatos(
     brutos: list[dict],
+    janela_inicio: date | None = None,
 ) -> tuple[pd.DataFrame, pd.DataFrame, list[dict]]:
-    """Remove duplicatas, forks e arquivados.
+    """Remove duplicatas, forks, arquivados e, com `janela_inicio`, os parados.
+
+    "Parado" é sem push desde o início da janela: ele não pode ter ≥ min_runs
+    runs de push na janela, então seria descartado na etapa de runs de
+    qualquer jeito. Cortar aqui só poupa chamadas (o `pushed_at` já vem na
+    busca) e não muda quem pode entrar na amostra. Candidato sem `pushed_at`
+    fica: na dúvida, quem decide é o filtro de verdade.
 
     Devolve (candidatos, descartes, etapas). `etapas` são as linhas do funil
     dessa fase, na ordem em que os filtros agem, de modo que a saída de uma é
@@ -161,6 +179,24 @@ def limpar_candidatos(
         restantes = mantidos
         etapas.append(_etapa(etapa, entraram, entraram - len(restantes), motivo))
 
+    if janela_inicio is not None:
+        corte = datetime(janela_inicio.year, janela_inicio.month,
+                         janela_inicio.day, tzinfo=timezone.utc)
+        motivo = (f"sem push desde {janela_inicio.isoformat()}: não pode ter "
+                  f"runs de push na janela")
+        entraram = len(restantes)
+        mantidos = []
+        for item in restantes:
+            push = _ultimo_push(item)
+            if push is not None and push < corte:
+                descartes.append({"repo": item["full_name"],
+                                  "etapa": "sem_push_na_janela", "motivo": motivo})
+            else:
+                mantidos.append(item)
+        restantes = mantidos
+        etapas.append(_etapa("sem_push_na_janela", entraram,
+                             entraram - len(restantes), motivo))
+
     candidatos = pd.DataFrame(
         [
             {
@@ -188,26 +224,32 @@ def _etapa(etapa: str, entraram: int, sairam: int, motivo: str) -> dict:
 def selecionar(cfg, pasta: str | Path = "data/processed") -> pd.DataFrame:
     """Do config à amostra: grava candidatos.csv, funil.csv e descartes.csv.
 
-    Devolve a amostra sorteada com as colunas de candidatos.csv.
+    Os filtros examinam os candidatos em ordem aleatória (pela semente) e
+    param ao aprovar `cfg.n_repos`; os que sobram viram a linha
+    `nao_examinados` do funil e não vão para descartes.csv (estão em
+    candidatos.csv). Devolve a amostra com as colunas de candidatos.csv.
     """
-    from coleta.filtros import df_descartes, df_funil, filtrar, funil_fecha, sortear
+    from coleta.filtros import df_descartes, df_funil, filtrar_ate, funil_fecha
 
     candidatos, desc_limpeza, etapas = limpar_candidatos(
-        buscar_candidatos(cfg.faixas_estrelas)
+        buscar_candidatos(cfg.faixas_estrelas), cfg.janela_inicio
     )
-    aprovados, desc_filtros, funil_filtros = filtrar(candidatos["repo"].tolist(), cfg)
-    amostra, desc_sorteio, etapa_sorteio = sortear(aprovados, cfg.n_repos, cfg.seed)
+    aprovados, desc_filtros, funil_filtros, nao_examinados = filtrar_ate(
+        candidatos["repo"].tolist(), cfg, cfg.n_repos, cfg.seed
+    )
+    motivo = (f"não examinados: a amostra de {cfg.n_repos} fechou antes "
+              f"(ordem aleatória, seed={cfg.seed})")
+    etapa_nao_examinados = _etapa("nao_examinados", len(candidatos),
+                                  nao_examinados, motivo)
 
-    funil = df_funil(etapas + funil_filtros + [etapa_sorteio])
-    if not funil_fecha(funil, len(amostra)):
+    funil = df_funil(etapas + [etapa_nao_examinados] + funil_filtros)
+    if not funil_fecha(funil, len(aprovados)):
         raise RuntimeError("o funil não fecha: confira funil.csv antes de seguir")
-    descartes = df_descartes(
-        desc_limpeza.to_dict("records") + desc_filtros + desc_sorteio
-    )
+    descartes = df_descartes(desc_limpeza.to_dict("records") + desc_filtros)
 
     pasta = Path(pasta)
     pasta.mkdir(parents=True, exist_ok=True)
     candidatos.to_csv(pasta / "candidatos.csv", index=False)
     funil.to_csv(pasta / "funil.csv", index=False)
     descartes.to_csv(pasta / "descartes.csv", index=False)
-    return candidatos[candidatos["repo"].isin(amostra)].reset_index(drop=True)
+    return candidatos[candidatos["repo"].isin(aprovados)].reset_index(drop=True)
