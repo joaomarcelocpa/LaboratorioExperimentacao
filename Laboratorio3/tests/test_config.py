@@ -107,3 +107,20 @@ def test_pipeline_recusa_rodar_com_janela_placeholder(capsys):
     codigo = main(["--config", str(RAIZ / "config.yaml")])
     assert codigo == 2
     assert "placeholder" in capsys.readouterr().err
+
+
+# --- correções da revisão final ---
+
+def test_janela_com_hora_da_erro_claro(tmp_path):
+    """datetime é subclasse de date: sem checagem explícita, a comparação
+    datetime vs date estoura TypeError em vez de ErroDeConfig."""
+    texto = VALIDO.replace("inicio: 2024-10-01", "inicio: 2024-10-01 00:00:00")
+    with pytest.raises(ErroDeConfig) as e:
+        carregar_config(escrever(tmp_path, texto))
+    assert "janela.inicio" in str(e.value)
+
+
+def test_config_que_e_diretorio_da_erro_claro(tmp_path):
+    with pytest.raises(ErroDeConfig) as e:
+        carregar_config(tmp_path)
+    assert str(tmp_path) in str(e.value)

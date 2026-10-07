@@ -32,7 +32,9 @@ def test_pipe_no_texto_e_escapado():
     from metricas.schemas import Coluna, Schema
 
     schema = Schema("teste.csv", "C", {
-        "col": Coluna("str", "a|b", "origem com | pipe"),
+        "col|ruim": Coluna("str", "a|b", "origem com | pipe"),
     })
-    linha = _tabela(schema)
-    assert r"\|" in linha
+    linha = [l for l in _tabela(schema).splitlines() if l.startswith("| `col")][0]
+    # A tabela tem 4 colunas: 5 barras de borda e nenhuma solta no meio.
+    assert linha.count("|") - linha.count(r"\|") == 5, linha
+    assert r"col\|ruim" in linha

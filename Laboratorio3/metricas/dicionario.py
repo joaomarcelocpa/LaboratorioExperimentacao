@@ -38,16 +38,16 @@ def _escapar(texto: str) -> str:
 
 def _tabela(schema: Schema) -> str:
     linhas = [
-        f"## `{schema.nome}`",
+        f"## `{_escapar(schema.nome)}`",
         "",
-        f"**Dono:** {schema.dono}",
+        f"**Dono:** {_escapar(schema.dono)}",
         "",
         "| Coluna | Tipo | Unidade | Origem |",
         "|---|---|---|---|",
     ]
     for nome, meta in schema.colunas.items():
         linhas.append(
-            f"| `{nome}` | {_escapar(meta.tipo)} | {_escapar(meta.unidade)} "
+            f"| `{_escapar(nome)}` | {_escapar(meta.tipo)} | {_escapar(meta.unidade)} "
             f"| {_escapar(meta.origem)} |"
         )
     linhas.append("")

@@ -49,7 +49,9 @@ _LISTAS = ["faixas_estrelas", "ambientes_producao", "labels_bug", "bots"]
 
 def carregar_config(caminho: str | Path = "config.yaml") -> Config:
     caminho = Path(caminho)
-    if not caminho.exists():
+    if caminho.is_dir():
+        raise ErroDeConfig(f"config é um diretório, não um arquivo: {caminho}")
+    if not caminho.is_file():
         raise ErroDeConfig(f"config não encontrado: {caminho}")
 
     try:
@@ -69,10 +71,13 @@ def carregar_config(caminho: str | Path = "config.yaml") -> Config:
     for campo in ("inicio", "fim"):
         if campo not in janela:
             raise ErroDeConfig(f"{caminho}: chave 'janela.{campo}' ausente")
-        if not isinstance(janela[campo], date):
+        # datetime é subclasse de date: sem o type() exato, uma data com hora
+        # passaria aqui e estouraria TypeError na comparação abaixo.
+        if type(janela[campo]) is not date:
             raise ErroDeConfig(
-                f"{caminho}: 'janela.{campo}' deve ser uma data AAAA-MM-DD, "
-                f"encontrado {type(janela[campo]).__name__}"
+                f"{caminho}: 'janela.{campo}' deve ser uma data AAAA-MM-DD "
+                f"sem hora, encontrado {type(janela[campo]).__module__}."
+                f"{type(janela[campo]).__name__}"
             )
     if janela["fim"] < janela["inicio"]:
         raise ErroDeConfig(

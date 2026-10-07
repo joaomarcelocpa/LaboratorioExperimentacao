@@ -152,3 +152,41 @@ def test_validar_csv_acusa_coluna_faltando(tmp_path, df_metricas):
     with pytest.raises(ErroDeContrato) as e:
         validar_csv(caminho, SCHEMAS["metricas"])
     assert "cfr_b" in str(e.value)
+
+
+# --- correções da revisão final ---
+
+def test_valor_texto_em_coluna_numerica_vira_erro_de_contrato(tmp_path):
+    """Uma célula de texto numa coluna numérica é violação de contrato,
+    não um TypeError vindo de dentro do pandas."""
+    caminho = tmp_path / "metricas_mensais.csv"
+    caminho.write_text(
+        "repo,mes,cfr_a,recuperacao_h,runs_validos\n"
+        "o/n,2025-01,0.3,2.0,3\n"
+        "o/n,2025-02,,,desconhecido\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ErroDeContrato) as e:
+        validar_csv(caminho, SCHEMAS["metricas_mensais"])
+    assert "runs_validos" in str(e.value)
+
+
+def test_texto_em_classe_dora_nota_vira_erro_de_contrato(df_metricas):
+    """int('High') daria ValueError; o contrato precisa acusar o tipo."""
+    df = df_metricas.assign(classe_dora_nota="High")
+    with pytest.raises(ErroDeContrato) as e:
+        validar(df, SCHEMAS["metricas"])
+    assert "classe_dora_nota" in str(e.value)
+
+
+def test_float_nao_inteiro_em_coluna_int_da_erro(df_metricas):
+    """nota_freq=2.5 quebraria o kappa ponderado da RQ07, que depende da ordem
+    de inteiros 1-4."""
+    with pytest.raises(ErroDeContrato) as e:
+        validar(df_metricas.assign(nota_freq=2.5), SCHEMAS["metricas"])
+    assert "nota_freq" in str(e.value)
+
+
+def test_float_inteiro_em_coluna_int_passa(df_metricas):
+    """pandas lê int com nulo como float64: 3.0 continua sendo 3."""
+    validar(df_metricas.assign(nota_freq=3.0), SCHEMAS["metricas"])

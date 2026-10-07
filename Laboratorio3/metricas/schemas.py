@@ -245,8 +245,26 @@ SCHEMAS: dict[str, Schema] = {
 
 # --- validação -----------------------------------------------------------
 
+def _e_inteiro(s: pd.Series) -> bool:
+    """Aceita int, Int64 anulável e float cujos valores sejam todos inteiros.
+
+    pandas lê inteiro com nulo como float64, então exigir is_integer_dtype
+    daria erro falso em toda métrica faltante. Mas 2.5 numa coluna de nota
+    quebraria o kappa ponderado da RQ07, que depende da ordem de inteiros 1-4
+    — por isso a checagem é pelo valor, não só pelo dtype.
+    """
+    if not pd.api.types.is_numeric_dtype(s):
+        return False
+    if pd.api.types.is_bool_dtype(s):
+        return False
+    sem_nulos = s.dropna()
+    if sem_nulos.empty:
+        return True
+    return bool((sem_nulos % 1 == 0).all())
+
+
 _CHECAGEM = {
-    "int": pd.api.types.is_numeric_dtype,
+    "int": _e_inteiro,
     "float": pd.api.types.is_numeric_dtype,
     "bool": lambda s: pd.api.types.is_bool_dtype(s) or pd.api.types.is_numeric_dtype(s),
     "str": lambda s: pd.api.types.is_object_dtype(s) or pd.api.types.is_string_dtype(s),
@@ -288,7 +306,10 @@ def validar(df: pd.DataFrame, schema: Schema, estrito: bool = True) -> None:
                 f"encontrado {df[col].dtype}"
             )
 
-    if not faltando:
+    # As regras semânticas assumem colunas presentes e com o tipo certo. Rodá-las
+    # sobre um DataFrame que já violou a estrutura produziria TypeError/ValueError
+    # vindos de dentro do pandas, em vez do ErroDeContrato que o chamador espera.
+    if not erros:
         for regra in schema.regras:
             erros.extend(regra(df))
 
