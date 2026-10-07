@@ -41,3 +41,12 @@ def test_custo_vazio_nao_tem_endpoint_mais_caro():
 def test_n_medido_invalido(n):
     with pytest.raises(ValueError):
         estimar(_custo(("/x", 1, 0)), n_medido=n, n_alvo=300, segundos=1)
+
+
+def test_custo_fixo_da_selecao_nao_escala_com_o_alvo():
+    total = _custo(("/search/repositories", 3000, 0), ("/x", 1000, 0))
+    selecao = _custo(("/search/repositories", 3000, 0))
+    r = estimar(total, n_medido=10, n_alvo=300, segundos=700,
+                custo_selecao=selecao, segundos_selecao=100)
+    # 1.000 chamadas em 10 repos = 100/repo; 300 repos = 30.000 + 3.000 fixas
+    assert r["chamadas_alvo"] == 33000

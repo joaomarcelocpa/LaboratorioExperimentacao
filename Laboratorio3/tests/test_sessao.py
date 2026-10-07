@@ -40,3 +40,28 @@ def test_raise_for_status_em_erro_e_headers_sem_caixa():
     assert 'rel="next"' in r.headers.get("Link")
     with pytest.raises(requests.HTTPError):
         r.raise_for_status()
+
+
+@responses.activate
+def test_releases_e_tags_pedem_pagina_de_100_como_o_filtro():
+    for caminho in ("releases", "tags"):
+        responses.add(responses.GET, f"https://api.github.com/repos/o/r/{caminho}", json=[])
+        SessaoHttp().get(f"https://api.github.com/repos/o/r/{caminho}")
+    assert all("per_page=100" in c.request.url for c in responses.calls)
+
+
+@responses.activate
+def test_releases_reaproveita_o_cache_do_paginar():
+    url = "https://api.github.com/repos/o/r/releases"
+    responses.add(responses.GET, url, json=[{"id": 1}])
+    http.paginar(url)
+    SessaoHttp().get(url)
+    assert len(responses.calls) == 1
+
+
+@responses.activate
+def test_compare_nao_ganha_per_page():
+    url = "https://api.github.com/repos/o/r/compare/v1...v2"
+    responses.add(responses.GET, url, json={"commits": []})
+    SessaoHttp().get(url)
+    assert "per_page" not in responses.calls[0].request.url

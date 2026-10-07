@@ -227,3 +227,83 @@ def test_funil_fecha_com_limite(tmp_path):
     assert len(r["repos"]) == 3
     assert funil_fecha(funil, 3)
     assert funil["etapa"].iloc[-1] == "sorteio"
+
+
+# --- achados da revisão final -------------------------------------------------
+
+def test_401_aborta_a_rodada_em_vez_de_virar_falha_por_repo(tmp_path):
+    def releases(repo, cfg, session):
+        raise http.ErroDeHTTP("Bad credentials", 401)
+
+    with pytest.raises(http.ErroDeHTTP):
+        executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a", "o/b"], coletar_releases=releases))
+    assert (tmp_path / "custo_api.csv").exists()
+
+
+def test_401_em_runs_tambem_aborta(tmp_path):
+    def runs(*a):
+        raise http.ErroDeHTTP("Bad credentials", 401)
+
+    with pytest.raises(http.ErroDeHTTP):
+        executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], coletar_runs=runs))
+
+
+def test_cli_sai_com_1_quando_nenhum_repo_sobreviveu(monkeypatch, tmp_path):
+    cfg = tmp_path / "c.yaml"
+    cfg.write_text(
+        "janela: {inicio: 2024-10-01, fim: 2025-09-30}\n"
+        "faixas_estrelas: ['1000..2000']\nmin_releases: 5\nmin_runs: 50\n"
+        "n_repos: 100\nseed: 42\nambientes_producao: [production]\n"
+        "labels_bug: [bug]\nn_dias_issue: 7\nbots: ['dependabot[bot]']\n",
+        encoding="utf-8",
+    )
+    monkeypatch.setattr("pipeline.executar.executar",
+                        lambda *a, **k: {"repos": [], "falhas": {"o/a": "boom"}})
+    assert cli.main(["--config", str(cfg)]) == 1
+
+
+def test_erro_inesperado_em_coletar_repos_so_derruba_o_repo_ruim(tmp_path):
+    def repos(lista, cfg, commits_df):
+        if "o/b" in lista and len(lista) > 1:
+            raise ValueError("rel=last sem número de página")
+        if lista == ["o/b"]:
+            raise ValueError("rel=last sem número de página")
+        return _etapas([]).coletar_repos(lista, cfg, commits_df)
+
+    r = executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a", "o/b"], coletar_repos=repos))
+    assert r["repos"] == ["o/a"]
+    assert "o/b" in r["falhas"]
+    assert pd.read_csv(tmp_path / "metricas.csv")["repo"].tolist() == ["o/a"]
+
+
+def test_repo_que_falha_em_runs_sai_de_todas_as_saidas(tmp_path):
+    def runs(repo, branch, inicio, fim):
+        if repo == "o/ruim":
+            raise KeyError("total_count")
+        return _etapas([]).coletar_runs(repo, branch, inicio, fim)
+
+    r = executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/ruim", "o/bom"], coletar_runs=runs))
+    assert "o/ruim" in r["falhas"]
+    for nome in ("repos.csv", "metricas.csv"):
+        assert pd.read_csv(tmp_path / nome)["repo"].tolist() == ["o/bom"], nome
+
+
+def test_fatias_saturadas_de_rodada_anterior_nao_sobrevive(tmp_path):
+    velho = tmp_path / "fatias_saturadas.csv"
+    velho.write_text("repo,inicio,fim,total_count\no/x,a,b,1000\n")
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"]))
+    assert not velho.exists()
+
+
+def test_custo_da_selecao_e_gravado_a_parte(tmp_path):
+    def selecionar(cfg, pasta):
+        http.get  # a seleção "gasta" uma chamada contada pelo cliente
+        http.cliente_padrao()._contar("https://api.github.com/search/repositories", "chamadas")
+        return pd.DataFrame({"repo": ["o/a"]})
+
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], selecionar=selecionar))
+    sel = pd.read_csv(tmp_path / "custo_selecao.csv")
+    assert sel["chamadas"].sum() == 1

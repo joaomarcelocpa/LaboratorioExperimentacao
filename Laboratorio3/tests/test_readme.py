@@ -19,6 +19,8 @@ def test_readme_documenta_cada_csv_do_contrato(schema):
     "make run-docker",
     "python -m pipeline.estimativa",
     "fatias_saturadas.csv",
+    "custo_selecao.csv",
+    "403, 422 e 410",
 ])
 def test_readme_traz_o_essencial(trecho):
     assert trecho in README

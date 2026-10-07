@@ -42,7 +42,10 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"janela: {cfg.janela_inicio} a {cfg.janela_fim} | "
           f"amostra: {args.limite or cfg.n_repos}")
-    executar(cfg, limite=args.limite)
+    resultado = executar(cfg, limite=args.limite)
+    if resultado["falhas"] and not resultado["repos"]:
+        print("erro: nenhum repositório foi coletado com sucesso", file=sys.stderr)
+        return 1
     return 0
 
 

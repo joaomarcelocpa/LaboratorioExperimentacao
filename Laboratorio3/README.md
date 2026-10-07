@@ -88,6 +88,7 @@ como `placeholder: true`.
 | `metricas.csv` | uma linha por repositório: as métricas DORA e seus proxies |
 | `metricas_mensais.csv` | CFR de CI e recuperação por repositório e mês (RQ 08b) |
 | `custo_api.csv` | chamadas por endpoint: as que saíram da máquina e as do cache |
+| `custo_selecao.csv` | diagnóstico: custo só da seleção (busca e filtros), que não cresce com a amostra |
 | `fatias_saturadas.csv` | só se existir: fatias que bateram o teto de 1.000 resultados |
 
 As colunas de cada arquivo estão em
@@ -102,6 +103,16 @@ Depois de uma rodada curta, estime o custo para 300 repositórios a partir do
 ```bash
 python -m pipeline.estimativa --medido 10 --segundos 600 --alvo 300
 ```
+
+A seleção percorre todos os candidatos qualquer que seja o `--limite`, então
+seu custo é fixo: a estimativa lê `custo_selecao.csv` e só escala o resto.
+Passe `--segundos-selecao` (impresso no fim da seleção) para tratar o tempo
+do mesmo jeito.
+
+**Limitação da retomada:** o cache guarda respostas 2xx e 404. Respostas
+403, 422 e 410 (Actions indisponível, fatia recusada, issues desligadas) não
+são guardadas e se repetem a cada rodada, então a segunda rodada pode ter
+`chamadas > 0` em alguns endpoints. `custo_api.csv` conta só a execução atual.
 
 ## Cache e retomada
 
