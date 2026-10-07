@@ -2,6 +2,8 @@
 import math
 from datetime import date
 import pandas as pd
+import pytest
+from metricas.classificacao import classificar_metrica
 from metricas.schemas import SCHEMAS, validar, df_vazio
 from pipeline.config import Config
 from pipeline.montagem import montar_metricas, montar_metricas_mensais
@@ -93,3 +95,32 @@ def test_montar_metricas_mensais_sem_runs_retorna_vazio():
     df = montar_metricas_mensais(["org/repo"], runs_df=None, cfg=cfg)
     assert df.empty or list(df.columns) == list(SCHEMAS["metricas_mensais"].colunas)
     validar(df, SCHEMAS["metricas_mensais"])
+
+
+def test_montar_metricas_classifica_e_calcula_cfr_c():
+    cfg = _cfg()
+    repo = "org/repo"
+    issues = pd.DataFrame([{
+        "repo": repo, "numero": 1, "criada_em": "2024-06-02T00:00:00Z",
+        "labels": "bug", "titulo": "quebrou", "cita_tag": True,
+    }])
+    df = montar_metricas(
+        [repo], _mk_releases(repo), _mk_commits(repo), _mk_tags(repo),
+        _mk_deployments(repo), cfg, issues_df=issues,
+    )
+    row = df.iloc[0]
+    # v1.0.0 sem issue; v1.1.0 e v1.1.1 (06/06 + 7 dias cabe na janela): a
+    # issue de 02/06 cai na janela de v1.1.0 só.
+    assert row["cfr_c"] == pytest.approx(1 / 3)
+    assert row["nota_freq"] == classificar_metrica("freq", row["freq_release"])
+    assert row["classe_dora"] in ("Elite", "High", "Medium", "Low")
+    validar(df, SCHEMAS["metricas"], estrito=False)
+
+
+def test_montar_metricas_sem_issues_deixa_cfr_c_nan():
+    repo = "org/repo"
+    df = montar_metricas(
+        [repo], _mk_releases(repo), _mk_commits(repo), _mk_tags(repo),
+        _mk_deployments(repo), _cfg(),
+    )
+    assert math.isnan(df.iloc[0]["cfr_c"])
