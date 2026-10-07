@@ -29,7 +29,7 @@ def cliente(tmp_path):
     ("https://api.github.com/repos/a/b/deployments/12345/statuses",
      "/repos/{owner}/{repo}/deployments/{id}/statuses"),
     ("https://api.github.com/repos/a/b/compare/v1...v2",
-     "/repos/{owner}/{repo}/compare/v1...v2"),
+     "/repos/{owner}/{repo}/compare/{base}...{head}"),
     ("https://api.github.com/orgs/python", "/orgs/{org}"),
     ("https://api.github.com/users/torvalds", "/users/{user}"),
     ("https://api.github.com/search/repositories?q=stars:%3E1000",
@@ -137,3 +137,34 @@ def test_escrever_gera_csv_valido(cliente, tmp_path):
 
 def test_caminho_padrao_fica_em_data_processed():
     assert CAMINHO_CUSTO == "data/processed/custo_api.csv"
+
+
+@pytest.mark.parametrize("url, esperado", [
+    # compare é o cavalo de batalha da B2: ~200 repos x >=5 releases. Sem
+    # normalizar o intervalo, custo_api.csv ganha mil linhas e para de
+    # responder onde a cota foi gasta, que é a razão de ele existir.
+    ("https://api.github.com/repos/a/b/compare/v1.2.3...v1.2.4",
+     "/repos/{owner}/{repo}/compare/{base}...{head}"),
+    (f"https://api.github.com/repos/a/b/compare/{SHA}...{'b' * 40}",
+     "/repos/{owner}/{repo}/compare/{base}...{head}"),
+    ("https://api.github.com/repos/a/b/git/refs/tags/v1.0.0",
+     "/repos/{owner}/{repo}/git/refs/tags/{tag}"),
+    ("https://api.github.com/repos/a/b/releases/tags/v2.0.0",
+     "/repos/{owner}/{repo}/releases/tags/{tag}"),
+    # A listagem de tags é coleção, não recurso: nada a substituir.
+    ("https://api.github.com/repos/a/b/tags", "/repos/{owner}/{repo}/tags"),
+])
+def test_endpoint_normaliza_intervalos_e_tags(url, esperado):
+    assert endpoint_de(url) == esperado
+
+
+@responses.activate
+def test_compares_diferentes_somam_numa_linha_so(cliente):
+    base = "https://api.github.com/repos/a/b/compare"
+    for par in ("v1...v2", "v2...v3", "v3...v4"):
+        responses.get(f"{base}/{par}", json={"commits": []}, status=200)
+        cliente.get(f"{base}/{par}")
+
+    custo = cliente.custo()
+    assert len(custo) == 1, f"uma linha por compare: {list(custo['endpoint'])}"
+    assert custo.iloc[0]["chamadas"] == 3

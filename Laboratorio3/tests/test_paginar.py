@@ -3,7 +3,7 @@ import pytest
 import responses
 
 from coleta.cache import Cache
-from coleta.http import Cliente, ErroDeHTTP
+from coleta.http import Cliente, ErroDeHTTP, links, paginar, redefinir_cliente
 
 BASE = "https://api.github.com/repos/a/b/releases"
 
@@ -152,3 +152,61 @@ def test_404_ao_paginar_levanta_com_status(cliente):
         cliente.paginar(BASE)
 
     assert erro.value.status == 404
+
+
+# --- acesso público ao cabeçalho Link -----------------------------------
+
+def test_links_devolve_todas_as_relacoes():
+    # repos.csv:contribuidores vem do rel="last" de
+    # contributors?per_page=1&anon=true. Sem um acesso público, a Issue #44
+    # teria que reescrever o parser de Link por conta própria.
+    cabecalhos = {
+        "Link": '<https://api.github.com/x?page=2>; rel="next", '
+                '<https://api.github.com/x?page=57>; rel="last"'
+    }
+
+    assert links(cabecalhos) == {
+        "next": "https://api.github.com/x?page=2",
+        "last": "https://api.github.com/x?page=57",
+    }
+
+
+def test_links_sem_cabecalho_e_vazio():
+    assert links({}) == {}
+
+
+def test_contar_contribuidores_pelo_rel_last():
+    # O caso concreto da Issue #44, com o truque do per_page=1.
+    cabecalhos = {"link": '<...?per_page=1&page=2>; rel="next", '
+                          '<...?per_page=1&page=57>; rel="last"'}
+
+    assert links(cabecalhos)["last"].endswith("page=57")
+
+
+def test_repo_com_um_contribuidor_nao_tem_link():
+    # Uma página só: o parser não pode estourar, tem que dizer "vazio".
+    assert links({}).get("last") is None
+
+
+@responses.activate
+def test_resposta_expoe_cabecalho_sem_depender_de_maiusculas(cliente):
+    responses.get(BASE, json=[], status=200, headers={"X-RateLimit-Remaining": "42"})
+
+    r = cliente.get(BASE)
+
+    assert r.cabecalho("x-ratelimit-remaining") == "42"
+    assert r.cabecalho("X-RateLimit-Remaining") == "42"
+    assert r.cabecalho("nao-existe") is None
+
+
+@responses.activate
+def test_paginar_de_modulo_usa_o_cliente_padrao(cliente):
+    # paginar() é um dos quatro nomes que as Issues #41-#48 vão importar.
+    p2 = f"{BASE}?page=2"
+    responses.get(BASE, json=[{"id": 1}], status=200, headers=_link(p2))
+    responses.get(p2, json=[{"id": 2}], status=200)
+    redefinir_cliente(cliente)
+    try:
+        assert [i["id"] for i in paginar(BASE)] == [1, 2]
+    finally:
+        redefinir_cliente(None)

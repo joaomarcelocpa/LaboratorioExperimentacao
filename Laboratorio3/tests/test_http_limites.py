@@ -4,7 +4,7 @@ import requests
 import responses
 
 from coleta.cache import Cache, chave_de
-from coleta.http import ESPERAS_5XX, Cliente, ErroDeHTTP
+from coleta.http import ESPERA_PADRAO_S, ESPERAS_5XX, Cliente, ErroDeHTTP
 
 URL = "https://api.github.com/repos/a/b/releases"
 OUTRA = "https://api.github.com/repos/a/b/tags"
@@ -264,3 +264,110 @@ def test_403_nunca_entra_no_cache(construir):
         cliente.get(URL)
 
     assert cliente._cache.ler(chave_de("GET", URL)) is None
+
+
+# --- cada balde de cota tem a sua própria contagem -----------------------
+
+BUSCA = "https://api.github.com/search/repositories"
+
+
+@responses.activate
+def test_balde_de_busca_nao_faz_o_cliente_dormir_a_toa(construir):
+    # O balde de busca autenticada é de 30 por minuto, então Remaining ali
+    # está SEMPRE abaixo do limiar de 50 do balde core. Tratar os dois como
+    # um só faria o cliente dormir ~1 min depois de cada busca — e a Issue
+    # #41 faz centenas delas.
+    cliente, dormidas = construir()
+    for restantes in ("29", "28", "27"):
+        responses.get(BUSCA, json={"items": []}, status=200,
+                      headers={"X-RateLimit-Remaining": restantes,
+                               "X-RateLimit-Reset": str(AGORA + 58),
+                               "X-RateLimit-Limit": "30",
+                               "X-RateLimit-Resource": "search"})
+
+    cliente.get(BUSCA, {"q": "a"})
+    cliente.get(BUSCA, {"q": "b"})
+    cliente.get(BUSCA, {"q": "c"})
+
+    assert dormidas == [], f"dormiu sem precisar entre buscas: {dormidas}"
+
+
+@responses.activate
+def test_cota_de_busca_nao_contamina_a_cota_core(construir):
+    cliente, dormidas = construir()
+    responses.get(BUSCA, json={"items": []}, status=200,
+                  headers={"X-RateLimit-Remaining": "1",
+                           "X-RateLimit-Reset": str(AGORA + 58),
+                           "X-RateLimit-Limit": "30",
+                           "X-RateLimit-Resource": "search"})
+    responses.get(URL, json=[], status=200,
+                  headers={"X-RateLimit-Remaining": "4987",
+                           "X-RateLimit-Reset": str(AGORA + 3500),
+                           "X-RateLimit-Limit": "5000",
+                           "X-RateLimit-Resource": "core"})
+
+    cliente.get(BUSCA, {"q": "a"})
+    cliente.get(URL)
+
+    assert dormidas == [], "a chamada core tinha 4987 de cota e mesmo assim dormiu"
+
+
+@responses.activate
+def test_balde_de_busca_esgotado_ainda_dorme(construir):
+    # O limiar encolhe junto com o balde, mas não some.
+    cliente, dormidas = construir()
+    responses.get(BUSCA, json={"items": []}, status=200,
+                  headers={"X-RateLimit-Remaining": "1",
+                           "X-RateLimit-Reset": str(AGORA + 58),
+                           "X-RateLimit-Limit": "30",
+                           "X-RateLimit-Resource": "search"})
+    responses.get(BUSCA, json={"items": []}, status=200)
+
+    cliente.get(BUSCA, {"q": "a"})
+    cliente.get(BUSCA, {"q": "b"})
+
+    assert dormidas == [59.0]
+
+
+@responses.activate
+def test_remaining_sem_reset_nao_se_junta_ao_reset_de_outra_resposta(construir):
+    # Remaining da resposta 1 + Reset da resposta 2 = uma espera inventada.
+    cliente, dormidas = construir()
+    responses.get(URL, json=[], status=200,
+                  headers={"X-RateLimit-Remaining": "3"})
+    responses.get(OUTRA, json=[], status=200,
+                  headers={"X-RateLimit-Reset": str(AGORA + 600)})
+    responses.get("https://api.github.com/repos/a/b/issues", json=[], status=200)
+
+    cliente.get(URL)
+    cliente.get(OUTRA)
+    cliente.get("https://api.github.com/repos/a/b/issues")
+
+    assert dormidas == [], f"dormiu com um par de cota remendado: {dormidas}"
+
+
+@responses.activate
+def test_cabecalho_de_cota_infinito_ou_nan_nao_derruba_a_coleta(construir):
+    # float("inf") passa pelo float() e estoura no int(); time.sleep(nan)
+    # levanta ValueError. Nenhum dos dois pode matar uma coleta de 100 repos.
+    cliente, dormidas = construir()
+    responses.get(URL, json=[], status=200,
+                  headers={"X-RateLimit-Remaining": "inf",
+                           "X-RateLimit-Reset": "nan"})
+    responses.get(OUTRA, json=[], status=200)
+
+    cliente.get(URL)
+
+    assert cliente.get(OUTRA).status == 200
+    assert all(s == s for s in dormidas), f"dormiu NaN: {dormidas}"
+
+
+@responses.activate
+def test_retry_after_nan_cai_na_espera_padrao(construir):
+    cliente, dormidas = construir()
+    responses.get(URL, json={"message": "rate limit"}, status=403,
+                  headers={"Retry-After": "nan"})
+    responses.get(URL, json=[], status=200)
+
+    assert cliente.get(URL).status == 200
+    assert dormidas == [ESPERA_PADRAO_S]

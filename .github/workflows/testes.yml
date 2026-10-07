@@ -28,6 +28,15 @@ jobs:
         run: pip install -r requirements.txt
       - name: testes com cobertura
         run: pytest --cov=metricas --cov=coleta --cov-report=term-missing --cov-fail-under=80
+      - name: o Makefile parseia
+        # make -n só imprime as receitas, sem rodar nada. Pega tab virado em
+        # espaço e alvo com nome errado — coisas que nenhum teste de string
+        # pegaria, e `make run-docker` é critério de aceite.
+        run: |
+          make -n test
+          make -n run
+          make -n run-docker
+          make -n reproduce
       - name: checagem de contrato
         # O dicionário de dados é gerado dos schemas: se divergir, o commit
         # esqueceu de regenerá-lo.

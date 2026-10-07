@@ -122,3 +122,10 @@ def test_readme_documenta_make_e_o_equivalente_sem_make():
     assert "GITHUB_TOKEN" in conteudo
     # Nem esta máquina nem o Windows padrão têm make.
     assert "powershell" in conteudo.lower()
+
+
+def test_ci_verifica_que_o_makefile_parseia(workflow):
+    # `make run-docker` é critério de aceite e, sem isto, não tem nenhuma
+    # verificação executável: uma receita com espaço no lugar do tab passaria
+    # por todos os testes de string acima e só quebraria na mão do colega.
+    assert "make -n" in workflow, "o CI não exercita o Makefile"
