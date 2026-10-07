@@ -27,6 +27,11 @@ n_dias_issue: 7
 # recentes, que são as que dizem se a falha foi flaky.
 max_tentativas_anteriores: 5
 
+# Mínimo de runs válidos para um mês ter métricas (Issue #42, RQ 08b). Não
+# pode ser menor que 5: o contrato de metricas_mensais.csv exige nulo abaixo
+# disso.
+min_runs_mes: 5
+
 bots:
   - "dependabot[bot]"
   - "renovate[bot]"

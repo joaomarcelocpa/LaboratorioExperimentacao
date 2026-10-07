@@ -201,7 +201,7 @@ SCHEMAS: dict[str, Schema] = {
         "fim": _c("data", "ISO 8601 UTC", "updated_at do próximo sucesso"),
         "horas": _c("float", "horas", "fim - inicio"),
         "censurado": _c("bool", "sim/não", "episódio sem sucesso até o fim da janela"),
-        "so_flaky": _c("bool", "sim/não", "falha e sucesso no mesmo head_sha"),
+        "so_flaky": _c("bool", "sim/não", "todas as falhas do episódio foram flaky (cada uma teve sucesso posterior no mesmo workflow e head_sha)"),
     }),
     "custo_api": Schema("custo_api.csv", "C", {
         "endpoint": _c("str", "caminho", "endpoint chamado"),
@@ -220,7 +220,8 @@ SCHEMAS: dict[str, Schema] = {
         "pct_commits_bot": _c("float", "proporção 0-1", "commits de bot ÷ total de commits"),
         "cfr_a": _c("float", "proporção 0-1", "RQ03a: falhas ÷ (falhas + sucessos) na conclusion listada"),
         "cfr_a_bruto": _c("float", "proporção 0-1", "RQ03a incluindo tentativas anteriores"),
-        "cfr_a_sem_flaky": _c("float", "proporção 0-1", "RQ03a removendo falhas seguidas de sucesso no mesmo head_sha"),
+        "cfr_a_sem_flaky": _c("float", "proporção 0-1", "RQ03a: o CFR bruto menos as falhas flaky (sucesso posterior no mesmo workflow e head_sha)"),
+        "pct_falhas_flaky": _c("float", "proporção 0-1", "falhas flaky ÷ total de falhas do CFR bruto; NaN se não houver falhas"),
         "cfr_b": _c("float", "proporção 0-1", "RQ03b: releases seguidas de corretiva em 7 dias ÷ releases avaliadas"),
         "cfr_c": _c("float", "proporção 0-1", "RQ03c: releases seguidas de issue de bug em n_dias_issue"),
         "recuperacao_h": _c("float", "horas", "RQ04: mediana dos episódios de falha"),

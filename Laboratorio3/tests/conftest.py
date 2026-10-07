@@ -19,6 +19,7 @@ def linha_metricas() -> dict:
         "cfr_a": 0.2,
         "cfr_a_bruto": 0.25,
         "cfr_a_sem_flaky": 0.15,
+        "pct_falhas_flaky": 0.4,
         "cfr_b": 0.2,
         "cfr_c": 0.1,
         "recuperacao_h": 1.33,

@@ -102,6 +102,7 @@ def montar_metricas(
             "cfr_a": float("nan"),
             "cfr_a_bruto": float("nan"),
             "cfr_a_sem_flaky": float("nan"),
+            "pct_falhas_flaky": float("nan"),
             "cfr_b": cfr_b,
             "cfr_c": float("nan"),
             "recuperacao_h": float("nan"),

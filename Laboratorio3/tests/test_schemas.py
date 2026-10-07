@@ -39,10 +39,12 @@ def test_todo_csv_tem_chave_repo_menos_funil_e_custo(nome):
     assert tem is (nome not in sem_repo)
 
 
-def test_metricas_tem_as_26_colunas():
-    assert len(SCHEMAS["metricas"].colunas) == 26
+def test_metricas_tem_as_27_colunas():
+    # 26 da #37 + pct_falhas_flaky (#42).
+    assert len(SCHEMAS["metricas"].colunas) == 27
     for col in ["rework_rate", "rework_rate_7d", "nota_freq", "nota_lead_time",
-                "nota_cfr", "nota_recuperacao", "classe_dora", "classe_dora_nota"]:
+                "nota_cfr", "nota_recuperacao", "classe_dora", "classe_dora_nota",
+                "pct_falhas_flaky"]:
         assert col in SCHEMAS["metricas"].colunas
 
 
@@ -206,3 +208,23 @@ def test_runs_nao_tem_path():
     # workflow_id já agrupa os workflows para a RQ 04; o caminho do YAML, se
     # precisar, sai de /actions/workflows.
     assert "path" not in SCHEMAS["runs"].colunas
+
+
+def test_metricas_tem_pct_falhas_flaky():
+    # É o número que sustenta a discussão do CFR com e sem flaky no artigo:
+    # sem ele, "removemos as flaky" não diz quantas eram.
+    coluna = SCHEMAS["metricas"].colunas["pct_falhas_flaky"]
+    assert coluna.tipo == "float"
+    assert "bruto" in coluna.origem, "a base é o CFR bruto, não o oficial"
+
+
+def test_cfr_sem_flaky_diz_que_a_base_e_o_bruto():
+    # A descrição antiga não dizia, e a diferença muda o número.
+    assert "bruto" in SCHEMAS["metricas"].colunas["cfr_a_sem_flaky"].origem
+
+
+def test_so_flaky_descreve_o_episodio_e_nao_a_falha():
+    # A descrição antiga era a de uma FALHA flaky. A coluna é de episódio:
+    # ela só é verdadeira quando todas as falhas do episódio foram flaky.
+    origem = SCHEMAS["episodios"].colunas["so_flaky"].origem
+    assert "todas" in origem.lower(), origem
