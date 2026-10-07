@@ -190,3 +190,19 @@ def test_float_nao_inteiro_em_coluna_int_da_erro(df_metricas):
 def test_float_inteiro_em_coluna_int_passa(df_metricas):
     """pandas lê int com nulo como float64: 3.0 continua sendo 3."""
     validar(df_metricas.assign(nota_freq=3.0), SCHEMAS["metricas"])
+
+
+def test_runs_tem_criado_em():
+    # O critério de janela do enunciado é "run criado dentro da janela", e o
+    # filtro created= da API é por esse campo. Sem a coluna, o CSV não traz o
+    # dado que define a inclusão de cada linha.
+    coluna = SCHEMAS["runs"].colunas["criado_em"]
+    assert coluna.tipo == "data"
+    assert coluna.unidade == "ISO 8601 UTC"
+    assert "created_at" in coluna.origem
+
+
+def test_runs_nao_tem_path():
+    # workflow_id já agrupa os workflows para a RQ 04; o caminho do YAML, se
+    # precisar, sai de /actions/workflows.
+    assert "path" not in SCHEMAS["runs"].colunas

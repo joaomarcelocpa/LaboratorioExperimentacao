@@ -224,6 +224,7 @@ Convenções de todo o estudo:
 | `classe` | str | sucesso\|falha\|ignorado | tabela de conclusion da seção 3 do enunciado |
 | `inicio` | data | ISO 8601 UTC | actions/runs: run_started_at |
 | `fim` | data | ISO 8601 UTC | actions/runs: updated_at |
+| `criado_em` | data | ISO 8601 UTC | actions/runs: created_at |
 
 ## `tags.csv`
 
