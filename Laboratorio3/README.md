@@ -73,7 +73,10 @@ saíram da máquina e quantas foram servidas pelo cache.
 
 A API devolve no máximo 1.000 resultados por consulta filtrada. A coleta de
 workflow runs fatia a janela em meses e parte ao meio toda fatia que bate esse
-teto — mês vira quinzena, quinzena vira semana, até o piso de uma hora.
+teto — mês vira quinzena, quinzena vira semana, e assim por diante. A
+bissecção para quando a fatia já dura uma hora ou menos (na prática as
+menores ficam entre 39 e 44 minutos, porque o corte é sempre ao meio), ou
+antes disso, se dividir deixar de estreitar o resultado.
 
 `data/processed/fatias_saturadas.csv` (`repo`, `inicio`, `fim`, `total_count`)
 registra as fatias que bateram o teto mesmo no piso, ou que a API recusou

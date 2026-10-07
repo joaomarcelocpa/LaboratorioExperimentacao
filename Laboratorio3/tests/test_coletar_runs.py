@@ -239,3 +239,133 @@ def test_escrever_fatias_saturadas(tmp_path):
 
 def test_caminho_das_fatias_fica_em_data_processed():
     assert CAMINHO_FATIAS == "data/processed/fatias_saturadas.csv"
+
+
+# --- achados da revisão -------------------------------------------------
+
+@responses.activate
+@pytest.mark.parametrize("valor", [None, 0])
+def test_run_attempt_nulo_ou_zero_vira_1(valor):
+    # int(None) levanta TypeError e mataria a coleta do repositório inteiro.
+    # Sem este caso, um refactor para .get("run_attempt", 1) passa despercebido.
+    responses.get(URL, **_resposta(1, [_run(1, run_attempt=valor)]))
+
+    linha = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31)).runs[0]
+
+    assert linha["run_attempt"] == 1
+
+
+@responses.activate
+def test_sem_total_count_a_mensagem_explica_o_problema():
+    # O KeyError incidental de carga["total_count"] também casaria com
+    # match="total_count": é preciso afirmar a mensagem, não só o tipo.
+    responses.get(URL, json={"workflow_runs": []}, status=200)
+
+    with pytest.raises(KeyError, match="saturou"):
+        coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+
+@responses.activate
+def test_run_fora_da_fatia_e_contado():
+    # Se a API ignorar o created= em vez de recusá-lo, runs de fora da janela
+    # entram em silêncio e enviesam a amostra inteira. Isso tem que gritar.
+    responses.get(URL, **_resposta(2, [
+        _run(1, created_at="2024-10-05T12:00:00Z"),
+        _run(2, created_at="2023-01-01T12:00:00Z"),
+    ]))
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+    assert coleta.fora_da_fatia == 1
+    assert len(coleta.runs) == 2, "contar não é descartar: o dado bruto fica"
+
+
+@responses.activate
+def test_created_at_ausente_nao_conta_como_fora():
+    responses.get(URL, **_resposta(1, [_run(1, created_at=None)]))
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+    assert coleta.fora_da_fatia == 0, "sem data não dá para afirmar que está fora"
+
+
+@responses.activate
+def test_subdivisao_para_quando_o_filtro_nao_estreita():
+    # Se a filha devolve o mesmo total que a mãe, o created= não está
+    # mordendo: continuar dividindo gastaria milhares de chamadas à toa.
+    responses.get(URL, **_resposta(5000, [_run(1)]))
+    responses.get(URL, **_resposta(5000, [_run(2)]))
+    responses.get(URL, **_resposta(5000, [_run(3)]))
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+    assert len(coleta.saturadas) == 2, "as duas metades inúteis viram diagnóstico"
+    assert len(responses.calls) == 3, "parou na primeira divisão sem ganho"
+
+
+@responses.activate
+def test_403_nao_descarta_o_repositorio():
+    # Um 403 no mês 12 não pode jogar fora os 11 meses já coletados.
+    responses.get(URL, **_resposta(1, [_run(1)]))
+    responses.get(URL, json={"message": "Resource not accessible"}, status=403)
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 11, 30))
+
+    assert len(coleta.runs) == 1, "o mês que deu certo tem que sobreviver"
+    assert len(coleta.saturadas) == 1
+
+
+@responses.activate
+def test_401_ainda_derruba_porque_e_erro_de_token():
+    # Degradar aqui esconderia um token errado atrás de um CSV vazio.
+    responses.get(URL, json={"message": "Bad credentials"}, status=401)
+
+    with pytest.raises(Exception):
+        coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+
+@responses.activate
+def test_workflow_id_ausente_e_erro_na_origem():
+    # Com workflow_id nulo em algumas linhas o pandas coage a coluna para
+    # float e o CSV sai com 7.0 — a #42 agrupa episódios por esse campo.
+    item = _run(1)
+    del item["workflow_id"]
+    responses.get(URL, **_resposta(1, [item]))
+
+    with pytest.raises(KeyError, match="workflow_id"):
+        coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+
+@responses.activate
+def test_workflow_id_sai_inteiro_no_csv(tmp_path):
+    responses.get(URL, **_resposta(2, [_run(1), _run(2)]))
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+    destino = tmp_path / "runs.csv"
+    df_runs(coleta.runs).to_csv(destino, index=False)
+
+    assert "7.0" not in destino.read_text(encoding="utf-8")
+
+
+@responses.activate
+def test_403_na_segunda_pagina_tambem_degrada():
+    # A página 1 vem do cache da sondagem, então um erro de paginação só pode
+    # aparecer da página 2 em diante. É o ramo que o try do paginar cobre.
+    p2 = f"{URL}?page=2"
+    responses.get(URL, **_resposta(2, [_run(1)],
+                                   headers={"Link": f'<{p2}>; rel="next"'}))
+    responses.get(p2, json={"message": "Resource not accessible"}, status=403)
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+    assert len(coleta.saturadas) == 1, "a fatia interrompida vira diagnóstico"
+    assert coleta.runs == [], "a fatia não entrou, mas o repositório sobreviveu"
+
+
+@responses.activate
+def test_created_at_impossivel_de_ler_nao_conta_como_fora():
+    responses.get(URL, **_resposta(1, [_run(1, created_at="ontem de manhã")]))
+
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+
+    assert coleta.fora_da_fatia == 0

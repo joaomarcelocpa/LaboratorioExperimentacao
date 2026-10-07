@@ -26,7 +26,7 @@ from metricas.schemas import SCHEMAS, validar
 
 MAX_TENTATIVAS_PADRAO = 5
 TETO_POR_CONSULTA = 1000          # máximo de resultados por consulta filtrada
-PISO_DA_FATIA = timedelta(hours=1)
+PISO_DA_FATIA = timedelta(hours=1)   # nao se parte o que ja dura <= 1 h
 CAMINHO_FATIAS = "data/processed/fatias_saturadas.csv"
 API = "https://api.github.com"
 
@@ -113,9 +113,13 @@ class Fatia:
     def created(self) -> str:
         """Valor do parâmetro created= da API.
 
-        A forma de data é a do enunciado e é a que a API aceita com certeza;
-        a forma com hora só aparece abaixo de um dia, quando a subdivisão
-        precisa descer mais.
+        A forma de data é a do enunciado e é a que a API aceita com certeza.
+        A forma com hora aparece assim que uma fatia deixa de terminar às
+        23:59:59 — o que acontece já na PRIMEIRA divisão de um mês de 31
+        dias, que parte em 15,5 dias. Não é um caso raro de fundo de
+        recursão: 7 dos 12 meses de uma janela caem nela de cara. Por isso o
+        422 na forma com hora é tratado como degradação esperada, e não como
+        imprevisto.
         """
         if self.e_de_dias_inteiros():
             return f"{self.inicio.date().isoformat()}..{self.fim.date().isoformat()}"
@@ -173,6 +177,19 @@ class FatiaSaturada:
 class Coleta:
     runs: list[dict]
     saturadas: list[FatiaSaturada]
+    # Runs que a API devolveu fora do intervalo pedido. Deveria ser sempre 0:
+    # qualquer outro número quer dizer que o created= não foi respeitado, e aí
+    # a amostra tem runs de fora da janela.
+    fora_da_fatia: int = 0
+
+
+def _momento(texto: str | None) -> datetime | None:
+    if not texto:
+        return None
+    try:
+        return datetime.fromisoformat(str(texto).replace("Z", "+00:00"))
+    except ValueError:
+        return None
 
 
 def _linha_de_run(repo: str, item: dict) -> dict:
@@ -180,7 +197,10 @@ def _linha_de_run(repo: str, item: dict) -> dict:
     return {
         "repo": repo,
         "run_id": item["id"],
-        "workflow_id": item.get("workflow_id"),
+        # Estrito de propósito: com workflow_id nulo em parte das linhas, o
+        # pandas coage a coluna para float e o CSV sai com 7.0 — e a #42
+        # agrupa episódios de falha por esse campo.
+        "workflow_id": item["workflow_id"],
         "workflow_nome": item.get("name"),
         "event": item.get("event"),
         "head_sha": item.get("head_sha"),
@@ -198,6 +218,28 @@ def _saturada(repo: str, fatia: Fatia, total: int) -> FatiaSaturada:
     return FatiaSaturada(repo, iso(fatia.inicio), iso(fatia.fim), total)
 
 
+def _e_degradavel(erro: http.ErroDeHTTP) -> bool:
+    """Erro que vira diagnóstico em vez de derrubar o repositório.
+
+    422 é o created= com hora recusado ou o teto de paginação; 403 é Actions
+    desligado ou repositório sem acesso. Em ambos, perder os meses já
+    coletados seria pior do que registrar a fatia e seguir. Um 401 continua
+    estourando: esconder um token errado atrás de um CSV vazio é pior ainda.
+    """
+    return erro.status in (403, 422)
+
+
+def _dentro(fatia: Fatia, created_at: str | None) -> bool:
+    """O run está mesmo no intervalo pedido?
+
+    Sem data não dá para afirmar que está fora, então conta como dentro.
+    """
+    momento = _momento(created_at)
+    if momento is None:
+        return True
+    return fatia.inicio <= momento <= fatia.fim
+
+
 def coletar_runs(
     repo: str, default_branch: str, inicio: date, fim: date
 ) -> Coleta:
@@ -211,8 +253,9 @@ def coletar_runs(
     url = f"{API}/repos/{repo}/actions/runs"
     linhas: dict[int, dict] = {}
     saturadas: list[FatiaSaturada] = []
-    # (fatia, total da fatia-mãe) — a mãe é o que sabemos quando um 422
-    # impede de medir a filha.
+    fora = 0
+    # (fatia, total da fatia-mãe) — a mãe é o que sabemos quando um erro
+    # impede de medir a filha, e é com ela que se vê se dividir adiantou.
     pendentes: list[tuple[Fatia, int]] = [(f, 0) for f in meses(inicio, fim)]
 
     while pendentes:
@@ -226,8 +269,7 @@ def coletar_runs(
         try:
             sondagem = http.get(url, {**filtros, "per_page": 100})
         except http.ErroDeHTTP as e:
-            if e.status == 422 and not fatia.e_de_dias_inteiros():
-                # A API recusou created= com hora: a recursão para aqui.
+            if _e_degradavel(e):
                 saturadas.append(_saturada(repo, fatia, total_da_mae))
                 continue
             raise
@@ -244,17 +286,38 @@ def coletar_runs(
             continue
 
         if total >= TETO_POR_CONSULTA:
-            metades = fatia.partir()
+            # Se a filha devolve o mesmo tanto que a mãe, o created= não está
+            # mordendo: continuar dividindo custaria milhares de chamadas sem
+            # estreitar nada.
+            estreitou = total_da_mae == 0 or total < total_da_mae
+            metades = fatia.partir() if estreitou else None
             if metades is not None:
                 pendentes.extend((m, total) for m in metades)
                 continue
-            # No piso: registra e colhe o que der.
+            # No piso, ou sem ganho em dividir: registra e colhe o que der.
             saturadas.append(_saturada(repo, fatia, total))
 
-        for item in http.paginar(url, filtros):
+        try:
+            itens = http.paginar(url, filtros)
+        except http.ErroDeHTTP as e:
+            if _e_degradavel(e):
+                saturadas.append(_saturada(repo, fatia, total))
+                continue
+            raise
+
+        for item in itens:
+            if not _dentro(fatia, item.get("created_at")):
+                fora += 1
             linhas[item["id"]] = _linha_de_run(repo, item)
 
-    return Coleta(list(linhas.values()), saturadas)
+    if fora:
+        _log.warning(
+            "%s: %s runs vieram fora da fatia pedida. O created= não foi "
+            "respeitado e a amostra pode conter runs de fora da janela.",
+            repo, fora,
+        )
+
+    return Coleta(list(linhas.values()), saturadas, fora)
 
 
 def df_runs(linhas: list[dict]) -> pd.DataFrame:
@@ -310,6 +373,11 @@ def coletar_tentativas(
     anteriores só existem em /attempts/{k}. Quando o teto corta, ficam as
     MAIS RECENTES: é o rerun imediatamente anterior que diz se uma falha foi
     instabilidade ou defeito.
+
+    IMPORTANTE para quem consome: isto devolve as tentativas 1..n-1. A
+    tentativa n, a última, NÃO está aqui — ela é a linha do próprio run em
+    runs.csv. Quem for somar as tentativas de um run (o cfr_a_bruto da #42)
+    precisa juntar as duas fontes, senão conta a mais ou a menos.
     """
     linhas: list[dict] = []
 
