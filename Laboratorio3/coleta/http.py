@@ -14,11 +14,15 @@ import os
 import re
 import time
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Callable
+from urllib.parse import urlsplit
 
+import pandas as pd
 import requests
 
 from coleta.cache import Cache, chave_de
+from metricas.schemas import SCHEMAS, validar
 
 TEMPO_LIMITE_S = 30
 ESPERAS_5XX = (1, 2, 4, 8, 16)   # 5 esperas, 6 tentativas no total
@@ -35,6 +39,12 @@ CHAVES_DE_ITENS = (
 )
 
 _RE_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="next"')
+
+CAMINHO_CUSTO = "data/processed/custo_api.csv"
+
+# Segmentos que identificam um recurso e vêm logo depois de uma coleção.
+_DONOS = {"repos": ("{owner}", "{repo}"), "orgs": ("{org}",), "users": ("{user}",)}
+_RE_SHA = re.compile(r"^[0-9a-f]{40}$", re.IGNORECASE)
 
 
 class ErroDeHTTP(Exception):
@@ -133,6 +143,29 @@ def _com_per_page(params: dict | None) -> dict:
     return completos
 
 
+def endpoint_de(url: str) -> str:
+    """Caminho da URL como template, para agrupar o custo.
+
+    Sem isto, custo_api.csv teria uma linha por repositório em vez de uma por
+    endpoint, e não daria para ver onde a cota foi gasta.
+    """
+    partes = [p for p in urlsplit(url).path.split("/") if p]
+    saida: list[str] = []
+    i = 0
+    while i < len(partes):
+        saida.append(partes[i])
+        marcadores = _DONOS.get(partes[i], ())
+        i += 1
+        for marcador in marcadores:
+            if i < len(partes):
+                saida.append(marcador)
+                i += 1
+    normalizados = [
+        "{id}" if p.isdigit() else "{sha}" if _RE_SHA.match(p) else p for p in saida
+    ]
+    return "/" + "/".join(normalizados)
+
+
 class Cliente:
     def __init__(
         self,
@@ -154,8 +187,17 @@ class Cliente:
     # --- custo ----------------------------------------------------------
 
     def _contar(self, url: str, campo: str) -> None:
-        linha = self._custo.setdefault(url, {"chamadas": 0, "do_cache": 0})
+        linha = self._custo.setdefault(endpoint_de(url), {"chamadas": 0, "do_cache": 0})
         linha[campo] += 1
+
+    def custo(self) -> pd.DataFrame:
+        """Chamadas que saíram da máquina e acertos de cache, por endpoint."""
+        linhas = [
+            {"endpoint": ep, "chamadas": v["chamadas"], "do_cache": v["do_cache"]}
+            for ep, v in sorted(self._custo.items())
+        ]
+        df = pd.DataFrame(linhas, columns=["endpoint", "chamadas", "do_cache"])
+        return df.astype({"chamadas": "int64", "do_cache": "int64"})
 
     # --- requisição -----------------------------------------------------
 
@@ -324,3 +366,19 @@ def get(url: str, params: dict | None = None) -> Resposta:
 
 def paginar(url: str, params: dict | None = None) -> list[dict]:
     return cliente_padrao().paginar(url, params)
+
+
+def escrever_custo_api(
+    caminho: str | Path = CAMINHO_CUSTO, cliente: Cliente | None = None
+) -> Path:
+    """Grava custo_api.csv, validado antes de ir para o disco.
+
+    Validar aqui faz o contrato quebrar neste ponto, e não lá na integração
+    da #39, quando ninguém se lembra de onde a coluna veio.
+    """
+    df = (cliente or cliente_padrao()).custo()
+    validar(df, SCHEMAS["custo_api"])
+    caminho = Path(caminho)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(caminho, index=False)
+    return caminho
