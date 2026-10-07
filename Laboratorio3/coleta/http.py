@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import time
 from dataclasses import dataclass
 from typing import Any, Callable
@@ -25,6 +26,15 @@ LIMIAR_COTA = 50                 # abaixo disto, dorme até o Reset
 MAX_ESPERAS_COTA = 5             # teto de esperas por rate limit, separado do backoff
 TETO_ESPERA_S = 3700             # a cota primária renova em até 1 h
 ESPERA_PADRAO_S = 60.0           # rate limit sem nenhum cabeçalho útil
+PER_PAGE_PADRAO = 100            # o padrão da API é 30; 100 corta as chamadas em três
+
+# Endpoints paginados que devolvem um objeto em vez de uma lista.
+CHAVES_DE_ITENS = (
+    "items", "workflow_runs", "commits", "tags", "workflows",
+    "check_runs", "artifacts",
+)
+
+_RE_NEXT = re.compile(r'<([^>]+)>\s*;\s*rel="next"')
 
 
 class ErroDeHTTP(Exception):
@@ -89,6 +99,38 @@ def _numero(valor: object) -> float | None:
         return float(valor)  # type: ignore[arg-type]
     except (TypeError, ValueError):
         return None
+
+
+def _proximo(cabecalhos: dict) -> str | None:
+    """URL da próxima página, do cabeçalho Link.
+
+    Só rel="next": seguir o rel="last" ou o rel="prev" faria a paginação
+    andar para trás.
+    """
+    valor = _minusculas(cabecalhos).get("link")
+    achado = _RE_NEXT.search(valor or "")
+    return achado.group(1) if achado else None
+
+
+def _itens(carga: Any) -> list[dict]:
+    if isinstance(carga, list):
+        return carga
+    if isinstance(carga, dict):
+        for chave in CHAVES_DE_ITENS:
+            if isinstance(carga.get(chave), list):
+                return carga[chave]
+        raise ErroDeHTTP(
+            "resposta paginada sem lista de itens reconhecível; chaves "
+            f"recebidas: {sorted(carga)}. Acrescente a chave certa a "
+            "CHAVES_DE_ITENS em coleta/http.py."
+        )
+    raise ErroDeHTTP(f"resposta paginada inesperada: {type(carga).__name__}")
+
+
+def _com_per_page(params: dict | None) -> dict:
+    completos = dict(params or {})
+    completos.setdefault("per_page", PER_PAGE_PADRAO)
+    return completos
 
 
 class Cliente:
@@ -234,6 +276,29 @@ class Cliente:
 
         raise ErroDeHTTP(f"GET {url} devolveu {status}: {corpo[:200]}", status)
 
+    def paginar(self, url: str, params: dict | None = None) -> list[dict]:
+        """Segue Link rel="next" até o fim e devolve todos os itens.
+
+        A URL do rel="next" já carrega os parâmetros, então as páginas
+        seguintes vão sem params. Cada página é cacheada pela própria URL, o
+        que faz a retomada funcionar no meio de uma paginação longa.
+        """
+        itens: list[dict] = []
+        visitadas: set[str] = set()
+        atual: str | None = url
+        primeira = True
+
+        while atual and atual not in visitadas:
+            visitadas.add(atual)
+            r = self.get(atual, _com_per_page(params) if primeira else None)
+            if r.status == 404:
+                raise ErroDeHTTP(f"GET {atual} devolveu 404 ao paginar", 404)
+            itens.extend(_itens(r.json()))
+            atual = _proximo(r.cabecalhos)
+            primeira = False
+
+        return itens
+
 
 # --- cliente padrão do processo -----------------------------------------
 
@@ -255,3 +320,7 @@ def redefinir_cliente(cliente: Cliente | None = None) -> None:
 
 def get(url: str, params: dict | None = None) -> Resposta:
     return cliente_padrao().get(url, params)
+
+
+def paginar(url: str, params: dict | None = None) -> list[dict]:
+    return cliente_padrao().paginar(url, params)
