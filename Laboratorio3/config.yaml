@@ -22,6 +22,11 @@ ambientes_producao: [production, prod, live]
 labels_bug: [bug, regression, "type: bug"]
 n_dias_issue: 7
 
+# Teto de tentativas anteriores buscadas por run (Issue #41). Um run com 40
+# tentativas não pode queimar a cota sozinho; as buscadas são as mais
+# recentes, que são as que dizem se a falha foi flaky.
+max_tentativas_anteriores: 5
+
 bots:
   - "dependabot[bot]"
   - "renovate[bot]"

@@ -182,6 +182,9 @@ SCHEMAS: dict[str, Schema] = {
         "classe": _c("str", "sucesso|falha|ignorado", "tabela de conclusion da seção 3 do enunciado"),
         "inicio": _c("data", "ISO 8601 UTC", "actions/runs: run_started_at"),
         "fim": _c("data", "ISO 8601 UTC", "actions/runs: updated_at"),
+        # O critério de janela do enunciado é "run criado dentro da janela", e
+        # é por este campo que o filtro created= da API recorta.
+        "criado_em": _c("data", "ISO 8601 UTC", "actions/runs: created_at"),
     }),
     "run_attempts": Schema("run_attempts.csv", "C", {
         "repo": _REPO,

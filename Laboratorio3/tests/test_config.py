@@ -124,3 +124,47 @@ def test_config_que_e_diretorio_da_erro_claro(tmp_path):
     with pytest.raises(ErroDeConfig) as e:
         carregar_config(tmp_path)
     assert str(tmp_path) in str(e.value)
+
+
+def test_max_tentativas_tem_padrao_quando_a_chave_falta(tmp_path):
+    # Opcional de propósito: tornar obrigatória quebraria todo config.yaml já
+    # escrito, inclusive o do grupo replicador.
+    assert carregar_config(escrever(tmp_path, VALIDO)).max_tentativas_anteriores == 5
+
+
+def test_max_tentativas_e_lido_quando_presente(tmp_path):
+    caminho = escrever(tmp_path, VALIDO + "max_tentativas_anteriores: 3\n")
+
+    assert carregar_config(caminho).max_tentativas_anteriores == 3
+
+
+def test_max_tentativas_com_tipo_errado_e_erro(tmp_path):
+    caminho = escrever(tmp_path, VALIDO + "max_tentativas_anteriores: muitas\n")
+
+    with pytest.raises(ErroDeConfig, match="max_tentativas_anteriores"):
+        carregar_config(caminho)
+
+
+@pytest.mark.parametrize("valor", [0, -1])
+def test_max_tentativas_menor_que_um_e_erro(tmp_path, valor):
+    # Zero desligaria a coleta de tentativas sem dizer; negativo viraria um
+    # range vazio silencioso.
+    caminho = escrever(tmp_path, VALIDO + f"max_tentativas_anteriores: {valor}\n")
+
+    with pytest.raises(ErroDeConfig, match="max_tentativas_anteriores"):
+        carregar_config(caminho)
+
+
+def test_booleano_nao_passa_por_int(tmp_path):
+    # bool é subclasse de int em Python: True viraria teto 1 sem reclamar.
+    caminho = escrever(tmp_path, VALIDO + "max_tentativas_anteriores: true\n")
+
+    with pytest.raises(ErroDeConfig, match="max_tentativas_anteriores"):
+        carregar_config(caminho)
+
+
+def test_config_do_projeto_bate_com_o_padrao_do_coletor():
+    # Duas fontes para o mesmo número: um teste barato evita que divirjam.
+    from coleta.runs import MAX_TENTATIVAS_PADRAO
+    assert carregar_config(RAIZ / "config.yaml").max_tentativas_anteriores == \
+        MAX_TENTATIVAS_PADRAO

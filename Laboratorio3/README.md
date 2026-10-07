@@ -69,6 +69,23 @@ espera de 1, 2, 4, 8 e 16 segundos.
 `data/processed/custo_api.csv` registra, por endpoint, quantas chamadas
 saíram da máquina e quantas foram servidas pelo cache.
 
+## Fatias saturadas
+
+A API devolve no máximo 1.000 resultados por consulta filtrada. A coleta de
+workflow runs fatia a janela em meses e parte ao meio toda fatia que bate esse
+teto — mês vira quinzena, quinzena vira semana, e assim por diante. A
+bissecção para quando a fatia já dura uma hora ou menos (na prática as
+menores ficam entre 39 e 44 minutos, porque o corte é sempre ao meio), ou
+antes disso, se dividir deixar de estreitar o resultado.
+
+`data/processed/fatias_saturadas.csv` (`repo`, `inicio`, `fim`, `total_count`)
+registra as fatias que bateram o teto mesmo no piso, ou que a API recusou
+subdividir. **Parte dos runs daquele intervalo ficou de fora**, então o
+arquivo é ameaça à validade e precisa ser reportado no artigo.
+
+Ele é diagnóstico, não dataset de análise: não aparece em
+`docs/dicionario_dados.md` nem passa pelo validador de contratos.
+
 ## Estrutura
 
 ```
