@@ -15,10 +15,20 @@ import logging
 from collections import Counter
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta, timezone
+from pathlib import Path
+
+import pandas as pd
+
+# Importado como módulo, e não as funções: é isso que faz redefinir_cliente
+# nos testes valer para as chamadas feitas daqui.
+from coleta import http
+from metricas.schemas import SCHEMAS, validar
 
 MAX_TENTATIVAS_PADRAO = 5
 TETO_POR_CONSULTA = 1000          # máximo de resultados por consulta filtrada
 PISO_DA_FATIA = timedelta(hours=1)
+CAMINHO_FATIAS = "data/processed/fatias_saturadas.csv"
+API = "https://api.github.com"
 
 _log = logging.getLogger(__name__)
 
@@ -143,3 +153,134 @@ def meses(inicio: date, fim: date) -> list[Fatia]:
         fatias.append(Fatia(_comeco(atual), _fim(min(ultimo_do_mes, fim))))
         atual = ultimo_do_mes + timedelta(days=1)
     return fatias
+
+
+@dataclass(frozen=True)
+class FatiaSaturada:
+    """Fatia que bateu o teto e não pôde ser subdividida.
+
+    É ameaça à validade, não ruído de log: parte dos runs daquele intervalo
+    ficou de fora e o artigo precisa dizer isso.
+    """
+
+    repo: str
+    inicio: str
+    fim: str
+    total_count: int
+
+
+@dataclass(frozen=True)
+class Coleta:
+    runs: list[dict]
+    saturadas: list[FatiaSaturada]
+
+
+def _linha_de_run(repo: str, item: dict) -> dict:
+    """Item da API no formato do contrato runs.csv."""
+    return {
+        "repo": repo,
+        "run_id": item["id"],
+        "workflow_id": item.get("workflow_id"),
+        "workflow_nome": item.get("name"),
+        "event": item.get("event"),
+        "head_sha": item.get("head_sha"),
+        # Um run sem run_attempt é a primeira tentativa. int(None) estouraria.
+        "run_attempt": int(item.get("run_attempt") or 1),
+        "conclusion": item.get("conclusion"),
+        "classe": classificar(item.get("conclusion")),
+        "inicio": item.get("run_started_at"),
+        "fim": item.get("updated_at"),
+        "criado_em": item.get("created_at"),
+    }
+
+
+def _saturada(repo: str, fatia: Fatia, total: int) -> FatiaSaturada:
+    return FatiaSaturada(repo, iso(fatia.inicio), iso(fatia.fim), total)
+
+
+def coletar_runs(
+    repo: str, default_branch: str, inicio: date, fim: date
+) -> Coleta:
+    """Runs de push do default branch na janela, fatiados até caberem.
+
+    O teto de 1.000 é da consulta, não da página: paginar até o fim devolve
+    1.000 e descarta o resto sem avisar. Por isso a saturação é detectada por
+    total_count, e a primeira página da sondagem vira acerto de cache quando
+    a fatia cabe — nenhuma chamada é desperdiçada no caminho normal.
+    """
+    url = f"{API}/repos/{repo}/actions/runs"
+    linhas: dict[int, dict] = {}
+    saturadas: list[FatiaSaturada] = []
+    # (fatia, total da fatia-mãe) — a mãe é o que sabemos quando um 422
+    # impede de medir a filha.
+    pendentes: list[tuple[Fatia, int]] = [(f, 0) for f in meses(inicio, fim)]
+
+    while pendentes:
+        fatia, total_da_mae = pendentes.pop()
+        filtros = {
+            "branch": default_branch,
+            "event": "push",
+            "created": fatia.created(),
+        }
+
+        try:
+            sondagem = http.get(url, {**filtros, "per_page": 100})
+        except http.ErroDeHTTP as e:
+            if e.status == 422 and not fatia.e_de_dias_inteiros():
+                # A API recusou created= com hora: a recursão para aqui.
+                saturadas.append(_saturada(repo, fatia, total_da_mae))
+                continue
+            raise
+
+        carga = sondagem.json()
+        if "total_count" not in carga:
+            raise KeyError(
+                f"resposta de {url} sem 'total_count'; sem ele não dá para "
+                f"saber se a fatia {fatia.created()} saturou"
+            )
+        total = int(carga["total_count"])
+
+        if total == 0:
+            continue
+
+        if total >= TETO_POR_CONSULTA:
+            metades = fatia.partir()
+            if metades is not None:
+                pendentes.extend((m, total) for m in metades)
+                continue
+            # No piso: registra e colhe o que der.
+            saturadas.append(_saturada(repo, fatia, total))
+
+        for item in http.paginar(url, filtros):
+            linhas[item["id"]] = _linha_de_run(repo, item)
+
+    return Coleta(list(linhas.values()), saturadas)
+
+
+def df_runs(linhas: list[dict]) -> pd.DataFrame:
+    """DataFrame no contrato de runs.csv, validado antes de sair."""
+    df = pd.DataFrame(linhas, columns=list(SCHEMAS["runs"].colunas))
+    validar(df, SCHEMAS["runs"])
+    return df
+
+
+def escrever_fatias_saturadas(
+    saturadas: list[FatiaSaturada], caminho: str | Path = CAMINHO_FATIAS
+) -> Path:
+    """Grava o diagnóstico de fatias que não couberam.
+
+    Fora de SCHEMAS de propósito: é artefato de diagnóstico, não dataset de
+    análise, então não passa por validar nem entra no dicionário de dados.
+    """
+    df = pd.DataFrame(
+        [
+            {"repo": f.repo, "inicio": f.inicio, "fim": f.fim,
+             "total_count": f.total_count}
+            for f in saturadas
+        ],
+        columns=["repo", "inicio", "fim", "total_count"],
+    )
+    caminho = Path(caminho)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(caminho, index=False)
+    return caminho
