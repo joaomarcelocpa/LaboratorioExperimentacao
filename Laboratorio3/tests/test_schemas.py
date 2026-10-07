@@ -221,3 +221,10 @@ def test_metricas_tem_pct_falhas_flaky():
 def test_cfr_sem_flaky_diz_que_a_base_e_o_bruto():
     # A descrição antiga não dizia, e a diferença muda o número.
     assert "bruto" in SCHEMAS["metricas"].colunas["cfr_a_sem_flaky"].origem
+
+
+def test_so_flaky_descreve_o_episodio_e_nao_a_falha():
+    # A descrição antiga era a de uma FALHA flaky. A coluna é de episódio:
+    # ela só é verdadeira quando todas as falhas do episódio foram flaky.
+    origem = SCHEMAS["episodios"].colunas["so_flaky"].origem
+    assert "todas" in origem.lower(), origem

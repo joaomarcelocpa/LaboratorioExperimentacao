@@ -97,6 +97,11 @@ def _construir(execucoes: pd.DataFrame) -> Episodios:
 
 
 def _fechado(repo, workflow_id, aberto: dict, fim) -> dict:
+    # Sem as duas pontas não dá para saber quanto durou. Fechar com horas=NaN
+    # e censurado=False faria o episódio sumir das duas contas e contradiria
+    # o CSV, onde `fim` vazio é justamente a marca da censura.
+    if pd.isna(fim) or pd.isna(aberto["inicio"]):
+        return _censurado(repo, workflow_id, aberto)
     horas = (fim - aberto["inicio"]).total_seconds() / 3600
     return {
         "repo": repo, "workflow_id": workflow_id,

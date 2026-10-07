@@ -7,7 +7,7 @@ from metricas.schemas import SCHEMAS, validar
 
 
 def _run(run_id, classe, mes=10, dia=1, hora=10, fim_hora=None,
-         workflow_id=1, head_sha="aaa"):
+         workflow_id=1, head_sha="aaa", criado_em=None):
     fim_hora = hora if fim_hora is None else fim_hora
     carimbo = f"2024-{mes:02d}-{dia:02d}T{hora:02d}:00:00Z"
     return {
@@ -16,7 +16,7 @@ def _run(run_id, classe, mes=10, dia=1, hora=10, fim_hora=None,
         "run_attempt": 1, "conclusion": "x", "classe": classe,
         "inicio": carimbo,
         "fim": f"2024-{mes:02d}-{dia:02d}T{fim_hora:02d}:00:00Z",
-        "criado_em": carimbo,
+        "criado_em": criado_em or carimbo,
     }
 
 
@@ -59,10 +59,16 @@ def test_ignorados_nao_contam_em_runs_validos():
 
 
 def test_mes_sai_de_criado_em():
-    # O critério da janela é a data de criação do run.
-    runs = pd.DataFrame(_muitos(11, 5))
+    # O critério da janela é a data de CRIAÇÃO do run, não a de início. Um
+    # run criado em 31/10 23:50 que só começou a rodar em 01/11 conta em
+    # outubro. Com inicio e criado_em iguais, este teste não provaria nada.
+    runs = pd.DataFrame([
+        _run(i, "sucesso", mes=11, dia=1, hora=0,
+             criado_em="2024-10-31T23:50:00Z")
+        for i in range(5)
+    ])
 
-    assert series_mensais(runs, None, min_runs_mes=5).iloc[0]["mes"] == "2024-11"
+    assert series_mensais(runs, None, min_runs_mes=5).iloc[0]["mes"] == "2024-10"
 
 
 def test_meses_diferentes_viram_linhas_diferentes():

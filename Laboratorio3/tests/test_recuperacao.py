@@ -82,6 +82,22 @@ def test_falha_nunca_recuperada_e_censurada():
 def test_censurados_ficam_fora_da_mediana():
     # Um censurado não tem duração conhecida: entrar com a duração parcial
     # puxaria a mediana para baixo e faria o repo parecer melhor do que é.
+    # O frame é montado à mão com horas PREENCHIDAS no censurado — se o
+    # teste viesse de episodios(), o NaN que _censurado grava faria o
+    # median() do pandas excluí-lo sozinho e o filtro não seria provado.
+    df = pd.DataFrame([
+        {"repo": "o/r", "workflow_id": 1, "inicio": pd.Timestamp("2024-10-01T10:00:00Z"),
+         "fim": pd.Timestamp("2024-10-01T12:00:00Z"), "horas": 2.0,
+         "censurado": False, "so_flaky": False},
+        {"repo": "o/r", "workflow_id": 1, "inicio": pd.Timestamp("2024-10-01T13:00:00Z"),
+         "fim": pd.NaT, "horas": 0.1,
+         "censurado": True, "so_flaky": False},
+    ])
+
+    assert mediana_horas(df) == pytest.approx(2.0),         "a duração parcial do censurado entrou na mediana"
+
+
+def test_episodios_de_verdade_marcam_censura_e_contam_certo():
     runs = _runs(
         _run(1, "sucesso", 9), _run(2, "falha", 10),
         _run(3, "sucesso", 12, fim_hora=12), _run(4, "falha", 13),
@@ -202,3 +218,76 @@ def test_ignorados_nao_abrem_nem_fecham_episodio():
 
     assert len(df) == 1
     assert df.iloc[0]["horas"] == pytest.approx(1.0)
+
+
+# --- achados da revisão: a hierarquia das duas populações ---------------
+
+def _tentativa(run_id, tentativa, conclusion="failure", hora=10, minuto=0):
+    return {
+        "repo": "o/r", "run_id": run_id, "tentativa": tentativa,
+        "conclusion": conclusion,
+        "inicio": f"2024-10-01T{hora:02d}:{minuto:02d}:00Z",
+        "fim": f"2024-10-01T{hora:02d}:{minuto + 10:02d}:00Z",
+    }
+
+
+def test_episodios_ignora_as_tentativas_e_fica_so_com_os_runs():
+    # episodios.csv é o conjunto da RQ 04, sobre runs.csv. Se a tentativa
+    # entrasse, o episódio abriria às 10:00 em vez de às 11:00.
+    runs = _runs(
+        _run(1, "sucesso", 9, head_sha="aaa"),
+        _run(2, "falha", 11, head_sha="bbb", run_attempt=2),
+        _run(3, "sucesso", 14, fim_hora=14, head_sha="ccc"),
+    )
+    attempts = pd.DataFrame([_tentativa(2, 1, hora=10)])
+
+    df = episodios(runs, attempts).df
+
+    assert len(df) == 1
+    assert df.iloc[0]["horas"] == pytest.approx(3.0), \
+        "o episódio tem que abrir na falha do run (11:00), não na da tentativa"
+
+
+def test_recuperacao_sem_flaky_usa_a_linha_do_tempo_bruta():
+    # A mesma entrada do teste acima: aqui a tentativa CONTA, e o episódio
+    # abre às 10:00. As duas colunas medem populações diferentes.
+    runs = _runs(
+        _run(1, "sucesso", 9, head_sha="aaa"),
+        _run(2, "falha", 11, head_sha="bbb", run_attempt=2),
+        _run(3, "sucesso", 14, fim_hora=14, head_sha="ccc"),
+    )
+    attempts = pd.DataFrame([_tentativa(2, 1, hora=10)])
+
+    assert mediana_horas(episodios(runs, attempts).df) == pytest.approx(3.0)
+    assert recuperacao_sem_flaky(runs, attempts) == pytest.approx(4.0)
+
+
+def test_so_flaky_exige_que_TODAS_as_falhas_sejam_flaky():
+    # Um episódio com uma falha flaky e outra não é um episódio com defeito
+    # de verdade dentro. `any` o descartaria da recuperacao_sem_flaky.
+    runs = _runs(
+        _run(1, "sucesso", 9, head_sha="aaa"),
+        _run(2, "falha", 10, head_sha="bbb"),
+        _run(3, "falha", 10, minuto=30, head_sha="ccc"),
+        _run(4, "sucesso", 11, fim_hora=11, head_sha="bbb"),
+    )
+
+    df = episodios(runs).df
+
+    assert len(df) == 1
+    assert not df.iloc[0]["so_flaky"], \
+        "a falha de ccc não teve sucesso posterior: o episódio não é só flaky"
+
+
+def test_sucesso_sem_fim_vira_episodio_censurado():
+    # fim vazio significa que não se sabe quando a recuperação terminou.
+    # Fechar o episódio com horas=NaN e censurado=False o faria sumir dos
+    # dois cálculos e contradiria o CSV, onde fim vazio é censura.
+    runs = _runs(_run(1, "sucesso", 9), _run(2, "falha", 10),
+                 _run(3, "sucesso", 11))
+    runs.loc[runs["run_id"] == 3, "fim"] = None
+
+    df = episodios(runs).df
+
+    assert df.iloc[0]["censurado"], "sem fim conhecido, o episódio é censurado"
+    assert pct_censurados(df) == pytest.approx(1.0)

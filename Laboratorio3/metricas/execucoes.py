@@ -37,7 +37,10 @@ def linha_do_tempo(
 ) -> pd.DataFrame:
     """Runs e tentativas anteriores numa só tabela, ordenada no tempo."""
     partes = [_de_runs(runs)]
-    if attempts is not None and not attempts.empty:
+    # Sem runs não há de onde as tentativas herdarem contexto: a junção
+    # estouraria. Acontece com um chamador que filtra runs por repositório
+    # mas passa attempts inteiro.
+    if attempts is not None and not attempts.empty and not runs.empty:
         partes.append(_de_tentativas(runs, attempts))
 
     # Partes vazias fora do concat: incluí-las faz o pandas inferir dtype a
@@ -115,10 +118,13 @@ def marcar_flaky(execucoes: pd.DataFrame) -> pd.DataFrame:
 
     ordem = pd.Series(range(len(df)), index=df.index)
     posicao_dos_sucessos = ordem.where(df["classe"] == "sucesso")
+    # repo entra na chave porque workflow_id e head_sha iguais em
+    # repositórios diferentes não são a mesma execução — e todo frame do
+    # estudo é multi-repo, já que `repo` é a chave de todos os contratos.
     # dropna=False: head_sha nulo é uma chave legítima. Sem isto, as falhas
     # desses runs nunca seriam marcadas e ninguém perceberia.
     ultimo_sucesso = posicao_dos_sucessos.groupby(
-        [df["workflow_id"], df["head_sha"]], dropna=False
+        [df["repo"], df["workflow_id"], df["head_sha"]], dropna=False
     ).transform("max")
 
     df["flaky"] = (df["classe"] == "falha") & (ordem < ultimo_sucesso)

@@ -143,3 +143,26 @@ def test_pct_falhas_flaky_tudo_flaky_e_um():
     attempts = pd.DataFrame([_tentativa(1, 1, hora=9)])
 
     assert pct_falhas_flaky(runs, attempts) == pytest.approx(1.0)
+
+
+# --- achados da revisão -------------------------------------------------
+
+def test_repos_diferentes_nao_contaminam_a_marcacao_de_flaky():
+    # workflow_id e head_sha iguais em repositórios diferentes não são a
+    # mesma execução. Sem o repo no agrupamento, a falha de o/a viraria
+    # flaky por causa de um sucesso de o/b.
+    de_a = _run(1, "falha", hora=10)
+    de_a["repo"] = "o/a"
+    de_b = _run(2, "sucesso", hora=11)
+    de_b["repo"] = "o/b"
+
+    assert cfr_ci(pd.DataFrame([de_a, de_b]), sem_flaky=True) == pytest.approx(0.5)
+
+
+def test_runs_vazio_com_attempts_nao_estoura():
+    # Um chamador que filtra runs por repositório mas passa attempts inteiro
+    # cairia num KeyError em vez de receber NaN.
+    vazio = pd.DataFrame(columns=["repo", "classe"])
+    attempts = pd.DataFrame([_tentativa(1, 1)])
+
+    assert math.isnan(cfr_ci(vazio, attempts))

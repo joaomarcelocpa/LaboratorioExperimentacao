@@ -81,7 +81,7 @@ Convenções de todo o estudo:
 | `fim` | data | ISO 8601 UTC | updated_at do próximo sucesso |
 | `horas` | float | horas | fim - inicio |
 | `censurado` | bool | sim/não | episódio sem sucesso até o fim da janela |
-| `so_flaky` | bool | sim/não | falha e sucesso no mesmo head_sha |
+| `so_flaky` | bool | sim/não | todas as falhas do episódio foram flaky (cada uma teve sucesso posterior no mesmo workflow e head_sha) |
 
 ## `funil.csv`
 

@@ -201,7 +201,7 @@ SCHEMAS: dict[str, Schema] = {
         "fim": _c("data", "ISO 8601 UTC", "updated_at do próximo sucesso"),
         "horas": _c("float", "horas", "fim - inicio"),
         "censurado": _c("bool", "sim/não", "episódio sem sucesso até o fim da janela"),
-        "so_flaky": _c("bool", "sim/não", "falha e sucesso no mesmo head_sha"),
+        "so_flaky": _c("bool", "sim/não", "todas as falhas do episódio foram flaky (cada uma teve sucesso posterior no mesmo workflow e head_sha)"),
     }),
     "custo_api": Schema("custo_api.csv", "C", {
         "endpoint": _c("str", "caminho", "endpoint chamado"),
