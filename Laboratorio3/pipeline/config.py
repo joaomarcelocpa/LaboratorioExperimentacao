@@ -30,6 +30,7 @@ class Config:
     n_dias_issue: int
     bots: list[str]
     max_tentativas_anteriores: int = 5
+    min_runs_mes: int = 5
     _janela_placeholder: bool = True
 
     def janela_e_placeholder(self) -> bool:
@@ -120,6 +121,21 @@ def carregar_config(caminho: str | Path = "config.yaml") -> Config:
             f"tentativas sem dizer."
         )
 
+    # Opcional: um config.yaml escrito antes desta chave continua válido.
+    min_mes = dados.get("min_runs_mes", 5)
+    if not isinstance(min_mes, int) or isinstance(min_mes, bool):
+        raise ErroDeConfig(
+            f"{caminho}: 'min_runs_mes' deve ser int, "
+            f"encontrado {type(min_mes).__name__}"
+        )
+    if min_mes < 5:
+        raise ErroDeConfig(
+            f"{caminho}: 'min_runs_mes' deve ser >= 5, encontrado {min_mes}. "
+            f"O contrato de metricas_mensais.csv exige cfr_a e recuperacao_h "
+            f"nulos em meses com menos de 5 runs válidos, então um corte "
+            f"menor produziria linhas que o validador recusa."
+        )
+
     return Config(
         janela_inicio=janela["inicio"],
         janela_fim=janela["fim"],
@@ -133,5 +149,6 @@ def carregar_config(caminho: str | Path = "config.yaml") -> Config:
         n_dias_issue=dados["n_dias_issue"],
         bots=dados["bots"],
         max_tentativas_anteriores=max_tentativas,
+        min_runs_mes=min_mes,
         _janela_placeholder=bool(janela.get("placeholder", False)),
     )

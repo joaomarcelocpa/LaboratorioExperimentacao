@@ -168,3 +168,38 @@ def test_config_do_projeto_bate_com_o_padrao_do_coletor():
     from coleta.runs import MAX_TENTATIVAS_PADRAO
     assert carregar_config(RAIZ / "config.yaml").max_tentativas_anteriores == \
         MAX_TENTATIVAS_PADRAO
+
+
+def test_min_runs_mes_tem_padrao_quando_a_chave_falta(tmp_path):
+    assert carregar_config(escrever(tmp_path, VALIDO)).min_runs_mes == 5
+
+
+def test_min_runs_mes_oito_e_aceito(tmp_path):
+    # Acima de 5 é compatível: anular a partir de 8 satisfaz uma regra que só
+    # exige anular abaixo de 5.
+    assert carregar_config(escrever(tmp_path, VALIDO + "min_runs_mes: 8\n")).min_runs_mes == 8
+
+
+def test_min_runs_mes_quatro_e_erro(tmp_path):
+    # Abaixo de 5 um mês com 4 runs teria valor calculado, e a regra
+    # _mes_pobre_e_nulo do contrato de metricas_mensais.csv exige nulo. O erro
+    # tem que aparecer aqui, e não no meio de uma coleta de horas.
+    caminho = escrever(tmp_path, VALIDO + "min_runs_mes: 4\n")
+
+    with pytest.raises(ErroDeConfig, match="metricas_mensais"):
+        carregar_config(caminho)
+
+
+def test_min_runs_mes_com_tipo_errado_e_erro(tmp_path):
+    caminho = escrever(tmp_path, VALIDO + "min_runs_mes: muitos\n")
+
+    with pytest.raises(ErroDeConfig, match="min_runs_mes"):
+        carregar_config(caminho)
+
+
+def test_min_runs_mes_booleano_e_erro(tmp_path):
+    # bool é subclasse de int em Python: True passaria como 1.
+    caminho = escrever(tmp_path, VALIDO + "min_runs_mes: true\n")
+
+    with pytest.raises(ErroDeConfig, match="min_runs_mes"):
+        carregar_config(caminho)
