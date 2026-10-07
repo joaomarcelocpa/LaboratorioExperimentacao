@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import sys
 
+from coleta.http import escrever_custo_api
 from pipeline.config import ErroDeConfig, carregar_config
 
 ETAPAS = ["selecao", "filtros", "coletores", "normalizacao", "metricas"]
@@ -37,8 +38,10 @@ def main(argv: list[str] | None = None) -> int:
 
     print(f"janela: {cfg.janela_inicio} a {cfg.janela_fim} | n_repos={cfg.n_repos}")
     for etapa in ETAPAS:
-        # TODO(#38, #39, #40): implementar as etapas de coleta.
-        print(f"  {etapa}: não implementada (Issues #38, #39, #40)")
+        # TODO(#38, #39): implementar as etapas de coleta.
+        print(f"  {etapa}: não implementada (Issues #38, #39)")
+
+    print(f"custo da API: {escrever_custo_api()}")
     return 0
 
 

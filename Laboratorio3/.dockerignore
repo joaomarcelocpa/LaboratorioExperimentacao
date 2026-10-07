@@ -1,0 +1,10 @@
+.git
+.github
+.venv
+.env
+data/raw
+docs/superpowers
+__pycache__
+*.pyc
+.pytest_cache
+.coverage
