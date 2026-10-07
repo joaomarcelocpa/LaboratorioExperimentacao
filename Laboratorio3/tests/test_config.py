@@ -163,7 +163,6 @@ def test_booleano_nao_passa_por_int(tmp_path):
         carregar_config(caminho)
 
 
-@pytest.mark.skip(reason="coleta.runs chega na Task 3 deste plano")
 def test_config_do_projeto_bate_com_o_padrao_do_coletor():
     # Duas fontes para o mesmo número: um teste barato evita que divirjam.
     from coleta.runs import MAX_TENTATIVAS_PADRAO
