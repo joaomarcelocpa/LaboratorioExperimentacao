@@ -124,7 +124,8 @@ Convenções de todo o estudo:
 | `pct_commits_bot` | float | proporção 0-1 | commits de bot ÷ total de commits |
 | `cfr_a` | float | proporção 0-1 | RQ03a: falhas ÷ (falhas + sucessos) na conclusion listada |
 | `cfr_a_bruto` | float | proporção 0-1 | RQ03a incluindo tentativas anteriores |
-| `cfr_a_sem_flaky` | float | proporção 0-1 | RQ03a removendo falhas seguidas de sucesso no mesmo head_sha |
+| `cfr_a_sem_flaky` | float | proporção 0-1 | RQ03a: o CFR bruto menos as falhas flaky (sucesso posterior no mesmo workflow e head_sha) |
+| `pct_falhas_flaky` | float | proporção 0-1 | falhas flaky ÷ total de falhas do CFR bruto; NaN se não houver falhas |
 | `cfr_b` | float | proporção 0-1 | RQ03b: releases seguidas de corretiva em 7 dias ÷ releases avaliadas |
 | `cfr_c` | float | proporção 0-1 | RQ03c: releases seguidas de issue de bug em n_dias_issue |
 | `recuperacao_h` | float | horas | RQ04: mediana dos episódios de falha |
