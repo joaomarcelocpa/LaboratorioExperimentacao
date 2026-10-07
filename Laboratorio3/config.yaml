@@ -1,0 +1,28 @@
+# Janela de observação — 12 meses, fixada pelo professor.
+# FIXAR: datas ainda não divulgadas (2026-10-06). Os valores abaixo são
+# placeholder; a coleta se recusa a rodar enquanto não forem substituídos.
+janela:
+  inicio: 2024-10-01
+  fim: 2025-09-30
+  placeholder: true
+
+faixas_estrelas:
+  - "1000..2000"
+  - "2000..5000"
+  - "5000..10000"
+  - "10000..50000"
+  - ">50000"
+
+min_releases: 5
+min_runs: 50
+n_repos: 100
+seed: 42
+
+ambientes_producao: [production, prod, live]
+labels_bug: [bug, regression, "type: bug"]
+n_dias_issue: 7
+
+bots:
+  - "dependabot[bot]"
+  - "renovate[bot]"
+  - "github-actions[bot]"
