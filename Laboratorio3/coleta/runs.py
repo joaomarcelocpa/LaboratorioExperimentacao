@@ -284,3 +284,71 @@ def escrever_fatias_saturadas(
     caminho.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(caminho, index=False)
     return caminho
+
+
+_podadas: Counter[str] = Counter()
+
+
+def tentativas_podadas() -> dict[str, int]:
+    """Quantas tentativas o teto cortou e quantas a API já não tinha."""
+    return {
+        "cortadas_pelo_teto": _podadas["cortadas_pelo_teto"],
+        "ausentes_na_api": _podadas["ausentes_na_api"],
+    }
+
+
+def esquecer_tentativas_podadas() -> None:
+    _podadas.clear()
+
+
+def coletar_tentativas(
+    repo: str, runs: list[dict], max_tentativas: int = MAX_TENTATIVAS_PADRAO
+) -> list[dict]:
+    """Tentativas anteriores dos runs que foram rerodados.
+
+    A listagem de /actions/runs mostra só a última tentativa, então as
+    anteriores só existem em /attempts/{k}. Quando o teto corta, ficam as
+    MAIS RECENTES: é o rerun imediatamente anterior que diz se uma falha foi
+    instabilidade ou defeito.
+    """
+    linhas: list[dict] = []
+
+    for run in runs:
+        total = int(run.get("run_attempt") or 1)
+        if total <= 1:
+            continue
+
+        run_id = run["run_id"]
+        primeira = max(1, total - max_tentativas)
+        if primeira > 1:
+            cortadas = primeira - 1
+            _podadas["cortadas_pelo_teto"] += cortadas
+            _log.warning(
+                "run %s tem %s tentativas; o teto de %s deixou de fora as %s "
+                "mais antigas.", run_id, total, max_tentativas, cortadas,
+            )
+
+        for k in range(primeira, total):
+            resposta = http.get(f"{API}/repos/{repo}/actions/runs/{run_id}/attempts/{k}")
+            if resposta.status == 404:
+                # O GitHub poda tentativas antigas. Conta e segue.
+                _podadas["ausentes_na_api"] += 1
+                continue
+            item = resposta.json()
+            linhas.append({
+                "repo": repo,
+                "run_id": run_id,
+                "tentativa": int(item.get("run_attempt") or k),
+                "conclusion": item.get("conclusion"),
+                "inicio": item.get("run_started_at"),
+                "fim": item.get("updated_at"),
+            })
+
+    return linhas
+
+
+def df_tentativas(linhas: list[dict]) -> pd.DataFrame:
+    """DataFrame no contrato de run_attempts.csv, validado antes de sair."""
+    df = pd.DataFrame(linhas, columns=list(SCHEMAS["run_attempts"].colunas))
+    validar(df, SCHEMAS["run_attempts"])
+    return df
