@@ -29,6 +29,7 @@ class Config:
     labels_bug: list[str]
     n_dias_issue: int
     bots: list[str]
+    max_tentativas_anteriores: int = 5
     _janela_placeholder: bool = True
 
     def janela_e_placeholder(self) -> bool:
@@ -105,6 +106,20 @@ def carregar_config(caminho: str | Path = "config.yaml") -> Config:
                 f"encontrado {type(dados[chave]).__name__}"
             )
 
+    # Opcional: um config.yaml escrito antes desta chave continua válido.
+    max_tentativas = dados.get("max_tentativas_anteriores", 5)
+    if not isinstance(max_tentativas, int) or isinstance(max_tentativas, bool):
+        raise ErroDeConfig(
+            f"{caminho}: 'max_tentativas_anteriores' deve ser int, "
+            f"encontrado {type(max_tentativas).__name__}"
+        )
+    if max_tentativas < 1:
+        raise ErroDeConfig(
+            f"{caminho}: 'max_tentativas_anteriores' deve ser >= 1, "
+            f"encontrado {max_tentativas}. Zero desligaria a coleta de "
+            f"tentativas sem dizer."
+        )
+
     return Config(
         janela_inicio=janela["inicio"],
         janela_fim=janela["fim"],
@@ -117,5 +132,6 @@ def carregar_config(caminho: str | Path = "config.yaml") -> Config:
         labels_bug=dados["labels_bug"],
         n_dias_issue=dados["n_dias_issue"],
         bots=dados["bots"],
+        max_tentativas_anteriores=max_tentativas,
         _janela_placeholder=bool(janela.get("placeholder", False)),
     )
