@@ -17,7 +17,7 @@ docker-build:
 	docker build -t $(IMAGEM) .
 
 run-docker: docker-build
-	docker run --rm -e GITHUB_TOKEN -v "$(CURDIR)/data:/app/data" $(IMAGEM) --config $(CONFIG)
+	docker run --rm $(if $(wildcard .env),--env-file .env) -e GITHUB_TOKEN -v "$(CURDIR)/data:/app/data" $(IMAGEM) --config $(CONFIG)
 
 reproduce:
 	@echo "make reproduce completo entra na S03: regenera as tabelas e figuras"

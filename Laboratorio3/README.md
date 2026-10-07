@@ -21,8 +21,11 @@ cp .env.example .env     # preencha GITHUB_TOKEN
 pip install -r requirements.txt
 ```
 
-O token é lido da variável de ambiente `GITHUB_TOKEN` e **nunca** é commitado.
-Sem ele, só respostas que já estão em cache funcionam.
+O token é lido da variável de ambiente `GITHUB_TOKEN` **ou** do arquivo `.env`
+na pasta onde o comando roda (o pipeline carrega o `.env` sozinho; uma variável
+já definida no shell tem prioridade). Ele **nunca** é commitado. Sem ele, só
+respostas que já estão em cache funcionam. No Docker, o `make run-docker` passa
+o `.env` ao container com `--env-file`.
 
 No PowerShell:
 

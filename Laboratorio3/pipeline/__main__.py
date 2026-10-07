@@ -1,13 +1,14 @@
 """Ponto de entrada do pipeline.
 
 Uso: python -m pipeline --config config.yaml [--limite N]
-Requer GITHUB_TOKEN no ambiente.
+Requer GITHUB_TOKEN no ambiente ou em .env.
 """
 from __future__ import annotations
 
 import argparse
 import sys
 
+from pipeline.ambiente import carregar_env
 from pipeline.config import ErroDeConfig, carregar_config
 
 
@@ -19,6 +20,7 @@ def main(argv: list[str] | None = None) -> int:
         help="Quantos repositórios entram na amostra (sobrepõe n_repos do config)",
     )
     args = parser.parse_args(argv)
+    carregar_env()
 
     if args.limite is not None and args.limite < 1:
         print("erro: --limite deve ser um inteiro >= 1", file=sys.stderr)
