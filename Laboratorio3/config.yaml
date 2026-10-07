@@ -1,10 +1,7 @@
 # Janela de observação — 12 meses, fixada pelo professor.
-# FIXAR: datas ainda não divulgadas (2026-10-06). Os valores abaixo são
-# placeholder; a coleta se recusa a rodar enquanto não forem substituídos.
 janela:
-  inicio: 2024-10-01
-  fim: 2025-09-30
-  placeholder: true
+  inicio: 2025-10-01
+  fim: 2026-09-30
 
 faixas_estrelas:
   - "1000..2000"

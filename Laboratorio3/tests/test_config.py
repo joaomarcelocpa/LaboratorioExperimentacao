@@ -95,18 +95,10 @@ def test_janela_placeholder_e_detectada(tmp_path):
     assert carregar_config(escrever(tmp_path, VALIDO)).janela_e_placeholder() is False
 
 
-def test_config_do_repositorio_ainda_e_placeholder():
-    # Quando o professor divulgar a janela, apague placeholder e este teste.
+def test_config_do_repositorio_tem_a_janela_do_professor():
     cfg = carregar_config(RAIZ / "config.yaml")
-    assert cfg.janela_e_placeholder() is True
-
-
-def test_pipeline_recusa_rodar_com_janela_placeholder(capsys):
-    from pipeline.__main__ import main
-
-    codigo = main(["--config", str(RAIZ / "config.yaml")])
-    assert codigo == 2
-    assert "placeholder" in capsys.readouterr().err
+    assert cfg.janela_e_placeholder() is False
+    assert (cfg.janela_inicio, cfg.janela_fim) == (date(2025, 10, 1), date(2026, 9, 30))
 
 
 # --- correções da revisão final ---
