@@ -36,9 +36,12 @@ def _cfg(**extra):
     return Config(**base)
 
 
-def _item(nome, estrelas=1500, fork=False, archived=False):
-    return {"full_name": nome, "stargazers_count": estrelas,
+def _item(nome, estrelas=1500, fork=False, archived=False, pushed_at=None):
+    item = {"full_name": nome, "stargazers_count": estrelas,
             "fork": fork, "archived": archived}
+    if pushed_at is not None:
+        item["pushed_at"] = pushed_at
+    return item
 
 
 def _busca(itens, total=None, link=None):
@@ -275,7 +278,6 @@ def test_funil_com_10_repositorios_fake_fecha(tmp_path):
            + [_item("o/dup")] * 2                       # 1 duplicata
            + [_item("o/fork", fork=True)])
     # 10 itens brutos: 1 duplicata, 1 fork -> 8 candidatos
-    # (7 + o/dup + o/fork removido = 8)
     for i, n in enumerate(nomes[:7]):
         _mock_repo(
             n,
@@ -291,17 +293,19 @@ def test_funil_com_10_repositorios_fake_fecha(tmp_path):
     validar(funil, SCHEMAS["funil"])
     assert filtros.funil_fecha(funil, len(amostra))
     assert funil["etapa"].tolist() == [
-        "duplicata", "fork", "arquivado",
-        "usa_actions", "min_releases", "min_runs", "sorteio",
+        "duplicata", "fork", "arquivado", "sem_push_na_janela",
+        "nao_examinados", "usa_actions", "min_releases", "min_runs",
     ]
-    # 10 brutos -> 9 -> 8 -> 8 -> 7 -> 6 -> 5 -> 3 sorteados
-    assert funil["entraram"].tolist() == [10, 9, 8, 8, 7, 6, 5]
-    assert funil["sairam"].tolist() == [1, 1, 0, 1, 1, 1, 2]
+    assert funil["entraram"].tolist()[:5] == [10, 9, 8, 8, 8]
     assert len(amostra) == 3
+    # a soma fecha: o que os filtros recebem é o que a seleção examinou
+    nao_examinados = int(funil.loc[funil["etapa"] == "nao_examinados", "sairam"].iloc[0])
+    assert int(funil.loc[funil["etapa"] == "usa_actions", "entraram"].iloc[0]) == 8 - nao_examinados
 
     descartes = pd.read_csv(tmp_path / "descartes.csv")
     validar(descartes, SCHEMAS["descartes"])
-    assert len(descartes) == funil["sairam"].sum()
+    # descartes.csv lista só quem foi examinado e barrado, não os não examinados
+    assert len(descartes) == funil["sairam"].sum() - nao_examinados
     candidatos = pd.read_csv(tmp_path / "candidatos.csv")
     assert len(candidatos) == 8
 
@@ -320,3 +324,127 @@ def test_funil_cuja_sobra_nao_e_a_amostra_nao_fecha():
     ])
     assert filtros.funil_fecha(funil, 8)
     assert not filtros.funil_fecha(funil, 7)
+
+
+# --- pré-filtro por pushed_at (Issue #58) ----------------------------------------
+
+INICIO = date(2025, 10, 1)
+
+
+def _com_push(nome, pushed_at):
+    return {**_item(nome, pushed_at=pushed_at), "_faixa": "1000..2000"}
+
+
+def test_sem_push_na_janela_sai_sem_chamar_a_api():
+    brutos = [
+        _com_push("p/parado", "2025-09-30T23:59:59Z"),
+        _com_push("p/no-limite", "2025-10-01T00:00:00Z"),
+        _com_push("p/recente", "2026-03-01T10:00:00Z"),
+        {**_item("p/sem-data"), "_faixa": "1000..2000"},      # sem pushed_at: fica
+    ]
+    candidatos, descartes, etapas = selecao.limpar_candidatos(brutos, janela_inicio=INICIO)
+    assert candidatos["repo"].tolist() == ["p/no-limite", "p/recente", "p/sem-data"]
+    assert descartes["repo"].tolist() == ["p/parado"]
+    assert descartes["etapa"].tolist() == ["sem_push_na_janela"]
+    assert "2025-10-01" in descartes["motivo"].iloc[0]
+    assert [(e["etapa"], e["entraram"], e["sairam"]) for e in etapas][-1] == (
+        "sem_push_na_janela", 4, 1)
+
+
+def test_sem_janela_o_prefiltro_nao_age():
+    brutos = [_com_push("p/parado", "2000-01-01T00:00:00Z")]
+    candidatos, _, etapas = selecao.limpar_candidatos(brutos)
+    assert candidatos["repo"].tolist() == ["p/parado"]
+    assert [e["etapa"] for e in etapas] == ["duplicata", "fork", "arquivado"]
+
+
+def test_fork_parado_cai_em_fork_e_nao_em_sem_push():
+    brutos = [{**_item("p/f", fork=True, pushed_at="2000-01-01T00:00:00Z"),
+               "_faixa": "1000..2000"}]
+    _, descartes, _ = selecao.limpar_candidatos(brutos, janela_inicio=INICIO)
+    assert descartes["etapa"].tolist() == ["fork"]
+
+
+# --- filtro preguiçoso (Issue #58) ---------------------------------------------------
+
+def test_ordem_de_exame_depende_da_semente_nao_da_ordem_de_entrada():
+    a = filtros.ordem_de_exame(REPOS, seed=42)
+    b = filtros.ordem_de_exame(list(reversed(REPOS)), seed=42)
+    assert a == b and sorted(a) == REPOS
+    assert len({tuple(filtros.ordem_de_exame(REPOS, seed=s)) for s in range(8)}) > 1
+
+
+@responses.activate
+def test_para_ao_aprovar_n_repos_e_nao_chama_a_api_para_o_resto():
+    for n in REPOS:
+        _mock_repo(n)
+    esperados = filtros.ordem_de_exame(REPOS, seed=42)[:3]
+    aprovados, descartes, funil, nao_examinados = filtros.filtrar_ate(
+        REPOS, _cfg(n_repos=3), alvo=3, seed=42)
+    assert aprovados == esperados
+    assert descartes == [] and nao_examinados == 7
+    tocados = {re.search(r"/repos/([^/]+/[^/?]+)", c.request.url).group(1)
+               for c in responses.calls}
+    assert tocados <= set(esperados)
+
+
+@responses.activate
+def test_funil_dos_filtros_conta_so_os_examinados_e_fecha():
+    ordem = filtros.ordem_de_exame(REPOS, seed=42)
+    # os 2 primeiros examinados caem em etapas diferentes; os seguintes passam
+    _mock_repo(ordem[0], status_404_actions=True)
+    _mock_repo(ordem[1], releases=1)
+    for n in ordem[2:]:
+        _mock_repo(n)
+    aprovados, descartes, funil, nao_examinados = filtros.filtrar_ate(
+        REPOS, _cfg(n_repos=3), alvo=3, seed=42)
+    assert aprovados == ordem[2:5] and nao_examinados == 5
+    assert [(f["etapa"], f["entraram"], f["sairam"]) for f in funil] == [
+        ("usa_actions", 5, 1), ("min_releases", 4, 1), ("min_runs", 3, 0)]
+    assert {d["repo"]: d["etapa"] for d in descartes} == {
+        ordem[0]: "usa_actions", ordem[1]: "min_releases"}
+
+
+@responses.activate
+def test_menos_aprovados_que_alvo_examina_todos():
+    for n in REPOS[:4]:
+        _mock_repo(n)
+    aprovados, _, funil, nao_examinados = filtros.filtrar_ate(
+        REPOS[:4], _cfg(n_repos=10), alvo=10, seed=1)
+    assert sorted(aprovados) == REPOS[:4] and nao_examinados == 0
+    assert funil[0]["entraram"] == 4
+
+
+@responses.activate
+def test_erro_de_api_descarta_o_repo_e_o_filtro_segue():
+    ordem = filtros.ordem_de_exame(REPOS[:3], seed=3)
+    responses.add(responses.GET, f"{API}/repos/{ordem[0]}/actions/workflows", status=451)
+    for n in ordem[1:]:
+        _mock_repo(n)
+    aprovados, descartes, _, _ = filtros.filtrar_ate(
+        REPOS[:3], _cfg(n_repos=2), alvo=2, seed=3)
+    assert aprovados == ordem[1:]
+    assert "451" in descartes[0]["motivo"]
+
+
+@responses.activate
+def test_401_derruba_o_filtro_preguicoso():
+    responses.add(responses.GET, f"{API}/repos/o/r00/actions/workflows", status=401,
+                  json={"message": "Bad credentials"})
+    with pytest.raises(Exception) as e:
+        filtros.filtrar_ate(["o/r00"], _cfg(), alvo=1, seed=1)
+    assert getattr(e.value, "status", None) == 401
+
+
+@responses.activate
+def test_selecionar_nao_chama_a_api_para_repo_parado(tmp_path):
+    _busca([_item("o/vivo", pushed_at="2026-01-01T00:00:00Z"),
+            _item("o/parado", pushed_at="2020-01-01T00:00:00Z")])
+    _mock_repo("o/vivo")
+    _mock_repo("o/parado")
+    amostra = selecao.selecionar(_cfg(janela_inicio=date(2025, 1, 1), n_repos=5), tmp_path)
+    assert amostra["repo"].tolist() == ["o/vivo"]
+    assert not any("o/parado" in c.request.url for c in responses.calls)
+    funil = pd.read_csv(tmp_path / "funil.csv")
+    assert filtros.funil_fecha(funil, 1)
+    assert funil.set_index("etapa").loc["sem_push_na_janela", "sairam"] == 1

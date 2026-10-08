@@ -8,6 +8,12 @@ descartado cedo não gaste chamadas das etapas seguintes:
     3. >= min_runs válidos       (até 4 chamadas + 1 do default branch)
     4. sorteio de n_repos com seed
 
+A seleção usa `filtrar_ate`, que examina os candidatos em ordem aleatória fixada
+pela semente e para quando aprova `n_repos`: as primeiras N aprovações dessa
+ordem são uma amostra uniforme do conjunto aprovado, e examinar todos os
+candidatos (dezenas de milhares) custaria dias de cota. `filtrar` e `sortear`
+seguem disponíveis e fazem a mesma seleção sobre a lista inteira.
+
 Cada descarte vai para descartes.csv com o motivo, e cada etapa vira uma
 linha de funil.csv. O funil fecha: o que entra numa etapa menos o que sai
 dela é o que entra na seguinte.
@@ -162,6 +168,75 @@ def filtrar(
         })
 
     return restantes, descartes, funil
+
+
+def ordem_de_exame(repos: list[str], seed: int) -> list[str]:
+    """Ordem em que os candidatos são examinados: aleatória, fixada pela semente.
+
+    A entrada é ordenada antes de embaralhar, de modo que a mesma semente dê a
+    mesma ordem independente de como os candidatos chegaram.
+    """
+    ordenados = sorted(set(repos))
+    random.Random(seed).shuffle(ordenados)
+    return ordenados
+
+
+def _primeira_barreira(repo: str, cfg: Config) -> tuple[str | None, str]:
+    """(etapa que barrou, motivo), ou (None, "") se o repo passou em todas."""
+    for etapa in ETAPAS:
+        try:
+            ok = _passa(repo, etapa, cfg)
+        except http.ErroDeHTTP as e:
+            if e.status == 401:
+                raise
+            _log.warning("%s descartado em %s: %s", repo, etapa, e)
+            return etapa, f"erro de API ({e.status}) em {etapa}"
+        if not ok:
+            return etapa, _motivo_da_etapa(etapa, cfg)
+    return None, ""
+
+
+def filtrar_ate(
+    repos: list[str], cfg: Config, alvo: int, seed: int
+) -> tuple[list[str], list[dict], list[dict], int]:
+    """Examina os candidatos em `ordem_de_exame` até aprovar `alvo`.
+
+    Devolve (aprovados, descartes, funil, nao_examinados). O funil e os
+    descartes cobrem só quem foi examinado; `nao_examinados` é quantos ficaram
+    para trás porque a amostra fechou antes. Com menos aprovados que `alvo`,
+    todos os candidatos são examinados. Um erro de API num repositório o
+    descarta; um 401 derruba a seleção, como em `filtrar`.
+    """
+    ordem = ordem_de_exame(repos, seed)
+    entraram = {e: 0 for e in ETAPAS}
+    sairam = {e: 0 for e in ETAPAS}
+    aprovados: list[str] = []
+    descartes: list[dict] = []
+    examinados = 0
+
+    for repo in ordem:
+        if len(aprovados) >= alvo:
+            break
+        examinados += 1
+        barreira, motivo = _primeira_barreira(repo, cfg)
+        for etapa in ETAPAS:
+            entraram[etapa] += 1
+            if etapa == barreira:
+                sairam[etapa] += 1
+                descartes.append({"repo": repo, "etapa": etapa, "motivo": motivo})
+                break
+        else:
+            aprovados.append(repo)
+        if examinados % 25 == 0:
+            print(f"  filtro: {examinados} examinados, {len(aprovados)}/{alvo} "
+                  f"aprovados", flush=True)
+
+    funil = [
+        {"etapa": e, "entraram": entraram[e], "sairam": sairam[e],
+         "motivo": _motivo_da_etapa(e, cfg)}
+        for e in ETAPAS
+    ]
+    return aprovados, descartes, funil, len(ordem) - examinados
 
 
 def _motivo_da_etapa(etapa: str, cfg: Config) -> str:

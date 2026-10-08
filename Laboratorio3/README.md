@@ -21,8 +21,11 @@ cp .env.example .env     # preencha GITHUB_TOKEN
 pip install -r requirements.txt
 ```
 
-O token é lido da variável de ambiente `GITHUB_TOKEN` e **nunca** é commitado.
-Sem ele, só respostas que já estão em cache funcionam.
+O token é lido da variável de ambiente `GITHUB_TOKEN` **ou** do arquivo `.env`
+na pasta onde o comando roda (o pipeline carrega o `.env` sozinho; uma variável
+já definida no shell tem prioridade). Ele **nunca** é commitado. Sem ele, só
+respostas que já estão em cache funcionam. No Docker, o `make run-docker` passa
+o `.env` ao container com `--env-file`.
 
 No PowerShell:
 
@@ -52,6 +55,90 @@ python -m metricas.dicionario
 docker build -t lab03-dora .
 docker run --rm -e GITHUB_TOKEN -v "${PWD}/data:/app/data" lab03-dora --config config.yaml
 ```
+
+## Comando único
+
+```bash
+export GITHUB_TOKEN=...        # nunca commitado; veja "Configuração"
+python -m pipeline --config config.yaml              # amostra de n_repos (100)
+python -m pipeline --config config.yaml --limite 10  # rodada curta de medição
+```
+
+O comando faz tudo: busca fatiada de candidatos, filtros e funil (examinados em
+ordem aleatória fixada pela semente, até fechar a amostra), coleta (releases, commits entre releases, deployments, workflow
+runs, issues de bug, metadados) e cálculo das métricas. `--limite N` troca o
+`n_repos` do config **antes** do sorteio, então `funil.csv` fecha com N.
+
+Um repositório que falha é registrado e os demais seguem; o resumo no fim da
+execução lista quem falhou. A coleta recusa rodar com a janela ainda marcada
+como `placeholder: true`.
+
+### Saídas (`data/processed/`)
+
+| Arquivo | O que é |
+|---|---|
+| `candidatos.csv` | candidatos da busca fatiada, já sem forks, arquivados e duplicatas |
+| `funil.csv` | por etapa: entraram, saíram e motivo; a soma fecha na amostra final (veja "Como a amostra é escolhida") |
+| `descartes.csv` | cada repositório descartado nos filtros, com etapa e motivo (não lista os `nao_examinados`) |
+| `repos.csv` | metadados e fatores de release da amostra |
+| `releases.csv`, `tags.csv` | releases (sem draft) e tags com data do commit |
+| `releases_ignoradas.csv` | releases sem comparação possível (sem anterior, 404) |
+| `commits.csv` | commits entre releases consecutivas |
+| `deployments.csv` | deployments em ambientes de produção |
+| `runs.csv`, `run_attempts.csv` | workflow runs de push no default branch e tentativas anteriores |
+| `episodios.csv` | episódios de falha do CI, com censura e flag de só-flaky |
+| `issues_bug.csv` | issues de bug (sem PRs) com a tag citada |
+| `metricas.csv` | uma linha por repositório: as métricas DORA e seus proxies |
+| `metricas_mensais.csv` | CFR de CI e recuperação por repositório e mês (RQ 08b) |
+| `custo_api.csv` | chamadas por endpoint: as que saíram da máquina e as do cache |
+| `custo_selecao.csv` | diagnóstico: custo só da seleção (busca e filtros), que não cresce com a amostra |
+| `fatias_saturadas.csv` | só se existir: fatias que bateram o teto de 1.000 resultados |
+
+As colunas de cada arquivo estão em
+[docs/dicionario_dados.md](docs/dicionario_dados.md). Métrica sem dado vale
+vazio (NaN), nunca zero.
+
+### Como a amostra é escolhida
+
+Examinar dezenas de milhares de candidatos custaria dias de cota (a cota é de
+5.000 chamadas por hora), então a seleção faz duas coisas que **não mudam quem
+pode entrar na amostra**:
+
+1. **Sem push na janela** (`sem_push_na_janela`): a busca já traz `pushed_at`.
+   Repositório sem push desde `janela.inicio` não pode ter ≥ `min_runs` runs de
+   push na janela, então seria descartado de qualquer jeito, sem gastar chamada.
+   Candidato sem `pushed_at` fica.
+2. **Filtro preguiçoso**: os candidatos são examinados em ordem aleatória fixada
+   por `seed`, e o exame para quando `n_repos` são aprovados. As primeiras N
+   aprovações de uma ordem aleatória fixa são uma amostra uniforme do conjunto
+   aprovado, e a mesma semente reproduz a mesma amostra.
+
+Consequência para o `funil.csv`: depois das etapas de limpeza vem a linha
+`nao_examinados` (candidatos que ficaram para trás porque a amostra já tinha
+fechado), e `usa_actions`, `min_releases` e `min_runs` contam **só os
+examinados**. Para dizer no artigo quantos candidatos "passam nos filtros", use a
+taxa entre os examinados (aprovados ÷ examinados), não o total de candidatos.
+`candidatos.csv` guarda todos, então os não examinados são os que não aparecem
+em `descartes.csv` nem em `repos.csv`.
+
+### Planejando uma coleta maior
+
+Depois de uma rodada curta, estime o custo para 300 repositórios a partir do
+`custo_api.csv` e do tempo medido (extrapolação linear, ordem de grandeza):
+
+```bash
+python -m pipeline.estimativa --medido 10 --segundos 600 --alvo 300
+```
+
+A seleção percorre todos os candidatos qualquer que seja o `--limite`, então
+seu custo é fixo: a estimativa lê `custo_selecao.csv` e só escala o resto.
+Passe `--segundos-selecao` (impresso no fim da seleção) para tratar o tempo
+do mesmo jeito.
+
+**Limitação da retomada:** o cache guarda respostas 2xx e 404. Respostas
+403, 422 e 410 (Actions indisponível, fatia recusada, issues desligadas) não
+são guardadas e se repetem a cada rodada, então a segunda rodada pode ter
+`chamadas > 0` em alguns endpoints. `custo_api.csv` conta só a execução atual.
 
 ## Cache e retomada
 
