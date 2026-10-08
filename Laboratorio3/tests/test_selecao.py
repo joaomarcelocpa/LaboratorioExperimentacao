@@ -203,7 +203,7 @@ def test_workflows_zerados_tambem_descartam():
 
 
 @responses.activate
-def test_releases_contam_so_a_janela_e_ignoram_rascunho():
+def test_releases_contam_so_a_janela_e_ignoram_rascunho_e_prerelease():
     itens = [
         {"tag_name": "v1", "published_at": "2024-09-30T23:59:59Z"},   # antes
         {"tag_name": "v2", "published_at": "2024-10-01T00:00:00Z"},   # borda
@@ -211,6 +211,8 @@ def test_releases_contam_so_a_janela_e_ignoram_rascunho():
         {"tag_name": "v4", "published_at": "2025-10-01T00:00:00Z"},   # depois
         {"tag_name": "v5", "published_at": "2025-01-01T00:00:00Z", "draft": True},
         {"tag_name": "v6", "published_at": None},
+        {"tag_name": "v7-rc1", "published_at": "2025-01-01T00:00:00Z",
+         "prerelease": True},
     ]
     responses.add(responses.GET, f"{API}/repos/a/a/releases", json=itens)
     assert filtros.releases_na_janela(

@@ -57,10 +57,12 @@ def usa_actions(repo: str) -> bool:
 
 
 def releases_na_janela(repo: str, inicio: date, fim: date) -> int:
-    """Releases publicadas na janela, sem rascunhos.
+    """Releases publicadas na janela, sem rascunhos e sem pré-releases.
 
-    Pré-releases contam: o estudo as trata como releases (freq_release_pre
-    existe justamente para compará-las).
+    É a definição principal de deploy da seção 3 do enunciado. As
+    pré-releases só entram como variante da RQ 07, não no critério de
+    inclusão: contá-las deixaria passar repositório com poucas releases de
+    verdade.
     """
     try:
         itens = http.paginar(f"{API}/repos/{repo}/releases")
@@ -72,7 +74,7 @@ def releases_na_janela(repo: str, inicio: date, fim: date) -> int:
     ate = datetime(fim.year, fim.month, fim.day, 23, 59, 59, tzinfo=timezone.utc)
     total = 0
     for rel in itens:
-        if rel.get("draft"):
+        if rel.get("draft") or rel.get("prerelease"):
             continue
         publicada = _momento(rel.get("published_at"))
         if publicada is not None and de <= publicada <= ate:
