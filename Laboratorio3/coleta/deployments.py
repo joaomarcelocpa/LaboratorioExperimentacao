@@ -28,26 +28,20 @@ def _paginar(session: requests.Session, url: str) -> list[dict]:
     return resultados
 
 
-def coletar_deployments(
-    repo: str,
-    cfg: Config,
-    session: requests.Session,
-) -> pd.DataFrame:
-    """Retorna deployments_df com estado_final de cada deployment de produção."""
+def _deployments_rest(
+    repo: str, cfg: Config, session: requests.Session
+) -> list[dict]:
+    """Caminho REST: uma chamada de statuses para cada deployment."""
     r = session.get(f"{BASE}/repos/{repo}/environments")
     r.raise_for_status()
     envs_data = r.json().get("environments", [])
     nomes_envs = {e["name"] for e in envs_data}
 
     producao = nomes_envs & set(cfg.ambientes_producao)
-    if not producao:
-        return df_vazio(SCHEMAS["deployments"])
-
     linhas: list[dict] = []
     for env in producao:
         url = f"{BASE}/repos/{repo}/deployments?environment={env}&per_page=100"
-        deployments = _paginar(session, url)
-        for dep in deployments:
+        for dep in _paginar(session, url):
             dep_id = dep["id"]
             sr = session.get(f"{BASE}/repos/{repo}/deployments/{dep_id}/statuses")
             sr.raise_for_status()
@@ -61,5 +55,23 @@ def coletar_deployments(
                 "sha": dep["sha"],
                 "estado_final": estado_final,
             })
+    return linhas
 
+
+def coletar_deployments(
+    repo: str,
+    cfg: Config,
+    session: requests.Session,
+) -> pd.DataFrame:
+    """Retorna deployments_df com estado_final de cada deployment de produção.
+
+    A sessão do pipeline sabe pedir isso ao GraphQL, 100 deployments por
+    chamada; sem ela (ou se o repositório não for achado pelo nome), a REST
+    faz uma chamada de statuses por deployment.
+    """
+    linhas: list[dict] | None = None
+    if hasattr(session, "deployments_com_estado"):
+        linhas = session.deployments_com_estado(repo, list(cfg.ambientes_producao))
+    if linhas is None:
+        linhas = _deployments_rest(repo, cfg, session)
     return pd.DataFrame(linhas) if linhas else df_vazio(SCHEMAS["deployments"])

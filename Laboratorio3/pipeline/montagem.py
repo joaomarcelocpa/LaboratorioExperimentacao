@@ -9,6 +9,7 @@ import pandas as pd
 
 from metricas.cfr import cfr_ci, cfr_issues, pct_falhas_flaky
 from metricas.classificacao import classificar_metrica, classificar_repo
+from metricas.estaveis import visao_estavel
 from metricas.corretiva import cfr_releases, recuperacao_releases, rework_rate
 from metricas.frequencia import frequencia
 from metricas.lead_time import lead_time_por_commit, lead_time_por_release, pct_commits_bot
@@ -59,23 +60,28 @@ def montar_metricas(
         freq_dep_ = (frequencia(dep_suc, cfg.janela_inicio, cfg.janela_fim, coluna_data="criado_em")
                      if not dep_suc.empty else 0.0)
 
-        lt_serie = lead_time_por_release(rel, com) if not rel.empty else pd.Series(dtype=float)
+        # Métricas principais (lead time, CFR, recuperação por release, rework):
+        # só releases estáveis, com os commits das pré-releases na estável que
+        # os entrega. Veja metricas/estaveis.py.
+        rel_e, com_e = visao_estavel(rel, com)
+
+        lt_serie = lead_time_por_release(rel_e, com_e) if not rel_e.empty else pd.Series(dtype=float)
         lt_rel = float(lt_serie.median()) if not lt_serie.empty else float("nan")
 
-        lt_com = lead_time_por_commit(rel, com) if not rel.empty else float("nan")
-        lt_com_sb = lead_time_por_commit(rel, com, excluir_bots=True) if not rel.empty else float("nan")
-        pct_bot = pct_commits_bot(com) if not com.empty else float("nan")
+        lt_com = lead_time_por_commit(rel_e, com_e) if not rel_e.empty else float("nan")
+        lt_com_sb = lead_time_por_commit(rel_e, com_e, excluir_bots=True) if not rel_e.empty else float("nan")
+        pct_bot = pct_commits_bot(com_e) if not com_e.empty else float("nan")
 
-        cfr_b = cfr_releases(rel, com, cfg.janela_fim) if not rel.empty else float("nan")
-        rec_h_serie = recuperacao_releases(rel, com, cfg.janela_fim) if not rel.empty else pd.Series(dtype=float)
+        cfr_b = cfr_releases(rel_e, com_e, cfg.janela_fim) if not rel_e.empty else float("nan")
+        rec_h_serie = recuperacao_releases(rel_e, com_e, cfg.janela_fim) if not rel_e.empty else pd.Series(dtype=float)
         rec_h = float(rec_h_serie.median()) if not rec_h_serie.empty else float("nan")
-        rr = rework_rate(rel, com) if not rel.empty else float("nan")
-        rr_7d = rework_rate(rel, com, limite_dias=7) if not rel.empty else float("nan")
+        rr = rework_rate(rel_e, com_e) if not rel_e.empty else float("nan")
+        rr_7d = rework_rate(rel_e, com_e, limite_dias=7) if not rel_e.empty else float("nan")
 
         iss = (issues_df[issues_df["repo"] == repo]
                if issues_df is not None and not issues_df.empty else pd.DataFrame())
-        cfr_c = (cfr_issues(rel, iss, cfg.n_dias_issue, "janela", cfg.janela_fim)
-                 if not iss.empty and not rel.empty else float("nan"))
+        cfr_c = (cfr_issues(rel_e, iss, cfg.n_dias_issue, "janela", cfg.janela_fim)
+                 if not iss.empty and not rel_e.empty else float("nan"))
 
         run = _do_repo(runs_df, repo)
         att = _do_repo(attempts_df, repo)

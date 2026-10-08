@@ -35,6 +35,13 @@ class RespostaCompat:
 
 
 class SessaoHttp:
+    def deployments_com_estado(self, repo: str, ambientes: list[str]) -> list[dict] | None:
+        """Deployments dos ambientes com o estado final via GraphQL (100 por
+        chamada), ou None se o repositório não for achado e o coletor precisar
+        do caminho REST."""
+        from coleta.deployments_graphql import deployments_com_estado
+        return deployments_com_estado(repo, ambientes)
+
     def tags_com_data(self, repo: str) -> list[dict] | None:
         """Tags com data de commit via GraphQL (100 por chamada), ou None se o
         repositório não for achado e o coletor precisar do caminho REST."""
