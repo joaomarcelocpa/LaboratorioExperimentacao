@@ -307,3 +307,66 @@ def test_custo_da_selecao_e_gravado_a_parte(tmp_path):
     executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], selecionar=selecionar))
     sel = pd.read_csv(tmp_path / "custo_selecao.csv")
     assert sel["chamadas"].sum() == 1
+
+
+# --- checkpoints: algo para entregar mesmo se a rodada for interrompida --------
+
+def _repos_em(pasta, nome):
+    return sorted(pd.read_csv(pasta / nome)["repo"].unique())
+
+
+def test_ctrl_c_no_segundo_repo_deixa_o_primeiro_completo_em_todos_os_csvs(tmp_path):
+    def runs(repo, branch, inicio, fim):
+        if repo == "o/b":
+            raise KeyboardInterrupt
+        return _etapas([]).coletar_runs(repo, branch, inicio, fim)
+
+    with pytest.raises(KeyboardInterrupt):
+        executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a", "o/b"], coletar_runs=runs))
+    for nome in ("repos.csv", "metricas.csv", "releases.csv", "runs.csv"):
+        # o/b já tinha releases coletadas quando caiu, mas não ficou completo
+        assert _repos_em(tmp_path, nome) == ["o/a"], nome
+    assert (tmp_path / "custo_api.csv").exists()
+
+
+def test_o_checkpoint_e_gravado_depois_de_cada_repo(tmp_path):
+    vistos = []
+
+    def releases(repo, cfg, session):
+        if repo == "o/b":  # no começo do 2º repo, o 1º já tem de estar no disco
+            vistos.extend(_repos_em(tmp_path, "metricas.csv"))
+        return _etapas([]).coletar_releases(repo, cfg, session)
+
+    executar(_cfg(), pasta=tmp_path,
+             etapas=_etapas(["o/a", "o/b"], coletar_releases=releases))
+    assert vistos == ["o/a"]
+
+
+def test_401_no_meio_preserva_o_que_ja_estava_completo(tmp_path):
+    def releases(repo, cfg, session):
+        if repo == "o/b":
+            raise http.ErroDeHTTP("Bad credentials", 401)
+        return _etapas([]).coletar_releases(repo, cfg, session)
+
+    with pytest.raises(http.ErroDeHTTP):
+        executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a", "o/b"], coletar_releases=releases))
+    assert _repos_em(tmp_path, "metricas.csv") == ["o/a"]
+
+
+def test_metadados_sao_pedidos_repo_a_repo(tmp_path):
+    pedidos = []
+
+    def repos(lista, cfg, commits_df):
+        pedidos.append(list(lista))
+        return _etapas([]).coletar_repos(lista, cfg, commits_df)
+
+    executar(_cfg(), pasta=tmp_path,
+             etapas=_etapas(["o/a", "o/b"], coletar_repos=repos))
+    assert pedidos == [["o/a"], ["o/b"]]
+
+
+def test_gravacao_nao_deixa_arquivo_temporario(tmp_path):
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a", "o/b"]))
+    assert not [p.name for p in tmp_path.iterdir() if p.name.endswith(".tmp")]

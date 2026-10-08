@@ -70,7 +70,14 @@ runs, issues de bug, metadados) e cálculo das métricas. `--limite N` troca o
 `n_repos` do config **antes** do sorteio, então `funil.csv` fecha com N.
 
 Um repositório que falha é registrado e os demais seguem; o resumo no fim da
-execução lista quem falhou. A coleta recusa rodar com a janela ainda marcada
+execução lista quem falhou.
+
+**Checkpoint:** cada repositório é coletado por inteiro e, ao terminar, todos os
+CSVs de `data/processed/` são regravados (cada gravação é um checkpoint atômico) só com os
+repositórios **completos**. Se a rodada for interrompida (Ctrl-C, queda, token
+inválido), os CSVs já refletem tudo o que ficou pronto até ali, e um repositório
+interrompido no meio não aparece em arquivo nenhum. Rodar de novo continua do
+cache. A coleta recusa rodar com a janela ainda marcada
 como `placeholder: true`.
 
 ### Saídas (`data/processed/`)
