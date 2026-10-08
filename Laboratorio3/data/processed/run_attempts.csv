@@ -1,0 +1,5 @@
+repo,run_id,tentativa,conclusion,inicio,fim
+mozilla/pontoon,31645452635,1,success,2026-08-12T22:05:28Z,2026-08-12T22:08:40Z
+axadrn/shadcn-templ,20480490107,1,failure,2025-12-24T06:59:47Z,2025-12-24T07:00:27Z
+autonomousapps/dependency-analysis-gradle-plugin,29615239221,1,failure,2026-07-17T21:35:44Z,2026-07-17T21:48:24Z
+autonomousapps/dependency-analysis-gradle-plugin,26895873648,1,failure,2026-06-03T15:42:36Z,2026-06-03T15:59:11Z
