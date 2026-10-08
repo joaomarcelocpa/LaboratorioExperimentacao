@@ -1,0 +1,1918 @@
+repo,tag,publicada_em,prerelease,na_janela,body
+mozilla/pontoon,v2026.09.23,2026-09-23T23:12:46Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 61e7e7f468889b46de29152d94fe2774a00664a8 -->
+
+## What's Changed
+### Changes
+* Move Pontoon API docs to public documentation at /docs by @flodolo in https://github.com/mozilla/pontoon/pull/4555
+* Contributors: Fix expanded dashboard timestamp links by @ayshushus in https://github.com/mozilla/pontoon/pull/4554
+* Fix insights active-users query window (relativedelta years=1) by @HarshRajSinghania in https://github.com/mozilla/pontoon/pull/4558
+* Fix warnings in generated API schema by @nyomanjyotisa in https://github.com/mozilla/pontoon/pull/4553
+
+## New Contributors
+* @HarshRajSinghania made their first contribution in https://github.com/mozilla/pontoon/pull/4558
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.22...v2026.09.23"
+mozilla/pontoon,v2026.09.22,2026-09-22T23:13:56Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 4cfec2d6831a7d35d35a4fdd855df59ce3a44a7c -->
+
+## What's Changed
+### Changes
+* Expose pretranslate inputs in API UI by @nyomanjyotisa in https://github.com/mozilla/pontoon/pull/4548
+* Use API endpoint for Upload translations in translate view by @flodolo in https://github.com/mozilla/pontoon/pull/4550
+
+## New Contributors
+* @nyomanjyotisa made their first contribution in https://github.com/mozilla/pontoon/pull/4548
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.21...v2026.09.22"
+mozilla/pontoon,v2026.09.21,2026-09-21T23:14:21Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 80926b91bf1216937e41d1cd56a723320a95ea8a -->
+
+## What's Changed
+### Dependencies
+* Bump the github-actions group with 4 updates by @dependabot[bot] in https://github.com/mozilla/pontoon/pull/4542
+### Changes
+* Backfill: ActionLog data, update implicit actions field by @ayshushus in https://github.com/mozilla/pontoon/pull/4535
+* Add API to upload translated files as suggestions by @flodolo in https://github.com/mozilla/pontoon/pull/4532
+* Re-parse Fluent messages with function references by @mathjazz in https://github.com/mozilla/pontoon/pull/4547
+* Contributors: Exclude self-reviews from the dashboard by @ayshushus in https://github.com/mozilla/pontoon/pull/4528
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.17...v2026.09.21"
+mozilla/pontoon,v2026.09.17,2026-09-17T23:13:16Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 83842c89adff6e4482a8a985935802ead268fd65 -->
+
+## What's Changed
+### Changes
+* Copy complete locale translations by @Hanabi9248 in https://github.com/mozilla/pontoon/pull/4521
+* Fix obsolete Google Translate locale link by @tahakotil in https://github.com/mozilla/pontoon/pull/4523
+* Add API to extract terms from provided text by @flodolo in https://github.com/mozilla/pontoon/pull/4516
+* Releases: Attach SBOM to release by @ayshushus in https://github.com/mozilla/pontoon/pull/4537
+
+## New Contributors
+* @Hanabi9248 made their first contribution in https://github.com/mozilla/pontoon/pull/4521
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.16...v2026.09.17"
+mozilla/pontoon,v2026.09.16,2026-09-16T23:14:10Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at edbb875b114833155d19f4d2a8159fa935d1362a -->
+
+## What's Changed
+### Changes
+* Fix warnings on HTML elements in placeholders by @flodolo in https://github.com/mozilla/pontoon/pull/4529
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.15...v2026.09.16"
+mozilla/pontoon,v2026.09.15,2026-09-15T23:14:20Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at a44fc3a238540acbda9ba496f98c4c800a13f66f -->
+
+## What's Changed
+### Changes
+* Add API to upload translated files as pretranslation by @flodolo in https://github.com/mozilla/pontoon/pull/4511
+* Fix placeholder checks for HTML elements (Android and Xcode) by @flodolo in https://github.com/mozilla/pontoon/pull/4525
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.14...v2026.09.15"
+mozilla/pontoon,v2026.09.14,2026-09-14T23:13:54Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at fdaa88c504d938abcd6c99315559b8b4f0f11c27 -->
+
+## What's Changed
+### Changes
+* Use the same attribute for Entity and Translation previews by @mathjazz in https://github.com/mozilla/pontoon/pull/4514
+* use current string id for resource path by @baha-bouali in https://github.com/mozilla/pontoon/pull/4515
+* Checks: Persist placeholder warnings to DB by @ayshushus in https://github.com/mozilla/pontoon/pull/4499
+* Source locale dropdown in Batch actions to open upwards instead of downwards by @baha-bouali in https://github.com/mozilla/pontoon/pull/4518
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.10...v2026.09.14"
+mozilla/pontoon,v2026.09.10,2026-09-10T23:12:48Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 17a20b00f00fe71c813d944526c442ef6e2a2e2c -->
+
+## What's Changed
+### Changes
+* Expose public API to upload translations by @flodolo in https://github.com/mozilla/pontoon/pull/4503
+* Follow up to #4494: Add regression test for uppercase terms popup by @baha-bouali in https://github.com/mozilla/pontoon/pull/4508
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.09...v2026.09.10"
+mozilla/pontoon,v2026.09.09,2026-09-09T23:14:07Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 2f529d6a86168ebc60d1f3dd15153f54fb432a55 -->
+
+## What's Changed
+### Changes
+* Update to moz-l10n 0.14.2 & parse patterns as editable by @eemeli in https://github.com/mozilla/pontoon/pull/4505
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.08...v2026.09.09"
+mozilla/pontoon,v2026.09.08,2026-09-08T23:14:26Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at b97a263e3ce2d3d49143f5ceaf473ea6e3abafc6 -->
+
+## What's Changed
+### Changes
+* Fix term popup not showing for uppercase terms by @baha-bouali in https://github.com/mozilla/pontoon/pull/4494
+* Update Time Range chart colors when the theme changes by @flodolo in https://github.com/mozilla/pontoon/pull/4496
+* add regex testing for non-alpha characters by @baha-bouali in https://github.com/mozilla/pontoon/pull/4500
+* Update data-theme when the user picks a theme by @MaxFreedomPollard in https://github.com/mozilla/pontoon/pull/4501
+* Don't reject strings with partial files in Upload translations by @flodolo in https://github.com/mozilla/pontoon/pull/4491
+
+## New Contributors
+* @baha-bouali made their first contribution in https://github.com/mozilla/pontoon/pull/4494
+* @MaxFreedomPollard made their first contribution in https://github.com/mozilla/pontoon/pull/4501
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.03...v2026.09.08"
+mozilla/pontoon,v2026.09.03,2026-09-03T23:13:40Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 1d860eb7618220fa0893d4849ade4dd51415a73b -->
+
+## What's Changed
+### Changes
+* Remove Heroku-specific code and references by @mathjazz in https://github.com/mozilla/pontoon/pull/4485
+* Copy batch action: show only locales available in current project by @MundiaNderi in https://github.com/mozilla/pontoon/pull/4435
+* Remove code only needed for the now deprectated Heroku button by @mathjazz in https://github.com/mozilla/pontoon/pull/4490
+* Replace Bleach with JustHTML by @flodolo in https://github.com/mozilla/pontoon/pull/4489
+* Keep repo file operations inside the checkout by @mathjazz in https://github.com/mozilla/pontoon/pull/4487
+* Fix CSP configuration for django-csp 4 (reported by @timhaines) by @mathjazz in https://github.com/mozilla/pontoon/pull/4493
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.09.02...v2026.09.03"
+mozilla/pontoon,v2026.09.02,2026-09-02T23:13:52Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at bf3f52013b4b169ba5829726ed49dedf274db840 -->
+
+## What's Changed
+### Dependencies
+* Bump browserslist from 4.25.4 to 4.28.8 by @dependabot[bot] in https://github.com/mozilla/pontoon/pull/4480
+### Changes
+* Pin monthly activity test to a date by @flodolo in https://github.com/mozilla/pontoon/pull/4471
+* Always include source attributes & declarations in Editor base value by @eemeli in https://github.com/mozilla/pontoon/pull/4427
+* Use ISO 15924 values for locale script by @flodolo in https://github.com/mozilla/pontoon/pull/4436
+* Use all Fluent variants for terminology lookup by @flodolo in https://github.com/mozilla/pontoon/pull/4469
+* Translate: Log StringNotFound UX events for experimentation by @ayshushus in https://github.com/mozilla/pontoon/pull/4454
+* Ignore many plural rule for cs, lt, sk by @mathjazz in https://github.com/mozilla/pontoon/pull/4475
+* Remove the local signup route (reported by @timhaines) by @mathjazz in https://github.com/mozilla/pontoon/pull/4482
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.08.31...v2026.09.02"
+mozilla/pontoon,v2026.08.31,2026-08-31T23:14:11Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 90d1370e410ab983779ffcff5f33a094e7cc4d34 -->
+
+## What's Changed
+### Changes
+* Docs: Fix pretranslation guidelines link by @tahakotil in https://github.com/mozilla/pontoon/pull/4459
+* Unify vertical and horizontal space between accesskey candidate buttons by @mathjazz in https://github.com/mozilla/pontoon/pull/4457
+* Send Google Translate API key in a header (reported by @timhaines) by @mathjazz in https://github.com/mozilla/pontoon/pull/4466
+* Fix placeable insertion after a translation is rejected by @flodolo in https://github.com/mozilla/pontoon/pull/4465
+* Label plural catchall with the locale's category by @mathjazz in https://github.com/mozilla/pontoon/pull/4467
+* Translate: ability to save long translations by @ayshushus in https://github.com/mozilla/pontoon/pull/4449
+* Stop reintroducing the wrong plural catchall by @mathjazz in https://github.com/mozilla/pontoon/pull/4468
+
+## New Contributors
+* @tahakotil made their first contribution in https://github.com/mozilla/pontoon/pull/4459
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.08.28...v2026.08.31"
+mozilla/pontoon,v2026.08.28,2026-08-28T01:45:10Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at 5eab94c0967cf4c3f77f587afd919738e6d84eb8 -->
+
+## What's Changed
+### Changes
+* Simplify LLM prompt for new frontier models by @flodolo in https://github.com/mozilla/pontoon/pull/4448
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.08.27...v2026.08.28"
+mozilla/pontoon,v2026.08.27,2026-08-27T00:11:59Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at c7ba26f242724d5798bcbad55686fe6777b630c1 -->
+
+## What's Changed
+### Changes
+* Community Health: monthly community health report system by @functionzz in https://github.com/mozilla/pontoon/pull/4336
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.08.25...v2026.08.27"
+mozilla/pontoon,v2026.08.25,2026-08-25T23:09:34Z,False,True,"<!-- Release notes generated using configuration in .github/release.yml at d63a6fcf4e8de0bbf88c4b07e0b1b4c5a3d047fa -->
+
+## What's Changed
+### Dependencies
+* Bump the github-actions group with 2 updates by @dependabot[bot] in https://github.com/mozilla/pontoon/pull/4437
+### Changes
+* Batch actions: fetch all pages when requesting locales from API by @MundiaNderi in https://github.com/mozilla/pontoon/pull/4420
+* Create localizer facing community health score documentation by @bcolsson in https://github.com/mozilla/pontoon/pull/4422
+* CHS: don't hardcode values, simplify import by @flodolo in https://github.com/mozilla/pontoon/pull/4428
+* CHS: reviews should count towards threshold even without translations by @flodolo in https://github.com/mozilla/pontoon/pull/4429
+* Automate release process based on deployment by @functionzz in https://github.com/mozilla/pontoon/pull/4393
+* Only run automated release workflow on main repository by @flodolo in https://github.com/mozilla/pontoon/pull/4434
+* Remove warning on SECRET_KEY for MozCloud Docker build by @flodolo in https://github.com/mozilla/pontoon/pull/4432
+* Don't let one failed entity abort pretranslation by @mathjazz in https://github.com/mozilla/pontoon/pull/4406
+* Write resources without fetch, using data model fields by @eemeli in https://github.com/mozilla/pontoon/pull/4391
+* Set initial value for hidden ""sources"" radio button in /admin by @flodolo in https://github.com/mozilla/pontoon/pull/4440
+* Fix tutorial entity values by @julen in https://github.com/mozilla/pontoon/pull/4446
+
+
+**Full Changelog**: https://github.com/mozilla/pontoon/compare/v2026.08.19...v2026.08.25"
+mozilla/pontoon,v2026.08.19,2026-08-19T08:54:25Z,False,True,"This is the first release ahead of the automated release process that will be implemented in #4393.
+
+Going forward, releases will be generated matching [pontoon.mozilla.org](https://pontoon.mozilla.org/) deployments, at most once a day.
+
+## What's Changed
+
+These are the main changes from the latest deployment on 2026-08-14.
+
+### Features
+* Composed Machinery is used to autofill translation in case of 100% match (#4417). The 100% notification has been moved (#4413).
+* Create lock in DB instead of cache to prevent multiple sync operations (#4418).
+* Check permissions on individual strings in the All Projects view (#4412).
+
+### Bug fixes
+* Fixed issues with machinery and suggestions on locales using a different category than `other` as default (#4405, #4407)."
+mozilla/pontoon,2018-12-19,2018-12-19T14:37:35Z,False,False,"We currently don't cut releases of Pontoon. Feel free to use the latest [`main`](https://github.com/mozilla/pontoon/tree/main/). Old Release Notes are still accessible on this page, but be aware that they are very old and not meant to be used anymore."
+axadrn/shadcn-templ,v2.0.0-beta.10,2026-09-22T08:29:38Z,False,True,"### Breaking Changes
+
+- Component JavaScript is now bundled at build time. Upgrade the module with `go get github.com/axadrn/shadcn-templ/v2@v2.0.0-beta.10` and the CLI with `go install github.com/axadrn/shadcn-templ/v2/cmd/shadcn-templ@v2.0.0-beta.10`. Remove the old `components/scripts.go`, `components/embed.go` and `/components/{bundle}` route; update the script tag with `shadcn-templ add scripts --overwrite`, then run `shadcn-templ bundle`. Serve `assets/js` at `/assets/js` and render `components.Scripts()` once in the layout. Run the bundle command before deployment builds; use `bundle --watch` during development. See the [JavaScript migration guide](https://shadcn-templ.com/docs/installation#javascript).
+
+### Minor Changes
+
+- Charts support explicit numeric-axis ticks and domains, `AllowDataOverflow`, numeric-axis `TickCount`, and Go `TickFormatter` labels. Line and area gaps, animated dashed lines, per-row `DotProps.Show`, hidden series and additional curve constants are supported.
+- The mobile sidebar preserves its open state across viewport changes, removes its modal effects on desktop, and reopens when returning to mobile. `tui.sidebar.openMobile()` now reports that state correctly.
+- Improved ARIA relationships, tab navigation, menu keyboard opening and focus handling across tabs, accordion, menus, popover, select, combobox, buttons and toggles.
+- Modal components share one reference-counted scroll lock, so DOM updates and closing an inner popup no longer unlock an open outer modal. Narrow touch-opened menus and selects allow background scrolling.
+- Escape is handled by the focused inner popup before outer layers. Closing a dropdown inside a sheet keeps the sheet open; nested drawers close from inside out, and submenu Escape closes the menu tree.
+
+### Patch Changes
+
+- Fixed clipped dropdown submenus so their items receive pointer interaction again.
+- Fixed popup focus during opening transitions in Chromium and WebKit.
+- Preserved trigger IDs supplied through button attributes, keeping popup labels connected to their triggers.
+- Migrated missing script-bundle configuration even when adding a template-only component such as Button.
+- Scaffold assets use production serving by default; development serving requires an explicit development flag.
+"
+axadrn/shadcn-templ,v2.0.0-beta.9,2026-09-03T06:05:20Z,False,True,"### Patch Changes
+
+- Compiled runtime-created Chart and Toast styles during registry builds, so CLI-installed components retain their selected style and no longer ship internal `cn-*` markers.
+- Resolved the `font-heading` utility from the project stylesheet, so components use it only when `--font-heading` is defined.
+- Added exhaustive registry checks across all 83 components, eight styles, and supported option profiles."
+axadrn/shadcn-templ,v1.13.2,2026-08-28T17:34:04Z,False,True,"## Fixed
+
+- Restore syntax highlighting for Hover Card documentation code blocks (#607)."
+axadrn/shadcn-templ,v2.0.0-beta.8,2026-08-23T12:00:47Z,False,True,"### Patch Changes
+
+- Fixed Select popups rendering outside the viewport on scrolled pages, with Base UI-compatible positioning for mouse, keyboard, touch, controlled state, and fallback placement. (#606)
+- Corrected popup transform origins across Select, Combobox, Dropdown Menu, Popover, Hover Card, Tooltip, and Context Menu."
+axadrn/shadcn-templ,v2.0.0-beta.7,2026-08-22T15:22:56Z,False,True,"### Patch Changes
+
+- Fixed unresponsive tabs in the Create → Get Code dialog. (#605)"
+axadrn/shadcn-templ,v2.0.0-beta.6,2026-08-18T09:19:50Z,False,True,"### Patch Changes
+
+- Components installed via the CLI no longer contain glued class names like `select-nonepr-2`: the registry style transform trims each string literal, which broke variant classes that were concatenated onto their base classes. InputGroup addons and buttons, Field orientations and ItemMedia variants now pass their variant classes as separate arguments, and a guard test keeps class literals self contained. The docs previews were never affected. (acb7d7e1)"
+axadrn/shadcn-templ,v2.0.0-beta.5,2026-08-18T05:58:16Z,False,True,"### Patch Changes
+
+- Adding a JavaScript component via the CLI now installs the shared script runtime automatically, including support for custom component aliases, and document the hashed script bundle route in the installation guide. (#603)
+"
+axadrn/shadcn-templ,v1.13.1,2026-08-18T06:12:21Z,False,True,"### Patch Changes
+
+- Popovers now close correctly: dropdown, selectbox, and timepicker dismissal is routed through the shared popover API, native open-state detection is fixed, and ESC closes popovers again. (#601)
+- Docs code panes bake their syntax highlights at build time.
+- The site banner carries the rebrand and the live domain.
+"
+axadrn/shadcn-templ,v2.0.0-beta.4,2026-08-15T08:50:05Z,False,True,"### Major Changes
+
+- Add all 27 shadcn Base UI blocks with the blocks gallery, previews, source viewer, registry, and CLI support.
+- Add the Resizable component with accessible pointer and keyboard controls, docs, and demos.
+
+### Breaking Changes
+
+- Interactive component state now follows Base UI attributes such as `data-open`, `data-closed`, `data-selected`, and `aria-expanded` instead of legacy Radix state selectors.
+
+### Minor Changes
+
+- Bring affected components in line with the current shadcn Base UI controlled/default state and interaction behavior.
+- Improve floating popup positioning and lifecycle, drawer modality, and sidebar interactions.
+- Translate framework-specific examples into Go and templ equivalents.
+"
+axadrn/shadcn-templ,v2.0.0-beta.3,2026-08-07T12:17:12Z,False,True,"### Minor Changes
+
+- chart: escape dismisses the tooltip until the coordinate changes like recharts (#599)
+- site: the schema urls serve real json schemas
+
+### Patch Changes
+
+- chart: the tooltip wires mouse and touch events like the recharts wrapper (#599)
+- chart: the keyboard layer follows recharts' interaction priority (#599)
+- chart: the hover overlays render through the entrance animation like recharts (#599)
+- select: the touch tap opens on release like base ui does
+- select: the press guards from base ui keep a quick tap from self dismissing"
+axadrn/shadcn-templ,v2.0.0-beta.2,2026-08-06T09:00:46Z,False,True,"templUI is now shadcn-templ. Same project, new name, with shadcn's blessing.
+
+This release moves everything to the new home:
+- Module path: `github.com/axadrn/shadcn-templ/v2`
+- CLI: `go install github.com/axadrn/shadcn-templ/v2/cmd/shadcn-templ@latest`
+- Docs and registry: https://shadcn-templ.com
+- Per-page open-graph images, new brand mark
+
+beta.1 users: reinstall the CLI with the command above and replace `templui/templui/v2` with `axadrn/shadcn-templ/v2` in your imports. templUI v1 keeps living at https://templui.io and `github.com/templui/templui`.
+"
+axadrn/shadcn-templ,v1.13.0,2026-08-05T07:47:54Z,False,True,"### Minor Changes
+
+- chart: respect an explicit Responsive false via chart.Bool (#592)
+
+### Patch Changes
+
+- cli: correct the --force hint in init messages (#587)
+- cli: fall back to the module version in go tool builds (#591)
+- popover: guard :popover-open for Safari before 17 (#583)
+- sidebar: make the collapsed group label click-transparent (#579)
+"
+axadrn/shadcn-templ,v2.0.0-beta.1,2026-08-04T21:18:57Z,True,True,"### Major Changes
+
+- rewrite every component against shadcn/ui and Base UI, with the client behavior ported to dependency-free vanilla JavaScript
+- add eight visual styles and a registry that compiles every component for the chosen style
+- add templui create, typeset and charts
+- add project templates and presets to the CLI
+- move the module path to `github.com/templui/templui/v2`
+"
+axadrn/shadcn-templ,v1.12.1,2026-06-28T10:14:45Z,False,True,"### Fixed
+
+- **dialog, sheet:** Force a reflow before opening so Safari renders the off-screen start position first, restoring the missing slide-in (enter) animation on Safari (most visible on the mobile sidebar, which is built on Sheet → Dialog) (#560, thanks @louishamelers)
+- **dialog:** Skip already-initialized dialogs when the MutationObserver re-scans, so unrelated DOM patches (e.g. Datastar updating content inside an open dialog) no longer rewrite state on every dialog and spiral into a feedback loop / UI lockup (#562, thanks @akthe-at)
+- **dropdown:** Switched to `overflow-y-auto`/`overflow-x-hidden` with a more generous, viewport-bounded max height so a normal-length menu no longer renders with a premature scrollbar (#563, thanks @RimJur)
+
+**Full Changelog**: https://github.com/templui/templui/compare/v1.12.0...v1.12.1"
+axadrn/shadcn-templ,v1.12.0,2026-06-01T08:54:29Z,False,True,"### Added
+
+- hovercard: Added a Hover Card component that shows rich content on hover, built as a thin wrapper around Popover with hover defaults (150ms open / 300ms close)
+- popover: Hover-based popovers (Tooltip, Hover Card) now also open on keyboard focus and close on blur for accessibility
+
+### Changed
+
+- tooltip: Default open/close delay is now instant (0ms) to match shadcn; the tooltip showcases no longer hardcode a 500ms delay
+
+### Fixed
+
+- dialog: Initialize dialogs added to the DOM after load (e.g. via HTMX swaps) so their triggers work without a full page reload (#557)
+- popover: An explicit hover delay of `0` is now respected as instant instead of falling back to 100ms, so instant tooltips/popovers are configurable"
+axadrn/shadcn-templ,v1.11.2,2026-05-23T11:57:23Z,False,True,"### Fixed
+
+- popover: Made the exclusive close behavior skip ancestor popovers so a popover-based component (SelectBox, Dropdown) nested inside another popover no longer closes its parent when opened; the public `closeAll` / `window.tui.popover.closeAll` API keeps its close-everything semantics (#555, thanks @derkan)"
+axadrn/shadcn-templ,v1.11.1,2026-05-12T09:22:21Z,False,True,"### Fixed
+
+- dialog, sheet: Removed the inner `data-tui-dialog-panel` wrapper whose `grid` layout broke Sheet's flex height chain, causing mobile sidebar content to not scroll and footers with `mt-auto` to not stick to the bottom; layout (`flex-col`, `gap-4`, `p-6`) now sits directly on the native `<dialog>` (#553, thanks @hainguyen27798)"
+axadrn/shadcn-templ,v1.11.0,2026-05-11T11:28:00Z,False,True,"### Added
+
+- calendar: Added range selection via a new `SelectionMode` (single/range) plus `EndValue` and `EndName` props, with a corresponding range showcase (#520, #552, thanks @anaelorlinski)
+- datepicker: Forwarded the new calendar range props and rendered the selected value as `start – end` when in range mode, with a corresponding range showcase
+- popover: Added `window.tui.popover.closeNearest(element)` so parent code can close the nearest enclosing popover from outside the trigger (#552)
+
+### Changed
+
+- calendar: Renamed the selection event from `calendar-date-selected` to `calendar-selected` and unified its payload for both single and range modes; update any direct listeners (breaking change) (#552)
+
+### Fixed
+
+- popover: Switched clickaway to `pointerdown` so re-rendering popover content during a click no longer triggers a false outside-click and immediate close (#552)"
+axadrn/shadcn-templ,v1.10.1,2026-05-11T08:30:21Z,False,True,"### Fixed
+
+- dialog: Scoped content resolution to the dialog's own root so a trigger only opens content it owns, fixing cases where a sheet (or dialog) trigger opened a dialog nested between trigger and content (#547, #551, thanks @primableatom)"
+axadrn/shadcn-templ,v1.10.0,2026-04-18T06:39:11Z,False,True,"### Added
+
+- slider: Added a Range component for selecting a value range with two handles
+- dialog: Added optional modal mode via `DisableModal bool` on `dialog.Content`, allowing the native backdrop to be disabled for dialogs that contain nested overlays (#541, #542, thanks @BillBuilt)
+
+### Changed
+
+- slider: Rebuilt the slider around a custom implementation, replacing the native `<input type=""range"">`; existing usages will need to be updated to the new component API (breaking change)
+
+### Fixed
+
+- popover: Ignored hover-based open/close triggers on touch devices so tooltips and hover-popovers no longer appear unexpectedly on mobile (#539, #546)"
+axadrn/shadcn-templ,v1.9.6,2026-04-14T10:17:59Z,False,True,"### Fixed
+
+- checkbox: Fixed reactive binding so it is only applied to child checkboxes, not the parent, preventing incorrect state propagation in checkbox groups"
+axadrn/shadcn-templ,v1.9.5,2026-04-08T05:43:16Z,False,True,"## Fixed
+- docs: Added the previously missing sidebar color variables to the docs styling guide so sidebar theming is easier to customize
+- calendar: Preserved startOfWeek=0 so Sunday-first calendars no longer fall back to the default start-of-week value. Closes #538.
+- popover: Restored the minimal fade animation for popover content transitions. Closes #540."
+axadrn/shadcn-templ,v1.9.4,2026-04-01T15:00:40Z,False,True,"### Fixed
+
+- utils: Restored the generic `If` and `IfElse` helpers after `v1.9.3`, so existing non-string uses compile again while keeping the `If[T any]` fix for non-`comparable` types (#537)
+"
+axadrn/shadcn-templ,v1.9.3,2026-04-01T06:23:38Z,False,True,"### Changed
+
+- dialog,sheet: Rebuilt dialog-based overlays around the native `<dialog>` element, simplifying trigger targeting, click-away handling, ESC handling, and sheet positioning while removing the previous duplicated overlay-layer approach (breaking for `dialog.Content` / `sheet.Content` users who were setting `ID` or `Open` there) (#534)
+
+### Fixed
+
+- datepicker: Fixed hidden-input ownership so date selections and reactive value updates stay in sync without duplicate calendar bindings (#536)
+- docs: Fixed the docs sidebar active-state and scroll reset handling after HTMX 4 swaps
+- docs: Fixed Tailwind setup instructions to require the standalone `tailwindcss` CLI explicitly instead of the previous `npx` fallback
+- utils: Fixed `If` to accept any value type instead of only `comparable`
+- utils: Fixed `TwIf` and `TwIfElse` to always return strings, avoiding generic-type mismatches in templ/class helpers
+"
+axadrn/shadcn-templ,v1.9.2,2026-03-23T08:19:32Z,False,True,"## Fixed
+
+- Fixed embedded component script routes on Windows by switching to slash-separated paths when reading from the embedded filesystem, so `/templui/js/...` no longer returns `404` for valid component assets. Fixes #526.
+- Fixed the import workflow Tailwind watcher example to resolve `TEMPLUI_PATH` with `go list -mod=mod`, which restores vendored and Docker-based setups. Fixes #527.
+"
+axadrn/shadcn-templ,v1.9.1,2026-03-18T17:14:30Z,False,True,"### Fixed
+
+- popover: Fixed the unminified Floating UI script load order so popover-based components no longer crash with `detectOverflow` errors when `utils.UseUnminifiedScripts = true`."
+axadrn/shadcn-templ,v1.9.0,2026-03-18T06:02:02Z,False,True,"### Added
+
+- calendar: Added configurable calendar cell sizing via the `--cell-size` CSS custom property, plus a new size showcase for the docs
+- CLI: Added `TEMPLUI_REPO` so the CLI can fetch registry and component assets from a fork or alternate GitHub repository (#524)
+
+### Fixed
+
+- CLI: Fixed component installs so registry-managed JavaScript assets are downloaded correctly and component scripts are loaded as ES modules (#525)
+
+"
+axadrn/shadcn-templ,v1.8.1,2026-03-17T08:42:09Z,False,True,"### Added
+- scripts: Added optional unminified component script loading for debugging in both the import and CLI workflows; set `utils.UseUnminifiedScripts = true` during app startup to use `.js` instead of `.min.js` (#523)
+
+### Fixed
+- popover: Fixed incorrect or off-screen positioning by switching to a fixed floating strategy and resetting conflicting native popover defaults (#522)"
+axadrn/shadcn-templ,v1.8.0,2026-03-13T08:57:40Z,False,True,"This release stabilizes the `v1.7.x` import and script changes. The automatic component script injection introduced in `v1.7.x` has been reverted. Interactive components should be loaded explicitly via `@component.Script()` in your layout again to avoid duplicate execution and swap-related bugs with HTMX and DataStar.
+
+### Added
+
+- chart: Added `RawConfig map[string]any` as an escape hatch for passing native Chart.js configs directly, plus a new mixed-chart showcase example (#502)
+
+### Changed
+
+- scripts: Reverted the `v1.7.x` automatic component script injection experiment; interactive components must be loaded explicitly via `@component.Script()` in your layout again
+- popover: Rebuilt the component around a root/content structure without the previous global portal behavior, making popover-based components safer during partial swaps and repeated DOM updates
+- dialog: Moved dialog layers into a shared root synced from each dialog instance, improving nested overlay behavior and DOM cleanup
+- docs: Simplified the import and CLI workflow documentation, including clearer asset-routing and script-loading instructions
+- docs: Updated per-component usage snippets so interactive components show the required `@component.Script()` call directly in the docs
+- docs: Updated the docs site to load `htmx@4.0.0-alpha7`
+
+### Fixed
+
+- scripts: Fixed the `v1.7.x` duplicate-script and re-execution problems that broke popovers and other interactive components, including sidebar/popover conflicts and Datastar fragment patch regressions (#516, #518)
+- popover: Fixed duplicate popover content IDs and stale floating layers during HTMX swaps or repeated client-side/template instantiation (#500, #495)
+- dialog: Fixed dialog usage inside dropdowns and other popover-based overlays (#513)
+
+"
+axadrn/shadcn-templ,v1.7.1,2026-03-10T05:11:51Z,False,True,"### Important
+
+- `v1.7.1` is currently still experimental and buggy. The new import workflow does not work reliably right now, so please use the CLI workflow instead. If you need a stable version, please use `v1.6.0` for now.
+
+### Changed
+
+- Removed the public `Script()` component API
+- CLI installs now rewrite each component's own script URL to the local JS path only
+
+### Fixed
+
+- Fixed duplicate script loading in components
+- Fixed local component JS paths during CLI installs
+"
+axadrn/shadcn-templ,v1.7.0,2026-03-09T09:56:04Z,False,True,"### Important
+
+- `v1.7.0` is currently still experimental and buggy. The new import workflow does not work reliably right now, so please use the CLI workflow instead. If you need a stable version, please use `v1.6.0` for now.
+
+### Added
+- Import workflow beta: templUI can now be used directly as a Go dependency via `github.com/templui/templui`
+- Restored the dedicated [`templui-quickstart`](https://github.com/templui/templui-quickstart) repository as the fastest way to start a new app
+- Simplified the documentation around two clear workflows: `Quickstart` / `Import Workflow` / `CLI Workflow`
+
+### Changed
+- Interactive components now render and deduplicate their own `Script()` templates automatically, so manual component script wiring in layouts is no longer required
+- Icon API simplified to class-only props for more consistent styling across the library (breaking change)
+- Import usage now targets only the public `components` and `utils` packages
+- Updated `templ` to `v0.3.1001`
+- The import workflow and quickstart are currently beta and may still evolve
+
+### Removed
+- CLI: removed `templui new` in favor of the dedicated quickstart flow
+- Removed the monorepo quickstart example and related template assets
+- Removed the `Code` component and related docs/showcases
+
+### Fixed
+- datepicker: Updated component dependencies
+- inputotp: Improved event target handling
+- scripts: Updated the default remote script reference from `main` to `latest`
+"
+axadrn/shadcn-templ,v1.6.0,2026-03-02T08:20:38Z,False,True,"### Added
+- icons: Synced generated icons with the latest Lucide release
+- input: Added `Required` to `Props` (thanks @tacheraSasi)
+- selectbox: Added fuzzy search matching for improved item filtering
+
+### Fixed
+- toast: Restored progress pause/resume behavior for initial and swapped toasts"
+axadrn/shadcn-templ,v1.5.0,2026-02-08T13:43:16Z,False,True,"### Added
+- CLI: Added `--installed` for bulk component updates via `templui --installed add[@<ref>]`
+- selectbox: Added a clear button in the trigger for faster value reset
+- selectbox: Improved keyboard/focus behavior when `nosearch` is enabled
+- selectbox: Simplified selected-state handling using Tailwind/data-attribute conditionals instead of JS toggling
+- timepicker: Preselected hour/minute values are now auto-scrolled into view when opening
+- Updated progress examples to match the current API
+
+### Removed
+- CLI: Removed short-form aliases (`-f`, `-v`, `-h`, `-m`) in favor of explicit long flags
+
+### Fixed
+- toast: Fixed initialization for toasts on full page loads
+"
+axadrn/shadcn-templ,v1.4.0,2026-01-29T05:02:01Z,False,True,"### Added
+- Add autocomplete suggestions
+- Add popover script requirement for Tags Input
+- Add autocomplete showcase for Tags Input
+"
+axadrn/shadcn-templ,v1.3.0,2026-01-20T07:21:52Z,False,True,"### Added
+- `templui upgrade` now updates both CLI and utils
+"
+axadrn/shadcn-templ,v1.2.0,2026-01-14T14:14:26Z,False,True,"### Added
+- add overridable ScriptURL function for custom cache busting
+"
+axadrn/shadcn-templ,v1.1.1,2026-01-13T06:37:33Z,False,True,"### Added
+- No more interactive prompts - just `templui new myapp`
+- Use module path directly: `templui new github.com/user/myapp` creates `myapp/` folder
+- switch: Added documentation explaining `switchcomp` alias
+
+### Changed
+- Streamlined `new` command: Project setup is now fully automatic
+- `templ generate` and `go mod tidy` run automatically
+
+### Fixed
+- checkbox: Fixed icon centering on custom sized classes using `inset-0`
+"
+axadrn/shadcn-templ,v1.1.0,2026-01-05T15:07:00Z,False,True,"### Added
+- Add group support with indeterminate state
+- Expose ymin, ymax and beginatzero
+
+### Removed
+- Remove overflow container (breaking)
+
+### Fixed
+- Scrollbars styling @RimJur
+"
+axadrn/shadcn-templ,v1.0.1,2026-01-04T07:26:44Z,False,True,"### Changed
+- Bump to templ v0.3.977
+- Lower Go version to 1.24 for distro package compatibility (thanks @RimJur)
+
+### Removed
+- Remove Go and templ version requirements
+
+### Fixed
+- Replace iframe preview docScr with src + separate route to avoid double char escaping
+- Update calendar.templ
+- Support nested collapsibles
+- Replace text-destructive-foreground with text-white
+"
+axadrn/shadcn-templ,v1.0.0,2025-12-24T08:17:34Z,False,True,"### Changed
+- We made it.
+- 1,564 commits. 231 merged PRs. 146 closed issues. 29 contributors. 101 releases. 41 components.
+- One major version.
+- Two-way binding for Datepicker, Timepicker & Rating
+- Improved quickstart template
+- To everyone who opened an issue, submitted a PR, or shipped something with templUI - this release is for you.
+- Happy holidays.
+
+### Fixed
+- Package name fix for custom directories
+"
+axadrn/shadcn-templ,v0.101.0,2025-11-17T14:13:48Z,False,True,"### Added
+- Add AI-ready registry system
+- Add `/llms.txt` endpoint
+- Add component metadata (categories, tags, dependencies)
+
+### Changed
+- Refactor sidebar to use registry
+- Automate component metadata generation
+"
+axadrn/shadcn-templ,v0.100.0,2025-11-16T12:43:24Z,False,True,"### Added
+- Documentation links added to installed components
+- Dialog: Add DisableAutoFocus prop to control auto-focus behavior
+- Simplify how-to-use guide and add Tailwind auto-fallback
+
+### Changed
+- Markdown documentation system for general documentation pages
+- Migration to Go 1.24 tool directive for dev tools
+- Automatic version detection via build info - no more manual version updates needed
+- Tooltip: Pass Class and Attributes to popover trigger
+- Smooth scroll position now shared between markdown and component docs on TOC link clicks
+- Dev Server: Replace Air with templ-managed server for instant hot reload
+- Reformatted codebase
+- Disabled style attribute linter
+- Docs footer now dragged to bottom
+- Beautified announcement and navbar
+
+### Removed
+- Remove duplicate code in input.css example
+- Removed redundant version field from manifest.json
+
+### Fixed
+"
+axadrn/shadcn-templ,v0.99.0,2025-11-02T11:12:35Z,False,True,"### Added
+- Calendar: Data attributes added for flexible styling with Class prop
+- Added goilerplate links to navbar/menu and announcement bar
+
+### Changed
+- Alert: Design aligned with shadcn/ui
+- Prioritize explicit For prop over context in Trigger
+- Dropdown/Popover: Close non-exclusive only if it's a parent/trigger
+- Reformatted codebase
+- Cache busting + JS files to copy button
+
+### Removed
+- ⚠️ Breaking Changes
+- Form Components: Removed Required prop from all form components (input, checkbox, radio, textarea, selectbox, inputotp, timepicker, datepicker). Server-side validation is now the only validation approach, as browser validation doesn't work with hidden inputs and creates confusion about validation responsibility.
+- Automatic cleanup for DOM removal - fixes body.overflow stuck when dialogs removed via HTMX/innerHTML
+- Dropdown: Removed unused Class and Attributes from Props
+- Dialog: Removed unnecessary disabled state
+
+### Fixed
+"
+axadrn/shadcn-templ,v0.98.0,2025-10-02T08:37:49Z,False,True,"### Added
+- New standalone component
+- Code component simplified (no longer includes copy button)
+- Month and year selection dropdowns
+- New time input showcase examples
+- Time input showcase examples (default + styled)
+- `Exclusive` prop – auto-closes other popovers when opening
+- Automatic script versioning on app restart
+- Updated Lucide icons to v0.544.0
+- Custom width support via CSS variables
+- Copy Button: The `Code` component no longer includes a copy button. Use the new standalone `Copy Button` component instead (thanks @jaredweinfurtner, @shtayeb, @nenad, and @ananyatimalsina for their contributions!)
+
+### Changed
+
+### Removed
+- Dropdown: removed dynamic class generation
+- Avatar: API simplified to match shadcn/ui pattern
+
+### Fixed
+- Select Box: two-way binding with reactive frameworks
+- Transform-based offcanvas animation
+- Toast: stable progress indicator rendering
+- Dialog: close button now type=""button"" to prevent form submit
+- Code: respects DOM swaps
+"
+axadrn/shadcn-templ,v0.97.0,2025-09-15T12:06:35Z,False,False,"### Added
+- Global JS API
+- Exposed programmatic API for `Dialog`, `Popover` and `Tabs`
+- → allows triggering components from external events (e.g. Mapbox markers) via
+- `window.tui.<component>.<function>()`
+- Sidebar
+- New configurable `shortcut` option for toggling
+- Sheet
+- Width can now be overridden via props
+
+### Removed
+- Removed ESC key close handler
+
+### Fixed
+- Sidebar Docs – fixed incorrect script path shown in examples
+- Popover – exposed missing `closeAllPopovers()` in `window.tui.popover` API
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.19.2,2026-09-14T22:40:38Z,False,True,"* [fix]: Updated asm to 9.10.1 (and use latest asm-relocated).
+* [fix]: don't duplicate advise for `main` -> `test` and main -> `androidTest`.
+* [fix]: de/serialize less stuff to `ExplodeJarWorkAction` and `FindKotlinMagicTask`.
+* [fix]: don't crash when analyzing KMP project with 'jvm(""foo"")' target.
+* [fix]: compute source set name correctly.
+* [fix]: warn about duplicate classes relating to Kotlin inline members.
+* [fix]: update moshix to v0.37.0.
+* [fix]: update kotlin.editor.core to v0.26.
+* [fix]: update gradletestkitplugin to v0.20.
+* [fix]: update gradle.publish.plugin to v2.2.1.
+* [fix]: update dependency commons-io:commons-io to v2.22.0.
+* [fix]: update dependency com.google.guava:guava to v33.7.1-jre.
+* [fix]: update dependency com.google.errorprone:error_prone_annotations to v2.50.0.
+* [fix]: update dependency com.android.tools:common to v32.4.0.
+* [refactor]: move compute classes to separate package.
+* [refactor]: don't expose mutable type outside compute class.
+* [chore]: onboard to the OSS Community Develocity Instance.
+* [chore]: configure and run `updateDaemonJvm` task.
+* [chore]: remove unnecessary freeCompilerArg (since Kotlin 2.4).
+* [chore]: compile build-logic with JDK 17.
+* [chore]: reorder workflow and make names more terse.
+* [chore]: update plugin com.gradle.develocity to v4.5.1.
+* [chore]: update build-logic's KGP to 2.4.0 (matching main build).
+* [docs]: improve kdoc for `ArtifactsExpander`.
+* [docs]: clarify that `checkSuperClasses()` is only for source code, not for external deps.
+
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.19.1,2026-08-26T00:19:21Z,False,True,"* [fix]: an 'analyzable class file' should have non-zero length.
+
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.19.0,2026-08-26T18:03:11Z,False,True,"* [feat]: ':printDuplicateDependencies' will now store the console output in a file on disk.
+* [fix]: incorrect Android-variant configuration advice.
+* [fix]: merge binary classes from all jar artifacts when building map.
+* [fix]: track component identifiers as input to tasks that write them to output.
+* [fix]: handle mixed source sets better.
+* [fix]: make `ArtifactsReportTask` cacheable again.
+* [fix]: simplify `kotlin-metadata-jvm` runtime handling.
+* [refactor]: use non-deprecated API in KMP analysis.
+* [refactor]: add `ExpensiveJar` type to hold `BinaryClasses`, removing them from `ExplodedJar`.
+* [test]: add test to ensure cache correctness.
+* [maintenance]: build with (and test against) Gradle 9.7.1 and KGP 2.4.0.
+* [maintenance]: update (and test against) AGP 9.3.1.
+* [security]: (GH actions) add 'persist-credentials: false' and disable all permissions by default.
+* [docs]: update issue templates and add a PR template.
+* [docs]: add GH workflow for creating GH releases.
+* [chore]: do not skip metadata version check.
+* [chore]: enable feature preview: `NO_IMPLICIT_LOOKUP_IN_PARENT_PROJECTS`.
+* [chore]: update dependency org.apache.groovy:groovy to v4.0.33.
+* [chore]: update dependency com.android.tools.metalava:metalava to v1.0.0-alpha15.
+* [chore]: update dependency com.github.ben-manes.caffeine:caffeine to v3.2.4.
+* [chore]: update dependency org.jspecify:jspecify to v1.0.1.
+* [chore]: update dependency org.junit:junit-bom to v5.14.4.
+* [chore]: update Develocity to latest.
+* [chore]: configure Renovate.
+* [chore]: add 'setup-testlens' action to CI workflow.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.18.0,2026-08-26T18:03:13Z,False,True,"* [feat]: isolate usage of ""kotlin-metadata-jvm"" to workers and downgrade Kotlin version used by the plugin.
+* [feat]: allow to exclude ABI by source path.
+* [fix]: `GraphViewTask`'s inputs are inputs, not internal details.
+* [fix]: make `GraphViewTask` sensitive to new transitive project edges.
+* [fix]: disable caching for `ArtifactsReportTask`.
+* [fix]: Don't fail IDEA sync when registering `InMemoryCache` with a task.
+* [chore]: update kotlin-editor-relocated to 0.25.0.
+* [chore]: update gradle-script-grammar to 0.7.
+* [chore]: use Gradle 9.6.1.
+* [docs]: add 'troubleshooting' section to README with discussion of the ""kotlin-metadata-jvm"" issue.
+* [maintenance]: resolve Gradle deprecations.
+* [test]: the usual gradle flags should be set for all tests (in particular, `org.gradle.caching=true`).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.17.0,2026-08-26T18:03:14Z,False,True,"* [feat]: support KMP with 'fixDependencies' (`RewriteTask`) in Kotlin DSL only.
+* [feat]: add DSL option for binary-compatibility check. It now defaults to 'false'. This is a breaking behavioral 
+  change.
+* [fix]: close leaked `ZipFile` objects.
+* [fix]: use Iterator.remove() to remove changes in Android project analysis.
+* [performance]: reduce memory usage when *not* opting-in to the binary-compatibility check.
+* [refactor]: limit use of `T.toJson()`. Prefer `bufferedWriteJson()`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.16.1,2026-08-26T18:03:15Z,False,True,"* [fix]: stop checking for missing runtime exceptions.
+* [fix]: don't advise moving dependency from `commonMainApi` to `jvmMainApi`.
+* [fix]: use `Iterator.remove()` for safe modification.
+* [perf]: compress `synthetic-project.json` to save disk space.
+* [chore]: update kotlin-editor-relocated to latest.
+* [chore]: update simple grammar ('antlr-shadowed') to latest.
+* [chore]: build with Gradle 9.6.0, and test against it
+* [refactor]: split `StandardTransform` into Android/JVM/KMP-specific classes.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.16.0,2026-08-26T18:03:17Z,False,True,"* [feat]: only emit 'Fixing dependencies for...' if the build script is being rewritten.
+* [fix]: test against AGP 9.2.1 and update `AGP_MAX` to 9.2.1.
+* [fix]: make InMemoryCache compatible with isolated projects.
+* [fix]: escape Kotlin reserved keywords when using project accessors.
+* [fix]: improve handling of Android product flavors.
+* [fix]: improve handling of Android build types.
+* [chore]: update kotlin-editor-relocated to latest.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.15.0,2026-08-26T18:03:18Z,False,True,"* [feat]: support AGP 9.2.0.
+* [fix]: don't report Android R classes as classpath duplicates.
+* [fix]: track multiple package names from libs that provide type aliases, and enhance default kotlin-lib bundle.
+* [fix]: update metadata of `:aggregatePublicTypesTask` to move `group` to `description`.
+* [fix]: simple grammar supports another kind of file-level annotation. (Updated `com.autonomousapps:antlr` to latest.)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.14.1,2026-08-26T18:03:20Z,False,True,"* [fix]: resolve performance issue with `computeTypeUsage`.
+* [fix]: `JarExploder` should ignore some MRJar content.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.14.0,2026-08-26T18:03:21Z,False,True,"* [feat]: new ':publicTypeUsage' task.
+* [fix]: `AndroidScore` should ignore class files when testing if a project has source splits.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.13.0,2026-08-26T18:03:23Z,False,True,"* [feat]: new `computeTypeUsage<variant>` task generates usage report.
+* [fix]: when computing actual usages, actually look at the runtime graph.
+* [refactor]: use Graphs wrapper instead of Guava directly.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.12.2,2026-08-26T18:03:24Z,False,True,"* [fix]: The new ""exceptions are special"" (in v3.12.0) handling was over-eager and flagging things that only referenced 
+  exceptions. We only want to flag things that provide the exception types.
+* [fix]: `MutableSet<Usage>.simplify(visibility, bucket)` in `StandardTransform` wasn't properly handling the case when 
+  a usage was visible on both compile and runtime classpaths. In such a case, we can filter out all usages. 
+* [fix]: reason output said ""implies implementation"" when it should have been ""implies runtimeOnly"" in the android lint 
+  jar case.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.12.1,2026-08-26T18:03:26Z,False,True,"* [fix]: don't suggest non-existent Android unit test variant in advice.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.12.0,2026-08-26T18:03:27Z,False,True,"* [feat]: exceptions are special. Exceptions get verified early by the JVM and so if a dependency is missing an 
+  exception's type from the runtime classpath, that can cause failures in the consumer at runtime.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.11.0,2026-08-26T18:03:29Z,False,True,"* [fix]: when following a bundle rule, don't drop `api` dependencies.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.10.0,2026-08-26T18:03:31Z,False,True,"* [feat]: Gradle plugin markers are the preferred way to depend on a plugin.
+* [feat]: Gradle plugin markers are part of an implicit bundle.
+* [fix]: handle `dependencies` blocks that have a single line.
+* [docs]: add 'partial analysis' section to readme.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.9.0,2026-08-26T18:03:32Z,False,True,"* (Reverted) Compiled against Kotlin 2.3.20. Compiling against Kotlin 2.2.21 again, with language level 2.2.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.8.0,2026-08-26T18:03:34Z,False,True,"* [feat]: record lambda in binaryClassAccesses.
+* [feat]: support analysis of a Gradle version catalog dependency.
+* [feat]: remove unused 'file' property.
+* Compiled against Kotlin 2.3.20.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.7.0,2026-08-26T18:03:35Z,False,True,"* [feat]: Expose useParenthesesForGroovy configuration for Groovy DSL syntax control.
+* [fix]: fix regex for excluding all *Generated annotations.
+* [fix]: don't attempt to suggest upgrading an undeclared 'parent' dependency of a KMP dependency.
+* [fix]: the 'androidMain' source set is special.
+* [chore]: Compiled against Kotlin 2.2 and Gradle 9.4.1.
+* [chore]: add Code of Conduct.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.6.1,2026-08-26T18:03:37Z,False,True,"* [Fix]: use compilation.disambiguatedName for crafting the task suffix.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.6.0,2026-08-26T18:03:38Z,False,True,"* [Breaking]: min version of Android Gradle Plugin (AGP) is now 8.10.0.
+* [Feat]: support KMP projects with JVM targets.
+* [Feat]: support KMP projects with Android targets.
+* [Feat]: update console report to be more idiomatic for KMP.
+* [Feat]: implement ABI inclusions filter.
+* [Feat]: add lifecycle `resolveExternalDependencies` task.
+* [Fix]: improve `Class.forName` handling.
+* [Fix]: remove dependency to `javax.inject`.
+* [Fix]: potential resource leak in `JarExploder`.
+* [Fix]: duplicate class detection for annotations.
+* [Fix]: use latest-kotlin editor.
+* [Refactor]: move two `public` types to an internal package to exclude from published api, and exclude the 
+  `com.autonomousapps.model.internal` package from the published api.
+* [Refactor]: moved a lot of task-registration code into `AbstractDependencyAnalyzer`.
+* [Docs]: add link to maven-hijack blog post.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.5.1,2026-08-26T18:03:40Z,False,True,"* [Fix]: don't try to process a non-match as a binary incompatibility.
+* [Fix]: use version catalog when applying the build-health plugin.
+* [Fix]: bundleTraces is a sortedSet and BundleTrace is Comparable.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.5.0,2026-08-26T18:03:41Z,False,True,"* [Feat]: check binary compatibility between consumer and producer code.
+* [Feat]: support the com.google.cloud.tools.jib plugin as an application-type plugin.
+* [Fix]: 'reason' works for project dependencies.
+* [Fix]: strip empty lines from service loaders.
+* [Docs]: clarify compatibilities with other plugins.
+* [Docs]: document the existence of dependencyAnalysis.app().
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.4.1,2026-08-26T18:03:43Z,False,True,"* [Fix]: find runtime graph for `debugAndroidTest` sources.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.4.0,2026-08-26T18:03:44Z,False,True,"* [Fix]: `InferredCapability` merging logic should use 'or', not 'and'.
+* [Fix]: Improve IP safety of `GlobalDslService`.
+* [Fix]: for builds with Gradle 9.1.0+, get the `buildPath` from the `Gradle` instance.
+* [Chore]: update to Gradle 9.1.0 (from 9.0.0).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.3.0,2026-08-26T18:03:46Z,False,True,"* [Feat]: detect reflective access using Class.forName().
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.2.0,2026-08-26T18:03:47Z,False,True,"* [Feat]: don't drop transitive runtime dependencies when removing 'unused' dependencies.
+  See the [PR description](https://github.com/autonomousapps/dependency-analysis-gradle-plugin/pull/1573) for more 
+  information.
+* [Fix]: consider suspend function return types with type parameters.
+* [Fix]: consider imports when computing usage of typealiases.
+* [Fix]: annotation processors are not blank strings.
+* [Fix]: update Kotlin metadata to 2.2.20 for Kotlin 2.3 support.
+* [Chore]: always publish build scans on CI. Optionally publish them locally.
+
+To publish build scans, add the following, as indicated:
+```
+# ~/.gradle/gradle.properties
+dependency.analysis.scans.publish=true
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.1.0,2026-08-26T18:03:49Z,False,True,"* [Fix] Updated asm to 9.9 (and use latest asm-relocated) for Java 25 support.
+* [Fix]: Test fixtures in a Spring Boot project are allowed to have testFixturesApi dependencies.
+* [Test]: run tests against Gradle 9.1.0.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.0.4,2026-08-26T18:03:50Z,False,True,"* [Fix] Remove auto-applied kotlin-stdlib for Gradle 8.11 support.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.0.3,2026-08-26T18:03:51Z,False,True,"* [Fix]: compare versions via `VersionNumber`, not raw strings.
+* [Fix] Forcibly downgrade kotlin-stdlib to 2.0.21 for Gradle 8.11 support.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.0.2,2026-08-26T18:03:53Z,False,True,"* [Fix] Downgrade Kotlin to 2.0.21 for Gradle 8.11 support.
+* [Fix]: min AGP version is 8.4.2.
+* [Fix]: Remove kotlin-dsl plugin usage.
+* [Fix]: correctly react to new/deleted/renamed files in Android projects.
+* [Fix]: resource ref problem (#1525).
+* [Chore]: update to AGP 8.13 stable.
+* [Chore]: use gradle plugin publishing plugin 2.0.0.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.0.1,2026-08-26T18:03:54Z,False,True,"* [Fix] set apiVersion and languageVersion to 2.0 for Gradle 8.11 support.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v3.0.0,2026-08-26T18:03:56Z,False,True,"* [Build] now building with Gradle 9.0.0.
+* [Breaking] minimum supported version of Gradle is now 8.11.
+* [Breaking]: annotations and their parameter classes are always considered `compileOnly`.
+
+  Annotations for which the class file is not present are treated like being non-existent by the JVM.
+  If someone wants to consume an annotation via reflection, they are responsible for providing the class file
+  at runtime, so from the annotating project's view, annotations are always `compileOnly`.
+  The same is true for classes and enums used as annotation arguments.
+  The only exception is a class literal as argument that is coming from a different artifact than the
+  annotation, such as a JUnit 4 runner implementation; those are considered `implementation`.
+* [Feat]: Add type-safe accessor support for fixDependencies task.
+* [Feat]: report excluded dependencies as unused.
+* [Feat]: add coordinates identifier in the error message for invalid change.
+* [Feat]: moving `internal.artifacts` package to new module, `com.autonomousapps:variant-artifacts`.
+* [Feat]: detect and report all Android resource references in Manifest files.
+* [Fix]: detect constants more consistently including from e.g. inner classes.
+* [Fix]: Move `useTypesafeProjectAccessors` to global dsl service.
+* [Fix]: reason works on included builds.
+* [Fix]: recognize test fixtures not only in Android libraries, but in Android app modules, too.
+* [Fix]: use Android flavors more consistently in advice.
+* [Chore]: update guava to 33.4.8-jre.
+* [Chore]: update AGP to the latest stable version, 8.12.0, and test against 8.13.0-alpha03.
+* [Chore]: add API-tracking tasks using metalava. Adopt semantic versioning.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.19.0,2026-08-26T18:03:57Z,False,True,"* [Feat]: support advices for Android test fixtures source sets
+* [Feat]: support typesafe project accessors in IssueHandler
+* [Fix]: bump kotlin-metadata-jvm to 2.1.21 to support K2.2 projects.
+* [Chore]: move publishing to new `central.sonatype.com` repo.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.18.0,2026-08-26T18:03:59Z,False,True,"* [Breaking]: update min support AGP version to 8.3.
+* [Feat]: Allow excluding violations by regex patterns.
+* [Feat]: add `ProviderConvertible` support.
+* [Feat]: add support for Activity `theme` in `AndroidManifest.xml`
+* [Feat]: Android merged manifests are now treated as runtime (not compile-time) requirements.
+* [Feat]: detect code source files that live outside of src/main as an AGP feature being used.
+* [Fix]: detect class references in the base package.
+* [Fix]: detect constants defined in Kotlin companion objects.
+* [Fix]: detect androidTest source set as a test source-set.
+* [Fix]: set android dependencies weight to 100.
+* [Fix]: also check for com.android.test.
+* [Chore]: use Gradle 8.14.
+* [Chore]: `kotlin.metadata.jvm` no longer needs to be non-transitive, since bumping to K2 for this project.
+* [Chore]: fix snapshot publishing by making task dependency more lazy.
+* [Chore]: update badge to point to actual workflow.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.17.0,2026-08-26T18:04:00Z,False,True,"* [Fix]: duplicate class warning doesn't warn about multiple dependencies with same GAV.
+* [Fix]: ensure all capabilities are internally sorted; also synthesized dependencies.
+* [Fix]: ensure all dependencies are internally sorted.
+* [Fix]: ensure output of GraphViewTask is fully sorted (therefore deterministic).
+* [Fix]: intermediate android res classes must have meaningful hashCode() functions.
+* [Fix]: improve sorting of various build outputs to ensure determinism.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.16.0,2026-08-26T18:04:01Z,False,True,"* [Feat]: support `com.android.test` projects.
+* [Feat]: support typesafe project accessors with opt-in.
+
+```kotlin
+dependencyAnalysis {
+  useTypesafeProjectAccessors(true) // false by default
+}
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.15.0,2026-08-26T18:04:03Z,False,True,"* [Feat]: superclass analysis is now opt-in. This is a breaking change since 2.7.0, when that feature was introduced.
+
+```kotlin
+dependencyAnalysis {
+  usage {
+    analysis {
+      checkSuperClasses(true) // false by default 
+    }
+  }
+}
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.14.0,2026-08-26T18:04:04Z,False,True,"* [Feat]: add temporary flag to test opting-out of superclass analysis.
+* [Fix]: `@InputFiles` is redundant next to `@Classpath`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.13.3,2026-08-26T18:04:06Z,False,True,"* [Fix]: check java/main in addition to kotlin/main to find correct artifact folder
+* [Fix]: use projectPath, not identityPath, for included build coordinates.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.13.2,2026-08-26T18:04:07Z,False,True,"* [Fix]: detect usages of SAM interfaces.
+* [Fix]: binaryClassAccesses uses sorted keys.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.13.1,2026-08-26T18:04:09Z,False,True,"* [Fix]: differentiate between main and other variants when rewriting dependencies with Kotlin DSL.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.13.0,2026-08-26T18:04:10Z,False,True,"* [Feat]: `computeResolvedDependencies` to also generate a version catalog file
+* [Feat]: experimenting with compressing intermediates, starting with `exploded-jars.json`.
+* [Chore]: remove unused moshi functions.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.12.0,2026-08-26T18:04:12Z,False,True,"* [Feat]: detect dependencies that provide dylibs for use on macOS. 
+* [Test]: incorrect attribution of so files to Android deps.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.11.0,2026-08-26T18:04:13Z,False,True,"* [Feat]: new task (`:computeAllDependencies`) for producing a version catalog file containing all dependencies.
+* [Fix]: kotlin-reflect must be on the compile classpath.
+* [Test]: Update AGP 8.9.0 stable.
+* [Test]: conditional signing.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.10.1,2026-08-26T18:04:15Z,False,True,"* [Fix]: `BuildHealthException` extends `VerificationException`.
+* [Fix]: module advice must be 'actionable' to be 'not empty'.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.10.0,2026-08-26T18:04:16Z,False,True,"* [Feat]: new `dependencyAnalysis.reporting.printBuildHealth` DSL option.
+* [Fix]: support colorizing multiline strings.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.9.0,2026-08-26T18:04:18Z,False,True,"* [Feat]: if buildHealth contains only warnings, adjust message to be less severe.
+* [Feat]: provide way to opt-out of printing postscript if it only contains warnings.
+* [Feat]: improve console output with colors and smarter vertical spacing.
+* [Fix]: improve comparability of `Declaration`.
+* [Fix]: dependency model classes are now fully Comparable.
+* [Fix]: `Source` is fully Comparable.
+* [Fix]: `ExplodingBytecode` is fully Comparable.
+* [Perf]: improve performance of `isForMissingSuperclass` (again).
+* [Chore]: update to Kotlin 2.0.21.
+* [Chore]: test against AGP 8.9 and 8.10
+
+```kotlin
+dependencyAnalysis {
+  reporting {
+    onlyOnFailure(false) // when true, only prints postscript when there are failure-level issues.
+    postscript(/* Some text to help out end users who may not be build engineers. */)
+  }
+}
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.8.2,2026-08-26T18:04:19Z,False,True,"* [Fix]: generate supergraph just once per variant (source set).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.8.1,2026-08-26T18:04:21Z,False,True,"* [Fix]: cache `SuperClassGraph`. No need to recompute for each dependency.
+* [Fix]: use less heap by using empty singleton collections.
+* [Fix]: trade metaspace for heap by interning strings.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.8.0,2026-08-26T18:04:22Z,False,True,"* [Feat]: support reasoning about multiple pieces of advice.
+* [Fix]: compute/printDuplicateDependencies works even when not all projects apply this plugin.
+* [Fix]: do not filter out advice to add to testImplementation if there is conflicting advice to downgrade from implementation.
+* [Fix]: compileOnly dependencies are not visible to the test compile classpath.
+* [Build]: use Gradle 8.12.1
+* [Chore]: update to AGP 8.8.0
+* [Refactor]: use `DependencyHandler.project()` instead of `Project.project()`.
+* [Test]: only run functionalTest against latest combination of AGP and Gradle.
+* [Test]: don't forward stdout on CI.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.7.0,2026-08-26T18:04:24Z,False,True,"* [Feat]: can set severity and filter duplicate class warnings.
+* [Feat]: don't recommend removing implementation dependency on necessary superclass.
+* [Chore]: use non-deprecated method when available.
+* [Chore]: update various dependencies, including antlr.
+
+New DSL option for configuring duplicate class warnings:
+```groovy
+// root build.gradle[.kts]
+dependencyAnalysis {
+  issues {
+    all {
+      onDuplicateClassWarnings {
+        severity(<""fail""|""warn""|""ignore"">)
+        // Fully-qualified class reference to exclude, slash- or dot-delimited
+        exclude(""org/jetbrains/annotations/NotNull"", ""org.jetbrains.annotations.Nullable"")
+      }
+    }
+  }
+}
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.6.1,2026-08-26T18:04:25Z,False,True,"* [Fix]: `superClassName` can be null (Object has no superclass).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.6.0,2026-08-26T18:04:27Z,False,True,"* [Feat]: improvements relating to generating project graphs.
+* [Fix]: use stable kotlin-metadata 2.0.21.
+* [Fix]: error message code example
+* [Chore]: use graph-support v0.4.
+* [Chore]: build with Gradle 8.11.1.
+* [Chore]: use com.gradle.develocity plugin exclusively.
+* [Chore]: replace deprecated kotlinOptions with compilerOptions.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.5.0,2026-08-26T18:04:28Z,False,True,"* [Feat]: use KotlinEditor to rewrite Gradle Kotlin DSL scripts.
+* [Fix]: ProjectAdvice is totally Comparable.
+* [Refactor]: make a lot of data models internal that don't need to be public.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.4.2,2026-08-26T18:04:29Z,False,True,"* [Fix]: reason can explain usage of invisible annotations.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.4.1,2026-08-26T18:04:31Z,False,True,"* [Fix]: differentiate visible from invisible annotations.
+* [Fix]: enable easier runtime debugging of bytecode analysis.
+  Use `-Ddependency.analysis.bytecode.logging=true` to get extremely verbose logging during bytecode analysis.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.4.0,2026-08-26T18:04:32Z,False,True,"* [Feat]: detect duplicate class files on compile and runtime classpaths, and warn.
+* [Fix]: use asm-relocated 9.7.1.0. Support Java 23.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.3.0,2026-08-26T18:04:33Z,False,True,"* [Feat]: enable reason task to get reason for specific gradle capabilities (e.g., test-fixtures).
+* [Fix]: don't suggest removing runtime-required annotation libraries.
+* [Fix]: only print issue postscript if there's an issue to report.
+
+Example usage of `reason`:
+```shell
+./gradlew app:reason --id foo --capability test-fixtures
+```
+Which will print the ""reason"" for any advice relating to the `test-fixtures` variant of the `foo` library.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.2.0,2026-08-26T18:04:35Z,False,True,"* [Feat]: new ReportingHandler with ability to specify postscript.
+* [Feat]: DSL option that opts-in source sets to requiring explicit dependencies.
+* [Chore]: build and test against Gradle 8.10.2.
+* [Chore]: bump to latest Kotlin 1.9.x patch.
+* [Chore]: update to AGP 8.7 stable and 8.8 alpha04
+
+Summary of new DSL options below:
+
+```kotlin
+// root build.gradle[.kts] or settings.gradle[.kts]
+dependencyAnalysis {
+  structure {
+    explicitSourceSets(/* vararg of source sets to be treated ""explicitly"" */)
+  }
+  reporting {
+    postscript(/* Some text to help out end users who may not be build engineers. */)
+  }
+}
+```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.1.4,2026-08-26T18:04:36Z,False,True,"* [Fix]: `@Metadata`'s d2 array should typically be compileOnly.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.1.3,2026-08-26T18:04:38Z,False,True,"* [Fix]: kotlin modules can have java code. 
+* [Fix]: classes referenced in runtime-retained annotations are required at runtime. 
+* [Fix]: reason for dependencies used in annotations is still confusing but less misleading.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.1.2,2026-08-26T18:04:39Z,False,True,"* [Fix]: include project description json at both external and internal coordinates.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.1.1,2026-08-26T18:04:41Z,False,True,"* [Fix]: improve separation of ""annotation"" vs ""not-annotation"" in bytecode analysis.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.1.0,2026-08-26T18:04:42Z,False,True,"* [Feat]: start to add information about how a class is referenced in bytecode.
+* [Fix]: when rewriting dependencies, don't require a version string.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.0.2,2026-08-26T18:04:44Z,False,True,"* [Fix]: include version catalog entries even when plugin not applied to root.
+* [Fix]: when setting bundle primary, also 'include' dependency.
+* [Fix]: consistently replace '.' with '_' in Android res.
+* [Fix]: typo in AGP missing message
+* [Docs]: add kdoc to `AbiHandler.ExclusionsHandler`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.0.1,2026-08-26T18:04:45Z,False,True,"* [Fix] consider dependency unused candidate if only capability is InferredCapability.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v2.0.0,2026-08-26T18:04:46Z,False,True,"* [Feat] add 'com.autonomousapps.build-health' settings plugin.
+* [Feat] `dependencyAnalysis` configurable from settings script.
+* [Feat] remove support for auto-apply flag.
+* [Feat] remove restriction that DAGP must be applied to root project.
+* [Feat] helpful error message when KGP or AGP are missing from build classpath.
+* [Feat] check that buildHealth did something.
+* [Feat] remove deprecated ignoreKtx property.
+* [Feat] move PluginAdvice to the model package.
+* [Feat] rename FindInlineMembersTask to FindKotlinMagicTask.
+* [Feat] don't warn when AGP is using a newer patch version
+* [Fix] gracefully handle 'empty' Android res file.
+* [Chore] update to Gradle 8.9
+* [Chore] update to AGP 8.5.2
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.33.0,2026-08-26T18:04:48Z,False,True,"* [Feat] Bundle kotlin-test to avoid false-positives.
+* [Fix] Merge dependency usages by identifier, not gav.
+* [Fix] Publish graph-support v0.3, fixing broken metadata.
+* [Fix] Improve performance of usesResByRes.
+* [Fix] Sort output of findDeclarations.
+* [Fix] Sort output of graphView tasks.
+* [Fix] Handle constant pool tag 17 (CONSTANT_DYNAMIC).
+* [Chore] Update latest stable AGP version to 8.5.1.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.32.0,2026-08-26T18:04:49Z,False,True,"* [New] Output dominator tree results in JSON format including size and total size of deps.
+* [New] Allow to force app behavior for pure Java projects.
+* [New] `generateProjectGraph` task.
+* [New] `reason` works for multi-capabilities.
+* [New] Print build file path in `projectHealth` console report.
+* [Fix] Enhance logging (more) when `ConstantPoolParser` throws exception.
+* [Fix] Do not dotty for path matching and remove prefix and suffix from binary class name.
+* [Fix] Fix Windows file separator incompatibility.
+* [Fix] Don't suggest adding `testImplementation` dependency on self.
+* [Fix] DAGP variants have a `Category` of 'dependency-analysis'.
+* [Fix] Sort an input map for better reproducibility.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.31.0,2026-08-26T18:04:51Z,False,True,"* [Fix] support Isolated Projects.
+* [Fix] only use new configurations factories from Gradle 8.5.
+* [Fix] Do not suggest to move dependencies between feature variants
+* [Fix] Reason explanation id ambiguity
+* [Fix] Use a hash in file name for dependencies with capabilities
+* [Fix] make file relativizing work properly on Windows
+* [Fix] try/catch to workaround AGP issue.
+* [Fix] enhance logging when ConstantPoolParser throws exception.
+* [Chore] no group for 'internal' tasks.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.30.0,2026-08-26T18:04:52Z,False,True,"* [Fix] Don't pass in android res (incl layouts) to XmlSourceExploderTask.
+* [Fix] Use AGP-blessed API for getting compiled class files instead of bundleTask.
+* [Fix] Use AGP's `variant.artifacts` instead of `tasks.named` for accessing class files.
+* [Fix] Move Android project configuration outside of afterEvaluate.
+* [Fix] Bump gradle-script-grammar to v0.3 (improving `fixDependencies` results).
+* [Fix] Reason was failing to give correct results for project dependencies.
+* [Fix] Handle disjoint classpaths. (main source and test source might have different versions on the same dependency.)
+* [Chore] Use `java.util.Objects` instead of Guava for hashing.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.29.0,2026-08-26T18:04:54Z,False,True,"* [New] Migrate to new, non-deprecated AGP APIs. Min AGP version now 8.0.
+* [Fix] Don't suggest unnecessary dependency relating to Android res and new IDs.
+* [Fix] Longstanding copy-paste bug in AndroidScore calculation.
+* [Fix] Don't leak Kotlin stdlib from shaded dependencies.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.28.0,2026-08-26T18:04:55Z,False,True,"* [New] Fully compatible with the configuration cache.
+* [Fix] Detect `typealias` usage.
+* [Chore] Fix deprecations relating to kotlinx-metadata 0.8.0.
+* [Chore] Build with Gradle 8.5.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.27.0,2026-08-26T18:04:57Z,False,True,"* [New] Users can exclude source sets from ABI analysis.
+* [New] Dominator tree calculation for runtime classpath.
+* [New] Move `ignoreKtx()` to DependenciesHandler (structure). Add deprecation.
+* [Fixed] Filter `Provider`s from `ConfigurableFileCollection` dependencies.
+* [Fixed] Catch exception when analyzing Kotlin files for inline members.
+* [Fixed] ReasonTask should use actual ID, not first one it finds that matches `String#startsWith`.
+* [Fixed] Make XML source `Comparable` and use sorted sets.
+* [Fixed] Track usage of `testInstrumentationRunner` in Android projects.
+* [Chore] Check for presence of unused flags and warn.
+* [Chore] Don't sign publications when testing. Don't disable configuration cache.
+* [Chore] Deal with many old TODOs.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.26.0,2026-08-26T18:04:58Z,False,True,"* [New] Support KMP artifacts better (""-android"" and ""-jvm"").
+* [New] Support version catalog references in `BundleHandler` and `DependenciesHandler`.
+* [Fixed] Look for InlineMembers in class files, not just jar files.
+* [Chore] Update kotlinx-metadata-jvm to 0.7 from 0.6. Remove deprecated usages involved in Kotlin ABI analysis.
+* [Chore] Rename all-declared-dependencies to exploded-jars.json.
+* [Chore] Promote some tasks to the non-internal group.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.25.0,2026-08-26T18:04:59Z,False,True,"* [New] Add exclude method for version catalog dependencies.
+* [Fixed] Deprecate `dependencyAnalysis.dependencies` for structure.
+* [Fixed] Filter out comments when scanning for annotation processors.
+* [Fixed] Clarify annotation processor-related error messages.
+* Use asm-relocated 9.6.0.0 to support Java 22.
+* Revert ""Support for correctly resolving KMP artifacts.""
+* Lower min supported version of Gradle to 7.4 from 7.5.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.24.0,2026-08-26T18:05:01Z,False,True,"* [New] Support for correctly resolving KMP artifacts.
+* [Fixed] Use full GAV when comparing module coordinates.
+* Update 'known good AGP versions' logging.
+* `resolveExternalDependencies` is configuration-cache compatible.
+* Resolve Kotlin deprecations.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.22.0,2026-08-26T18:05:04Z,False,True,"* [Fixed] Bundles account for IncludedBuildCoordinates, which are used more now.
+* [Fixed] Workaround Gradle bug when analyzing `files(...)` dependencies in a Kotlin DSL build script.
+* [Fixed] Workaround Gradle bug (?) relating to analyzing mixed source sets of Java and Kotlin.
+* Use BuildIdentifier.getBuildPath() starting with Gradle 8.2.
+* AGP 8.1.0 is the latest supported version.
+* Kotlin 1.9.10.
+* Fix issue in plugin build script for publishing to Gradle Plugin Portal.
+
+Thanks [Jendrik Johannes](https://github.com/jjohannes))
+Thanks [Josh Friend](https://github.com/joshfriend))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.21.0,2026-08-26T18:05:05Z,False,True,"* [Fixed] Include Android res IDs in analysis.
+* [Fixed] Handle ResolvedDependencyResult.resolvedVariant == null.
+* Reduce memory usage by using a single InMemoryCache when possible.
+* Remove pretty-printed files, reducing IO and disk usage.
+* Consistently use IncludedBuildCoordinates to refer to other projects (#916).
+* Change text to clarify missing entries (#910).
+* Use new grammar for source analysis.
+* Build and test against Gradle 8.2.1.
+* Build and test against Kotlin 1.9.0.
+* Test against latest AGP versions, and compile against AGP 7.4.2.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.20.0,2026-08-26T18:05:07Z,False,True,"* [New] Support testFixtures in standard JVM projects.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [New] Can ignore analysis for specified source sets.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] Incorrect advice when using a dependency with a capability.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] False positive for testImplementation dependency with classifier.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.19.0,2026-08-26T18:05:08Z,False,True,"* [New] Analyze dependencies of all source sets in standard JVM projects.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] Dependencies that provide Android Activities are now considered to be providing runtime capabilities.
+* [Fixed] Variant-specific declarations now more accurately map to variant-specific usages in the advice.
+* [Fixed] Allow exclusions to be added more than once.
+  (Thanks [Daan Schipper](https://github.com/daanschipper))
+* Kotlinx Metadata 0.6.0.
+  (Thanks [Gabriel Ittner](https://github.com/gabrielittner))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.18.0,2026-08-26T18:05:10Z,False,True,"* [New] Add flag for ignoring android variants.
+  (Thanks [Sergey Boishtyan](https://github.com/sboishtyan))
+* [New] Use buffered reading when reading files in `SynthesizeDependenciesTask`.
+  (Thanks [Daan Schipper](https://github.com/daanschipper))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.17.0,2026-08-26T18:05:12Z,False,True,"* [Fixed] Fix NPE in `asmUtil.exportedPackages()`.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] `Coordinates.compareTo()` fix.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] Use buffered writer when writing large json objects to file.
+  (Thanks [Daan Schipper](https://github.com/daanschipper))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.16.0,2026-08-26T18:05:13Z,False,True,"* [New] Support ABI filtering on project level.
+  (Thanks [Martijn Vegter](https://github.com/mvegter).)
+* [New] You can now specify an allow-list (using regex) of which projects to enable analysis on. By default, the regex 
+  is `"".*""` (that is, all projects). An example of a regex that would exclude paths matching a prefix is 
+  `""^((?!:prefix)).*$""`. Example usage:
+  ```properties
+  # gradle.properties
+  # match all project paths except those with the prefix ':prefix' (using a negative lookahead)
+  dependency.analysis.project.includes='^((?!:prefix)).*$'
+  
+  # only match project paths that have the prefix 'prefix'
+  dependency.analysis.project.includes='^:prefix.*$'
+  ```
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.15.0,2026-08-26T18:05:14Z,False,True,"* [Fixed] Duplicated declaration does not lead to wrong analysis result (#807)
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] Use information from 'module-info' to determine if a package is public.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] `project(...)` dependencies between subprojects of an included build.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] The requested version is irrelevant for included builds.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* Improve performance in SynthesizeDependenciesTask.
+* Eliminate some redundant work in FindInlineMembersTask.
+* Eliminate some redundant work relating to JarExploder.
+* Use asm 9.4.
+
+Thanks as well to [Adam Ahmed](https://github.com/oheyadam) for modernizing the GHA workflows!
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.12.0,2026-08-26T18:05:19Z,False,True,"* [Fixed] Analysis fails when an Android manifest doesn't have a package declaration.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.10.0,2026-08-26T18:05:22Z,False,True,"* [New] `buildHealth` and `projectHealth` now include a new category of advice, ""module structure advice."" This  
+  currently only includes advice on whether a project could be a JVM project instead of an Android project.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.9.0,2026-08-26T18:05:24Z,False,True,"* [New] `reason` output contains much more information.
+* [New] `reason` should know about the runtime classpath.
+* [Fixed] Setting project-specific excludes will not by itself override the severity for issues of that type for that
+  project. (Bug introduced in 1.7.0.)
+* [Fixed] Fix cacheability issue in GraphViewTask, and therefore ComputeAdviceTask.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.8.0,2026-08-26T18:05:25Z,False,True,"NOTE: This version _is_ available on the Gradle Plugin Portal.
+* [Fixed] Consider 'invisible annotations' for purposes of ABI exclusions.
+* [Fixed] Detect generic types from field signatures.
+* [Fixed] Use KMP bundles even when neither member is declared.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.7.0,2026-08-26T18:05:27Z,False,True,"NOTE: This version is not available on the Gradle Plugin Portal. It is only on Maven Central.
+* [New] Severity set on a project takes precedence over global severity setting.
+* [Fixed] `reason` ""shortest path"" did not show all the relevant classpaths.
+* [Fixed] Removed undesirable dependencies from classpath.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.6.0,2026-08-26T18:05:28Z,False,True,"* [New] Experimental support for printing the dominance tree of the compile classpath. Try it: 
+  `./gradlew <module>:printDominanceTree`
+* [Fixed] Support Components with multiple Jar files.
+* [Fixed] Fails when AndroidManifest file does not contain package.
+  ([#700](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/700))
+* Publish shaded antlr and asm-relocated libs and consume those instead.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.5.0,2026-08-26T18:05:30Z,False,True,"* [Fixed] Detect nested constant usage.
+* [Fixed] Detect custom application defined in a different module.
+* [Fixed] Detect more res-to-res usages.
+* [Fixed] Use the same (unique) key when writing and reading to/from inMemoryCache.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.4.0,2026-08-26T18:05:31Z,False,True,"* [New] Analysis now supports Groovy (experimental).
+* [New] Analysis now supports Scala (experimental).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.3.0,2026-08-26T18:05:33Z,False,True,"* [New] Treat KMP modules as implicit bundles.
+* [Fixed] Plugin will not fail in the presence of `--configuration-cache`, but it still is not compatible.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.2.1,2026-08-26T18:05:34Z,False,True,"* [New] Improve console output for root project.
+* [New] Add a trailing space for path linkifying.
+  (Thanks [Zac Sweers](https://twitter.com/ZacSweers).)
+* [Fixed] Dependency bundles ignore change-advice to ensure consistent builds.
+  ([#672](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/672))
+* [Fixed] NoSuchMethodError: kotlinx.metadata.jvm.KotlinClassHeader.<init>.
+  ([#673](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/673),
+  thanks [Zac Sweers](https://twitter.com/ZacSweers).)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.2.0,2026-08-26T18:05:36Z,False,True,"* [New] Support (optional) dependency version in the exclusion identifier.
+  ([#640](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/640),
+  thanks [Martijn Vegter](https://github.com/mvegter).)
+* [New] Give advice to change to `runtimeOnly` where appropriate.
+  ([#646](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/646),
+  thanks [Jendrik Johannes](https://github.com/jjohannes).)
+* [New] Ignore dependencies for and to unsupported sourceSets/variants.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes).)
+* [New] Put 'compileOnlyApi' and 'providedCompile' into the COMPILE_ONLY bucket.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes).)
+* [New] Support a primary entry point for bundles.
+  ([PR #666](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/666))
+* [Fixed] Filter out 'module-info.class' files in all places.
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes).) 
+* [Fixed] Detect android assets.
+  ([Issue 657](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/657))
+* [Fixed] Detect more Android styleable usages.
+  ([Issue 664](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/664))
+
+Special thanks to [Zac Sweers](https://twitter.com/ZacSweers) for consistently filing good issues.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.1.0,2026-08-26T18:05:37Z,False,True,"* [New] `buildHealth` and `projectHealth` reports respect DSL language for easier copying and pasting.
+* [Fixed] Capture generic types in class signature, for ABI-detection purposes.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0,2026-08-26T18:05:39Z,False,True,"* Promote to GA.
+* Build with Gradle 7.4.2.
+* Test against AGP 7.1.3 and 7.3.0-alpha08.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc06,2026-08-26T18:05:40Z,False,True,"* [New] **Reason** now indicates if advice was filtered out due to a bundle or exclude rule.
+* [Fixed] Replace `artifacts.clear()` with `isVisible=false`.
+  ([#625](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/625))
+  (Thanks [Jendrik Johannes](https://github.com/jjohannes))
+* [Fixed] Filter out `androidTest`-related declarations more thoroughly.
+* Don't register tasks if they can't be used.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc05,2026-08-26T18:05:42Z,False,True,"* [New] onAny should also control onRedundantPlugins behavior.
+* [New] Reason output colorized.
+* [New] Reason output includes path to dependency.
+* [Fixed] Filter out androidTest declarations.
+* [Fixed] Improve Reason for `compileOnly` dependencies.
+* [Fixed] Fix faulty set difference logic in redundant plugin excludes.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc04,2026-08-26T18:05:44Z,False,True,"* [New] 'reason' task re-introduced. Usage example: `./gradlew lib:reason --id com.foo:bar:1.0`
+* [New] Allow common configuration through build logic and override on project level.
+  (Thanks [Martijn Vegter](https://github.com/mvegter))
+* [Fixed] Plugins can now be excluded via `dependencyAnalysis.issues.<all|project(...)>.onRedundantPlugins.exclude`
+* [Fixed] Fix `AbiHandler.excludeAnnotations()`.
+* [Fixed] Fix build cache issue with GraphViewTask.
+* `dependency.analysis.test.analysis` and `dependency.analysis.autoapply` can now be specified as Gradle properties.
+* Test against AGP 7.1.2 and 7.2.0-beta04.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc03,2026-08-26T18:05:45Z,False,True,"* [Fixed] Inaccurate analysis of test source sets in Android libraries.
+* [Fixed] Explicit support for dependencies resolved from an included build.
+* [Fixed] Improve support relating to annotation processors.
+* [Fixed] Inline usages regression in 1.0.0-rcXX.
+  (Thanks [Vladimir Mironov](https://github.com/nsk-mironov))
+* [Fixed] Make FindAndroidLinters cacheable.
+  (Thanks [Subhrajyoti Sen](https://github.com/SubhrajyotiSen))
+* You can restore old behavior and print the buildHealth report with `-Pdependency.analysis.print.build.health=true`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc02,2026-08-26T18:05:47Z,False,True,"* Old model has been entirely removed. `-Ddependency.analysis.old.model=true` has no effect.
+* [Fixed] Sort the output of `ProjectHealthConsoleReportBuilder` on the printed suggestion.
+  ([#568](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/568))
+  (Thanks [Martijn Vegter](https://github.com/mvegter))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v1.0.0-rc01,2026-08-26T18:05:48Z,False,True,"* New model is now the default. To use the old model, specify `-Ddependency.analysis.old.model=true`.
+* [Fixed] Don't report kotlin as unused when it is in fact used.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.80.0,2026-08-26T18:05:50Z,False,True,"* [Fixed] Resolve LinkageError when more than one annotation processor references the same class.
+  ([#556](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/556))
+* [Fixed] Add databinding-compiler to the list of excluded databiding related dependencies.
+  ([#543](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/543))
+  Thanks to [Vladimir Mironov](https://github.com/nsk-mironov).
+* [Fixed] Resolve Gradle 8 deprecation warning.
+* [Fixed] Don't suggest removing test dependencies when test analysis is disabled.
+* [New] Introduce UsagesHandler that allows to exclude particular classes from a list of used classes.
+  ([#545](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/545))
+  Thanks to [Vladimir Mironov](https://github.com/nsk-mironov).
+* Build with Gradle 7.3.3.
+* Test against AGP 7.1.0-beta05 and 7.2.0-alpha06.
+* Improved DOT file formatting.
+* Working on a new model. It can be used by passing the flag `-Dv=2`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.79.0,2026-08-26T18:05:51Z,False,True,"* [Fixed] Don't warn on duplicate dependency declaration.
+  ([#507](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/507))
+* [Fixed] Track interfaces when doing bytecode analysis.
+  ([#500](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/500))
+* [Fixed] Declared `compileOnly` file dependencies should not be marked as transitive
+* [Fixed] Enum only JARs should not be reported as `compileOnly`.
+* [Fixed] Filters out non-xml files from layouts collection.
+  ([#490](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/490))
+* Don't try to analyze a file that doesn't exist.
+  ([#483](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/483))
+* Analyze Dagger's annotation processor.
+  ([#479](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/479))
+* Building with Gradle 7 and Kotlin 1.5.21 now. Minimum supported version of AGP now 4.2.
+* Bump to asm 9.2.
+* Replace '- ' prefix with '  ' in advice output.
+* Detect more res-by-res usages.
+* Make artifact views lenient.
+* `LocateDependenciesTask` can be up to date.
+* Sort the output of `AdvicePrinter`
+* The element type of `ConfigurableFileCollection` can be `GString`, use `toString` instead of casting.
+
+Special thanks to [Martijn Vegter](https://github.com/mvegter) for several fixes in this release!
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.78.0,2026-08-26T18:05:53Z,False,True,"* Rename advice$variant task to generateAdvice$variant.
+  ([#476](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/476))
+* [Fixed] Detect Android res attr usage. Min version of AGP 4.2 required.
+  ([#420](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/420))
+* [Fixed] It's ok when a node isn't in the graph (sometimes).
+  ([#463](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/463))
+* [Fixed] Don't suggest declaring elements of the Gradle distribution.
+  ([#464](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/464))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.77.0,2026-08-26T18:05:54Z,False,True,"* [Fixed] Consider declared exceptions to be part of ABI, for dependency purposes.
+  ([#395](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/395))
+* [Fixed] Fix regression with constants detection from kt files (Kotlin 1.4 -> 1.5 breakage).
+  ([#408](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/408))
+* [Fixed] Don't crash when file is missing due to Android unit test being disabled for some variant.
+  ([#452](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/452))
+* [Fixed] Don't crash with `-Ddependency.analysis.autoapply=false` and `strictMode(false)`.
+  ([#453](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/453))
+* [Fixed] Handle complex Processor.init() functions when looking for annotation processor types.
+  ([#454](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/454))
+* Test against Gradle 7.2.
+* Test against AGP 7.0.1 and 7.1.0-alpha10.
+
+Thanks once again to [Gabriel Ittner](https://github.com/gabrielittner) for consistently filing issues with reproducers!
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.76.0,2026-08-26T18:05:56Z,False,True,"* [New] kotlin-kapt may now be excluded from the redundant-plugins check.
+* [New] Auto-apply functionality has been removed from extension. To disable, you must now use a
+  system property. Either `-Ddependency.analysis.autoapply=false` or add
+  `systemProp.dependency.analysis.autoapply=false` to `gradle.properties`. Default remains true.
+* [Improved] Dependency bundles now support multiple hops between the dependencies in the bundle.
+  They also support bundles of test dependencies.
+* Test against AGP 4.2.2, 7.0.0, and 7.1.0-alpha07.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.75.0,2026-08-26T18:05:57Z,False,True,"* [New] Do not report java-library plugin as redundant, even in the absence of Java source.
+* [Fixed] Fix Android manifest parsing in case of queries node.
+  Thanks to [eugene-krivobokov](https://github.com/eugene-krivobokov) for this fix.
+* [Fixed] Java bytecode analysis will filter to analyze only jar files.
+  Thanks to [Astro03](https://github.com/Astro03) for this fix.
+* [Fixed] Transitive test dependencies suggested to be put on wrong configuration.
+  ([#424](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/424))
+* [Fixed] Don't fail in configuration when an Android test variant is disabled.
+  ([#423](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/423))
+* [Fixed] Work around lint jar sometimes not existing in AGP 7.0.0.
+* Test against Gradle 7.1.
+* Test against AGP 4.2.1 and 7.0.0-beta04.
+
+Additional thanks to [Gabriel Ittner](https://github.com/gabrielittner) for consistently filing good issues!
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.74.0,2026-08-26T18:05:59Z,False,True,"* [Fixed] Correctly associate compiled binaries with source files and the source sets they live in.
+  ([#393](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/393))
+* [Fixed] Builds with non-strict mode should not fail on strict-mode-only issues.
+  ([#397](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/397))
+* [Fixed] Tasks with `@Option` arguments should be annotated with `@Input`.
+  Thanks to [eugene-krivobokov](https://github.com/eugene-krivobokov) for this fix.
+  ([PR #413](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/pull/413))
+* [Fixed] Unused `testImplementation` dependencies should be detected.
+  ([#366](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/366))
+* Use the BIN distribution of Gradle 6.9.
+  Thanks to [Vladimir Sitnikov](https://github.com/vlsi) for this enhancement.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.73.0,2026-08-26T18:06:01Z,False,True,"* [Fixed] Detect usage of annotations on type parameters
+  ([#372](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/372))
+* Remove deprecated functions.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.72.0,2026-08-26T18:06:02Z,False,True,"* [New] Non-strict mode which helps to keep compile graphs smaller than with the default strict
+  mode.
+  ```
+  // root build.gradle[.kts]
+  dependencyAnalysis {
+    strictMode(false) // default is true
+  }
+  ```
+  
+* [New] Compute some basic build health metrics, based on size and shape of the compile-classpath graphs.
+* Remove all the JCenter references missed the first time around.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.71.0,2026-08-26T18:06:03Z,False,True,"* [New] Make it easier to make changes incrementally by introducing the concept of ""ripples."" A
+  ripple can occur if you downgrade a dependency (remove it or update it from `api` to
+  `implementation`), and this removes that dependency from the compilation classpath of a dependent
+  project that was using that dependency without having declared it. Use like:
+
+```
+./gradlew ripples --id :some-project
+```
+* Bumped Kotlin to 1.4.21.
+* Now building with and testing against Gradle 6.8.2.
+* Updated to latest AGPs at time of writing (4.1.2, 4.2.0-beta04, 7.0.0-alpha05).
+* Removed all references to jcenter. 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.70.0,2026-08-26T18:06:05Z,False,True,"* [Fixed] Assume dependencies on some variant (e.g. `debugImplementation` vs `implementation`) are 
+  correctly on that variant.
+  ([#340](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/340))
+* [Fixed] Don't duplicate section headers in `advice-console.txt`.
+  ([#318](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/318))
+* [Fixed] Use absolute-path sensitivity for artifact file paths.
+  ([#350](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/350))
+* [Fixed] File dependencies now trim the prefix path in order to provide a unique identification.
+* [Fixed] Exclusively use the compile classpath for resolving dependencies, filtering out 
+  constraints.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.69.0,2026-08-26T18:06:06Z,False,True,"* [Fixed] Don't use an enforced platform for the Kotlin BOM. This will permit use of the Kotlin
+compiler daemon for projects using Kotlin 1.4+.
+ ([#333](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/333))
+* Now building with and testing against Gradle 6.7.1.
+* Update supported version of AGP 4.2.0 to beta01.
+
+Thanks to Stephane Nicolas @stephanenicolas for helping keep AGP up to date, and for the many 
+discussions.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.68.0,2026-08-26T18:06:08Z,False,True,"* [Fixed] Improved analysis of annotations for ABI reporting.
+* [Fixed] Be null-safe.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.67.0,2026-08-26T18:06:09Z,False,True,"* [Fixed] Annotations on public classes, public methods, and parameters of public methods are part 
+of the ABI.
+ ([#296](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/296))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.66.0,2026-08-26T18:06:10Z,False,True,"* [New] Visualize project dependencies and reverse-dependencies (dependents) with 
+```
+./gradlew :projectGraphReport
+```
+or see the dependents of a specific project with
+```
+./gradlew :projectGraphReport --id :my-project
+```
+The resultant dot files can be converted to svg by installing graphviz and executing
+```
+dot -Tsvg path/to/file.gv -o output.svg
+```
+* [New] Configure artifacts-clearing behavior with a new system property, 
+`dependency.analysis.clear.artifacts=<true|false>`. This can be added to the command line invocation
+ or added to `gradle.properties`. Default is `true`.
+ ([#321](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/321))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.65.0,2026-08-26T18:06:12Z,False,True,"* [Fixed] Remove task execution listener. It wasn't doing anything useful and was incompatible with 
+the configuration cache.
+* [Fixed] Optimize GraphBuilder algorithm to dramatically improve performance.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.64.0,2026-08-26T18:06:13Z,False,True,"* [New] Run `./gradlew :ripples` to see expected downstream impacts from upstream changes.
+* [New] Colorize console output (only used experimentally in `ripples` right now).
+* [Fixed] Detect imports in Kotlin source even when @file:<Anything> is used.
+* [Fixed] Filter out Java Platform modules when creating transitive-use relations.
+* [Fixed] LocateDependenciesTask should not resolve dependencies.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.63.0,2026-08-26T18:06:15Z,False,True,"* [New] Detect Android lint-only dependencies and do not suggest removing them.
+([#303](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/303))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.62.0,2026-08-26T18:06:16Z,False,True,"* [New] Will now ignore not-well-known configurations.
+([#300](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/300))
+* [New] Firebase is now part of a dependency bundle by default.
+([#305](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/305))
+* [New] ABI dump output is now more accessible to end-users.
+* [New] `Reason` now includes more information about dependencies, specifically Android manifest
+  components and security providers.
+* [Fixed] Safe-cast to `ProjectDependency` to prevent mysterious NPE.
+([#295](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/295))
+* [Fixed] Dependency graph doesn't show flat jars.
+* Improved console output. 
+* Improved exception message when build is configured to fail.
+* Now building with Gradle 6.7.
+
+Thanks to Vladimir Sitnikov [@vlsi](https://github.com/vlsi) for discussing several issues and
+reviewing PRs for this release.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.61.0,2026-08-26T18:06:17Z,False,True,"* [New] New `:proj:projectHealth` task added to each subproject/module in a build. This is a new 
+primary end-user target and will respect the user-defined `severity` behavior, similar to 
+`:buildHealth`. Furthermore, the `:failOrWarn` task has been removed, and now `:buildHealth` will
+simply fail itself. 
+([Issue 273](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/273))
+* [Fixed] Flat jar file dependencies mis-reported in several interesting ways.
+* Updated to latest AGPs at time of writing (4.1.0-rc03 and 4.2.0-alpha12) 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.58.0,2026-08-26T18:06:22Z,False,True,"* [New] New experimental feature to provide insight into the reason for the plugin's advice. For 
+example:
+```
+./gradlew proj:reasonDebug --id com.squareup.okio:okio
+``` 
+* [Fixed] Fails to recognize when dependencies have been declared on multiple configurations.
+([Issue 257](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/257))
+* [Fixed] Eagerly realizing tasks.
+* Updated to latest AGPs at time of writing (4.1.0-rc02 and 4.2.0-alpha09) 
+* Updated test matrix to run against Gradle 6.6.1.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.60.0,2026-08-26T18:06:19Z,False,True,"* [Fixed] Does not union global and local rules as expected.
+([Issue 273](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/273))
+* [Fixed] In-memory cache now has a configurable eviction policy.
+([Issue 274](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/274))
+* [Fixed] Sometimes a dependency can appear multiple times in the advice.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.59.0,2026-08-26T18:06:20Z,False,True,"* [New] Kotlin stdlib now a dependency bundle by default, improving ergonomics for Kotlin users.
+* [New] Improved on _reason_ experimental feature. Try it out:
+```
+./gradlew proj:reason --id com.squareup.okio:okio
+```
+* Do less work during configuration.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.57.0,2026-08-26T18:06:23Z,False,True,"* [Fixed] LocateDependenciesTask remains up to date even after changing dependency configurations
+([Issue 255](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/255)).
+* [Fixed] Works better with Kotlin Multiplatform Projects 
+([Issue 228](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/228)).
+(Thank you to Martin Bonnin @martinbonnin for contributing this!)
+* [Fixed] AARs with only native libs wrongly declared unused
+([Issue 252](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/252)).
+* [Fixed] Don't try to analyze `module-info.class` files.
+([Issue 239](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/239))
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.56.0,2026-08-26T18:06:25Z,False,True,"* [Fixed] Unhook plugin from `assemble` task, to which it was yoked against its will. The upshot is
+that running `assemble` will no longer trigger the plugin's tasks to run. Using the 
+**Build Project** button in Android Studio will also no longer trigger the plugin's tasks.
+* [Fixed] Don't do too much work during configuration for the `LocateDependenciesTask`.
+* No longer disable plugin configuration when in the context of Android Studio. This was causing
+more problems than it solved (and may not even have solved anything). 
+* Improved warning message about using a version of AGP outside of the known-good range.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.55.0,2026-08-26T18:06:27Z,False,True,"* Don't call `await()` on `WorkerExecutor`s, which should improve runtime performance, and was
+unnecessary anyway. 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.54.0,2026-08-26T18:06:28Z,False,True,"* [Fixed] Crashes in the presence of file dependencies (flat jars).
+* Improved efficiency in bytecode analysis, which should reduce memory pressure and CPU usage.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.53.1,2026-08-26T18:06:29Z,False,True,"* [Fixed] Inadvertently built 0.53.0 with Java 9, which leads to compatibility issues with projects
+that use Java 8.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.53.0,2026-08-26T18:06:31Z,False,True,"* [New] Improved support for Spring Boot and Kotlin Multiplatform Projects. This plugin no longer
+relies on the `jar` task, which is disabled by these plugins. Instead, it uses compiled class files
+as its input.
+* [New] The plugin will not suggest `api` dependencies for Spring Boot projects.
+* Now built with Gradle 6.5.1.
+* Now compiling against AGP 4.0.1 and testing against AGPs 3.5.4, 3.6.4, and 4.0.1.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.52.0,2026-08-26T18:06:32Z,False,True,"* [New] Provide suggested fix on Android unit test compilation failure. Partially resolves 
+[Issue 205](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/205).
+* [Fixed] Android Studio reports configuration failure due to changes in 0.50.0.
+* [Fixed] Don't suggest changing an implementation dependency to testImplementation when it is 
+actually used in the main source.
+* Now compiling against AGP 4.0.0.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.51.0,2026-08-26T18:06:34Z,False,True,"* [Fixed] Don't crash when unit test variants have been disabled.
+(Thank you to Stephane Nicolas @stephanenicolas for contributing this!)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.50.0,2026-08-26T18:06:37Z,False,True,"* [New] Plugin disables itself if invoked from the IDE, to workaround an issue with Android Studio's
+`Make project`.
+* [New] You can disable most console output with a new system property, 
+`dependency.analysis.silent=true`. This can be added to the command line invocation or added to 
+`gradle.properties`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.49.0,2026-08-26T18:06:40Z,False,True,"* [Fixed] Detect star imports as supported annotation types.
+* [Fixed] Detect if jar task has been disabled and provide more useful error message if so. 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.48.0,2026-08-26T18:06:41Z,False,True,"* [New] Analyze test source in order to provide advice relating to test dependencies.
+* Updated to latest AGPs at time of writing (4.1.0-beta01 and 4.2.0-alpha01) 
+* Deprecated 'master' branch in favor of new 'main' branch.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.47.0,2026-08-26T18:06:43Z,False,True,"* [New] The concept of dependency ""facades"" has been formalized as ""logical dependencies"", aka
+""bundles"". `dependencyAnalysis.setFacadeGroups()` is now deprecated and is a no-op. Users should 
+instead use `dependencyAnalysis.dependencies {}` to specify their bundles. Finally, with this 
+change, the Kotlin stdlib family is no longer considered a bundle by default.
+(Thanks to Zac Sweers @ZacSweers for talking with me about how to name this new feature)
+* Simplified and reduced the amount of logging.
+* Building with Gradle 6.5. Added Gradle 6.5 to the test matrix.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.46.0,2026-08-26T18:06:45Z,False,True,"* [New] New `registerPostProcessingTask()` method on the extension to register a custom task to 
+execute with the `ComprehensiveAdvice` produced by the project as an input.
+* [New] Can now filter/configure compileOnly advice, analogous to other kinds of advice.
+* [New] Improved DSL for configuring plugin behavior. See the
+[wiki](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/wiki/Customizing-plugin-behavior)
+for more information.
+(Thank you to Stephane Nicolas @stephanenicolas for contributing this!)
+* Updated to latest AGPs at time of writing (4.0.0!).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.45.0,2026-08-26T18:06:46Z,False,True,"* [New] All advice, both dependency- and plugin-related, is now aggregated at the project level for
+easier consumption. The extension methods `adviceOutputFor(variant: String)` has been changed to
+`adviceOutput()`. It no longer returns a nullable `RegularFileProperty`. This output is now always
+non-null, but may nevertheless _contain_ a null value, so you should use `getOrElse()`.
+Finally, the type of the output has changed from `Set<Advice>` to `Set<ComprehensiveAdvice>`.
+* [Fixed] `StringIndexOutOfBoundsException` when parsing empty source directory.
+* Several root-level aggregate tasks were removed as no longer useful.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.44.0,2026-08-26T18:06:48Z,False,True,"* [New] Improved support for Android variants in dependency analysis. Plugin now analyzes all 
+source sets / variants for each execution of `buildHealth`.
+* [Fixed] Build cache issue with `ArtifactsAnalysisTask`. (Thanks to @Paladinium for filing the 
+issue and providing a reproducer!)
+* [Deprecated] The `setVariants()` method is now deprecated; it no longer does anything, and will be
+removed in v1.0.0.
+* No longer attempts to parse Java stubs generated by kapt. No tests break, so ¯\\_(ツ)\_/¯
+* Updated to latest AGPs at time of writing (4.0.0-rc01).
+* Staging repo closing and release process is now semi-automated (with thanks to 
+Niklas Baudy @vanniktech, https://github.com/vanniktech/gradle-maven-publish-plugin)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.43.0,2026-08-26T18:06:49Z,False,True,"* [New] New `setDependencyRenamingMap()` method on the DSL allows customizing some output with 
+semantic dependency names. See the javadoc for more information. More output will be mapped in a
+future release. (Thank you to Stephane Nicolas @stephanenicolas for contributing this!)
+* Building plugin with Gradle 6.4.1, and testing against same.
+* Comment on PRs with build scan URL when there is a failure.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.42.0,2026-08-26T18:06:50Z,False,True,"* [New] Support the `application` plugin.
+* [New] New `abi` exclusions DSL. See the wiki for details. (Thanks to Zac Sweers @ZacSweers for the
+contribution!)
+* [New] Detects usages that only appear in a generic context, and javadoc too (as a side effect).
+* [New] Does not suggest removing dependencies that supply security providers (such as Conscrypt).
+* Now publishing snapshots on every push to master.
+* Building plugin with Gradle 6.4, and testing against same.
+* Updated to latest AGP, 4.1.0-alpha09.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.41.0,2026-08-26T18:06:52Z,False,True,"* [New] Supports the concept of ""facade"" dependencies. See the new wiki for details.
+* Post-processing support has been improved. See the new wiki for details.
+* Most of what was in the over-long readme has been moved to the wiki.
+* `OutputPaths` is back to internal. We have a new way to make outputs available.
+* Updated to latest AGPs at time of writing (4.0.0-beta05, 4.1.0-alpha08).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.40.0,2026-08-26T18:06:53Z,False,True,"* [New] Console report now stored on disk for easier human consumption.
+(Thank you to Stephane Nicolas @stephanenicolas for contributing this!)
+* [New] `OutputPaths` is now non-internal at `com.autonomousapps.OutputPaths`. This makes it 
+possible to consume plugin outputs without having to reference its tasks.
+* [New] `Advice` json for ""remove"" and ""add"" advice now indicates used-transitive dependencies (for
+the former) and parents or upstream dependencies (for the latter).
+* [Fixed] Reports Java service loaders as unused. Due to their runtime nature, they will now be 
+filtered from the unused dependencies advice.
+* Updated to latest AGPs at time of writing (3.6.3, 4.0.0-beta04, 4.1.0-alpha06).
+* Added a CONTRIBUTING guide (Thank you to Stephane Nicolas @stephanenicolas for assisting with 
+this)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.39.0,2026-08-26T18:06:55Z,False,True,"* [New] Reports when kapt has been applied but there are no annotation processors present.
+* [New] Reports when either the `java-library` or `org.jetbrains.kotlin.jvm` have been redundantly
+applied. Laid the groundwork for reporting other plugin issues.
+* [Fixed] Reports unused dependencies that are on a flavor-based configuration as being on a ""null""
+configuration.
+* Re-organized the model code. In particular, moved `Advice` and `Dependency` to a non-internal
+package. These should now be considered part of the plugin's public API.
+* Added an ""intermediates"" directory to the output, so it's more clear to end-users which files
+they should care about.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.38.0,2026-08-26T18:06:56Z,False,True,"* [Fixed] Plugin now correctly detects usage of annotation processors that support annotations with
+`SOURCE` retention policies.
+* Updated asm dependency to 8.0.1 (shaded).
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.37.0,2026-08-26T18:06:58Z,False,True,"Please note that this version is only available via Maven Central, as there were issues publishing 
+to the Gradle Plugin Portal.
+* [New] Support kotlin-jvm projects.
+* [Fixed] False positive on unused annotation processors.
+* [Fixed] Poor performance in `MisusedDependencyDetector`. (special thanks to Stephane Nicolas 
+@stephanenicolas for discussing this issue with me)
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.36.0,2026-08-26T18:06:59Z,False,True,"* [New] Reports unused annotation processors.
+* [New] Tries to be more memory-efficient by interning strings.
+* [New] Tries to be more memory-efficient by using in-memory cache to avoid duplicate (simultaneous) work.
+* [New] No longer fails when used outside of known-good AGP range. Instead emits warning.
+* [New] New extension method `chatty()` lets users set console logging preference.
+* [Fixed] Don't use default Locale when capitalizing strings. 
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.35.0,2026-08-26T18:07:01Z,False,True,"* [Fixed] Plugin gives redundant advice (suggests moving compileOnly dep to compileOnly). This impacted both
+console output and advice.json.
+* Plugin no longer eagerly fails if a version of AGP is used outside of the known-good range.
+Instead it emits a warning.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.34.0,2026-08-26T18:07:02Z,False,True,"* [Fixed] Check for presence of ContentProvider or Service in contributed Android manifests.
+Such Android libraries are now considered used, even if they don't appear in the compiled classes of a project.
+(nb: this ensures LeakCanary is not considered unused.)
+* [Fixed] Reports appcompat as unused when its resources are (but not by Java/Kotlin source).
+* [Fixed] Deprecation warning with AGP 4+ for `android.viewBinding` and `android.dataBinding`.
+Fixed issue with `AgpVersion` comparisons.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.33.0,2026-08-26T18:07:03Z,False,True,"* Added extension option for ignoring ""-ktx"" dependencies. See README for more information.
+* [Fixed] Version badge showed a very old version. (Thanks Pavlos-Petros Tournaris!) 
+* [Fixed] Emit helpful error message if plugin has not been applied to root project.
+* [Fixed] Provide advice for source-containing root projects.
+* [Fixed] Subtle bug that led to unused dependencies showing up in change-advice.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.32.0,2026-08-26T18:07:05Z,False,True,"* Plugin now available on Maven Central in addition to Gradle Plugin Portal.
+* Plugin supports a new configuration option to not auto-apply to all subprojects.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.31.0,2026-08-26T18:07:06Z,False,True,"* [Fixed] Now supports AGP 4.1.0-alpha04.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.30.0,2026-08-26T18:07:08Z,False,True,"* [Fixed] [Issue 82](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/82). Build fails with StringIndexOutOfBoundsException.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.28.0,2026-08-26T18:07:09Z,False,True,"* [Feature] The plugin will warn the user and throw an explicit error if it is applied to a project outisde the range of accepted AGP versions (3.5.3-4.1.0-alpha08 at time of writing).
+* [Fixed] Deprecation warnings on projects built with AGP 4+, due to accessing 3.x-era `android.dataBinding` and `android.viewBinding`.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.26.1,2026-08-26T18:07:12Z,False,True,"* [Feature] The plugin now detects if databinding or viewbinding have been enabled and, of so, does not suggest changing dependencies automatically added by AGP.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.25.0,2026-08-26T18:07:15Z,False,True,"* [Fixed] Support for AGP 4.1.0-alpha02.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.24.1,2026-08-26T18:07:17Z,False,True,"* [Fixed] Should not assume every class has a superclass.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.24.0,2026-08-26T18:07:18Z,False,True,"* [Fixed] Crashes when configuring project with Java-only Android application module.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.23.0,2026-08-26T18:07:20Z,False,True,"* [Feature] Added support for recognizing potential `compileOnly` dependencies, such as source/class annotation libraries.
+* Simplified source code parsing so it's only done once.
+* [Fixed] Forgot to close an input stream on a collection of files.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.22.0,2026-08-26T18:07:21Z,False,True,"* [Fixed] Runtime issue during configuration for some projects.
+* Now testing against Gradle 6.2.2.
+* Bumped Kotlin to 1.3.70.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.21.1,2026-08-26T18:07:23Z,False,True,"* [Fixed] Runtime issue with custom variant and java-library subproject.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.21.0,2026-08-26T18:07:24Z,False,True,"* [Fixed] ConstantDetector task fails at runtime.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.20.3,2026-08-26T18:07:26Z,False,True,"* [Fixed] Plugin crashes with AGP 4.0.0-beta01.
+* Functional tests updated to run against latest AGP 4.0.0 beta and Gradle 6.2.1.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.20.2,2026-08-26T18:07:27Z,False,True,"* [Feature] Lifts limitation on detecting constant usage.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.19.2,2026-08-26T18:07:32Z,False,True,"* [Feature] Extension offers more configuration options for detected issues.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.18.0,2026-08-26T18:07:36Z,False,True,"* [Feature] Extension now offers basic configurable failure options.
+* Bumped to Gradle 6.1.1, including functional tests matrix.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.17.1,2026-08-26T18:07:37Z,False,True,"* Simplified console output.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.17.0,2026-08-26T18:07:39Z,False,True,"* [Feature] Thorough advice now provided for how to update build scripts based on plugin findings.
+This is printed in narrative form as well as written to disk in a machine-readable format.
+* Trimmed down README with a new focus on the advice-related tasks.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.16.0,2026-08-26T18:07:40Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.15.0,2026-08-26T18:07:41Z,False,True,"* [Fixed] Plugin now works with AGP 4.0.0-alpha08.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.14.0,2026-08-26T18:07:43Z,False,True,"* [Feature] Reports now indicate on which configuration a dependency was declared, if it were.
+* [Fixed] Kotlin stdlib is never a candidate for unused direct dependency.
+* Significantly more tests, alongside some refactoring.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.13.1,2026-08-26T18:07:45Z,False,True,"* [Fixed] Kotlin stdlib never appears in list of used transitive dependencies.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.13.0,2026-08-26T18:07:46Z,False,True,"* Added support for detecting use of Kotlin inline members.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.12.1,2026-08-26T18:07:48Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.12.0,2026-08-26T18:07:49Z,False,True,"* ([12](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/12)) Generate outputs into buildDir/reports directory
+* Normalize annotation of input AbiAnalysisTask
+* ([11](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/11)) add version in transitive dependencies
+* More robustness in Functional tests
+* Extract models and utils to separate Gradle project (""module"")
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.11.1,2026-08-26T18:07:51Z,False,True,"* Add resolved versions to all reports
+* Clean up of Runner class
+* Matrix of Functional tests for different AGP and Gradle versions
+* Target Kotlin at Java 8
+* Add test for ABI dependency analysis
+* Use Java 8
+* Add unit tests to some components
+* Improved logging
+* Refactor of jar/ClassList analysis tasks
+* Refactor Gradle Runner
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.11.0,2026-08-26T18:07:52Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.10.0,2026-08-26T18:07:54Z,False,True,"* Plugin should now be applied only to root project.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.9.0,2026-08-26T18:07:55Z,False,True,"* Add extension for Aggregate BuildHealth Task
+* Improved bytecode analysis
+* Switched from aggregating tasks to aggregating configurations.
+* ([6](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/6)) Changed file extension on some outputs to .json.
+* ([7](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin/issues/7)) Use reified types
+* Added abstract base class for android-project analysis
+* Introduction of perpetual semantic versioning.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.8,2026-08-26T18:07:56Z,False,True,"* Improve analysis of pure Java projects
+* Apache 2.0 license
+* Improved misused-dependencies report.
+* Fixed an issue that impacted IDE sync.
+* ABI analysis merged
+* AGP 3.5.3
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.7.1,2026-08-26T18:07:58Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.7,2026-08-26T18:07:59Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.6.1,2026-08-26T18:08:01Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.6,2026-08-26T18:08:02Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.5,2026-08-26T18:08:03Z,False,True,"* Reports in HTML
+* Improved cacheability of tasks
+* AGP & KGP versions bump 3.5.2 & 1.3.61
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.4,2026-08-26T18:08:05Z,False,True,"* Gradle 5 and shaded ASM dependency
+* Change handling of kotlin-stdlib artifacts
+* ASM 7
+* kapt support
+* [java-library](https://docs.gradle.org/current/userguide/java_library_plugin.html) projects support
+* Better byte code analysis
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.3,2026-08-26T18:08:07Z,False,True,"
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.2,2026-08-26T18:08:08Z,False,True,"* Analysis of XML layouts
+* Gradle 6
+* Function testing introduced (but doesn't work yet)
+* Simplified ClassListAnalysisTask configuration.
+"
+autonomousapps/dependency-analysis-gradle-plugin,v0.1,2026-08-26T18:08:10Z,False,True,"October 23rd, 2019. Project starts.
+"

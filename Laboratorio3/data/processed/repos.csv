@@ -1,0 +1,4 @@
+repo,estrelas,linguagem,criado_em,idade_anos,default_branch,contribuidores,owner_tipo,org_verificada,automacao_release,ferramenta_release,pct_conventional
+mozilla/pontoon,1673,Python,2011-02-19T11:25:51Z,15.61265901082465,main,162,Organization,False,False,nenhuma,0.01904761904761905
+axadrn/shadcn-templ,1752,templ,2024-10-01T14:40:11Z,1.9969575633127994,main,28,User,False,False,nenhuma,0.811965811965812
+autonomousapps/dependency-analysis-gradle-plugin,2182,Kotlin,2019-10-23T19:12:37Z,6.938260260602834,main,70,User,False,False,nenhuma,0.9681274900398407

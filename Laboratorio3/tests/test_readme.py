@@ -22,6 +22,7 @@ def test_readme_documenta_cada_csv_do_contrato(schema):
     "custo_selecao.csv",
     "sem_push_na_janela",
     "nao_examinados",
+    "checkpoint",
     "403, 422 e 410",
 ])
 def test_readme_traz_o_essencial(trecho):
