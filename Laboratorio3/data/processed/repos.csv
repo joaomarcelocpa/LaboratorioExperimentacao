@@ -1,4 +1,11 @@
 repo,estrelas,linguagem,criado_em,idade_anos,default_branch,contribuidores,owner_tipo,org_verificada,automacao_release,ferramenta_release,pct_conventional
-mozilla/pontoon,1673,Python,2011-02-19T11:25:51Z,15.61265901082465,main,162,Organization,False,False,nenhuma,0.01904761904761905
-axadrn/shadcn-templ,1752,templ,2024-10-01T14:40:11Z,1.9969575633127994,main,28,User,False,False,nenhuma,0.811965811965812
-autonomousapps/dependency-analysis-gradle-plugin,2182,Kotlin,2019-10-23T19:12:37Z,6.938260260602834,main,70,User,False,False,nenhuma,0.9681274900398407
+SciML/NeuralPDE.jl,1234,Julia,2017-03-14T20:53:14Z,9.547240759753594,master,74,Organization,False,False,nenhuma,0.10810810810810811
+goodroot/hyprwhspr,1234,Python,2025-08-27T18:21:15Z,1.0930464927624408,main,60,User,False,False,nenhuma,0.7750556792873051
+dotnet/ClangSharp,1255,C#,2015-02-13T03:02:17Z,11.630043539432657,main,62,Organization,True,False,nenhuma,0.005449591280653951
+eclipse-milo/milo,1391,Java,2016-05-06T13:20:04Z,10.402311804446473,main,32,Organization,False,False,nenhuma,0.0
+linear/linear,1629,TypeScript,2019-04-11T22:54:14Z,7.471719807589931,master,49,Organization,True,True,changesets,0.8536585365853658
+levy-street/world-of-claudecraft,2289,TypeScript,2026-06-10T05:55:59Z,0.30870028139021977,main,85,Organization,False,False,nenhuma,0.6543996225524888
+Kong/unirest-java,2703,Java,2011-04-11T21:19:53Z,15.471899193855046,main,74,Organization,True,False,nenhuma,0.0
+apache/storm,6696,Java,2013-11-05T08:00:14Z,12.902577667503232,master,558,Organization,True,False,nenhuma,0.1891625615763547
+napi-rs/napi-rs,7964,Rust,2018-04-28T08:26:28Z,8.426141753492027,main,184,Organization,True,False,nenhuma,1.0
+mockoon/mockoon,8439,TypeScript,2017-07-17T13:19:16Z,9.20587253149796,main,69,Organization,True,False,nenhuma,0.03865979381443299

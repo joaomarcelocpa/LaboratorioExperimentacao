@@ -46,7 +46,13 @@ def montar_metricas(
         rel_janela = rel[rel["na_janela"]] if not rel.empty and "na_janela" in rel.columns else rel
         dep_suc = dep[dep["estado_final"] == "success"] if not dep.empty and "estado_final" in dep.columns else dep
 
-        freq_rel = frequencia(rel_janela, cfg.janela_inicio, cfg.janela_fim) if not rel_janela.empty else 0.0
+        # Definição principal de deploy (seção 3 do enunciado): release publicada,
+        # sem pré-release. As pré-releases só entram na variante freq_release_pre.
+        rel_estavel = (rel_janela[~rel_janela["prerelease"].astype(bool)]
+                       if not rel_janela.empty and "prerelease" in rel_janela.columns
+                       else rel_janela)
+
+        freq_rel = frequencia(rel_estavel, cfg.janela_inicio, cfg.janela_fim) if not rel_estavel.empty else 0.0
         freq_rel_pre = frequencia(rel, cfg.janela_inicio, cfg.janela_fim) if not rel.empty else 0.0
         freq_tag_ = (frequencia(tag, cfg.janela_inicio, cfg.janela_fim, coluna_data="data_commit")
                      if not tag.empty else 0.0)

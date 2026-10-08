@@ -124,3 +124,18 @@ def test_montar_metricas_sem_issues_deixa_cfr_c_nan():
         _mk_deployments(repo), _cfg(),
     )
     assert math.isnan(df.iloc[0]["cfr_c"])
+
+
+def test_freq_release_exclui_prerelease_e_a_variante_pre_inclui():
+    repo = "org/repo"
+    rel = pd.concat([_mk_releases(repo), pd.DataFrame([{
+        "repo": repo, "tag": "v1.2.0-rc1", "publicada_em": "2024-07-01T00:00:00Z",
+        "prerelease": True, "na_janela": True, "body": "",
+    }])], ignore_index=True)
+    df = montar_metricas([repo], rel, _mk_commits(repo), _mk_tags(repo),
+                         _mk_deployments(repo), _cfg())
+    row = df.iloc[0]
+    semanas = 366 / 7   # a janela de _cfg() é 2024 inteiro (ano bissexto)
+    assert row["freq_release"] == pytest.approx(3 / semanas)
+    assert row["freq_release_pre"] == pytest.approx(4 / semanas)
+    assert row["freq_release"] < row["freq_release_pre"]

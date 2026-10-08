@@ -30,6 +30,22 @@ def _parse_data(s: str) -> datetime:
     return datetime.fromisoformat(s.replace("Z", "+00:00"))
 
 
+def _tags_rest(session: requests.Session, repo: str) -> list[dict]:
+    """Caminho REST: uma chamada a /commits/{sha} para cada tag."""
+    linhas: list[dict] = []
+    for t in _paginar(session, f"{BASE}/repos/{repo}/tags"):
+        sha = t["commit"]["sha"]
+        r = session.get(f"{BASE}/repos/{repo}/commits/{sha}")
+        r.raise_for_status()
+        linhas.append({
+            "repo": repo,
+            "tag": t["name"],
+            "sha": sha,
+            "data_commit": r.json()["commit"]["author"]["date"],
+        })
+    return linhas
+
+
 def coletar_releases(
     repo: str,
     cfg: Config,
@@ -39,7 +55,7 @@ def coletar_releases(
 
     releases_df inclui todas as releases sem draft, com flag na_janela.
     Inclui a release imediatamente anterior à janela (base para compare).
-    tags_df inclui todas as tags com data_commit via GET /commits/{sha}.
+    tags_df inclui todas as tags com data_commit (GraphQL, ou REST de reserva).
     """
     inicio = datetime(cfg.janela_inicio.year, cfg.janela_inicio.month,
                       cfg.janela_inicio.day, tzinfo=timezone.utc)
@@ -82,20 +98,14 @@ def coletar_releases(
 
     releases_df = pd.DataFrame(linhas) if linhas else df_vazio(SCHEMAS["releases"])
 
-    # tags
-    raw_tags = _paginar(session, f"{BASE}/repos/{repo}/tags")
-    tag_linhas: list[dict] = []
-    for t in raw_tags:
-        sha = t["commit"]["sha"]
-        r = session.get(f"{BASE}/repos/{repo}/commits/{sha}")
-        r.raise_for_status()
-        data = r.json()["commit"]["author"]["date"]
-        tag_linhas.append({
-            "repo": repo,
-            "tag": t["name"],
-            "sha": sha,
-            "data_commit": data,
-        })
+    # tags: com a data do commit. A sessão do pipeline sabe pedir isso ao
+    # GraphQL, 100 tags por chamada; sem ela (ou se o repositório não for
+    # achado pelo nome), a REST faz uma chamada por tag.
+    tag_linhas: list[dict] | None = None
+    if hasattr(session, "tags_com_data"):
+        tag_linhas = session.tags_com_data(repo)
+    if tag_linhas is None:
+        tag_linhas = _tags_rest(session, repo)
     tags_df = pd.DataFrame(tag_linhas) if tag_linhas else df_vazio(SCHEMAS["tags"])
 
     return releases_df, tags_df

@@ -1,9 +1,9 @@
 etapa,entraram,sairam,motivo
-duplicata,65444,22,já veio de outra faixa de estrelas
-fork,65422,0,é um fork
-arquivado,65422,5361,está arquivado
-sem_push_na_janela,60061,22710,sem push desde 2025-10-01: não pode ter runs de push na janela
-nao_examinados,37351,37280,"não examinados: a amostra de 10 fechou antes (ordem aleatória, seed=42)"
-usa_actions,71,10,não usa GitHub Actions
-min_releases,61,44,menos de 5 releases na janela
-min_runs,17,7,menos de 50 runs válidos na janela
+duplicata,65450,26,já veio de outra faixa de estrelas
+fork,65424,0,é um fork
+arquivado,65424,5361,está arquivado
+sem_push_na_janela,60063,22710,sem push desde 2025-10-01: não pode ter runs de push na janela
+nao_examinados,37353,37288,"não examinados: a amostra de 10 fechou antes (ordem aleatória, seed=42)"
+usa_actions,65,6,não usa GitHub Actions
+min_releases,59,44,menos de 5 releases na janela
+min_runs,15,5,menos de 50 runs válidos na janela

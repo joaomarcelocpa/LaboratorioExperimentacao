@@ -35,6 +35,12 @@ class RespostaCompat:
 
 
 class SessaoHttp:
+    def tags_com_data(self, repo: str) -> list[dict] | None:
+        """Tags com data de commit via GraphQL (100 por chamada), ou None se o
+        repositório não for achado e o coletor precisar do caminho REST."""
+        from coleta.tags import tags_com_data
+        return tags_com_data(repo)
+
     def get(self, url: str, params: dict | None = None, **_) -> RespostaCompat:
         if params is None and _LISTAGENS.search(url):
             params = {"per_page": http.PER_PAGE_PADRAO}

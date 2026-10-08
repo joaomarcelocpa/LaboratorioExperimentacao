@@ -1,423 +1,158 @@
 repo,numero,criada_em,labels,titulo,cita_tag
-mozilla/pontoon,2015,2015-05-05T04:57:46Z,bug;P4,[intro] Add RTL support,False
-mozilla/pontoon,2018,2015-08-04T05:57:32Z,bug;P4,[translate] Move translation validation from view to model,False
-mozilla/pontoon,2026,2015-11-03T23:03:20Z,bug;P3;checks,Improve quality checks,False
-mozilla/pontoon,2030,2016-01-26T03:57:34Z,bug;P4;sync,"If change happens on both ends, VCS wins",False
-mozilla/pontoon,2057,2017-03-07T19:44:13Z,P2;bug;sync,Remove bilingual files removed from repository,False
-mozilla/pontoon,2068,2017-06-11T21:35:46Z,bug;P3;sync,"On source repo change, import translations from corresponding l10n files",False
-mozilla/pontoon,2073,2017-07-02T17:03:21Z,bug;P3,CSP error on Pontoon pages,False
-mozilla/pontoon,2075,2017-07-06T23:06:42Z,bug;P3,Speed up team permissions page,False
-mozilla/pontoon,2078,2017-07-18T00:56:04Z,bug;P3,Fuzzy status not updated properly,False
-mozilla/pontoon,2083,2017-08-08T04:07:58Z,P5;bug;sync,"Files sync is triggered, despite no change actually happened",False
-mozilla/pontoon,2097,2017-09-22T00:07:16Z,bug;P3,Strings from <title> tags are not clickable or editable in in-context mode,False
-mozilla/pontoon,2127,2018-04-26T22:33:09Z,P5;bug,Feature request to allow for private projects,False
-mozilla/pontoon,2129,2018-05-09T02:52:50Z,P2;bug;sync,Improve sync performance,False
-mozilla/pontoon,2132,2018-05-31T01:46:59Z,bug;P3;sync,Treat NBSP as a valid translation in .lang files,False
-mozilla/pontoon,2145,2018-10-08T23:10:52Z,bug;P4,Find in page doesn't find all results in scrollable elements like div with overflow-y: auto,False
-mozilla/pontoon,2146,2018-10-18T17:09:28Z,bug;P4,Mixed RTL and LTR content is hard to read in text inputs,False
-mozilla/pontoon,2159,2019-02-09T00:23:38Z,bug;P3,Hebrew hyphen takes no space in textarea,False
-mozilla/pontoon,2169,2019-06-10T17:04:52Z,bug;P4;sync,Do not break sync if POT file added without PO counterparts,False
-mozilla/pontoon,2170,2019-06-10T22:13:05Z,bug;P3;sync,Detecting localizable files is not strict enough,False
-mozilla/pontoon,2186,2019-10-16T00:39:58Z,bug;P3;FTL,"Problem while saving FTL string with only ""other"" plural variant in string",False
-mozilla/pontoon,2188,2019-10-24T23:50:13Z,bug;P3;FTL,Empty attribute not displayed in the UI,False
-mozilla/pontoon,2190,2019-10-28T23:28:52Z,bug;P4;FTL,Can switch from Rich editor to Simple via Source,False
-mozilla/pontoon,2200,2019-12-08T21:15:06Z,bug;P4,Mixed RTL and LTR content is hard to read in marked placeables,False
-mozilla/pontoon,2211,2020-02-11T20:30:10Z,P2;bug;sync,Detect moved/renamed files in git as changed files,False
-mozilla/pontoon,2212,2020-02-13T06:17:14Z,P2;bug;sync,Escape straight apostrophes or double quotes in strings.xml files,False
-mozilla/pontoon,2215,2020-02-23T17:51:58Z,P2;bug;sync,Sync stops running after Scheduler Cycling,False
-mozilla/pontoon,2217,2020-02-28T01:10:59Z,P2;bug;checks;FTL,Fix display of Translations with Errors,False
-mozilla/pontoon,2220,2020-03-18T21:33:06Z,P2;bug;notifications,Space available in notifications for comments is too small,False
-mozilla/pontoon,2228,2020-05-17T17:44:05Z,P2;bug;sync;FTL,Rejected Fluent strings resurrected as imported and approved,False
-mozilla/pontoon,2242,2020-11-23T18:42:30Z,P2;bug;project config,Changes to .toml file reverted on sync,False
-mozilla/pontoon,2243,2020-12-07T21:54:03Z,P2;bug,URLs truncation in resource comments lead to broken URLs,False
-mozilla/pontoon,2244,2020-12-12T05:28:20Z,bug;P4;FTL,Machinery text replaces text in source editor instead of just adding it,False
-mozilla/pontoon,2245,2020-12-13T22:37:22Z,P2;bug,Invalid HTTP_HOST header error appears when accessing mozilla-pontoon.herokuapp.com,False
-mozilla/pontoon,2246,2020-12-14T22:50:13Z,bug;P3;FTL,Back button doesn't update translation text,False
-mozilla/pontoon,2251,2021-01-12T15:19:19Z,P1;bug;checks;FTL,Warnings behave inconsistently when working with FTL string,False
-mozilla/pontoon,2254,2021-01-24T18:43:18Z,bug;P3;FTL,Input fields disappear when FTL mode is toggled,False
-mozilla/pontoon,2257,2021-01-29T03:10:10Z,bug;P4,Add ability to Re-apply existing filter,False
-mozilla/pontoon,2266,2021-02-12T07:53:30Z,P2;bug,Only list pinned comments under all comments where posted,False
-mozilla/pontoon,2267,2021-02-12T07:57:30Z,bug;P3,Set direction on placeables,False
-mozilla/pontoon,2275,2021-03-10T03:31:18Z,P1;bug,Concordance search not reset properly after translation submission,False
-mozilla/pontoon,2277,2021-03-15T06:15:56Z,bug;P3;good first issue;sync,Pontoon picks the wrong folder format for locales (underscore instead of hyphens),False
-mozilla/pontoon,2285,2021-04-07T17:16:42Z,bug;P3;sync,Sync breaks with TypeError: 'builtin_function_or_method' object is not subscriptable,False
-mozilla/pontoon,2287,2021-04-11T05:00:25Z,bug;P3;FTL,"After search, clicking any field in the rich editor puts focus on the first field",False
-mozilla/pontoon,2293,2021-05-18T02:46:54Z,P2;bug,Pilcrow in message,False
-mozilla/pontoon,2297,2021-05-28T22:16:07Z,P1;bug;checks;FTL,Translate view gets into a state where approving translations is broken,False
-mozilla/pontoon,2301,2021-07-15T22:36:02Z,bug;P3,Pontoon build fails in Docker on M1 MacBooks due to segfault in curl,False
-mozilla/pontoon,2302,2021-08-11T14:46:23Z,P2;bug,Pontoon settings not accessible if profile has non existing locale as custom home page,False
-mozilla/pontoon,2306,2021-08-21T15:27:28Z,bug;P3;good first issue;sync,Daily sync errors for android-l10n project,False
-mozilla/pontoon,2311,2021-09-09T14:01:31Z,bug,Error R12 in Update to Pontoon,False
-mozilla/pontoon,2319,2021-09-22T09:22:04Z,bug;P3,Labels overlap in DATE/TIME range picker,False
-mozilla/pontoon,2325,2021-10-01T07:24:10Z,P1;bug,recently commit is broken my pontoon instance,False
-mozilla/pontoon,2331,2021-10-16T11:03:58Z,P1;bug,"Thanks, so my Instance is broken",False
-mozilla/pontoon,2345,2021-10-25T06:03:53Z,bug;P3,Fluent: DATETIME() is not highlighted as a placeable in source,False
-mozilla/pontoon,2346,2021-10-25T10:10:24Z,bug;P3,"Deploy to Heroku - 'CSRF_USE_SESSIONS is enabled, but request.session is not set' error",False
-mozilla/pontoon,2350,2021-10-31T10:10:35Z,P2;bug,"Links below time range graph (7D, 1D, 24H, etc.) are missing",False
-mozilla/pontoon,2374,2021-11-27T04:12:09Z,P1;bug,"""Copy"" does not copy variables for fluent ",False
-mozilla/pontoon,2387,2021-12-14T15:38:00Z,P2;bug,Pontoon documentation is not searchable,False
-mozilla/pontoon,2388,2021-12-16T20:48:18Z,bug;P3,Concordance search text disappears when switching Machinery/Locales tabs,False
-mozilla/pontoon,2389,2021-12-16T20:48:21Z,P2;bug,Unable to scroll Locales tab in the Terminology project,False
-mozilla/pontoon,2400,2022-01-07T15:33:29Z,P2;bug,Comment layout looks broken when mentioning Arabic nickname,False
-mozilla/pontoon,2404,2022-01-13T06:14:33Z,P2;bug;docs,Search is broken in Pontoon documentation,False
-mozilla/pontoon,2407,2022-01-14T18:04:36Z,bug;P3,Ability to hide email address,False
-mozilla/pontoon,2424,2022-02-11T15:34:33Z,P2;bug,Adding leading/trailing whitespace to multiline FTL translations results in entering duplicates,False
-mozilla/pontoon,2447,2022-03-09T11:13:39Z,P1;bug,Microsoft Terminology Service returning 500,False
-mozilla/pontoon,2457,2022-03-16T08:46:39Z,P1;bug,Insights data missing on several projects and project-locales,False
-mozilla/pontoon,2460,2022-03-21T18:41:03Z,P2;bug,Broken heroku deploy button,False
-mozilla/pontoon,2461,2022-03-22T01:07:28Z,bug;P3,Error when navigating string list using keyboard shortcut very fast,False
-mozilla/pontoon,2470,2022-04-06T19:35:05Z,P2;bug;FTL,Broken UI and errors in Fluent string with empty attribute,False
-mozilla/pontoon,2475,2022-04-17T05:01:29Z,P1;bug,Hitting the Enter key in the numpad area now enters a newline instead of submitting the suggestion,False
-mozilla/pontoon,2476,2022-04-17T15:53:24Z,P1;bug,Enter-key event submits translation without accepting IME candidates first,False
-mozilla/pontoon,2478,2022-04-19T07:48:31Z,bug;P3,Translate UI crashes when the page is translated,False
-mozilla/pontoon,2491,2022-04-22T09:50:07Z,P2;bug,"When implicitly rejecting a translation, delete any of its TM entries",False
-mozilla/pontoon,2493,2022-04-25T15:34:16Z,P2;bug,Pontoon is not compatible with Python 3.10,False
-mozilla/pontoon,2519,2022-05-07T09:19:24Z,P2;bug,"After sending a comment, the text remains in the input field",False
-mozilla/pontoon,2532,2022-05-18T10:12:08Z,P2;bug,Send Machinery requests simultaneously,False
-mozilla/pontoon,2538,2022-05-25T06:24:30Z,P2;bug;notifications,Missing link in comment notifications when string gets deleted,False
-mozilla/pontoon,2539,2022-05-27T09:53:48Z,P1;bug,Can’t search in TM from Concordance search,False
-mozilla/pontoon,2540,2022-05-27T09:58:18Z,P2;bug,Missing April/May insights data in multiple projects,False
-mozilla/pontoon,2543,2022-05-31T20:31:36Z,P1;bug,Warnings don't show up in the Translate View,False
-mozilla/pontoon,2547,2022-06-14T19:02:05Z,bug;P3,"On Gettext plural form approval, move to next form",False
-mozilla/pontoon,2549,2022-06-15T19:41:51Z,P2;bug,When editing existing strings in rich editor cursor jumps to the end,False
-mozilla/pontoon,2551,2022-06-16T03:30:43Z,bug;P3,make loaddb fails,False
-mozilla/pontoon,2556,2022-06-27T18:39:54Z,P2;bug,Update History after translating the only string from the list,False
-mozilla/pontoon,2558,2022-06-29T08:39:11Z,P2;bug,Wrong character count is shown for source strings in FTL files,False
-mozilla/pontoon,2559,2022-07-02T09:02:01Z,bug;P3,"""Age un unreviewed"" graph in locale insights is empty",False
-mozilla/pontoon,2561,2022-07-04T23:34:18Z,P2;bug,Flashing of unnecessary text during loading of the translate page,False
-mozilla/pontoon,2563,2022-07-07T07:53:43Z,P2;bug,Project info toggle does not open the popup,False
-mozilla/pontoon,2567,2022-07-08T12:11:50Z,P2;bug,"When clicking on a translation in the Locales tab, the context is copied to the editor together with the selected translation",False
-mozilla/pontoon,2572,2022-07-18T18:36:23Z,P2;bug,"After searching, clicking on the text area doesn't show the cursor",False
-mozilla/pontoon,2573,2022-07-19T06:32:29Z,P2;bug,Clicking item in MACHINERY doesn't focus the translation area,False
-mozilla/pontoon,2576,2022-07-21T22:52:22Z,P5;bug,Site isn't compatible with dark mode,False
-mozilla/pontoon,2577,2022-07-25T11:12:55Z,P2;bug,Can’t upload translations,False
-mozilla/pontoon,2582,2022-07-29T15:56:53Z,P2;bug,Copying from Machinery/Locales using keyboard shortcut is broken,False
-mozilla/pontoon,2591,2022-08-03T09:38:26Z,bug;P3,Delay before contact person data appears in the comment field,False
-mozilla/pontoon,2599,2022-08-09T13:06:06Z,P2;bug,No warnings when trying to submit empty translations,False
-mozilla/pontoon,2603,2022-08-12T20:52:12Z,P2;bug,"Default state of the accesskey message shows ""0""",False
-mozilla/pontoon,2604,2022-08-13T09:49:13Z,P2;bug,Save button sometimes does not have keyboard focus after using copy button,False
-mozilla/pontoon,2605,2022-08-13T09:54:00Z,P2;bug;notifications,en-GB team get notified of approvals from Tutorial,False
-mozilla/pontoon,2607,2022-08-15T11:46:51Z,P2;bug,"If a string has multiple pending suggestions, asked to confirm existing even without making any change",False
-mozilla/pontoon,2608,2022-08-17T09:09:41Z,P2;bug;sync,Removing source strings breaks the sync  when the projects are all private,False
-mozilla/pontoon,2611,2022-08-19T13:07:54Z,bug;P3,Date format in Latest activity tooltip is inconsistent with the rest of the app,False
-mozilla/pontoon,2620,2022-09-08T13:24:41Z,bug;P3,Do not mark translations of DB projects as needing sync,False
-mozilla/pontoon,2626,2022-09-14T17:34:41Z,P2;bug,String comment input field gets focus after approving a translation,False
-mozilla/pontoon,2638,2022-10-09T05:20:45Z,P2;bug,Unsaved changed warning displayed unnecessarily after approving one string ,False
-mozilla/pontoon,2655,2022-11-08T18:14:20Z,P2;bug,"AutoML Translate slowness, possibly on cold start",False
-mozilla/pontoon,2657,2022-11-10T20:04:03Z,bug;P3,Console error when accessing translate view wihout string parameter,False
-mozilla/pontoon,2661,2022-11-19T11:54:01Z,P2;bug,Exclude system users from Contributors dashboards,False
-mozilla/pontoon,2666,2022-11-28T23:23:33Z,P1;bug,Entities of mass deleted terms do not get obsolete,False
-mozilla/pontoon,2680,2022-12-12T14:50:45Z,P1;bug,“100% match” are triggered even when the copy slightly differs,False
-mozilla/pontoon,2690,2022-12-23T07:55:43Z,P2;bug;pretranslation,Pretranslated Fluent string has the ID translated or modified,False
-mozilla/pontoon,2691,2022-12-23T07:59:24Z,P2;bug;pretranslation,Don't submit pretranslated strings with warnings or errors,False
-mozilla/pontoon,2692,2022-12-23T08:13:19Z,P2;bug,Field names in the translation area should be identical to the ones for the reference string,False
-mozilla/pontoon,2703,2023-01-12T14:23:30Z,P1;bug;FTL,"Translate interface is breaking with very complex string (4 variants, 6 plurals)",False
-mozilla/pontoon,2706,2023-01-12T21:31:43Z,P2;bug,Unable to reveal term popup,False
-mozilla/pontoon,2707,2023-01-12T22:48:57Z,P1;bug;FTL,Typing or pasting a single { or } character causes the UI to disappear,False
-mozilla/pontoon,2710,2023-01-13T08:39:34Z,P2;bug,Fluent: Translation rejected by string imported with an extra line break,False
-mozilla/pontoon,2711,2023-01-13T09:13:56Z,bug;P3,"Tooltip on rejected string authors says ""Not reviewed yet""",False
-mozilla/pontoon,2712,2023-01-13T12:41:37Z,P2;bug;pretranslation,Log translation creation action for pretranslations,False
-mozilla/pontoon,2718,2023-01-20T10:03:27Z,P2;bug;pretranslation,Google Translate not available in MACHINERY right after running pretranslation,False
-mozilla/pontoon,2721,2023-01-20T19:22:09Z,bug;P3;good first issue,Admin · Current Project link broken in All Projects view,False
-mozilla/pontoon,2722,2023-01-20T19:40:57Z,P2;bug;pretranslation,Focus for Android pretranslated to Slovenian,False
-mozilla/pontoon,2731,2023-01-27T20:46:59Z,P2;bug;pretranslation,Mismatch between Pretranslation GT and Machinery GT,False
-mozilla/pontoon,2733,2023-01-27T23:59:15Z,P2;bug;FTL;pretranslation,Only pretranslate localizable text in complex Fluent messages,False
-mozilla/pontoon,2734,2023-01-28T00:12:13Z,P2;bug;FTL;pretranslation,Pretranslate Fluent plural messages for each plural form used by the locale,False
-mozilla/pontoon,2735,2023-01-28T00:21:42Z,P2;bug;FTL;pretranslation,Pretranslate access keys using the algorithm to extract candidate keys,False
-mozilla/pontoon,2742,2023-01-31T09:47:06Z,P1;bug;pretranslation,UI breaks (blank page) for pre-translated string with translated Fluent function,False
-mozilla/pontoon,2744,2023-01-31T16:07:37Z,P2;bug,Pontoon fails to approve string translation,False
-mozilla/pontoon,2745,2023-02-02T16:14:17Z,P2;bug,Comments sidebar shouldn't take focus when moving to a new string,False
-mozilla/pontoon,2753,2023-02-15T13:13:55Z,P2;bug;pretranslation,Show system users in translation authors filter,False
-mozilla/pontoon,2757,2023-02-16T08:56:11Z,P1;bug,Copying to source view produces invalid contents,False
-mozilla/pontoon,2758,2023-02-16T14:01:47Z,P1;bug,UI is broken with label and accesskey,False
-mozilla/pontoon,2764,2023-02-17T16:31:15Z,P2;bug,CSS broken in the Notification panel in translate view,False
-mozilla/pontoon,2768,2023-02-22T06:11:27Z,P2;bug;pretranslation,Pontoon failed to pretranslate a string for Thunderbird + Italian,False
-mozilla/pontoon,2780,2023-03-06T15:29:22Z,P2;bug,Fluent Plurals UI broken for untranslated strings in some locales,False
-mozilla/pontoon,2781,2023-03-07T08:20:25Z,P2;bug,Clicking a placeable in source string moves the cursor to the end of the string,False
-mozilla/pontoon,2785,2023-03-07T20:46:43Z,bug;P3,Seen NaN in /machinery,False
-mozilla/pontoon,2787,2023-03-07T21:29:37Z,bug;P3;pretranslation,Chosen pretranslated locales also listed Available in Admin,False
-mozilla/pontoon,2821,2023-04-19T13:11:03Z,P2;bug,Downloading TMX fails,False
-mozilla/pontoon,2823,2023-04-29T18:06:31Z,P2;bug,Machinery doesn't update for adjacent strings,False
-mozilla/pontoon,2824,2023-05-02T09:22:31Z,bug;P3;good first issue,Capitalization and terminology inconsistency,False
-mozilla/pontoon,2831,2023-05-04T05:40:31Z,P2;bug;pretranslation,Number of pretranslated strings in the header is incorrect,False
-mozilla/pontoon,2840,2023-05-08T19:47:38Z,bug;P3,Add space after mentions,False
-mozilla/pontoon,2843,2023-05-09T19:17:06Z,P2;bug,Aggregating locale stats doesn't exclude obsolete strings,False
-mozilla/pontoon,2848,2023-05-12T04:40:22Z,bug;P3,Make suggestions setting should be hidden in editor for contributors,False
-mozilla/pontoon,2849,2023-05-14T11:51:35Z,P2;bug,Cannot add team translators/managers to per-project translators,False
-mozilla/pontoon,2858,2023-05-22T12:35:18Z,P2;bug;pretranslation,Pretranslations of Android (strings.xml) strings containing straight quotes result in errors,False
-mozilla/pontoon,2874,2023-06-09T08:45:40Z,P2;bug,JSON error in console when using Translate view,False
-mozilla/pontoon,2880,2023-06-20T10:13:09Z,P2;bug,Can't type in editor with pending suggestion,False
-mozilla/pontoon,2881,2023-06-20T14:33:28Z,P2;bug,Spellchecking not working anymore,False
-mozilla/pontoon,2885,2023-06-21T05:24:34Z,P1;bug,Translators can't approve pending suggestions,False
-mozilla/pontoon,2892,2023-06-25T06:59:51Z,P2;bug,Import translations not working for WebExtension project,False
-mozilla/pontoon,2899,2023-07-02T09:07:35Z,P1;bug,Microsoft Terminology API times out the gunicorn worker,False
-mozilla/pontoon,2941,2023-08-26T21:13:33Z,P2;bug,Cursor jumping to the end of the editor,False
-mozilla/pontoon,2946,2023-09-01T09:03:50Z,P2;bug,Pretranslation form includes only one project in request email,False
-mozilla/pontoon,2949,2023-09-02T09:04:08Z,P2;bug,Two strings on Pontoon cannot be approved successfully,False
-mozilla/pontoon,2954,2023-09-10T16:50:18Z,P2;bug,Empty string when loading specific string for Interlingua,False
-mozilla/pontoon,2955,2023-09-12T13:46:47Z,P2;bug,Impossible to edit the content in translate view (editor has contenteditable set to false),False
-mozilla/pontoon,2968,2023-09-24T16:21:29Z,P2;bug,12-month approval rate in profile is incorrect,False
-mozilla/pontoon,2973,2023-10-03T17:51:43Z,P2;bug,"""Same translation already exists"" when trying to change the access key attribute",False
-mozilla/pontoon,2974,2023-10-04T13:41:40Z,bug;P3,Pasting a multiline text in the comment input text is broken,False
-mozilla/pontoon,2977,2023-10-06T10:23:08Z,P2;bug,Warn on empty Fluent rich editor fields,False
-mozilla/pontoon,2979,2023-10-09T07:03:05Z,P2;bug,Application error when loading the global Insights page for the first time,False
-mozilla/pontoon,2986,2023-10-12T15:21:33Z,bug;P3,"Highlighted {placeholders} in HTML property ""values"" are mirrored in RTL messages",False
-mozilla/pontoon,2987,2023-10-13T07:04:59Z,P2;bug,Can't type a space at the end of a string (removed automatically),False
-mozilla/pontoon,2988,2023-10-13T08:16:57Z,P2;bug,Bad placeable detection in the editor,False
-mozilla/pontoon,2991,2023-10-14T17:41:42Z,P2;bug,GetText check fails incorrectly on newline,False
-mozilla/pontoon,2992,2023-10-16T15:13:42Z,P2;bug,Plural rule breaks js code,False
-mozilla/pontoon,2999,2023-10-22T17:36:58Z,P2;bug,Charts in global Insights page end in August,False
-mozilla/pontoon,3011,2023-11-02T13:33:15Z,P2;bug,"Hovering the notification bar makes it stick for over 10 seconds, with no way to dismiss it",False
-mozilla/pontoon,3016,2023-11-10T06:21:37Z,P2;bug,"Searching "" in string and concordance search makes translate view unresponsive",False
-mozilla/pontoon,3035,2023-11-28T21:46:12Z,P2;bug,User with team manager role and Admin rights appear as Contributor in the locale contributors view,False
-mozilla/pontoon,3039,2023-12-01T11:47:37Z,P2;bug,Cannot switch theme in Pontoon,False
-mozilla/pontoon,3050,2023-12-13T07:06:55Z,P2;bug,REQUEST CONTEXT or REPORT ISSUE doesn't CC project manager,False
-mozilla/pontoon,3052,2023-12-15T09:03:53Z,P2;bug,Translate view is cut when the list of strings is short,False
-mozilla/pontoon,3053,2023-12-15T09:14:01Z,P1;bug,Blank page returned when filter returns an empty list,False
-mozilla/pontoon,3072,2024-01-15T08:14:20Z,P2;bug;FTL;pretranslation,Fluent pretranslations not serialized in canonical form,False
-mozilla/pontoon,3076,2024-01-20T07:08:48Z,bug;P4,could not update translation without term,False
-mozilla/pontoon,3088,2024-02-06T16:18:30Z,bug;P3,Highlighted parts of string previews are miscapitalised in search results,False
-mozilla/pontoon,3097,2024-02-13T07:35:37Z,P2;bug,Can't save term translation after updating the term's text in DB,False
-mozilla/pontoon,3116,2024-02-23T10:59:23Z,P2;bug,Hitting a server error when accessing a Tag page of a Tag without any resoures associated to it,False
-mozilla/pontoon,3124,2024-02-26T15:24:00Z,P1;bug,Headers on /contributors and /insights pages are cached,False
-mozilla/pontoon,3177,2024-04-17T08:57:49Z,bug,Pontoon doesn't check that the string belongs to the current project or path,False
-mozilla/pontoon,3178,2024-04-17T10:04:43Z,bug;P3;sync,The repo last_synced_revisions value is not validated,False
-mozilla/pontoon,3194,2024-04-29T19:43:25Z,P2;bug,Error in logs django.core.exceptions.ImproperlyConfigured,False
-mozilla/pontoon,3204,2024-05-08T11:16:57Z,P2;bug;LLM,LLM translations are not correctly attributed,False
-mozilla/pontoon,3228,2024-05-14T16:02:19Z,P2;bug,Machinery translations of Fluent strings are not attributed as such,False
-mozilla/pontoon,3232,2024-05-17T06:09:03Z,bug;P3;LLM,LLM rephrase loses HTML tags,False
-mozilla/pontoon,3249,2024-05-31T11:22:46Z,bug;P3,Unable to drag selected text to another location within the translated string,False
-mozilla/pontoon,3275,2024-07-09T13:59:20Z,P2;bug,Add data migration to account for the change in how we store locale data in LLM UX action Log,False
-mozilla/pontoon,3276,2024-07-10T09:02:19Z,P2;bug,Charts on Insights page jump back and forth between Dec and Oct 2023,False
-mozilla/pontoon,3292,2024-08-01T12:27:43Z,bug;P3;API,GraphQL does not load,False
-mozilla/pontoon,3302,2024-08-26T09:51:34Z,bug;P3;sync,Last synced revision not always set accuratelly for the translation repositories,False
-mozilla/pontoon,3333,2024-09-12T09:24:40Z,P2;bug;search-2024,Pontoon search fails for search terms with $,False
-mozilla/pontoon,3344,2024-09-17T06:52:15Z,P2;bug;search-2024,"String not found when searching for ID with both ""search in string identifiers"" and ""search in translations only"" enabled ",False
-mozilla/pontoon,3418,2024-10-20T22:30:31Z,P2;bug,Unify admin user status definition,False
-mozilla/pontoon,3425,2024-10-24T12:55:11Z,P2;bug,"""NEW"" banner should not be displayed for System users (like Google Translate)",False
-mozilla/pontoon,3429,2024-10-28T14:42:15Z,P2;bug,A newly registered user's email is not hidden,False
-mozilla/pontoon,3438,2024-11-13T07:59:07Z,P2;bug,Contact email address now shown in settings,False
-mozilla/pontoon,3447,2024-11-18T23:01:29Z,P2;bug,Can't approve translations in a private project,False
-mozilla/pontoon,3449,2024-11-19T18:40:25Z,P2;bug,Server error when uploading translations (messages.json),False
-mozilla/pontoon,3461,2024-11-30T07:56:11Z,P2;bug;FTL;pretranslation,Pretranslation breaks for accesskey labels with variant keys of type NumberLiteral,False
-mozilla/pontoon,3465,2024-12-03T09:12:00Z,P2;bug,New contributor tooltip is hidden,False
-mozilla/pontoon,3476,2024-12-09T06:58:01Z,P2;bug,New contributor notifications are not being sent,False
-mozilla/pontoon,3513,2025-01-08T15:45:58Z,P2;bug;sync,Stats are off when pretranslations have warnings,False
-mozilla/pontoon,3514,2025-01-08T18:38:56Z,P2;bug;sync,Stats are off at locale level after sync (Italian),False
-mozilla/pontoon,3518,2025-01-09T09:05:43Z,P2;bug;sync;FTL,Existing FTL strings containing parametrized references are getting rejected and re-imported,False
-mozilla/pontoon,3519,2025-01-10T12:28:21Z,P2;bug,Source string changes are not being picked up by sync,False
-mozilla/pontoon,3545,2025-01-24T09:00:49Z,P1;bug;performance,N+1 query problem on dashboards,False
-mozilla/pontoon,3550,2025-02-01T14:25:01Z,bug;P3,Translate UI breaks on iOS 15,False
-mozilla/pontoon,3574,2025-02-25T09:58:58Z,P2;bug,Latest activity in team page is incorrect (shows latest global activity for that project),False
-mozilla/pontoon,3677,2025-06-18T17:17:04Z,P2;regression;days,Adding new locales to Gettext projects directly from Pontoon is no longer possible,False
-mozilla/pontoon,3794,2025-10-01T07:27:27Z,P1;regression,Monthly activity summary for September is incorrect,False
-mozilla/pontoon,3803,2025-10-10T09:07:19Z,P3;notifications;regression,Time in notifications is off (UTC vs local),False
-mozilla/pontoon,3810,2025-10-15T08:57:06Z,P1;regression,DataError in the Insights dashboard,False
-mozilla/pontoon,3812,2025-10-15T15:27:48Z,P2;regression,Tutorial page is broken,False
-mozilla/pontoon,3822,2025-11-04T17:50:51Z,P2;regression,GetText: attribution lost when .po file is reformatted to shorter line lenght,False
-mozilla/pontoon,3887,2026-01-08T13:05:24Z,P2;sync;regression;GCP,File exists Git error on sync,False
-mozilla/pontoon,3888,2026-01-08T13:07:34Z,P3;regression;GCP,log.info() messages showing as errors in Cloud Logging,False
-mozilla/pontoon,3895,2026-01-13T18:11:57Z,P2;checks;regression,Translate Toolkit checks false positive on valid XLIFF strings,False
-mozilla/pontoon,3898,2026-01-14T09:57:00Z,P3;regression,Drop leading '/' from django-allauth URL patterns,False
-mozilla/pontoon,3904,2026-01-16T06:42:35Z,P2;regression,"Strings rejected without visible difference after import (iOS, Android)",False
-mozilla/pontoon,3979,2026-02-18T23:07:36Z,P2;regression,Swagger UI broken,False
-mozilla/pontoon,3990,2026-02-24T06:45:53Z,P2;regression,Notification summary email includes CSS,False
-mozilla/pontoon,4003,2026-03-03T05:46:00Z,P2;regression,Android error not blocked by linter,False
-mozilla/pontoon,4013,2026-03-05T10:44:24Z,P2;regression,Running ./manage.py update_auth_providers fails,False
-mozilla/pontoon,4027,2026-03-18T15:12:20Z,regression,Loading a /search page URL with `search` parameter will show profile's default settings,False
-mozilla/pontoon,4042,2026-03-26T12:21:13Z,P3;regression;hours,Translation comments are no longer indented,False
-mozilla/pontoon,4044,2026-03-26T18:56:58Z,P1;regression;hours,Pretranslation is broken,False
-mozilla/pontoon,4066,2026-04-07T18:55:13Z,P2;regression,Add data migration to delete SocialApp entries,False
-mozilla/pontoon,4080,2026-04-13T05:07:31Z,P2;regression,Serbian: MF2-style placeholders in iOS translations,False
-mozilla/pontoon,4083,2026-04-14T07:58:47Z,P2;regression,Editor warns about unsaved changes also with no changes,False
-mozilla/pontoon,4110,2026-04-23T20:28:31Z,P3;regression;hours,When a string is removed the rejection of pending translation suggestions are attributed as a review performed by the submitter,False
-mozilla/pontoon,4113,2026-04-27T09:26:16Z,P2;regression;hours,"Messaging center: ""Sent"" layout looks broken right after sending a message",False
-mozilla/pontoon,4163,2026-05-17T05:23:08Z,P4;sync;regression;days,"Fluent string rejected by import, no visible difference",False
-mozilla/pontoon,4169,2026-05-21T20:38:30Z,P4;regression;hours,Standalone logout fails for local environment,False
-mozilla/pontoon,4179,2026-05-28T22:19:11Z,regression;waf,Unable to save translation that begins with a parenthesis,False
-mozilla/pontoon,4199,2026-06-08T15:14:57Z,P2;regression;hours,Vitest output is really chatty with warnings & Dependabot PRs do not trigger frontend tests,False
-mozilla/pontoon,4202,2026-06-08T21:21:17Z,P1;regression,Simple FTL UI not saving value to .accesskey,False
-mozilla/pontoon,4207,2026-06-10T07:11:22Z,P1;regression,Project Firefox losing locales enabled for pretranslation,False
-mozilla/pontoon,4216,2026-06-12T00:08:54Z,P2;regression;hours,Plurals for new locales not displaying the proper number of Fluent variants in translator UI,False
-mozilla/pontoon,4230,2026-06-16T17:32:25Z,P2;FTL;regression;hours,Pontoon adds NUMBER() function when saving translation,False
-mozilla/pontoon,4239,2026-06-18T17:18:39Z,P3;good first issue;regression;hours,Asterisk is overlapping text in project header,False
-mozilla/pontoon,4245,2026-06-22T09:09:42Z,P2;regression,Google AutoML warmup command is not effective (gets cached),False
-mozilla/pontoon,4247,2026-06-22T13:30:19Z,regression,Fluent translations have more unnecessary leading or trailing escaped spaces than before,False
-mozilla/pontoon,4249,2026-06-22T21:44:33Z,P2;regression;hours,Tiny cursor in the empty editor,False
-mozilla/pontoon,4253,2026-06-23T23:49:47Z,P1;regression,Terminology: source string missing for recent terms,False
-mozilla/pontoon,4261,2026-06-27T04:15:37Z,P2;sync;regression;hours,Pontoon mixing dash and underscore in locale folder names,False
-mozilla/pontoon,4262,2026-06-29T04:39:42Z,P2;regression;hours,Incorrect syntax error when saving string with variable in WebExtension (JSON),False
-mozilla/pontoon,4266,2026-06-30T17:46:05Z,P2;regression;hours,XLIFF: problems with string including markup,False
-mozilla/pontoon,4270,2026-07-01T04:11:29Z,P2;regression;hours,.properties strings with line breaks serialized incorrectly,False
-mozilla/pontoon,4306,2026-07-13T17:18:36Z,P2;good first issue;regression;hours,"Hover state on ""approve"" button is unreadable",False
-mozilla/pontoon,4314,2026-07-19T09:58:53Z,P2;regression;hours,Editor textarea focus is lost after using a TM match,False
-mozilla/pontoon,4317,2026-07-21T08:55:09Z,P2;regression;hours,"Rejecting a Fluent translation fills editor with ID = { """" }",False
-mozilla/pontoon,4324,2026-07-22T12:31:17Z,P2;regression;hours,Removing an attribute from advanced ftl view not triggering error before saving,False
-mozilla/pontoon,4339,2026-07-26T06:45:24Z,P2;regression;hours,Android: line breaks in strings are ignored (likely converted to space),False
-mozilla/pontoon,4342,2026-07-27T04:34:07Z,P2;regression;hours,Profile page crashes when displayed by an anonymous user,False
-mozilla/pontoon,4362,2026-08-04T04:59:09Z,P2;regression;hours,"XLIFF: Strings rejected without visible changes, again",False
-mozilla/pontoon,4364,2026-08-04T11:12:44Z,P2;regression;hours,Strings with warnings are not marked as such in the UI,False
-mozilla/pontoon,4371,2026-08-05T12:20:03Z,P1;regression;hours,Unable to switch resources in translate view,False
-mozilla/pontoon,4377,2026-08-10T07:23:35Z,P3;regression;hours,Localizers are not linked to automatic commits on GitHub,False
-mozilla/pontoon,4385,2026-08-10T17:17:41Z,sync;regression;hours,Project config: strings in new file appeared only after forced sync,False
-mozilla/pontoon,4414,2026-08-14T17:55:42Z,P2;regression;hours,Variable in JSON Webextension format serialized incorrectly,False
-mozilla/pontoon,4430,2026-08-20T18:55:23Z,P2;regression;hours,Cannot save Android and iOS translations with ampersand character,False
-mozilla/pontoon,4438,2026-08-21T17:43:02Z,P2;regression;hours,Unable to save long translations,False
-mozilla/pontoon,4439,2026-08-22T06:39:50Z,P1;regression;hours,Cannot create a new project,False
-mozilla/pontoon,4453,2026-08-26T12:06:48Z,P2;sync;regression;hours,"Gettext: plural forms removed on sync for some locales (pl, ru, uk)",False
-mozilla/pontoon,4456,2026-08-27T20:01:15Z,P2;regression;hours,Terminology is not recognized in complex strings,False
-mozilla/pontoon,4492,2026-09-03T17:43:37Z,P1;regression,CSP is broken,False
-mozilla/pontoon,4524,2026-09-14T17:13:30Z,P2;regression;hours,Cannot save translation that has a placeholder inside an html tag,False
-mozilla/pontoon,4533,2026-09-16T12:05:12Z,P2;regression;hours,Fluent strings with `SHORTDATE()` reimported and showing up broken as `{�}`,False
-mozilla/pontoon,4557,2026-09-23T07:21:08Z,P3;good first issue;regression;hours,Insights: Active users query loads the entire ActionLog history,False
-mozilla/pontoon,4577,2026-10-07T18:09:49Z,P2;regression,Dependabot not updating Python packages,False
-axadrn/shadcn-templ,391,2025-08-26T07:01:34Z,bug,[Bug] Toast indicator is very buggy,False
-axadrn/shadcn-templ,432,2025-09-29T07:26:18Z,bug,[Bug] Binding selectbox value with datastar (or alpinejs),True
-axadrn/shadcn-templ,439,2025-10-05T00:14:26Z,bug,[Bug],True
-axadrn/shadcn-templ,441,2025-10-14T08:17:28Z,bug,The overlay stays on the screen after the modal/dialog closes when the form is submitted.,True
-axadrn/shadcn-templ,442,2025-10-16T12:43:56Z,bug,[Bug] Dropdown in templui's page self-closes,False
-axadrn/shadcn-templ,445,2025-10-28T16:47:56Z,bug,[Bug] SelectBox hidden input prevents required validation,True
-axadrn/shadcn-templ,448,2025-11-02T13:05:25Z,bug,"[Bug] templui ""how to use"" base configuration example has '--radius' twice.",False
-axadrn/shadcn-templ,451,2025-11-07T15:24:59Z,bug,[Bug] SelectBox behavior is inconsistent with HTML Select element,False
-axadrn/shadcn-templ,453,2025-11-07T23:11:00Z,bug,[Bug] tooltip trigger component doesn't pass class to popover trigger,False
-axadrn/shadcn-templ,461,2025-11-23T17:19:10Z,bug,[Bug] Binding datepicker value with datastar (or alpinejs),True
-axadrn/shadcn-templ,466,2025-12-19T18:56:22Z,bug,[Bug] `templui.go` file has improper package name when placed into non-`utils` folder,True
-axadrn/shadcn-templ,467,2025-12-21T04:16:55Z,bug,[Bug] Cannot apply unknown utility class bg-selection,True
-axadrn/shadcn-templ,474,2026-01-03T06:36:55Z,bug,[Bug] DatePicker <option> element rendering in Chrome dark mode,False
-axadrn/shadcn-templ,483,2026-01-08T12:15:10Z,bug,[Bug] TemplUI CLI stuck @v0.101.0,True
-axadrn/shadcn-templ,492,2026-01-27T17:48:02Z,bug,[Bug] SelectBox options are not being focused if it's rendered without searchbox,False
-axadrn/shadcn-templ,493,2026-01-27T18:43:18Z,bug,[Bug] Toast does not initialize when included with markup,True
-axadrn/shadcn-templ,495,2026-01-31T04:08:28Z,bug,[Bug] Selectbox can't be used inside a template,False
-axadrn/shadcn-templ,498,2026-02-06T17:25:39Z,bug,[Bug] Remove highlighting when select box option loses focus,False
-axadrn/shadcn-templ,500,2026-02-11T16:56:47Z,bug,[Bug] Selctboxes dynamically replaced by HTMX create duplicate popover content elements,False
-axadrn/shadcn-templ,511,2026-02-28T04:03:29Z,bug,[Bug] Toast indicator animation doesn't resume on mouseout,False
-axadrn/shadcn-templ,513,2026-03-04T15:52:48Z,bug,[Bug] dialog can't be used within dropdown,False
-axadrn/shadcn-templ,522,2026-03-15T15:20:26Z,bug,[Bug] popover position wrong or out of screen,True
-axadrn/shadcn-templ,526,2026-03-20T15:22:01Z,bug,[Bug] SetupScriptRoutes fails on Windows due to filepath.Join using backslashes.,True
-axadrn/shadcn-templ,530,2026-03-27T21:59:08Z,bug,[Bug] Bug: DatePicker hidden input not updated on date selection when used inside a form,True
-axadrn/shadcn-templ,533,2026-03-29T17:51:32Z,bug,[Bug] Website sidebar active item not working,False
-axadrn/shadcn-templ,535,2026-03-31T00:53:32Z,bug,[Bug] utils.If() has unnecessary comparable constraint on type T,False
-axadrn/shadcn-templ,538,2026-04-02T01:28:35Z,bug,[Bug] Datepicker StartOfWeek,False
-axadrn/shadcn-templ,540,2026-04-02T19:00:21Z,bug,[Bug] Popover animation disappeared when upgrading to v1.9.4,True
-axadrn/shadcn-templ,544,2026-04-10T15:16:18Z,bug,[Bug] utils.TwMerge seems to drop some class names,False
-axadrn/shadcn-templ,545,2026-04-12T02:28:54Z,bug,[Bug] Clicking checkbox group parent misses first child checkbox,True
-axadrn/shadcn-templ,553,2026-05-12T07:33:14Z,bug,[Bug] SideBar: Can't scroll on mobile screen,True
-axadrn/shadcn-templ,554,2026-05-12T18:31:46Z,bug,[Bug] input.Input height customization is difficult and inconsistent (especially password type),True
-axadrn/shadcn-templ,560,2026-06-24T14:19:00Z,bug,[Bug] The sidebar component has no 'enter' animation on Safari browsers in mobile view,True
-axadrn/shadcn-templ,562,2026-06-27T13:12:38Z,bug,[Bug] Dialog MutationObserver reinits all dialogs for unrelated DOM patches,True
-axadrn/shadcn-templ,563,2026-06-28T07:29:53Z,bug,[Bug],False
-axadrn/shadcn-templ,569,2026-07-09T02:48:02Z,bug;2.x,[Bug] issue with GitHub installation,True
-axadrn/shadcn-templ,576,2026-07-16T06:31:17Z,bug;2.x,[Bug] Datetime range picker calendar icon goes off the icon area,False
-axadrn/shadcn-templ,577,2026-07-16T07:12:30Z,bug;2.x,[Bug] Sidebar: fixed container doesn't transition its width,True
-axadrn/shadcn-templ,579,2026-07-16T08:04:59Z,bug;2.x,[Bug] Sidebar: visually hidden element still participates in pointer events,False
-axadrn/shadcn-templ,580,2026-07-16T08:05:55Z,bug,[Bug] Sidebar: visually hidden element still participates in pointer events,False
-axadrn/shadcn-templ,583,2026-07-23T05:53:11Z,bug;2.x,"[Bug] Popover: unguarded Element.matches("":popover-open"") throws DOMException on Safari/iOS < 17",True
-axadrn/shadcn-templ,587,2026-07-25T16:49:27Z,bug;2.x,[Bug]  Help command when recreating utils file does not work,True
-axadrn/shadcn-templ,591,2026-07-26T20:43:32Z,bug,[Bug] templui command installed via go get  -tool,False
-axadrn/shadcn-templ,592,2026-07-30T18:51:18Z,bug,[Bug] Char does not honor the Options.Responsive setting,False
-axadrn/shadcn-templ,595,2026-08-06T08:52:56Z,bug,"[bug]: v2, `go install` command failed",True
-axadrn/shadcn-templ,596,2026-08-06T17:03:41Z,bug,[bug]: V1 docs,False
-axadrn/shadcn-templ,597,2026-08-06T20:11:37Z,bug,[bug]: Select Component on Mobile,False
-axadrn/shadcn-templ,598,2026-08-06T22:02:05Z,bug,[bug]: mobile tap behavior on new charts,False
-axadrn/shadcn-templ,601,2026-08-14T18:09:20Z,bug,[bug]: Popover contents stay on top after closed,True
-axadrn/shadcn-templ,603,2026-08-16T10:46:46Z,bug,"[bug]: ""shadcn-templ init"" doesn't produce ""scripts.templ, scripts.go, embed.go""",True
-axadrn/shadcn-templ,605,2026-08-18T09:16:39Z,bug,[bug]: Unresponsive Buttons on Create's Get Code Dialog,False
-axadrn/shadcn-templ,606,2026-08-23T10:13:29Z,bug,[bug]: Docs: Select component examples not opening,False
-axadrn/shadcn-templ,607,2026-08-28T14:06:21Z,bug,[bug]: Misformatted example code in documentation for Hover Card,False
-axadrn/shadcn-templ,613,2026-09-15T19:31:12Z,bug,[bug]: Mobile sidebar leaves page blocked after resizing to desktop,True
-axadrn/shadcn-templ,616,2026-09-22T14:56:20Z,bug,[bug]: dropdownmenu item does not get processed by htmx,True
-axadrn/shadcn-templ,621,2026-09-28T13:48:41Z,bug,[bug]: Combobox docs page,False
-axadrn/shadcn-templ,622,2026-09-28T13:56:14Z,bug,[bug]: Sample code copy button,False
-axadrn/shadcn-templ,625,2026-10-02T11:32:06Z,bug,[bug]: Uncaught TypeError: Cannot read properties of undefined (reading 'lifecycle'),False
-axadrn/shadcn-templ,631,2026-10-05T09:56:53Z,bug,[bug]: undefined: utils.DirectionAttributes & utils.Direction,False
-axadrn/shadcn-templ,632,2026-10-05T09:57:15Z,bug,[bug]: new components have broken docs examples,False
-autonomousapps/dependency-analysis-gradle-plugin,685,2022-05-30T08:59:04Z,bug;blocked-by-gradle,Gradle deprecation warning: Antlr plugin,True
-autonomousapps/dependency-analysis-gradle-plugin,735,2022-07-05T17:33:22Z,bug;wontfix;toolchain:java,Dependencies from constants marked as unused when using Eclipse Compiler for Java,True
-autonomousapps/dependency-analysis-gradle-plugin,791,2022-09-27T06:34:25Z,bug;toolchain:android;sponsorable,Unused dependency false positive if Hilt Gradle Plugin is applied,True
-autonomousapps/dependency-analysis-gradle-plugin,912,2023-06-02T07:08:17Z,bug;blocked-by-gradle;toolchain:kotlin,Gradle8 + KSP compatibility,True
-autonomousapps/dependency-analysis-gradle-plugin,948,2023-08-30T01:59:24Z,bug;toolchain:android;toolchain:kotlin,Analysis of local projects with mixed Java & Kotlin source sets results in incorrect analysis. Only Kotlin classes get analyzed,True
-autonomousapps/dependency-analysis-gradle-plugin,1029,2023-11-10T21:18:24Z,bug;more information needed;toolchain:android,"After adding dependency flagged as an undeclared used transitive, advice says to remove same dependency because it is unused",True
-autonomousapps/dependency-analysis-gradle-plugin,1167,2024-04-15T14:45:03Z,bug;wontfix;toolchain:java,Make FindDeclaredProcsTask use the JDK of the configured Java toolchain to load classes,False
-autonomousapps/dependency-analysis-gradle-plugin,1220,2024-07-09T09:08:57Z,bug;performance,Bug: caching issues for included builds,False
-autonomousapps/dependency-analysis-gradle-plugin,1269,2024-09-24T10:24:39Z,bug;duplicate;toolchain:java,False positive with new style gradle test suite definition,True
-autonomousapps/dependency-analysis-gradle-plugin,1272,2024-09-28T15:00:16Z,bug;more information needed,can't apply new buildhealth plugin,False
-autonomousapps/dependency-analysis-gradle-plugin,1273,2024-09-28T16:33:12Z,bug;duplicate;more information needed;toolchain:java,jvm test suite reporting false positive with transient,True
-autonomousapps/dependency-analysis-gradle-plugin,1274,2024-09-28T17:19:08Z,bug;more information needed,false positive advice to remove annotation used library,True
-autonomousapps/dependency-analysis-gradle-plugin,1283,2024-10-10T13:23:07Z,bug;wontfix;toolchain:android,ignoreKtx(true) is not working,True
-autonomousapps/dependency-analysis-gradle-plugin,1312,2024-11-18T01:09:15Z,bug;more information needed;toolchain:android,Variant dependency on module suggested to change to implementation,True
-autonomousapps/dependency-analysis-gradle-plugin,1317,2024-11-20T10:39:13Z,bug,Add support for project isolation,False
-autonomousapps/dependency-analysis-gradle-plugin,1324,2024-11-26T23:11:36Z,bug;toolchain:kotlin,Return type of suspend function not considered for public API,True
-autonomousapps/dependency-analysis-gradle-plugin,1325,2024-11-27T20:19:15Z,bug;toolchain:kotlin,Wrong configuration issue is not working,True
-autonomousapps/dependency-analysis-gradle-plugin,1329,2024-12-02T21:32:25Z,bug;toolchain:android,superClassName can be null. explodeJar task fails on Android library module on 2.5.0,True
-autonomousapps/dependency-analysis-gradle-plugin,1335,2024-12-11T06:44:53Z,bug;toolchain:android,Duplicate class detection warning when using strings from one module in another,False
-autonomousapps/dependency-analysis-gradle-plugin,1426,2025-04-24T04:21:38Z,bug;toolchain:android;toolchain:kotlin,False positive unused dependency on debugImplementation for Compose ui-tooling,True
-autonomousapps/dependency-analysis-gradle-plugin,1428,2025-04-25T20:18:51Z,bug,Enable useTypesafeProjectAccessors with fixVersions,True
-autonomousapps/dependency-analysis-gradle-plugin,1440,2025-05-09T19:54:53Z,bug;toolchain:android;sponsorable,`com.android.test` projects recommend removing dependencies that provide instrumentation tests,True
-autonomousapps/dependency-analysis-gradle-plugin,1441,2025-05-12T10:32:39Z,bug,Generated advice does not use version catalog aliases when DAGP is applied as settings plugin,True
-autonomousapps/dependency-analysis-gradle-plugin,1443,2025-05-12T16:04:43Z,bug;toolchain:kotlin,A generic type is not recognized as `api` when exposed as return type from a suspend function,True
-autonomousapps/dependency-analysis-gradle-plugin,1465,2025-06-10T00:24:41Z,bug;more information needed;toolchain:kotlin,Uses of `const val` not detected properly,True
-autonomousapps/dependency-analysis-gradle-plugin,1516,2025-08-12T11:06:08Z,bug;more information needed,Incorrect implementation vs api advice when interface implementor overrides return type,True
-autonomousapps/dependency-analysis-gradle-plugin,1523,2025-08-20T19:22:10Z,bug,Change advice cannot be from and to the same configuration (testImplementation in this case),False
-autonomousapps/dependency-analysis-gradle-plugin,1537,2025-09-01T19:19:56Z,bug;toolchain:kotlin,DAGP exposes Kotlin BOM causing incompatibility with Kotlin DSL in Gradle 8.x,True
-autonomousapps/dependency-analysis-gradle-plugin,1554,2025-09-11T12:33:23Z,bug;enhancement,Test fixtures in a Spring Boot project are not allowed to have testFixturesApi dependencies,True
-autonomousapps/dependency-analysis-gradle-plugin,1556,2025-09-11T23:26:37Z,bug;toolchain:kotlin,Typealiases from dependency artifacts aren't considered usages,True
-autonomousapps/dependency-analysis-gradle-plugin,1563,2025-09-30T15:02:43Z,bug,DAGP not compatible with IP,True
-autonomousapps/dependency-analysis-gradle-plugin,1574,2025-10-17T13:17:14Z,bug;toolchain:android,`@Provides` parameters from Hilt module bindings are incorrectly classified as api,True
-autonomousapps/dependency-analysis-gradle-plugin,1580,2025-10-23T04:47:26Z,bug;toolchain:android,Couldn't find a runtime graph,True
-autonomousapps/dependency-analysis-gradle-plugin,1583,2025-10-24T13:39:23Z,bug,Nested generic types not detected,True
-autonomousapps/dependency-analysis-gradle-plugin,1590,2025-10-31T15:54:08Z,bug;duplicate;toolchain:kotlin,Incorrect advice when the same package name is used,True
-autonomousapps/dependency-analysis-gradle-plugin,1592,2025-11-04T09:03:49Z,bug,False positive: Advises removing spring-core altough RetryContext.setAttribute is used,True
-autonomousapps/dependency-analysis-gradle-plugin,1595,2025-11-07T11:17:59Z,bug;toolchain:kotlin,Incorrect advice to change configuration when @OptIn annotation is used,True
-autonomousapps/dependency-analysis-gradle-plugin,1603,2025-11-18T21:58:27Z,bug,`fixDependencies` does not remove an unused dependency identified by `buildHealth`,True
-autonomousapps/dependency-analysis-gradle-plugin,1604,2025-11-20T10:20:05Z,bug;more information needed;performance,OOM exception when running the buildHealth task with version 3.5.0,True
-autonomousapps/dependency-analysis-gradle-plugin,1613,2025-12-01T15:36:29Z,bug;more information needed,Incorrect advice for advanced reflection usage,True
-autonomousapps/dependency-analysis-gradle-plugin,1621,2025-12-09T09:49:51Z,bug;more information needed;toolchain:android;toolchain:kotlin,Do not suggest parcelize runtime if parcelize plugin applied,True
-autonomousapps/dependency-analysis-gradle-plugin,1624,2025-12-10T22:03:52Z,bug;toolchain:java,Do not ignore advice for `gradleApi()` dependency,False
-autonomousapps/dependency-analysis-gradle-plugin,1625,2025-12-16T13:13:28Z,bug;more information needed,Advice to configure dependency only for specific variant,True
-autonomousapps/dependency-analysis-gradle-plugin,1626,2025-12-19T06:17:17Z,bug;toolchain:android,Bundles prevent unused dependencies from working,True
-autonomousapps/dependency-analysis-gradle-plugin,1627,2025-12-22T08:38:29Z,bug;wontfix;toolchain:android,Resource ID transitive dependency advice,True
-autonomousapps/dependency-analysis-gradle-plugin,1629,2025-12-22T12:52:23Z,bug,`onAny` does not cover `onDuplicateClassWarnings`,True
-autonomousapps/dependency-analysis-gradle-plugin,1631,2025-12-23T10:58:22Z,bug;more information needed;toolchain:android,Question: Should excluded transitive dependency not popup in the advice,True
-autonomousapps/dependency-analysis-gradle-plugin,1633,2026-01-06T07:51:08Z,bug,IndexOutOfBoundsException - DependencyExtractor.findIdentifier,True
-autonomousapps/dependency-analysis-gradle-plugin,1636,2026-02-03T14:33:00Z,bug;more information needed;toolchain:kotlin,False positive incorrect configuration on value class in public API,True
-autonomousapps/dependency-analysis-gradle-plugin,1638,2026-02-07T11:06:54Z,bug;more information needed;toolchain:kotlin,Unclear advice when upgrading mockk from 1.14.7 to 1.14.9,False
-autonomousapps/dependency-analysis-gradle-plugin,1646,2026-02-26T10:23:57Z,bug;toolchain:kmp,Cannot add task 'artifactsReportMain' as a task with that name already exists,True
-autonomousapps/dependency-analysis-gradle-plugin,1649,2026-02-28T20:28:52Z,bug;toolchain:kmp,Change advice cannot be from and to the same configuration (androidMainImplementation) in KMP project,True
-autonomousapps/dependency-analysis-gradle-plugin,1652,2026-03-05T10:30:56Z,bug,fixDependencies task loses exclusions when changing configuration,True
-autonomousapps/dependency-analysis-gradle-plugin,1653,2026-03-05T13:48:35Z,bug;toolchain:android,NoSuchElementException on some android projects ,True
-autonomousapps/dependency-analysis-gradle-plugin,1654,2026-03-06T14:34:44Z,bug;more information needed;toolchain:android,Using product flavors causes incorrect advice,True
-autonomousapps/dependency-analysis-gradle-plugin,1656,2026-03-11T20:13:08Z,bug;more information needed,ComputeAdviceTask throwing ClassCastException,True
-autonomousapps/dependency-analysis-gradle-plugin,1667,2026-04-03T01:24:33Z,bug;toolchain:java,Depending on multiple feature variants of the same library reports the library as unused and breaks reason task,True
-autonomousapps/dependency-analysis-gradle-plugin,1671,2026-04-08T10:49:28Z,bug;more information needed,Gradle 8 support broken since 3.2.0,True
-autonomousapps/dependency-analysis-gradle-plugin,1672,2026-04-08T16:08:16Z,bug;enhancement;toolchain:kmp,3.6.0 reports all JS dependencies as unused in KMP project with JS target,True
-autonomousapps/dependency-analysis-gradle-plugin,1680,2026-04-15T03:50:14Z,bug;toolchain:java,Plugin fails when annotation processor path contains a classes directory instead of a jar,True
-autonomousapps/dependency-analysis-gradle-plugin,1690,2026-04-22T03:12:33Z,bug;toolchain:kotlin;toolchain:java;toolchain:kmp,KMP project : Could not determine the dependencies of task ':lib:findDeclaredProcsAndroidDebug',True
-autonomousapps/dependency-analysis-gradle-plugin,1695,2026-04-29T07:08:12Z,bug;more information needed;toolchain:android,Redundant variant suggestion,True
-autonomousapps/dependency-analysis-gradle-plugin,1700,2026-05-12T06:14:07Z,bug;more information needed;toolchain:android,3.11.0 is suggesting KMP dependencies use api,True
-autonomousapps/dependency-analysis-gradle-plugin,1715,2026-05-26T14:58:50Z,bug;toolchain:kotlin,Modules with names equivalent to Kotlin keywords should be escaped with `fixDependencies` task,True
-autonomousapps/dependency-analysis-gradle-plugin,1725,2026-06-08T14:11:44Z,bug,`:aggregatePublicTypes` task has incorrect task metadata,False
-autonomousapps/dependency-analysis-gradle-plugin,1730,2026-06-11T05:07:43Z,bug;toolchain:android,Dependency is both unused and is a transitive dependency to be declared,True
-autonomousapps/dependency-analysis-gradle-plugin,1740,2026-06-23T01:48:15Z,bug;duplicate;toolchain:kmp,KMP project: `kotlin-dom-api-compat` flagged as unused on Kotlin/JS targets,True
-autonomousapps/dependency-analysis-gradle-plugin,1746,2026-06-26T07:01:38Z,bug;toolchain:kmp,Version 3.16.0 introduces false-positives about unused API dependencies in KMP,True
-autonomousapps/dependency-analysis-gradle-plugin,1747,2026-06-26T13:21:09Z,bug,v3.16.0 produces `ConcurrentModificationException` in `StandardTransform.kt`,True
-autonomousapps/dependency-analysis-gradle-plugin,1749,2026-06-27T12:01:07Z,bug;duplicate;toolchain:kmp,3.16.0 regression: KMP commonMain project dependencies falsely reported unused / advised per source-set,True
-autonomousapps/dependency-analysis-gradle-plugin,1753,2026-07-01T07:28:47Z,bug;more information needed,"Dependency only needed to resolve a generic type argument inferred across two other modules is fully undetected as used (not misclassified, not detected at all)",True
-autonomousapps/dependency-analysis-gradle-plugin,1767,2026-07-08T10:47:05Z,bug;more information needed;toolchain:kotlin,`@JvmOverloads` leads to binary-incompatible advice on consumer module,True
-autonomousapps/dependency-analysis-gradle-plugin,1775,2026-07-15T14:16:36Z,bug,Plugin can reuse a stale graph and suppress dependency advice when an upstream project dependency changes,True
-autonomousapps/dependency-analysis-gradle-plugin,1784,2026-07-22T13:51:32Z,bug;toolchain:kmp,`buildHealth` suggests moving some `commonMain` dependencies to `jvmMain`,True
-autonomousapps/dependency-analysis-gradle-plugin,1791,2026-07-27T16:45:36Z,bug;toolchain:kmp,KMP: invisible inline-member usage in `commonMain`,True
-autonomousapps/dependency-analysis-gradle-plugin,1801,2026-07-29T07:08:05Z,bug;toolchain:kotlin,`publicTypeUsage` reports a file facade whose members are all `internal`,True
-autonomousapps/dependency-analysis-gradle-plugin,1805,2026-08-02T19:25:18Z,bug;toolchain:kotlin,Default version of kotlin-metadata-jvm for runtime execution,True
-autonomousapps/dependency-analysis-gradle-plugin,1811,2026-08-10T12:01:26Z,bug,Mixed Java/Kotlin test fixtures are attributed to the main dependency,True
-autonomousapps/dependency-analysis-gradle-plugin,1814,2026-08-13T03:45:33Z,bug;toolchain:android,Artifact collision when using ThreetenABP,True
-autonomousapps/dependency-analysis-gradle-plugin,1818,2026-08-14T13:00:06Z,bug;toolchain:kotlin;toolchain:java,Duplicate add advice generated for transitive dependency across `implementation` and `testImplementation`,True
-autonomousapps/dependency-analysis-gradle-plugin,1820,2026-08-14T15:29:44Z,bug;toolchain:android,Incorrect Android-variant configuration advice,True
-autonomousapps/dependency-analysis-gradle-plugin,1827,2026-08-18T12:10:34Z,bug;more information needed;toolchain:kotlin,"`findKotlinMagicFunTest` task causes ""No such file or directory""",True
-autonomousapps/dependency-analysis-gradle-plugin,1828,2026-08-20T09:36:41Z,bug;works as intended;sponsorable;toolchain:java,buildHealth fails for needed compile time dependency,True
-autonomousapps/dependency-analysis-gradle-plugin,1829,2026-08-20T13:12:08Z,bug;toolchain:java,buildHealth -subtask ExplodeJar fails with ArrayIndexOutOfBounds in ClassReader,True
-autonomousapps/dependency-analysis-gradle-plugin,1844,2026-08-24T13:23:36Z,bug;duplicate;toolchain:android,NoSuchElementException in SuperClassGraphBuilder.kt:60,True
-autonomousapps/dependency-analysis-gradle-plugin,1859,2026-08-27T10:42:24Z,bug;toolchain:android;has:repro,"Couldn't find a runtime graph associated with: fromConfiguration=null, toConfiguration=test*RuntimeOnly",True
-autonomousapps/dependency-analysis-gradle-plugin,1864,2026-09-02T12:40:16Z,bug;more information needed,Used transitive dependency not reported if declared as runtimeOnly,True
-autonomousapps/dependency-analysis-gradle-plugin,1865,2026-09-02T19:00:25Z,bug;toolchain:kmp,Dependency analysis crashes with a JVM target named desktop,True
-autonomousapps/dependency-analysis-gradle-plugin,1878,2026-09-10T13:56:44Z,bug;performance,OOM exception when analysing large projects,True
-autonomousapps/dependency-analysis-gradle-plugin,1897,2026-09-18T11:24:15Z,bug;more information needed;toolchain:kmp,KMP DAGP reports many dependencies as unused even though they're in use,True
+SciML/NeuralPDE.jl,844,2024-04-03T18:27:56Z,bug,GPU Compatibility Issue: Compilation Error with Complex-Valued Data in LuxCUDA Broadcasting Kernel,False
+SciML/NeuralPDE.jl,911,2024-11-16T01:21:41Z,bug,Trivial boundary conditions error,True
+SciML/NeuralPDE.jl,931,2025-03-15T12:45:53Z,bug,Potential precision loss in AutoDiff through the loss function,False
+SciML/NeuralPDE.jl,1052,2026-04-23T15:56:54Z,bug,GPU AD failing,False
+SciML/NeuralPDE.jl,1218,2026-09-28T14:27:40Z,bug,Integro-differential example in docs fails,True
+goodroot/hyprwhspr,12,2025-10-27T19:22:47Z,bug,Service does not seem to run immediately after boot,False
+dotnet/ClangSharp,239,2021-06-13T19:26:27Z,bug,Passing `this` should be passed as a pointer,False
+dotnet/ClangSharp,270,2021-09-27T18:52:47Z,bug,Unions inside functions aren't handled correctly,False
+dotnet/ClangSharp,296,2021-11-19T23:14:46Z,bug;help wanted,Error: arithmetic on a pointer to void,False
+dotnet/ClangSharp,298,2021-11-21T16:27:02Z,bug;help wanted,[bug] ClangSharp Pinvoke Gen: local variable reassignment leads to bad codegen  (`.operator=`),False
+eclipse-milo/milo,1605,2025-10-01T18:07:27Z,bug;server,Cache endpoints returned by `ServerApplicationContextImpl::getEndpointDescriptions`,False
+eclipse-milo/milo,1741,2026-05-11T19:28:30Z,bug,JSON BSD codec fails on nested struct fields,True
+eclipse-milo/milo,2027,2026-09-18T12:45:06Z,bug;server,Event MonitoredItem delivers no events when any select clause fails validation,False
+eclipse-milo/milo,2040,2026-09-29T12:45:11Z,bug;interop;stack;client;server;compliance,Use only leaf certificate hashes in enhanced session signatures,False
+linear/linear,181,2022-03-21T14:37:32Z,bug;Importer;Stale,[Bug] Pivotal import produces reverse priority of issues,False
+linear/linear,187,2022-04-12T13:37:46Z,bug;Importer;GitHub;Stale,Malformed repo names produces a misleading error in the GitHub importer,False
+linear/linear,906,2025-10-20T18:11:27Z,bug;GitHub;Pull Request Reviews,Wrong Reviewer for Github PR,False
+linear/linear,963,2025-12-08T14:22:50Z,bug;SDK;Images + video,`createIssue` fails if a webp image url is included in description text field as a markdown image,False
+linear/linear,973,2025-12-14T19:48:24Z,bug;Importer,Trello import image issues,False
+linear/linear,1008,2026-01-15T20:38:08Z,bug;SDK,[Bug] [sdk] issue.history pagination does not work properly,False
+linear/linear,1011,2026-01-19T19:49:13Z,bug;Desktop;Desktop App,macOS Universal Links broken due to missing associated-domains entitlement,False
+linear/linear,1028,2026-02-03T21:29:38Z,bug;API;MCP,[MCP] list_issues search fails - GraphQL fragments incorrectly spread on IssueSearchResult type,False
+linear/linear,1045,2026-02-18T06:41:01Z,bug;MCP;Labels,MCP: Hierarchical label names from list_issue_labels don't round-trip to create_issue/update_issue,False
+linear/linear,1049,2026-02-25T23:57:53Z,bug;API;MCP,MCP Server: update_issue tool returns -32602 'Tool not found' despite being listed in tools/list,False
+linear/linear,1054,2026-03-01T14:21:26Z,bug;Agents,🧓 Weekly Memory Distillation Stalled - Fred,False
+linear/linear,1060,2026-03-06T06:42:37Z,bug;API,Claude Code Linear Plugin: blockedBy relations include completed/resolved issues,False
+linear/linear,1076,2026-03-19T23:22:24Z,bug;Agents,No way to distinguish @mention-triggered from assignment-triggered AgentSessionEvent webhooks,False
+linear/linear,1085,2026-03-26T15:59:19Z,bug;MCP,MCP authentication broken,False
+linear/linear,1086,2026-03-26T20:32:37Z,bug;API;MCP,MCP server returns 500 when using API key with Authorization: Bearer header,False
+linear/linear,1089,2026-03-29T14:23:13Z,bug;API;MCP,Error: setTeams cannot be combined with addTeams or removeTeams,False
+linear/linear,1106,2026-04-15T00:09:13Z,bug;Desktop;Desktop App,"""'Linear-1.29.5-universal.dmg' is damaged and can't be opened. You should move it to the Trash.""",False
+linear/linear,1107,2026-04-17T15:42:31Z,bug;Importer,Linear import readme typo,False
+linear/linear,1116,2026-04-22T21:13:45Z,bug;API,"inconsistent usage of ""canceled"" vs ""cancelled""",False
+linear/linear,1150,2026-05-17T15:23:37Z,bug;Editor;Copy + paste,I'd like my bullet points to be copy-able,False
+linear/linear,1187,2026-06-07T18:25:20Z,bug;Agents;Integration issues;Blocked by partner,Codex delegate creates session/linkback but no visible cloud task result after @Codex,False
+linear/linear,1203,2026-07-02T18:07:50Z,bug;GitHub;Integration issues,"""Copy git branch name"" button moves ticket status to Blocked if status is Backlog or TODO",False
+linear/linear,1223,2026-07-28T23:26:40Z,bug;API;MCP;Integration issues,"MCP registry entry points at `mcp.linear.app/sse`, which 404s — the live endpoint is `/mcp`",False
+linear/linear,1235,2026-08-17T15:29:23Z,bug;API;MCP,"list_issues.includeArchived defaults to true, inconsistent with every sibling tool",False
+linear/linear,1236,2026-08-17T15:29:47Z,bug;API;MCP,list_projects limit maxes at 50 while sibling list tools allow 250,False
+linear/linear,1238,2026-08-18T19:55:07Z,bug;GitHub Sync;MCP;Integration issues,MCP diff comment tools escape raw Markdown before syncing to GitHub,False
+linear/linear,1265,2026-09-09T14:55:49Z,bug;GitHub;GitHub Sync;Integration issues,Automations Not Setting Issue Status On PR Merge,False
+linear/linear,1273,2026-09-14T14:09:25Z,bug;MCP;Integration issues,MCP OAuth on WSL2: Invalid client. The clientId provided does not match to this client (Cursor IDE works),False
+linear/linear,1292,2026-10-01T14:26:39Z,bug;MCP,MCP: return explicit null delegate fields for unassigned issues,False
+levy-street/world-of-claudecraft,93,2026-06-13T22:59:00Z,bug,Add rate limiting to authentication endpoints,False
+levy-street/world-of-claudecraft,96,2026-06-13T22:59:05Z,bug,Prevent player damage and hostile CC outside accepted duels/PvP,False
+levy-street/world-of-claudecraft,97,2026-06-13T22:59:07Z,bug,Allow clearing/replacing full actionbar slots for new spells and consumables,False
+levy-street/world-of-claudecraft,98,2026-06-13T22:59:08Z,bug,Quest reward preview can mismatch scaled turn-in reward,False
+levy-street/world-of-claudecraft,99,2026-06-13T22:59:10Z,bug,"Fix dungeon entry spawn, NPC pathing, and untargetable/stuck NPCs",False
+levy-street/world-of-claudecraft,100,2026-06-13T22:59:12Z,bug,Clarify and refresh guild/friends online status indicators,False
+levy-street/world-of-claudecraft,698,2026-06-19T12:03:53Z,bug,Duplicate Options Game Menu,False
+levy-street/world-of-claudecraft,978,2026-06-27T15:05:11Z,bug,no global inbound message-rate limit,False
+levy-street/world-of-claudecraft,1051,2026-06-29T23:33:45Z,bug,Unable to scroll the world market UI on mobile,False
+levy-street/world-of-claudecraft,1081,2026-06-30T16:50:13Z,bug,High-Contrast Text blurs text on the Parchment UI theme,False
+levy-street/world-of-claudecraft,1082,2026-06-30T16:50:14Z,bug,Keybindings window is cut off in fullscreen and the lowest rows are unreachable,False
+levy-street/world-of-claudecraft,1083,2026-06-30T17:17:24Z,bug,Malware-scan release gate self-matches inside Claude Code worktrees (.claude/worktrees) as a local-only false positive,False
+levy-street/world-of-claudecraft,1085,2026-06-30T19:50:33Z,bug,Arena PvP: players can move through the walls and keep attacking,False
+levy-street/world-of-claudecraft,1229,2026-07-01T14:48:56Z,bug,Mobile web touch controls drift and register unintended movement,False
+levy-street/world-of-claudecraft,1230,2026-07-01T14:53:52Z,bug,"Add a Discord button on web desktop and surface the ""!"" chat command hint",False
+levy-street/world-of-claudecraft,1232,2026-07-01T14:59:40Z,bug,Chat input box is an odd height and clips its placeholder text,False
+levy-street/world-of-claudecraft,1233,2026-07-01T15:00:55Z,bug,"""Realm maintenance"" label is off-center on the offline page",False
+levy-street/world-of-claudecraft,1255,2026-07-01T20:58:43Z,bug,Hard coded absolute paths,False
+levy-street/world-of-claudecraft,1326,2026-07-02T22:37:17Z,bug,Food is extremely expensive compared to potions,False
+levy-street/world-of-claudecraft,1365,2026-07-03T10:50:46Z,bug,"Chat window UI breaks down as tabs are added, and the input text is misaligned",False
+levy-street/world-of-claudecraft,1443,2026-07-04T15:10:15Z,bug,"[Mailbox] When I join an item to a mail, it should not reset the email form",False
+levy-street/world-of-claudecraft,1464,2026-07-05T06:46:01Z,bug,Bug: Character creator preview inconsistent,False
+levy-street/world-of-claudecraft,1484,2026-07-05T16:28:38Z,bug,Stuck on death sreen,False
+levy-street/world-of-claudecraft,1485,2026-07-05T16:42:10Z,bug,"Bug: Hotbar shows ""empty slot"" tooltip after dragging a spell",False
+levy-street/world-of-claudecraft,1486,2026-07-05T16:55:28Z,bug,"Bug: NPC hitboxes remain in upright 'standing' state after death, causing phantom collisions in perspective view",False
+levy-street/world-of-claudecraft,1500,2026-07-05T21:54:52Z,bug,Bug: Pier at Deepfen shallows has no collision,False
+levy-street/world-of-claudecraft,1536,2026-07-06T17:37:34Z,bug,Quest tracker number badges are hard to read due to an inherited text shadow,False
+levy-street/world-of-claudecraft,1537,2026-07-06T17:41:32Z,bug,Desktop auto-update can flip a production app to the dev API backend,False
+levy-street/world-of-claudecraft,1538,2026-07-06T17:42:12Z,bug,Bags window takes two clicks or two presses of B to open after loading in,False
+levy-street/world-of-claudecraft,1539,2026-07-06T17:43:25Z,bug,Un-looted mob loot is permanently lost when the mob respawns in place,False
+levy-street/world-of-claudecraft,1558,2026-07-06T22:16:54Z,bug,Bug: UI changes while sliding the UI scale slider in options menu,False
+levy-street/world-of-claudecraft,1559,2026-07-06T22:28:28Z,bug,Bug: Map isn't scaling along with rest of UI,False
+levy-street/world-of-claudecraft,1626,2026-07-07T22:12:42Z,bug,Bug: Item tooltip shows wrong item when dragging an item on top of another,False
+levy-street/world-of-claudecraft,1639,2026-07-08T09:29:05Z,bug,Overhead names with the dev-tier glow look blurred,False
+levy-street/world-of-claudecraft,1667,2026-07-08T21:23:56Z,bug,Bug: NPC dialog doesn't show the next quest immediately after completing the previous in a sequence,False
+levy-street/world-of-claudecraft,1668,2026-07-08T21:30:16Z,bug,"Bug: The message ""line of sight"" shows when trying to cast over a fence, even though my character can see over it",False
+levy-street/world-of-claudecraft,1737,2026-07-10T01:05:22Z,bug,Can't create an Account,False
+levy-street/world-of-claudecraft,1831,2026-07-12T18:54:55Z,bug,Vale Cup daily task wins silently award no points after a server restart,True
+levy-street/world-of-claudecraft,1832,2026-07-12T19:22:56Z,bug,Server calls botDetector.setTrackingConnection that the bundled detector does not implement,True
+levy-street/world-of-claudecraft,1833,2026-07-12T19:23:10Z,bug,Sim tick stalled for six minutes in production: mob.update climbed to 98ms mean per tick,False
+levy-street/world-of-claudecraft,1849,2026-07-13T08:54:01Z,bug,discord link expired,False
+levy-street/world-of-claudecraft,1862,2026-07-13T14:33:25Z,bug,"Bug: Critters move sideways, trough the ground",False
+levy-street/world-of-claudecraft,1865,2026-07-13T16:10:36Z,bug,Crafting window has no on-screen button; only reachable via the T keybind,False
+levy-street/world-of-claudecraft,1888,2026-07-14T03:30:05Z,bug,"Critical: gathering nodes have no harvest trigger, making A Trade for Every Hand uncompletable",False
+levy-street/world-of-claudecraft,1986,2026-07-15T21:05:04Z,bug,Admin Discord flair is not shown in game for members holding the Admins role,False
+levy-street/world-of-claudecraft,1988,2026-07-15T22:12:31Z,bug,Discord login does nothing on Windows (no popup or redirect appears),False
+levy-street/world-of-claudecraft,1990,2026-07-15T22:45:37Z,bug,Critical: Windows desktop app runs on integrated GPU instead of the discrete NVIDIA GPU on Optimus laptops,False
+levy-street/world-of-claudecraft,2026,2026-07-16T17:21:04Z,bug,Bug: Dungeon finder dungeon list scrolls back up after selecting one of the dungeons,False
+levy-street/world-of-claudecraft,2033,2026-07-16T19:58:24Z,bug,Combo recipes cannot be crafted in online play: craft skills and archetype are never mirrored to the client,False
+levy-street/world-of-claudecraft,2119,2026-07-18T14:13:53Z,bug,Browser client renders on the integrated GPU on hybrid-GPU laptops,False
+levy-street/world-of-claudecraft,2126,2026-07-18T16:32:26Z,bug,Bug: Release 27 desktop client shows error when I enter the world,False
+levy-street/world-of-claudecraft,2137,2026-07-19T01:41:50Z,bug,Bug: Prestige level in character window doesn't increase when prestiging,False
+levy-street/world-of-claudecraft,2243,2026-07-21T02:32:52Z,bug,Struggling clients get pinned at 30 fps with multi-second movement freezes; low preset performs worse than medium,True
+levy-street/world-of-claudecraft,2339,2026-07-23T12:44:52Z,bug,Old Salt deed not earned when the character sheet shows Fishing 100,False
+levy-street/world-of-claudecraft,2340,2026-07-23T13:46:29Z,bug,"Disenchanting an enchanted item fails with ""You do not have that item""",False
+levy-street/world-of-claudecraft,2341,2026-07-23T14:03:42Z,bug,"Reset to Defaults in a settings sub-view resets every setting, not just the displayed ones",False
+levy-street/world-of-claudecraft,2344,2026-07-23T14:32:45Z,bug,Bug: Town focus shows unfriendly (unreadable) string,False
+levy-street/world-of-claudecraft,2373,2026-07-24T17:36:56Z,bug,Bug: Bag window doesn't update when collecting gold from auctioneer,False
+levy-street/world-of-claudecraft,2375,2026-07-24T19:58:27Z,bug,Bug: Crafting window doesn't update when contents of the bag changes,False
+levy-street/world-of-claudecraft,2426,2026-07-25T16:11:50Z,bug,Rogue bug list,False
+levy-street/world-of-claudecraft,2430,2026-07-25T17:15:08Z,bug,Every profession action logs two chat lines for one grant,False
+levy-street/world-of-claudecraft,2451,2026-07-25T19:03:33Z,bug,[BUG] auto-attack on ability use,False
+levy-street/world-of-claudecraft,2456,2026-07-25T21:34:08Z,bug,Bug: Tooltip remains after the item is no longer listed in the world market,False
+levy-street/world-of-claudecraft,2703,2026-07-31T18:24:06Z,bug,Unexpected server-side CPU usage after v0.30.0,True
+levy-street/world-of-claudecraft,2767,2026-08-02T13:53:13Z,bug,"Vale Cup skill deeds (Hat Trick, Safe Hands, clean sheet) feel unearnable under common play paths",False
+levy-street/world-of-claudecraft,2823,2026-08-03T16:24:21Z,bug,Full freeze unplayable,False
+levy-street/world-of-claudecraft,2917,2026-08-04T09:06:15Z,bug;enhancement,fix(render): rift boss AoE telegraph rings are too thin and clip into platforms,True
+levy-street/world-of-claudecraft,2927,2026-08-04T19:13:44Z,bug;high priority,Galecrest: Scuttlers in the Pots and Wind Against the Wick are uncompletable (target mobs never spawn),True
+levy-street/world-of-claudecraft,3027,2026-08-06T18:41:47Z,bug,Bug: Tooltip remains after loot roll is finished,False
+levy-street/world-of-claudecraft,3029,2026-08-06T20:05:57Z,bug,"Bug: Chat message says: ""You have died. Slain by Cauterized"" even though Cauterized is not a mob",False
+levy-street/world-of-claudecraft,3125,2026-08-08T01:41:37Z,bug,"Share player card layout does not fit grown content (title, $WOC, gear)",False
+levy-street/world-of-claudecraft,3166,2026-08-08T22:59:09Z,bug,Bug: Rune message spam in rift,False
+levy-street/world-of-claudecraft,3372,2026-08-13T22:01:31Z,bug,It's possible to change talents during a boss fight,False
+levy-street/world-of-claudecraft,3400,2026-08-14T16:21:06Z,bug,bug(sim): death mid-wardstone-channel leaves channeling armed; the next hard cast resolves once per tick (4-9k opener spikes),True
+levy-street/world-of-claudecraft,3427,2026-08-15T15:14:51Z,bug,Bug: The Gravity Always Wins deed can be accomplished while being dead,False
+levy-street/world-of-claudecraft,3436,2026-08-16T04:30:50Z,bug,Major VFX / Lighting memory leaks,False
+levy-street/world-of-claudecraft,3449,2026-08-16T17:44:52Z,bug,World Market search ignores localized item names,False
+levy-street/world-of-claudecraft,3450,2026-08-16T19:21:45Z,bug,Bug: Can no longer open chat input using the `enter` key after clicking the mail icon on the minimap,False
+levy-street/world-of-claudecraft,3523,2026-08-20T03:38:48Z,bug,"Bug: The message `line of sight` appears, even though I can see the target from a stall in eastbrook",False
+levy-street/world-of-claudecraft,3657,2026-08-26T07:25:25Z,bug,Bug: Bag window invisible when browser window is resized,False
+levy-street/world-of-claudecraft,3673,2026-08-26T22:07:08Z,bug,"Deeds and Reliquary unlocks are granted for traded, mailed, and market bought items instead of earned play",False
+levy-street/world-of-claudecraft,3698,2026-08-27T16:40:41Z,bug,Bug: World market slot counter is stale after putting up a listing,False
+levy-street/world-of-claudecraft,3749,2026-08-29T13:13:02Z,bug,Bug: Player unfriendly string in the nythraxis pillar progress bar,False
+levy-street/world-of-claudecraft,3757,2026-08-29T18:48:30Z,bug,Bug: Stormreel fishing rod is listed under `materials` category in world market,False
+levy-street/world-of-claudecraft,3774,2026-08-31T08:53:27Z,bug,Two new rogue poisons are not poisons but spells,False
+levy-street/world-of-claudecraft,3801,2026-09-01T08:21:09Z,bug,"Bug: Entering heroic drowned litany moves the player's character in the open world, never enters dungeon",False
+levy-street/world-of-claudecraft,3836,2026-09-02T18:25:22Z,bug,Bug: Bag window unresponsive after dragging item,False
+levy-street/world-of-claudecraft,3857,2026-09-03T14:51:01Z,bug,"Bug: Woc store window extends beyond the browser window, unable to resize",False
+levy-street/world-of-claudecraft,4296,2026-09-30T19:18:45Z,bug,World Market Wanted tab: deliver button permanently disabled for all craft-only items (no plain source),False
+Kong/unirest-java,549,2025-10-07T12:44:55Z,Bug,"GitHub ""release"" version wrong",False
+apache/storm,7533,2021-03-07T06:20:53Z,bug;imported-jira-issue,[STORM-3751] NPE in WorkerState.transferLocalBatch,True
+apache/storm,7534,2021-03-07T09:03:45Z,bug;Imported Jira Issue;imported-jira-issue,[STORM-3752] Nimbus can't be run in MacOSX 10.13.x,False
+apache/storm,7550,2021-04-28T09:59:27Z,bug;imported-jira-issue,[STORM-3768] Zero Values for Assigned Mem (MB) in Topology Summary and Used Mem (MB) in Supervisor Summary,True
+apache/storm,7565,2021-07-20T14:28:32Z,bug;imported-jira-issue,[STORM-3783] 500 Server Error - Internal error processing getComponentPageInfo,True
+apache/storm,7600,2022-01-18T17:11:40Z,bug;Imported Jira Issue,[STORM-3818] Joining more than 2 streams in Stream API,False
+apache/storm,7653,2022-06-03T14:14:40Z,bug;imported-jira-issue,[STORM-3871] Storm blobstore leak space,False
+apache/storm,7782,2023-11-10T21:49:28Z,bug;Imported Jira Issue;imported-jira-issue,[STORM-4000] Processing late tuples from BaseWindowedBolt results in serialization exception,True
+apache/storm,7800,2024-01-16T11:14:17Z,bug;Imported Jira Issue,[STORM-4019] Missing some parameters while logging external API calls ,True
+apache/storm,7897,2024-11-13T09:32:49Z,bug;Imported Jira Issue;good first issue,[STORM-4116] Heartbeats mechanism is affected by Y2038 bug,True
+apache/storm,7978,2025-02-27T16:28:51Z,bug,Error on syncing BlobStore: Could not download the blob with key,True
+apache/storm,8419,2026-03-05T11:37:20Z,bug,Nimbus deployment causing Topologies rebalancing,True
+apache/storm,8456,2026-03-30T18:47:35Z,bug,Storm 2.8.5 GUI using scientific notation in columns for large numbers,True
+apache/storm,8588,2026-05-06T15:28:32Z,bug,Kafka spout lag broken after Kafka 4 client upgrade — `ClassCastException` in TopologySpoutLag,True
+apache/storm,8704,2026-05-22T07:07:40Z,bug,Isolation Scheduler Does Shuffle After Sort so sorting does not makes sense,True
+apache/storm,8708,2026-05-25T07:53:34Z,bug,Isolation Scheduler Can Have Free Slots Check as a Secondary Sorting Check,False
+napi-rs/napi-rs,1597,2023-05-25T16:52:40Z,bug,Cannot use `#[napi]` on function when parameter of type `napi::Env` is present,False
+napi-rs/napi-rs,1630,2023-06-19T23:39:04Z,bug,`failed printing to stdout: Resource temporarily unavailable (os error 35)` on MacOS,False
+napi-rs/napi-rs,2060,2024-04-19T11:26:46Z,bug,[bug] exported function has incorrect signature,False
+napi-rs/napi-rs,2476,2025-02-23T19:41:52Z,bug,A set accessor cannot have an optional parameter,False
+napi-rs/napi-rs,2555,2025-04-12T00:06:46Z,bug,NAPI custom gc segfault,False
+napi-rs/napi-rs,2926,2025-09-15T18:16:12Z,bug,Memory leak when converting a Promise from an Unknown,False
+napi-rs/napi-rs,2958,2025-10-12T17:46:07Z,bug,"Remove ""module_exports can only be used once"" check",False
+napi-rs/napi-rs,2970,2025-10-22T14:02:23Z,bug,regression: Node.JS process doesn't exit on Windows,False
+napi-rs/napi-rs,2999,2025-11-06T10:24:30Z,bug,napi-build 2.3.0 breaks when used with napi-2.x,False

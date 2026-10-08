@@ -45,6 +45,7 @@ CHAVES_DE_ITENS = (
 _RE_LINK = re.compile(r'<([^>]+)>\s*;\s*rel="([^"]+)"')
 
 CAMINHO_CUSTO = "data/processed/custo_api.csv"
+GRAPHQL_URL = "https://api.github.com/graphql"
 
 # Segmentos que identificam um recurso e vêm logo depois de uma coleção.
 _DONOS = {
@@ -138,9 +139,12 @@ def _numero(valor: object) -> float | None:
 def _recurso_de(url: str) -> str:
     """Qual balde de cota esta URL consome.
 
-    O GitHub conta /search/* num balde próprio. Só usamos esses dois.
+    O GitHub conta /search/* e /graphql em baldes próprios.
     """
-    return "search" if urlsplit(url).path.startswith("/search/") else "core"
+    caminho = urlsplit(url).path
+    if caminho.startswith("/search/"):
+        return "search"
+    return "graphql" if caminho == "/graphql" else "core"
 
 
 def _limiar(limite: float | None) -> int:
@@ -325,8 +329,12 @@ class Cliente:
             return ESPERA_PADRAO_S
         return min(max(segundos, 0.0), TETO_ESPERA_S)
 
-    def _buscar(self, url: str, params: dict | None) -> tuple[int, dict, str]:
+    def _buscar(
+        self, url: str, params: dict | None, corpo_json: dict | None = None
+    ) -> tuple[int, dict, str]:
         """Vai à rede até conseguir uma resposta aproveitável.
+
+        Com `corpo_json` a chamada é um POST (GraphQL); sem ele, um GET.
 
         O rate limit tem contador próprio: um 403 de cota não pode consumir o
         backoff de 5xx, senão cinco esperas de cota matariam a coleta.
@@ -339,9 +347,14 @@ class Cliente:
             self._esperar_cota(url)
             self._contar(url, "chamadas")
             try:
-                r = self._sessao.get(
-                    url, params=params, headers=cabecalhos, timeout=TEMPO_LIMITE_S
-                )
+                if corpo_json is None:
+                    r = self._sessao.get(
+                        url, params=params, headers=cabecalhos, timeout=TEMPO_LIMITE_S
+                    )
+                else:
+                    r = self._sessao.post(
+                        url, json=corpo_json, headers=cabecalhos, timeout=TEMPO_LIMITE_S
+                    )
             except requests.RequestException as e:
                 if tentativa >= len(ESPERAS_5XX):
                     raise ErroDeHTTP(
@@ -396,6 +409,42 @@ class Cliente:
 
         raise ErroDeHTTP(f"GET {url} devolveu {status}: {corpo[:200]}", status)
 
+    def graphql(self, consulta: str, variaveis: dict | None = None) -> dict:
+        """Executa uma consulta GraphQL e devolve o JSON da resposta.
+
+        Passa pelo mesmo cache, rate limit e backoff do REST. Uma resposta com
+        `errors` é devolvida mas NÃO é cacheada: o GraphQL responde 200 até
+        quando falha, e cachear isso envenenaria a coleta para sempre. Quem
+        chama decide o que fazer com o erro (um NOT_FOUND, por exemplo, é
+        esperado para repositório renomeado).
+        """
+        variaveis = variaveis or {}
+        chave = chave_de("POST", GRAPHQL_URL, {
+            "query": consulta,
+            "variables": json.dumps(variaveis, sort_keys=True),
+        })
+        guardada = self._cache.ler(chave)
+        if guardada is not None:
+            self._contar(GRAPHQL_URL, "do_cache")
+            return json.loads(guardada.corpo)
+
+        status, cabecalhos, corpo = self._buscar(
+            GRAPHQL_URL, None, {"query": consulta, "variables": variaveis}
+        )
+        if status != 200:
+            raise ErroDeHTTP(f"POST {GRAPHQL_URL} devolveu {status}: {corpo[:200]}", status)
+        try:
+            dados = json.loads(corpo)
+        except json.JSONDecodeError as e:
+            raise ErroDeHTTP(f"resposta GraphQL não era JSON: {corpo[:200]}", status) from e
+        if "errors" not in dados:
+            self._cache.gravar(
+                chave, "POST", GRAPHQL_URL,
+                {"query": consulta, "variables": json.dumps(variaveis, sort_keys=True)},
+                status, cabecalhos, corpo,
+            )
+        return dados
+
     def paginar(self, url: str, params: dict | None = None) -> list[dict]:
         """Segue Link rel="next" até o fim e devolve todos os itens.
 
@@ -444,6 +493,10 @@ def get(url: str, params: dict | None = None) -> Resposta:
 
 def paginar(url: str, params: dict | None = None) -> list[dict]:
     return cliente_padrao().paginar(url, params)
+
+
+def graphql(consulta: str, variaveis: dict | None = None) -> dict:
+    return cliente_padrao().graphql(consulta, variaveis)
 
 
 def escrever_custo_api(
