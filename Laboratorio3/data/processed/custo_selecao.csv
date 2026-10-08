@@ -1,7 +1,7 @@
 endpoint,chamadas,do_cache
-/repos/{owner}/{repo},0,15
-/repos/{owner}/{repo}/actions/runs,0,30
-/repos/{owner}/{repo}/actions/workflows,0,65
-/repos/{owner}/{repo}/releases,0,59
-/repositories/{id}/releases,0,9
+/repos/{owner}/{repo},119,15
+/repos/{owner}/{repo}/actions/runs,206,30
+/repos/{owner}/{repo}/actions/workflows,418,65
+/repos/{owner}/{repo}/releases,328,59
+/repositories/{id}/releases,185,9
 /search/repositories,0,795
