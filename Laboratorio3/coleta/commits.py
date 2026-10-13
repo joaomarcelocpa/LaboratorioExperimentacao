@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from urllib.parse import quote
 
 import pandas as pd
 import requests
@@ -43,6 +44,9 @@ def coletar_commits(
     session: requests.Session,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Retorna (commits_df, releases_ignoradas_df)."""
+    if releases_df.empty:
+        return df_vazio(SCHEMAS["commits"]), df_vazio(SCHEMAS["releases_ignoradas"])
+
     na_janela = releases_df[releases_df["na_janela"]].sort_values("publicada_em")
     todas = releases_df.sort_values("publicada_em")
 
@@ -61,7 +65,10 @@ def coletar_commits(
             continue
 
         tag_base = anteriores.sort_values("publicada_em").iloc[-1]["tag"]
-        url = f"{BASE}/repos/{repo}/compare/{tag_base}...{tag_head}"
+        # Tags com `/`, `#`, `?`, espaço ou `%` (comuns em monorepos, como
+        # `pacote/1.0`) precisam ser codificadas, senão apontam para outro recurso.
+        url = (f"{BASE}/repos/{repo}/compare/"
+               f"{quote(tag_base, safe='')}...{quote(tag_head, safe='')}")
         raw_commits, houve_404 = _paginar_compare(session, url)
 
         if houve_404:

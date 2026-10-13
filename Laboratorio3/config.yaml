@@ -16,7 +16,7 @@ n_repos: 100
 seed: 42
 
 ambientes_producao: [production, prod, live]
-labels_bug: [bug, regression, "type: bug"]
+labels_bug: [bug, regression, "type: bug", "kind/bug", "kind/regression", "🐛 Bug", "bug :bug:"]
 n_dias_issue: 7
 
 # Teto de tentativas anteriores buscadas por run (Issue #41). Um run com 40

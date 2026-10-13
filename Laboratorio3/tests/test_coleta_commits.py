@@ -116,3 +116,34 @@ def test_eh_bot_marcado_por_login():
     commits_df, _ = coletar_commits("org/repo", releases, cfg, session)
     assert not commits_df[commits_df["sha"] == "sha1"].iloc[0]["eh_bot"]
     assert commits_df[commits_df["sha"] == "sha2"].iloc[0]["eh_bot"]
+
+
+@responses.activate
+def test_repo_sem_release_devolve_vazio_sem_excecao():
+    from metricas.schemas import SCHEMAS, df_vazio
+    commits_df, ignoradas_df = coletar_commits(
+        "org/repo", df_vazio(SCHEMAS["releases"]), _cfg(), requests.Session())
+    assert commits_df.empty
+    assert ignoradas_df.empty
+    assert list(commits_df.columns) == list(SCHEMAS["commits"].colunas)
+    assert len(responses.calls) == 0
+
+
+@responses.activate
+def test_tags_com_barra_e_cerquilha_sao_codificadas_na_url():
+    releases = _releases_df([
+        ("pkg/a#1.0", "2023-12-01T00:00:00Z", False),
+        ("pkg/a#1.1", "2024-03-01T00:00:00Z", True),
+    ])
+    url = f"{BASE}/repos/org/repo/compare/pkg%2Fa%231.0...pkg%2Fa%231.1"
+    responses.add(responses.GET, url, json={"commits": [{
+        "sha": "abc", "commit": {"author": {"date": "2024-02-01T10:00:00Z"},
+                                 "message": "feat: x"},
+        "author": {"login": "dev1"}}]}, status=200)
+
+    commits_df, ignoradas_df = coletar_commits(
+        "org/repo", releases, _cfg(), requests.Session())
+
+    assert responses.calls[0].request.url == url
+    assert commits_df["sha"].tolist() == ["abc"]
+    assert ignoradas_df.empty
