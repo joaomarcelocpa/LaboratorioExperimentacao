@@ -11,6 +11,21 @@ Convenções de todo o estudo:
 - Proporções em 0–1.
 - Valor ausente é vazio no CSV (`NaN` ao ler com pandas) e significa que a
   métrica não pôde ser calculada para aquele repositório.
+- `commits.csv` e `runs.csv` são entregues comprimidos, como `commits.csv.gz` e
+  `runs.csv.gz` (descomprimidos passam de 100 MB, o limite do GitHub). As
+  colunas são as das tabelas abaixo, e `pandas.read_csv` abre o `.gz` direto.
+
+## Arquivos de diagnóstico
+
+Estes arquivos acompanham a coleta, mas **não são dataset de análise**: não
+passam pelo validador de contratos e, exceto `custo_selecao.csv`, só existem
+quando há algo a registrar.
+
+| Arquivo | Colunas | O que registra |
+|---|---|---|
+| `fatias_saturadas.csv` | `repo`, `inicio`, `fim`, `total_count` | intervalos de runs que bateram o teto de 1.000 resultados da API: parte dos runs deles ficou de fora |
+| `fatias_nao_coletadas.csv` | `repo`, `inicio`, `fim`, `motivo` | intervalos de runs que a API recusou (`erro 403`, `erro 422`) |
+| `custo_selecao.csv` | `endpoint`, `chamadas`, `do_cache` | custo da seleção na execução em curso; o custo acumulado da coleta inteira está em `custo_api.csv` |
 
 ## `candidatos.csv`
 
