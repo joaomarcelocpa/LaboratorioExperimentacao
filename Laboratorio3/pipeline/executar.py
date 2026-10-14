@@ -6,6 +6,7 @@ são injetáveis para que os testes rodem sem rede.
 from __future__ import annotations
 
 import os
+import sys
 import time
 from dataclasses import dataclass, field, replace
 from pathlib import Path
@@ -37,6 +38,22 @@ ARQUIVOS = {
 }
 
 
+# Descomprimidos, commits.csv (244 MB) e runs.csv (114 MB) passam de 100 MB, o
+# limite do GitHub. Eles saem em .csv.gz ao FINAL da rodada; nos checkpoints
+# ficam planos (e fora do git, veja o .gitignore), porque comprimir a cada
+# repositório custaria dezenas de minutos numa rodada de 300.
+COMPACTADOS = ("commits.csv", "runs.csv")
+
+
+def caminho_saida(pasta: str | Path, nome: str) -> Path:
+    """Onde está o CSV `nome`: o plano (checkpoint em andamento) ou o .gz."""
+    pasta = Path(pasta)
+    plano = pasta / nome
+    if nome in COMPACTADOS and not plano.exists():
+        return pasta / f"{nome}.gz"
+    return plano
+
+
 def etapas_reais() -> SimpleNamespace:
     from coleta import commits, deployments, issues, metadados, releases, runs, selecao
     from coleta.sessao import SessaoHttp
@@ -59,13 +76,42 @@ def _juntar(dfs: list[pd.DataFrame], schema: str) -> pd.DataFrame:
     return pd.concat(validos, ignore_index=True) if validos else df_vazio(SCHEMAS[schema])
 
 
-def _gravar(df: pd.DataFrame, nome: str, pasta: Path) -> None:
+def _gravar(df: pd.DataFrame, nome: str, pasta: Path, final: bool = False) -> None:
     """Valida e grava de forma atômica: um Ctrl-C no meio da escrita não deixa
-    um CSV pela metade no lugar do checkpoint anterior."""
+    um CSV pela metade no lugar do checkpoint anterior.
+
+    Com `final`, os arquivos de COMPACTADOS saem em .gz e o plano é removido.
+    O gzip é determinístico (mtime 0, mesmo nome temporário), então a mesma
+    coleta gera os mesmos bytes e o grupo replicador pode compará-los.
+    """
     validar(df, SCHEMAS[ARQUIVOS[nome]], estrito=False)
+    if final and nome in COMPACTADOS:
+        tmp = pasta / f"{nome}.gz.tmp"
+        df.to_csv(tmp, index=False,
+                  compression={"method": "gzip", "compresslevel": 6, "mtime": 0})
+        os.replace(tmp, pasta / f"{nome}.gz")
+        (pasta / nome).unlink(missing_ok=True)
+        return
     tmp = pasta / f"{nome}.tmp"
     df.to_csv(tmp, index=False)
     os.replace(tmp, pasta / nome)
+
+
+def _sem_mascarar(acao, erro_em_voo: bool) -> None:
+    """Roda uma tarefa de fechamento sem deixar que ela esconda o erro original.
+
+    Uma exceção levantada dentro de um `finally` substitui a que já estava
+    subindo (a original fica só como contexto). Se já há erro em voo, a falha
+    do fechamento é avisada em stderr e o original segue; se não há, ela sobe,
+    porque aí é o único erro.
+    """
+    try:
+        acao()
+    except Exception as exc:  # noqa: BLE001
+        if not erro_em_voo:
+            raise
+        print(f"aviso: o fechamento também falhou ({type(exc).__name__}: {exc}); "
+              f"o erro original segue.", file=sys.stderr, flush=True)
 
 
 def _repassa_401(exc: Exception) -> None:
@@ -95,8 +141,13 @@ class _Completos:
     saturadas: list = field(default_factory=list)
 
 
-def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path) -> list[str]:
-    """Monta as métricas do que está completo e grava todos os CSVs."""
+def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path,
+                   final: bool = False) -> list[str]:
+    """Monta as métricas do que está completo e grava todos os CSVs.
+
+    `final=False` é o checkpoint (rápido, tudo plano); `final=True` fecha a
+    rodada e comprime o que passa de 100 MB.
+    """
     repos_df = _juntar(acc.repos, "repos")
     repos = repos_df["repo"].tolist()
     releases_df, tags_df = _juntar(acc.rels, "releases"), _juntar(acc.tags, "tags")
@@ -123,10 +174,15 @@ def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path) -> list[str]:
         "metricas_mensais.csv": mensais_df,
     }
     for nome, df in saidas.items():
-        _gravar(df, nome, pasta)
-    if acc.saturadas:
+        _gravar(df, nome, pasta, final)
+    teto = [f for f in acc.saturadas if f.motivo == "teto"]
+    erro_de_api = [f for f in acc.saturadas if f.motivo != "teto"]
+    if teto:
         from coleta.runs import escrever_fatias_saturadas
-        escrever_fatias_saturadas(acc.saturadas, pasta / "fatias_saturadas.csv")
+        escrever_fatias_saturadas(teto, pasta / "fatias_saturadas.csv")
+    if erro_de_api:
+        from coleta.runs import escrever_fatias_nao_coletadas
+        escrever_fatias_nao_coletadas(erro_de_api, pasta / "fatias_nao_coletadas.csv")
     return repos
 
 
@@ -154,8 +210,11 @@ def executar(
     inicio = time.monotonic()
     # Uma rodada anterior pode ter deixado este diagnóstico; lido agora, ele
     # pareceria ameaça à validade desta amostra.
-    (pasta / "fatias_saturadas.csv").unlink(missing_ok=True)
+    for diagnostico in ("fatias_saturadas.csv", "fatias_nao_coletadas.csv"):
+        (pasta / diagnostico).unlink(missing_ok=True)
 
+    acc = _Completos()
+    repos: list[str] = []
     try:
         amostra = etapas.selecionar(cfg, pasta)
         alvo = amostra["repo"].tolist()
@@ -166,8 +225,6 @@ def executar(
         print(f"selecionados: {len(alvo)} repositórios "
               f"(seleção: {time.monotonic() - inicio:.0f}s)", flush=True)
 
-        acc = _Completos()
-        repos: list[str] = []
         for i, repo in enumerate(alvo, 1):
             print(f"  [{i}/{len(alvo)}] {repo}...", end=" ", flush=True)
             try:
@@ -201,9 +258,15 @@ def executar(
             repos = _gravar_saidas(acc, cfg, pasta)
             print(f"ok ({len(repos)} completos)", flush=True)
 
-        repos = _gravar_saidas(acc, cfg, pasta)
+        repos = _gravar_saidas(acc, cfg, pasta, final=True)
     finally:
-        http.escrever_custo_api(pasta / "custo_api.csv")
+        em_voo = sys.exc_info()[0] is not None
+        if em_voo and acc.repos:
+            # interrompida: comprime o que já estava completo, para que o que
+            # sobra em disco seja o que o GitHub aceita
+            _sem_mascarar(lambda: _gravar_saidas(acc, cfg, pasta, final=True), True)
+        _sem_mascarar(lambda: http.escrever_custo_api(pasta / "custo_api.csv"),
+                      erro_em_voo=em_voo)
         print(f"tempo: {time.monotonic() - inicio:.0f}s | "
               f"custo em {pasta / 'custo_api.csv'}", flush=True)
 

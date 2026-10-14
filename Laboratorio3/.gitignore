@@ -7,3 +7,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 .coverage
+# versionados só como .csv.gz (os puros passam de 100 MB, limite do GitHub)
+data/processed/commits.csv
+data/processed/runs.csv
