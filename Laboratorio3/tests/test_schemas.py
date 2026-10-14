@@ -39,9 +39,9 @@ def test_todo_csv_tem_chave_repo_menos_funil_e_custo(nome):
     assert tem is (nome not in sem_repo)
 
 
-def test_metricas_tem_as_27_colunas():
-    # 26 da #37 + pct_falhas_flaky (#42).
-    assert len(SCHEMAS["metricas"].colunas) == 27
+def test_metricas_tem_as_30_colunas():
+    # 26 da #37 + pct_falhas_flaky (#42) + lt_commit_base_recente_h + cfr_b_semver + cfr_b_nao_semver (#64).
+    assert len(SCHEMAS["metricas"].colunas) == 30
     for col in ["rework_rate", "rework_rate_7d", "nota_freq", "nota_lead_time",
                 "nota_cfr", "nota_recuperacao", "classe_dora", "classe_dora_nota",
                 "pct_falhas_flaky"]:
