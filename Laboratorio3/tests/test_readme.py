@@ -21,6 +21,8 @@ def test_readme_documenta_cada_csv_do_contrato(schema):
     "fatias_saturadas.csv",
     "fatias_nao_coletadas.csv",
     "custo_selecao.csv",
+    "Limitações conhecidas",
+    "pytorch/pytorch",
     "commits.csv.gz",
     "runs.csv.gz",
     "sem_push_na_janela",

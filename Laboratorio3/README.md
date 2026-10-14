@@ -200,6 +200,29 @@ Os dois são diagnóstico, não dataset de análise: não aparecem em
 `docs/dicionario_dados.md` nem passam pelo validador de contratos, e só existem
 quando há algo a registrar.
 
+## Limitações conhecidas
+
+**Execuções de CI incompletas.** Em alguns repositórios o teto de 1.000
+resultados da API persiste mesmo na menor fatia (cerca de 40 minutos), e os
+runs daquele intervalo ficam de fora. Isso afeta o CFR de CI (RQ 03a), o tempo
+de recuperação (RQ 04) e a série mensal (RQ 08b) desses repositórios, e deve
+entrar na seção de ameaças à validade do artigo.
+
+| Rodada | Intervalos incompletos | Repositórios |
+|---|---|---|
+| 100 repositórios | 31 | `pytorch/pytorch` 24, `openvinotoolkit/openvino` 5, `decidim/decidim` 1, `steipete/summarize` 1 |
+| 300 repositórios (299 coletados) | 69 | 11 repositórios; `pytorch/pytorch` 24, `dust-tt/dust` 15, `twentyhq/twenty` 10, `openai/codex` 8, `openvinotoolkit/openvino` 5, `tenstorrent/tt-metal` 2 e cinco com 1 cada |
+
+A API não permite recuperar esses runs: mesmo na fatia mínima o `total_count`
+passa do teto (até 2.500 numa única fatia de `pytorch/pytorch`). A coleta
+registra o intervalo em `fatias_saturadas.csv` em vez de perdê-lo em silêncio,
+e a análise deve reportar a proporção de repositórios afetados e, se
+necessário, repetir o resultado sem eles. Os intervalos que ficaram de fora por
+erro de API (403, 422) vão para `fatias_nao_coletadas.csv`. As duas rodadas
+foram feitas antes dessa separação, e em nenhuma linha do
+`fatias_saturadas.csv` delas o `total_count` é 0 (o sinal de um 403), então os
+69 intervalos acima são saturação real.
+
 ## Estrutura
 
 ```
