@@ -13,7 +13,7 @@ from coleta.runs import Coleta
 from metricas.schemas import SCHEMAS, df_vazio
 from pipeline import __main__ as cli
 from pipeline.config import Config
-from pipeline.executar import ARQUIVOS, executar
+from pipeline.executar import ARQUIVOS, COMPACTADOS, caminho_saida, executar
 
 
 def _cfg(**kw):
@@ -111,7 +111,7 @@ def test_sem_limite_usa_n_repos_do_config(tmp_path):
 def test_grava_todos_os_csvs_do_contrato(tmp_path):
     executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a", "o/b"]))
     for nome, chave in ARQUIVOS.items():
-        arquivo = tmp_path / nome
+        arquivo = caminho_saida(tmp_path, nome)
         assert arquivo.exists(), nome
         # o cabeçalho é o contrato; a validação de tipos roda antes de gravar
         assert list(pd.read_csv(arquivo).columns) == list(SCHEMAS[chave].colunas), nome
@@ -147,7 +147,7 @@ def test_custo_gravado_mesmo_em_ctrl_c(tmp_path):
 def test_zero_aprovados_gera_csvs_vazios_validos(tmp_path):
     executar(_cfg(), pasta=tmp_path, etapas=_etapas([]))
     for nome, chave in ARQUIVOS.items():
-        assert (tmp_path / nome).exists(), nome
+        assert caminho_saida(tmp_path, nome).exists(), nome
     assert pd.read_csv(tmp_path / "metricas.csv").empty
 
 
@@ -312,7 +312,7 @@ def test_custo_da_selecao_e_gravado_a_parte(tmp_path):
 # --- checkpoints: algo para entregar mesmo se a rodada for interrompida --------
 
 def _repos_em(pasta, nome):
-    return sorted(pd.read_csv(pasta / nome)["repo"].unique())
+    return sorted(pd.read_csv(caminho_saida(pasta, nome))["repo"].unique())
 
 
 def test_ctrl_c_no_segundo_repo_deixa_o_primeiro_completo_em_todos_os_csvs(tmp_path):
@@ -441,3 +441,71 @@ def test_so_erro_de_api_nao_cria_fatias_saturadas(tmp_path):
     executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], coletar_runs=runs))
     assert not (tmp_path / "fatias_saturadas.csv").exists()
     assert (tmp_path / "fatias_nao_coletadas.csv").exists()
+
+
+# --- commits.csv e runs.csv passam de 100 MB: saem em .gz (Issue #65) ---------------
+
+def test_commits_e_runs_saem_comprimidos_e_sem_o_arquivo_grande(tmp_path):
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a", "o/b"]))
+    assert COMPACTADOS == ("commits.csv", "runs.csv")
+    for nome in COMPACTADOS:
+        assert (tmp_path / f"{nome}.gz").exists(), nome
+        assert not (tmp_path / nome).exists(), f"{nome} puro não pode sobrar (>100 MB)"
+        cols = list(pd.read_csv(tmp_path / f"{nome}.gz").columns)
+        assert cols == list(SCHEMAS[ARQUIVOS[nome]].colunas)
+    assert sorted(pd.read_csv(tmp_path / "runs.csv.gz")["repo"].unique()) == ["o/a", "o/b"]
+
+
+def test_os_outros_csvs_continuam_planos(tmp_path):
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"]))
+    for nome in ARQUIVOS:
+        if nome not in COMPACTADOS:
+            assert (tmp_path / nome).exists() and not (tmp_path / f"{nome}.gz").exists()
+
+
+def test_checkpoint_e_plano_e_so_o_final_comprime(tmp_path):
+    visto = {}
+
+    def releases(repo, cfg, session):
+        if repo == "o/b":   # o 1º repo já passou pelo checkpoint
+            visto["plano"] = (tmp_path / "runs.csv").exists()
+            visto["gz"] = (tmp_path / "runs.csv.gz").exists()
+        return _etapas([]).coletar_releases(repo, cfg, session)
+
+    executar(_cfg(), pasta=tmp_path,
+             etapas=_etapas(["o/a", "o/b"], coletar_releases=releases))
+    assert visto == {"plano": True, "gz": False}      # comprimir a cada repo custaria horas
+    assert (tmp_path / "runs.csv.gz").exists() and not (tmp_path / "runs.csv").exists()
+
+
+def test_interrompido_tambem_deixa_o_gz_com_o_que_estava_completo(tmp_path):
+    def runs(repo, branch, inicio, fim):
+        if repo == "o/b":
+            raise KeyboardInterrupt
+        return _etapas([]).coletar_runs(repo, branch, inicio, fim)
+
+    with pytest.raises(KeyboardInterrupt):
+        executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a", "o/b"], coletar_runs=runs))
+    assert sorted(pd.read_csv(tmp_path / "runs.csv.gz")["repo"].unique()) == ["o/a"]
+    assert not (tmp_path / "runs.csv").exists()
+    assert (tmp_path / "custo_api.csv").exists()
+
+
+def test_o_gz_e_reprodutivel_byte_a_byte(tmp_path):
+    import hashlib, time
+
+    def rodar(pasta):
+        executar(_cfg(), pasta=pasta, etapas=_etapas(["o/a", "o/b"]))
+        return hashlib.md5((pasta / "commits.csv.gz").read_bytes()).hexdigest()
+
+    a = rodar(tmp_path / "1")
+    time.sleep(1.1)       # um relógio no cabeçalho do gzip mudaria o resultado
+    assert rodar(tmp_path / "2") == a
+
+
+def test_caminho_saida_prefere_o_plano_em_andamento_e_cai_no_gz(tmp_path):
+    (tmp_path / "runs.csv.gz").write_bytes(b"x")
+    assert caminho_saida(tmp_path, "runs.csv") == tmp_path / "runs.csv.gz"
+    (tmp_path / "runs.csv").write_text("x")
+    assert caminho_saida(tmp_path, "runs.csv") == tmp_path / "runs.csv"
+    assert caminho_saida(tmp_path, "repos.csv") == tmp_path / "repos.csv"

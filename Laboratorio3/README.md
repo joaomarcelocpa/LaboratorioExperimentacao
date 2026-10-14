@@ -102,6 +102,16 @@ como `placeholder: true`.
 | `fatias_saturadas.csv` | só se existir: fatias que bateram o teto de 1.000 resultados |
 | `fatias_nao_coletadas.csv` | só se existir: intervalos de runs que a API recusou (403, 422) |
 
+**Formato de `commits.csv` e `runs.csv`:** descomprimidos eles têm 244 MB e
+114 MB, acima do limite de 100 MB do GitHub, então são gravados como
+`commits.csv.gz` e `runs.csv.gz` (os dois com as mesmas colunas do contrato) ao
+fim da rodada. Durante a coleta, os checkpoints ficam planos em
+`commits.csv` e `runs.csv`, que o `.gitignore` deixa de fora do git. O
+`pandas.read_csv("data/processed/runs.csv.gz")` abre o arquivo direto, sem
+descomprimir antes. O gzip é determinístico: a mesma coleta gera os mesmos
+bytes, o que permite ao grupo replicador comparar os arquivos. Os demais CSVs
+seguem planos.
+
 As colunas de cada arquivo estão em
 [docs/dicionario_dados.md](docs/dicionario_dados.md). Métrica sem dado vale
 vazio (NaN), nunca zero.

@@ -38,6 +38,22 @@ ARQUIVOS = {
 }
 
 
+# Descomprimidos, commits.csv (244 MB) e runs.csv (114 MB) passam de 100 MB, o
+# limite do GitHub. Eles saem em .csv.gz ao FINAL da rodada; nos checkpoints
+# ficam planos (e fora do git, veja o .gitignore), porque comprimir a cada
+# repositório custaria dezenas de minutos numa rodada de 300.
+COMPACTADOS = ("commits.csv", "runs.csv")
+
+
+def caminho_saida(pasta: str | Path, nome: str) -> Path:
+    """Onde está o CSV `nome`: o plano (checkpoint em andamento) ou o .gz."""
+    pasta = Path(pasta)
+    plano = pasta / nome
+    if nome in COMPACTADOS and not plano.exists():
+        return pasta / f"{nome}.gz"
+    return plano
+
+
 def etapas_reais() -> SimpleNamespace:
     from coleta import commits, deployments, issues, metadados, releases, runs, selecao
     from coleta.sessao import SessaoHttp
@@ -60,10 +76,22 @@ def _juntar(dfs: list[pd.DataFrame], schema: str) -> pd.DataFrame:
     return pd.concat(validos, ignore_index=True) if validos else df_vazio(SCHEMAS[schema])
 
 
-def _gravar(df: pd.DataFrame, nome: str, pasta: Path) -> None:
+def _gravar(df: pd.DataFrame, nome: str, pasta: Path, final: bool = False) -> None:
     """Valida e grava de forma atômica: um Ctrl-C no meio da escrita não deixa
-    um CSV pela metade no lugar do checkpoint anterior."""
+    um CSV pela metade no lugar do checkpoint anterior.
+
+    Com `final`, os arquivos de COMPACTADOS saem em .gz e o plano é removido.
+    O gzip é determinístico (mtime 0, mesmo nome temporário), então a mesma
+    coleta gera os mesmos bytes e o grupo replicador pode compará-los.
+    """
     validar(df, SCHEMAS[ARQUIVOS[nome]], estrito=False)
+    if final and nome in COMPACTADOS:
+        tmp = pasta / f"{nome}.gz.tmp"
+        df.to_csv(tmp, index=False,
+                  compression={"method": "gzip", "compresslevel": 6, "mtime": 0})
+        os.replace(tmp, pasta / f"{nome}.gz")
+        (pasta / nome).unlink(missing_ok=True)
+        return
     tmp = pasta / f"{nome}.tmp"
     df.to_csv(tmp, index=False)
     os.replace(tmp, pasta / nome)
@@ -113,8 +141,13 @@ class _Completos:
     saturadas: list = field(default_factory=list)
 
 
-def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path) -> list[str]:
-    """Monta as métricas do que está completo e grava todos os CSVs."""
+def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path,
+                   final: bool = False) -> list[str]:
+    """Monta as métricas do que está completo e grava todos os CSVs.
+
+    `final=False` é o checkpoint (rápido, tudo plano); `final=True` fecha a
+    rodada e comprime o que passa de 100 MB.
+    """
     repos_df = _juntar(acc.repos, "repos")
     repos = repos_df["repo"].tolist()
     releases_df, tags_df = _juntar(acc.rels, "releases"), _juntar(acc.tags, "tags")
@@ -141,7 +174,7 @@ def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path) -> list[str]:
         "metricas_mensais.csv": mensais_df,
     }
     for nome, df in saidas.items():
-        _gravar(df, nome, pasta)
+        _gravar(df, nome, pasta, final)
     teto = [f for f in acc.saturadas if f.motivo == "teto"]
     erro_de_api = [f for f in acc.saturadas if f.motivo != "teto"]
     if teto:
@@ -180,6 +213,8 @@ def executar(
     for diagnostico in ("fatias_saturadas.csv", "fatias_nao_coletadas.csv"):
         (pasta / diagnostico).unlink(missing_ok=True)
 
+    acc = _Completos()
+    repos: list[str] = []
     try:
         amostra = etapas.selecionar(cfg, pasta)
         alvo = amostra["repo"].tolist()
@@ -190,8 +225,6 @@ def executar(
         print(f"selecionados: {len(alvo)} repositórios "
               f"(seleção: {time.monotonic() - inicio:.0f}s)", flush=True)
 
-        acc = _Completos()
-        repos: list[str] = []
         for i, repo in enumerate(alvo, 1):
             print(f"  [{i}/{len(alvo)}] {repo}...", end=" ", flush=True)
             try:
@@ -225,10 +258,15 @@ def executar(
             repos = _gravar_saidas(acc, cfg, pasta)
             print(f"ok ({len(repos)} completos)", flush=True)
 
-        repos = _gravar_saidas(acc, cfg, pasta)
+        repos = _gravar_saidas(acc, cfg, pasta, final=True)
     finally:
+        em_voo = sys.exc_info()[0] is not None
+        if em_voo and acc.repos:
+            # interrompida: comprime o que já estava completo, para que o que
+            # sobra em disco seja o que o GitHub aceita
+            _sem_mascarar(lambda: _gravar_saidas(acc, cfg, pasta, final=True), True)
         _sem_mascarar(lambda: http.escrever_custo_api(pasta / "custo_api.csv"),
-                      erro_em_voo=sys.exc_info()[0] is not None)
+                      erro_em_voo=em_voo)
         print(f"tempo: {time.monotonic() - inicio:.0f}s | "
               f"custo em {pasta / 'custo_api.csv'}", flush=True)
 
