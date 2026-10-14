@@ -509,3 +509,16 @@ def test_caminho_saida_prefere_o_plano_em_andamento_e_cai_no_gz(tmp_path):
     (tmp_path / "runs.csv").write_text("x")
     assert caminho_saida(tmp_path, "runs.csv") == tmp_path / "runs.csv"
     assert caminho_saida(tmp_path, "repos.csv") == tmp_path / "repos.csv"
+
+
+# --- validação estrita na gravação (Issue #66) --------------------------------
+
+def test_coluna_fora_do_contrato_barra_a_gravacao(tmp_path):
+    from metricas.schemas import ErroDeContrato
+
+    def com_coluna_extra(lista, cfg, commits_df):
+        return _etapas([]).coletar_repos(lista, cfg, commits_df).assign(coluna_clandestina=1)
+
+    with pytest.raises(ErroDeContrato, match="coluna_clandestina"):
+        executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a"], coletar_repos=com_coluna_extra))
