@@ -10,9 +10,10 @@ import pandas as pd
 from metricas.cfr import cfr_ci, cfr_issues, pct_falhas_flaky
 from metricas.classificacao import classificar_metrica, classificar_repo
 from metricas.estaveis import visao_estavel
-from metricas.corretiva import cfr_releases, recuperacao_releases, rework_rate
+from metricas.corretiva import cfr_releases, recuperacao_releases, rework_rate, parse_semver
 from metricas.frequencia import frequencia
-from metricas.lead_time import lead_time_por_commit, lead_time_por_release, pct_commits_bot
+from metricas.lead_time import (lead_time_por_commit, lead_time_por_commit_base_recente,
+                                lead_time_por_release, pct_commits_bot)
 from metricas.mensais import series_mensais
 from metricas.recuperacao import episodios, mediana_horas, pct_censurados, recuperacao_sem_flaky
 from metricas.schemas import SCHEMAS, df_vazio
@@ -70,9 +71,16 @@ def montar_metricas(
 
         lt_com = lead_time_por_commit(rel_e, com_e) if not rel_e.empty else float("nan")
         lt_com_sb = lead_time_por_commit(rel_e, com_e, excluir_bots=True) if not rel_e.empty else float("nan")
+        lt_com_br = lead_time_por_commit_base_recente(rel_e, com_e) if not rel_e.empty else float("nan")
         pct_bot = pct_commits_bot(com_e) if not com_e.empty else float("nan")
 
         cfr_b = cfr_releases(rel_e, com_e, cfg.janela_fim) if not rel_e.empty else float("nan")
+        rel_e_sv = (rel_e[rel_e["tag"].apply(lambda t: parse_semver(t) is not None)]
+                    if not rel_e.empty else rel_e)
+        rel_e_nsv = (rel_e[rel_e["tag"].apply(lambda t: parse_semver(t) is None)]
+                     if not rel_e.empty else rel_e)
+        cfr_b_sv = cfr_releases(rel_e_sv, com_e, cfg.janela_fim) if not rel_e_sv.empty else float("nan")
+        cfr_b_nsv = cfr_releases(rel_e_nsv, com_e, cfg.janela_fim) if not rel_e_nsv.empty else float("nan")
         rec_h_serie = recuperacao_releases(rel_e, com_e, cfg.janela_fim) if not rel_e.empty else pd.Series(dtype=float)
         rec_h = float(rec_h_serie.median()) if not rec_h_serie.empty else float("nan")
         rr = rework_rate(rel_e, com_e) if not rel_e.empty else float("nan")
@@ -113,12 +121,15 @@ def montar_metricas(
             "lt_release_h": lt_rel,
             "lt_commit_h": lt_com,
             "lt_commit_sem_bots_h": lt_com_sb,
+            "lt_commit_base_recente_h": lt_com_br,
             "pct_commits_bot": pct_bot,
             "cfr_a": cfr_a,
             "cfr_a_bruto": cfr_a_bruto,
             "cfr_a_sem_flaky": cfr_a_sem_flaky,
             "pct_falhas_flaky": pct_flaky,
             "cfr_b": cfr_b,
+            "cfr_b_semver": cfr_b_sv,
+            "cfr_b_nao_semver": cfr_b_nsv,
             "cfr_c": cfr_c,
             "recuperacao_h": recuperacao_h,
             "recuperacao_sem_flaky_h": recuperacao_sem_flaky_h,

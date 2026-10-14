@@ -90,6 +90,52 @@ def lead_time_por_commit(
     return float(s.median())
 
 
+def lead_time_por_commit_base_recente(
+    releases_df: pd.DataFrame,
+    commits_df: pd.DataFrame,
+    max_idade_base_anos: float = 1.0,
+    excluir_bots: bool = False,
+) -> float:
+    """Mediana do lead time por commit, ignorando releases cuja base anterior
+    foi publicada há mais de `max_idade_base_anos` anos.
+
+    Útil para mitigar o viés de projetos que têm uma release muito antiga como
+    base — os commits ficam com lead time artificialmente longo.
+    """
+    na_janela = releases_df[releases_df["na_janela"]].copy()
+    todas = releases_df.sort_values("publicada_em")
+    max_dias = max_idade_base_anos * 365.25
+
+    lead_times: list[float] = []
+
+    for _, rel in na_janela.iterrows():
+        tag = rel["tag"]
+        anteriores = todas[todas["publicada_em"] < rel["publicada_em"]]
+        if anteriores.empty:
+            continue
+
+        base = anteriores.iloc[-1]
+        delta_base = (_para_utc(rel["publicada_em"]) - _para_utc(base["publicada_em"])).total_seconds() / 86400
+        if delta_base > max_dias:
+            continue  # base muito antiga — exclui esta release
+
+        rel_commits = (commits_df[commits_df["release_tag"] == tag].copy()
+                       if not commits_df.empty else pd.DataFrame())
+        if excluir_bots and not rel_commits.empty:
+            rel_commits = rel_commits[~rel_commits["eh_bot"]]
+        if rel_commits.empty:
+            continue
+
+        pub = _para_utc(rel["publicada_em"])
+        for _, c in rel_commits.iterrows():
+            lt = (pub - _para_utc(c["data_autor"])).total_seconds() / 3600
+            lead_times.append(lt)
+
+    if not lead_times:
+        return float("nan")
+    return float(pd.Series(lead_times).median())
+
+
 def pct_commits_bot(commits_df: pd.DataFrame) -> float:
     """Proporção de commits feitos por bots. NaN se sem commits."""
     if commits_df.empty or "eh_bot" not in commits_df.columns:

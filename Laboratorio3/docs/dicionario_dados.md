@@ -136,12 +136,15 @@ quando há algo a registrar.
 | `lt_release_h` | float | horas | RQ02a: mediana de (data da release - commit mais antigo) |
 | `lt_commit_h` | float | horas | RQ02b: mediana por commit |
 | `lt_commit_sem_bots_h` | float | horas | RQ02b excluindo commits de bot |
+| `lt_commit_base_recente_h` | float | horas | RQ02b variante: mediana por commit excluindo releases cuja base anterior foi publicada há mais de 1 ano |
 | `pct_commits_bot` | float | proporção 0-1 | commits de bot ÷ total de commits |
 | `cfr_a` | float | proporção 0-1 | RQ03a: falhas ÷ (falhas + sucessos) na conclusion listada |
 | `cfr_a_bruto` | float | proporção 0-1 | RQ03a incluindo tentativas anteriores |
 | `cfr_a_sem_flaky` | float | proporção 0-1 | RQ03a: o CFR bruto menos as falhas flaky (sucesso posterior no mesmo workflow e head_sha) |
 | `pct_falhas_flaky` | float | proporção 0-1 | falhas flaky ÷ total de falhas do CFR bruto; NaN se não houver falhas |
 | `cfr_b` | float | proporção 0-1 | RQ03b: releases seguidas de corretiva em 7 dias ÷ releases avaliadas |
+| `cfr_b_semver` | float | proporção 0-1 | RQ03b variante: CFR(b) calculado só sobre releases com versão semântica (1.2.3) |
+| `cfr_b_nao_semver` | float | proporção 0-1 | RQ03b variante: CFR(b) calculado só sobre releases sem versão semântica |
 | `cfr_c` | float | proporção 0-1 | RQ03c: releases seguidas de issue de bug em n_dias_issue |
 | `recuperacao_h` | float | horas | RQ04: mediana dos episódios de falha |
 | `recuperacao_sem_flaky_h` | float | horas | RQ04 ignorando episódios só de flaky |
