@@ -171,6 +171,10 @@ class FatiaSaturada:
     inicio: str
     fim: str
     total_count: int
+    # "teto": o intervalo passou de 1.000 resultados e não coube. Qualquer outro
+    # valor ("erro 403", "erro 422") é um intervalo NÃO coletado por erro de
+    # API, que não diz nada sobre saturação.
+    motivo: str = "teto"
 
 
 @dataclass(frozen=True)
@@ -214,8 +218,21 @@ def _linha_de_run(repo: str, item: dict) -> dict:
     }
 
 
-def _saturada(repo: str, fatia: Fatia, total: int) -> FatiaSaturada:
-    return FatiaSaturada(repo, iso(fatia.inicio), iso(fatia.fim), total)
+def _saturada(repo: str, fatia: Fatia, total: int,
+              motivo: str = "teto") -> FatiaSaturada:
+    return FatiaSaturada(repo, iso(fatia.inicio), iso(fatia.fim), total, motivo)
+
+
+def _motivo_do_erro(status: int, total_conhecido: int) -> str:
+    """Por que o intervalo ficou incompleto quando a API respondeu com erro.
+
+    Um 422 depois de a fatia (ou a mãe dela) já ter batido o teto é o teto de
+    paginação ou a recusa de subdividir: continua sendo saturação. Sem esse
+    total, ou com 403 (Actions desligado, sem acesso), é erro de API.
+    """
+    if status == 422 and total_conhecido >= TETO_POR_CONSULTA:
+        return "teto"
+    return f"erro {status}"
 
 
 def _e_degradavel(erro: http.ErroDeHTTP) -> bool:
@@ -270,7 +287,9 @@ def coletar_runs(
             sondagem = http.get(url, {**filtros, "per_page": 100})
         except http.ErroDeHTTP as e:
             if _e_degradavel(e):
-                saturadas.append(_saturada(repo, fatia, total_da_mae))
+                saturadas.append(_saturada(
+                    repo, fatia, total_da_mae,
+                    _motivo_do_erro(e.status, total_da_mae)))
                 continue
             raise
 
@@ -301,7 +320,8 @@ def coletar_runs(
             itens = http.paginar(url, filtros)
         except http.ErroDeHTTP as e:
             if _e_degradavel(e):
-                saturadas.append(_saturada(repo, fatia, total))
+                saturadas.append(_saturada(
+                    repo, fatia, total, _motivo_do_erro(e.status, total)))
                 continue
             raise
 
@@ -342,6 +362,25 @@ def escrever_fatias_saturadas(
             for f in saturadas
         ],
         columns=["repo", "inicio", "fim", "total_count"],
+    )
+    caminho = Path(caminho)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    df.to_csv(caminho, index=False)
+    return caminho
+
+
+def escrever_fatias_nao_coletadas(
+    fatias: list[FatiaSaturada], caminho: str | Path
+) -> Path:
+    """Grava os intervalos que ficaram de fora por erro de API (403, 422).
+
+    São diagnóstico, como fatias_saturadas.csv, mas respondem a outra
+    pergunta: não "o intervalo era grande demais" e sim "a API recusou".
+    """
+    df = pd.DataFrame(
+        [{"repo": f.repo, "inicio": f.inicio, "fim": f.fim, "motivo": f.motivo}
+         for f in fatias],
+        columns=["repo", "inicio", "fim", "motivo"],
     )
     caminho = Path(caminho)
     caminho.parent.mkdir(parents=True, exist_ok=True)

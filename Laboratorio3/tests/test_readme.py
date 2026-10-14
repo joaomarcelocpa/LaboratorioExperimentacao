@@ -19,6 +19,7 @@ def test_readme_documenta_cada_csv_do_contrato(schema):
     "make run-docker",
     "python -m pipeline.estimativa",
     "fatias_saturadas.csv",
+    "fatias_nao_coletadas.csv",
     "custo_selecao.csv",
     "sem_push_na_janela",
     "nao_examinados",

@@ -403,3 +403,41 @@ def test_sem_erro_original_a_falha_do_custo_aparece(tmp_path, monkeypatch):
                         lambda *a, **k: (_ for _ in ()).throw(OSError("disco cheio")))
     with pytest.raises(OSError, match="disco cheio"):
         executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"]))
+
+
+# --- fatias: saturação real separada de erro de API (Issue #65) ---------------------
+
+def _fatia(repo, motivo, total=1000):
+    from coleta.runs import FatiaSaturada
+    return FatiaSaturada(repo, "2025-10-01T00:00:00Z", "2025-10-31T23:59:59Z", total, motivo)
+
+
+def test_fatias_saturadas_so_tem_saturacao_real(tmp_path):
+    def runs(repo, branch, inicio, fim):
+        return Coleta(runs=[], saturadas=[
+            _fatia(repo, "teto", 1500), _fatia(repo, "erro 403", 0),
+            _fatia(repo, "erro 422", 0)])
+
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], coletar_runs=runs))
+    sat = pd.read_csv(tmp_path / "fatias_saturadas.csv")
+    nao = pd.read_csv(tmp_path / "fatias_nao_coletadas.csv")
+    assert sat["total_count"].tolist() == [1500] and list(sat.columns) == [
+        "repo", "inicio", "fim", "total_count"]
+    assert sorted(nao["motivo"]) == ["erro 403", "erro 422"]
+
+
+def test_sem_nada_a_registrar_nenhum_dos_dois_arquivos_existe(tmp_path):
+    (tmp_path / "fatias_nao_coletadas.csv").write_text("repo,inicio,fim,motivo\no/x,a,b,erro 403\n")
+    (tmp_path / "fatias_saturadas.csv").write_text("repo,inicio,fim,total_count\no/x,a,b,1000\n")
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"]))
+    assert not (tmp_path / "fatias_saturadas.csv").exists()
+    assert not (tmp_path / "fatias_nao_coletadas.csv").exists()
+
+
+def test_so_erro_de_api_nao_cria_fatias_saturadas(tmp_path):
+    def runs(repo, branch, inicio, fim):
+        return Coleta(runs=[], saturadas=[_fatia(repo, "erro 403", 0)])
+
+    executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], coletar_runs=runs))
+    assert not (tmp_path / "fatias_saturadas.csv").exists()
+    assert (tmp_path / "fatias_nao_coletadas.csv").exists()

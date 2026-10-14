@@ -8,7 +8,8 @@ import responses
 from coleta.cache import Cache
 from coleta.http import Cliente, redefinir_cliente
 from coleta.runs import (
-    CAMINHO_FATIAS, coletar_runs, df_runs, escrever_fatias_saturadas,
+    CAMINHO_FATIAS, FatiaSaturada, coletar_runs, df_runs,
+    escrever_fatias_nao_coletadas, escrever_fatias_saturadas,
 )
 from metricas.schemas import SCHEMAS, validar
 
@@ -369,3 +370,52 @@ def test_created_at_impossivel_de_ler_nao_conta_como_fora():
     coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
 
     assert coleta.fora_da_fatia == 0
+
+
+# --- saturação real x erro de API (Issue #65) -----------------------------------
+
+@responses.activate
+def test_403_e_erro_de_acesso_e_nao_saturacao():
+    responses.get(URL, **_resposta(1, [_run(1)]))
+    responses.get(URL, json={"message": "Resource not accessible"}, status=403)
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 11, 30))
+    (fatia,) = coleta.saturadas
+    assert fatia.motivo == "erro 403" and fatia.total_count == 0
+
+
+@responses.activate
+def test_422_na_sondagem_sem_total_conhecido_e_erro_e_nao_saturacao():
+    responses.get(URL, json={"message": "Invalid"}, status=422)
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 31))
+    (fatia,) = coleta.saturadas
+    assert fatia.motivo == "erro 422"
+
+
+@responses.activate
+def test_422_depois_de_a_mae_saturar_continua_sendo_teto():
+    # o dia bateu 1.000 e a API recusou subdividir: o intervalo é incompleto
+    # justamente por causa do teto
+    responses.get(URL, **_resposta(1000, [_run(1)]))
+    responses.get(URL, json={"message": "Invalid"}, status=422)
+    responses.get(URL, json={"message": "Invalid"}, status=422)
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 1))
+    assert coleta.saturadas and all(f.motivo == "teto" for f in coleta.saturadas)
+
+
+@responses.activate
+def test_fatia_que_bate_o_teto_no_piso_e_teto():
+    responses.get(URL, **_resposta(1000, [_run(1)]))
+    responses.get(URL, **_resposta(1000, [_run(2)]))
+    responses.get(URL, **_resposta(1000, [_run(3)]))
+    coleta = coletar_runs(REPO, "main", date(2024, 10, 1), date(2024, 10, 1))
+    assert coleta.saturadas and all(f.motivo == "teto" for f in coleta.saturadas)
+
+
+def test_escrever_fatias_nao_coletadas(tmp_path):
+    destino = tmp_path / "fatias_nao_coletadas.csv"
+    escrever_fatias_nao_coletadas(
+        [FatiaSaturada("o/r", "2025-10-01T00:00:00Z", "2025-10-31T23:59:59Z", 0, "erro 403")],
+        destino)
+    df = pd.read_csv(destino)
+    assert list(df.columns) == ["repo", "inicio", "fim", "motivo"]
+    assert df["motivo"].tolist() == ["erro 403"]

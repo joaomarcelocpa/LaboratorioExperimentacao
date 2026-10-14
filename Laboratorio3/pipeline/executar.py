@@ -142,9 +142,14 @@ def _gravar_saidas(acc: _Completos, cfg: Config, pasta: Path) -> list[str]:
     }
     for nome, df in saidas.items():
         _gravar(df, nome, pasta)
-    if acc.saturadas:
+    teto = [f for f in acc.saturadas if f.motivo == "teto"]
+    erro_de_api = [f for f in acc.saturadas if f.motivo != "teto"]
+    if teto:
         from coleta.runs import escrever_fatias_saturadas
-        escrever_fatias_saturadas(acc.saturadas, pasta / "fatias_saturadas.csv")
+        escrever_fatias_saturadas(teto, pasta / "fatias_saturadas.csv")
+    if erro_de_api:
+        from coleta.runs import escrever_fatias_nao_coletadas
+        escrever_fatias_nao_coletadas(erro_de_api, pasta / "fatias_nao_coletadas.csv")
     return repos
 
 
@@ -172,7 +177,8 @@ def executar(
     inicio = time.monotonic()
     # Uma rodada anterior pode ter deixado este diagnóstico; lido agora, ele
     # pareceria ameaça à validade desta amostra.
-    (pasta / "fatias_saturadas.csv").unlink(missing_ok=True)
+    for diagnostico in ("fatias_saturadas.csv", "fatias_nao_coletadas.csv"):
+        (pasta / diagnostico).unlink(missing_ok=True)
 
     try:
         amostra = etapas.selecionar(cfg, pasta)

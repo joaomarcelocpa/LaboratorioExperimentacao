@@ -100,6 +100,7 @@ como `placeholder: true`.
 | `custo_api.csv` | chamadas por endpoint: as que saíram da máquina e as do cache |
 | `custo_selecao.csv` | diagnóstico: custo só da seleção (busca e filtros), que não cresce com a amostra |
 | `fatias_saturadas.csv` | só se existir: fatias que bateram o teto de 1.000 resultados |
+| `fatias_nao_coletadas.csv` | só se existir: intervalos de runs que a API recusou (403, 422) |
 
 As colunas de cada arquivo estão em
 [docs/dicionario_dados.md](docs/dicionario_dados.md). Métrica sem dado vale
@@ -173,12 +174,21 @@ menores ficam entre 39 e 44 minutos, porque o corte é sempre ao meio), ou
 antes disso, se dividir deixar de estreitar o resultado.
 
 `data/processed/fatias_saturadas.csv` (`repo`, `inicio`, `fim`, `total_count`)
-registra as fatias que bateram o teto mesmo no piso, ou que a API recusou
-subdividir. **Parte dos runs daquele intervalo ficou de fora**, então o
-arquivo é ameaça à validade e precisa ser reportado no artigo.
+registra **só saturação real**: fatias que bateram o teto mesmo no piso, ou
+cuja subdivisão a API recusou depois de o teto já ter sido atingido. **Parte
+dos runs daquele intervalo ficou de fora**, então o arquivo é ameaça à validade
+e precisa ser reportado no artigo.
 
-Ele é diagnóstico, não dataset de análise: não aparece em
-`docs/dicionario_dados.md` nem passa pelo validador de contratos.
+`data/processed/fatias_nao_coletadas.csv` (`repo`, `inicio`, `fim`, `motivo`)
+registra os intervalos que ficaram de fora por **erro de API**, e não por
+tamanho: `erro 403` (Actions desligado ou repositório sem acesso, `total_count`
+0) e `erro 422` (consulta recusada sem que o teto tenha sido medido). Eles
+também deixam o conjunto de runs incompleto, mas não dizem nada sobre
+saturação, por isso não entram no arquivo acima.
+
+Os dois são diagnóstico, não dataset de análise: não aparecem em
+`docs/dicionario_dados.md` nem passam pelo validador de contratos, e só existem
+quando há algo a registrar.
 
 ## Estrutura
 
