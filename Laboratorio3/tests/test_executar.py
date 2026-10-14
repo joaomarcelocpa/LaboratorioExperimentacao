@@ -179,12 +179,15 @@ def test_segunda_rodada_nao_chama_a_api(tmp_path, cliente):
     from coleta.sessao import SessaoHttp
     e = _etapas(["o/a"], coletar_releases=releases, session=SessaoHttp())
     executar(_cfg(), pasta=tmp_path / "1", etapas=e)
-    cliente._custo.clear()
+    saidas_antes = int(cliente.custo()["chamadas"].sum())
     executar(_cfg(), pasta=tmp_path / "2", etapas=e)
-    custo = pd.read_csv(tmp_path / "2" / "custo_api.csv")
-    assert custo["chamadas"].sum() == 0
-    assert custo["do_cache"].sum() >= 1
+    # a 2ª rodada não saiu da máquina: o contador de chamadas do processo não andou
+    assert int(cliente.custo()["chamadas"].sum()) == saidas_antes
     assert len(responses.calls) == 1
+    # e o custo_api.csv acumula as duas rodadas: 1 chamada na 1ª, só acertos na 2ª
+    custo = pd.read_csv(tmp_path / "2" / "custo_api.csv")
+    assert custo["chamadas"].sum() == saidas_antes
+    assert custo["do_cache"].sum() >= 1
 
 
 # --- linha de comando -------------------------------------------------------

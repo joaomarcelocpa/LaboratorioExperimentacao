@@ -249,6 +249,8 @@ class Cliente:
         self._agora = agora
         self._dormir = dormir
         self._custo: dict[str, dict[str, int]] = {}
+        # o que deste processo já foi somado ao custo acumulado do cache
+        self._custo_somado: dict[str, tuple[int, int]] = {}
         # balde de cota -> (restantes, reset, limiar)
         self._cota: dict[str, tuple[int, float, int]] = {}
 
@@ -263,6 +265,31 @@ class Cliente:
         linhas = [
             {"endpoint": ep, "chamadas": v["chamadas"], "do_cache": v["do_cache"]}
             for ep, v in sorted(self._custo.items())
+        ]
+        df = pd.DataFrame(linhas, columns=["endpoint", "chamadas", "do_cache"])
+        return df.astype({"chamadas": "int64", "do_cache": "int64"})
+
+    def acumular_custo(self) -> pd.DataFrame:
+        """Soma ao cache o que este processo gastou desde a última chamada e
+        devolve o custo acumulado de todas as execuções que usaram o cache.
+
+        Só o que ainda não foi somado entra, então chamar duas vezes no mesmo
+        processo (ou depois de uma interrupção e uma retomada) não conta em
+        dobro.
+        """
+        delta: dict[str, tuple[int, int]] = {}
+        for endpoint, v in self._custo.items():
+            c0, h0 = self._custo_somado.get(endpoint, (0, 0))
+            d = (v["chamadas"] - c0, v["do_cache"] - h0)
+            if d != (0, 0):
+                delta[endpoint] = d
+        if delta:
+            self._cache.somar_custo(delta)
+        self._custo_somado = {
+            ep: (v["chamadas"], v["do_cache"]) for ep, v in self._custo.items()}
+        linhas = [
+            {"endpoint": ep, "chamadas": c, "do_cache": h}
+            for ep, (c, h) in self._cache.custo_acumulado().items()
         ]
         df = pd.DataFrame(linhas, columns=["endpoint", "chamadas", "do_cache"])
         return df.astype({"chamadas": "int64", "do_cache": "int64"})
@@ -507,7 +534,7 @@ def escrever_custo_api(
     Validar aqui faz o contrato quebrar neste ponto, e não lá na integração
     da #39, quando ninguém se lembra de onde a coluna veio.
     """
-    df = (cliente or cliente_padrao()).custo()
+    df = (cliente or cliente_padrao()).acumular_custo()
     validar(df, SCHEMAS["custo_api"])
     caminho = Path(caminho)
     caminho.parent.mkdir(parents=True, exist_ok=True)

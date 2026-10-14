@@ -43,8 +43,8 @@ Convenções de todo o estudo:
 | Coluna | Tipo | Unidade | Origem |
 |---|---|---|---|
 | `endpoint` | str | caminho | endpoint chamado |
-| `chamadas` | int | contagem | chamadas que saíram da máquina |
-| `do_cache` | int | contagem | respostas servidas pelo cache |
+| `chamadas` | int | contagem | chamadas que saíram da máquina, somadas em todas as execuções que usaram o mesmo cache |
+| `do_cache` | int | contagem | respostas servidas pelo cache, somadas em todas as execuções que usaram o mesmo cache |
 
 ## `deployments.csv`
 
