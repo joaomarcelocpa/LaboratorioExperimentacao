@@ -38,3 +38,13 @@ def test_pipe_no_texto_e_escapado():
     # A tabela tem 4 colunas: 5 barras de borda e nenhuma solta no meio.
     assert linha.count("|") - linha.count(r"\|") == 5, linha
     assert r"col\|ruim" in linha
+
+
+def test_dicionario_avisa_do_formato_gz_e_lista_os_arquivos_de_diagnostico():
+    from metricas.dicionario import gerar_markdown
+
+    texto = gerar_markdown()
+    assert "commits.csv.gz" in texto and "runs.csv.gz" in texto
+    for diagnostico in ("fatias_saturadas.csv", "fatias_nao_coletadas.csv",
+                        "custo_selecao.csv"):
+        assert diagnostico in texto, diagnostico
