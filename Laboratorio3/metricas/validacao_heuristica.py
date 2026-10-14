@@ -152,7 +152,15 @@ def validar(
     """
     df = pd.read_csv(caminho_labels)
 
-    rotulos_validos = df["corretiva"].notna()
+    # Se não tem publicada_em, tenta merge automático com planilha_releases.csv
+    if "publicada_em" not in df.columns:
+        planilha_path = Path(caminho_labels).parent / "planilha_releases.csv"
+        if planilha_path.exists():
+            planilha = pd.read_csv(planilha_path, dtype=str, keep_default_na=False, encoding="utf-8-sig")
+            cols_planilha = [c for c in planilha.columns if c not in ("corretiva",)]
+            df = planilha[cols_planilha].merge(df[["repo", "tag", "corretiva"]], on=["repo", "tag"])
+
+    rotulos_validos = df["corretiva"].notna() & (df["corretiva"] != "")
     if not rotulos_validos.all():
         if verbose:
             n_nan = (~rotulos_validos).sum()
@@ -162,7 +170,12 @@ def validar(
             )
         df = df[rotulos_validos].copy()
 
-    verdadeiros = df["corretiva"].astype(bool).tolist()
+    _MAPA_BOOL = {"sim": True, "nao": False, "true": True, "false": False, "1": True, "0": False}
+
+    def _para_bool(serie: pd.Series) -> list[bool]:
+        return [_MAPA_BOOL.get(str(v).lower().strip(), bool(v)) for v in serie]
+
+    verdadeiros = _para_bool(df["corretiva"])
     prev = _prev_tag_por_repo(df)
 
     # Subconjunto decidível: exclui primeiras releases de cada repo no dataset,
@@ -170,7 +183,7 @@ def validar(
     tem_prev = pd.Series([prev.get((r, t)) is not None
                           for r, t in zip(df["repo"], df["tag"])])
     df_dec = df[tem_prev].copy()
-    verdadeiros_dec = df_dec["corretiva"].astype(bool).tolist()
+    verdadeiros_dec = _para_bool(df_dec["corretiva"])
 
     linhas = []
     for v in ("v1", "v2", "v3", "v4", "v5"):
