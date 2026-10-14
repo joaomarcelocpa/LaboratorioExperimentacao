@@ -1,15 +1,26 @@
-"""Heurística v0 de release corretiva; CFR(b), recuperação e rework rate."""
+"""Heurística de release corretiva (variantes v1-v4); CFR(b), recuperação e rework rate."""
 from __future__ import annotations
 
 import re
 from datetime import date, datetime, timezone
+from typing import Literal
 
 import pandas as pd
 
 _SEMVER_RE = re.compile(
     r"^v?(\d+)\.(\d+)\.(\d+)(?:[.\-+][a-zA-Z0-9._+-]*)?$"
 )
-_CORRETIVO_RE = re.compile(r"\b(fix|hotfix|revert)\b", re.IGNORECASE)
+# v1/v4: fix, hotfix ou revert nos commits
+_CORRETIVO_V1_RE = re.compile(r"\b(fix|hotfix|revert)\b", re.IGNORECASE)
+# v2: apenas hotfix ou revert (sem "fix" simples)
+_CORRETIVO_V2_RE = re.compile(r"\b(hotfix|revert)\b", re.IGNORECASE)
+# v4: palavras chave de correção nas notas da release
+_NOTAS_CORRETIVO_RE = re.compile(
+    r"\b(fix|bug|hotfix|revert|regression|patch|security|vulnerability|cve|crash)\b",
+    re.IGNORECASE,
+)
+
+VarianteHeuristica = Literal["v1", "v2", "v3", "v4", "v5"]
 
 
 def parse_semver(tag: str) -> tuple[int, int, int] | None:
@@ -24,8 +35,21 @@ def eh_corretiva(
     tag_anterior: str,
     tag_atual: str,
     commits_intervalo: pd.DataFrame,
+    variante: VarianteHeuristica = "v1",
+    notas: str = "",
+    pct_threshold: float = 0.20,
 ) -> bool:
-    """True se a release é corretiva: só o patch mudou OU há commit fix/hotfix/revert."""
+    """True se a release é corretiva segundo a variante escolhida.
+
+    v1 (padrão): só o patch mudou OU algum commit tem fix/hotfix/revert.
+    v2: só o patch mudou OU algum commit tem hotfix/revert (sem plain "fix").
+    v3: só o patch mudou OU >pct_threshold dos commits têm "fix".
+    v4: v1 OU as notas da release contêm palavra-chave de correção.
+    v5 (refinada): só o patch mudou OU hotfix/revert OU >15% dos commits
+        têm "fix" OU as notas contêm palavra-chave de correção.
+        Reduz falsos positivos causados por releases com apenas 1 commit
+        de "fix: typo" entre muitas features.
+    """
     sv_ant = parse_semver(tag_anterior)
     sv_atu = parse_semver(tag_atual)
     so_patch = (
@@ -35,12 +59,55 @@ def eh_corretiva(
         and sv_ant[1] == sv_atu[1]
         and sv_atu[2] > sv_ant[2]
     )
+
+    if variante == "v2":
+        tem_commit_fix = (
+            not commits_intervalo.empty
+            and commits_intervalo["mensagem"].apply(
+                lambda m: bool(_CORRETIVO_V2_RE.search(str(m)))
+            ).any()
+        )
+        return bool(so_patch or tem_commit_fix)
+
+    if variante == "v3":
+        if commits_intervalo.empty:
+            tem_commit_fix = False
+        else:
+            pct_fix = commits_intervalo["mensagem"].apply(
+                lambda m: bool(_CORRETIVO_V1_RE.search(str(m)))
+            ).mean()
+            tem_commit_fix = float(pct_fix) > pct_threshold
+        return bool(so_patch or tem_commit_fix)
+
+    # v1, v4 e v5 compartilham a detecção por commits
     tem_commit_fix = (
         not commits_intervalo.empty
         and commits_intervalo["mensagem"].apply(
-            lambda m: bool(_CORRETIVO_RE.search(str(m)))
+            lambda m: bool(_CORRETIVO_V1_RE.search(str(m)))
         ).any()
     )
+
+    if variante == "v4":
+        tem_notas_fix = bool(_NOTAS_CORRETIVO_RE.search(str(notas)))
+        return bool(so_patch or tem_commit_fix or tem_notas_fix)
+
+    if variante == "v5":
+        # hotfix/revert como sinal forte; exige >15% de commits com "fix" para
+        # não confundir releases de features com um único "fix: typo" commit.
+        if commits_intervalo.empty:
+            pct_fix = 0.0
+            tem_hotfix = False
+        else:
+            pct_fix = float(commits_intervalo["mensagem"].apply(
+                lambda m: bool(_CORRETIVO_V1_RE.search(str(m)))
+            ).mean())
+            tem_hotfix = bool(commits_intervalo["mensagem"].apply(
+                lambda m: bool(_CORRETIVO_V2_RE.search(str(m)))
+            ).any())
+        tem_notas_fix = bool(_NOTAS_CORRETIVO_RE.search(str(notas)))
+        return bool(so_patch or tem_hotfix or pct_fix > 0.15 or tem_notas_fix)
+
+    # v1 (default)
     return bool(so_patch or tem_commit_fix)
 
 
@@ -57,6 +124,7 @@ def cfr_releases(
     commits_df: pd.DataFrame,
     janela_fim: date,
     janela_dias: int = 7,
+    variante: VarianteHeuristica = "v1",
 ) -> float:
     """CFR(b): releases que falharam ÷ releases avaliadas.
 
@@ -87,7 +155,9 @@ def cfr_releases(
                 break
             commits_prox = (commits_df[commits_df["release_tag"] == prox["tag"]]
                             if not commits_df.empty else pd.DataFrame())
-            if eh_corretiva(rel["tag"], prox["tag"], commits_prox):
+            notas_prox = str(prox.get("body", "")) if variante == "v4" else ""
+            if eh_corretiva(rel["tag"], prox["tag"], commits_prox,
+                            variante=variante, notas=notas_prox):
                 falhas += 1
                 break
 
@@ -101,6 +171,7 @@ def recuperacao_releases(
     commits_df: pd.DataFrame,
     janela_fim: date,
     janela_dias: int = 7,
+    variante: VarianteHeuristica = "v1",
 ) -> pd.Series:
     """Horas entre cada release que falhou e a respectiva corretiva."""
     na_janela = releases_df[releases_df["na_janela"]].sort_values("publicada_em")
@@ -125,7 +196,9 @@ def recuperacao_releases(
                 break
             commits_prox = (commits_df[commits_df["release_tag"] == prox["tag"]]
                             if not commits_df.empty else pd.DataFrame())
-            if eh_corretiva(rel["tag"], prox["tag"], commits_prox):
+            notas_prox = str(prox.get("body", "")) if variante == "v4" else ""
+            if eh_corretiva(rel["tag"], prox["tag"], commits_prox,
+                            variante=variante, notas=notas_prox):
                 h = (_para_utc(prox["publicada_em"]) - pub_dt).total_seconds() / 3600
                 horas.append(h)
                 break
@@ -137,6 +210,7 @@ def rework_rate(
     releases_df: pd.DataFrame,
     commits_df: pd.DataFrame,
     limite_dias: int | None = None,
+    variante: VarianteHeuristica = "v1",
 ) -> float:
     """Proporção de releases corretivas sobre total avaliadas.
 
@@ -161,7 +235,9 @@ def rework_rate(
 
         commits_rel = (commits_df[commits_df["release_tag"] == rel["tag"]]
                        if not commits_df.empty else pd.DataFrame())
-        if eh_corretiva(ant["tag"], rel["tag"], commits_rel):
+        notas_rel = str(rel.get("body", "")) if variante == "v4" else ""
+        if eh_corretiva(ant["tag"], rel["tag"], commits_rel,
+                        variante=variante, notas=notas_rel):
             corretivas += 1
 
     if avaliadas == 0:

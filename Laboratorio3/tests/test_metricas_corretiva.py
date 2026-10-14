@@ -57,6 +57,83 @@ def test_commit_revert_marca_corretiva():
     assert eh_corretiva("v1.0.0", "v1.0.1", commits) is True
 
 
+# --- variantes v2-v5 ---
+
+def test_v2_fix_simples_nao_conta():
+    # v2 só aceita hotfix/revert, não "fix"
+    commits = pd.DataFrame([{"mensagem": "fix: typo", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v2") is False
+
+
+def test_v2_hotfix_conta():
+    commits = pd.DataFrame([{"mensagem": "hotfix: crash on startup", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v2") is True
+
+
+def test_v2_patch_sem_hotfix_e_corretiva():
+    assert eh_corretiva("v2.3.0", "v2.3.1", _commits_feature(), variante="v2") is True
+
+
+def test_v3_threshold_20pct_atingido():
+    # 2 de 3 commits com "fix" = 66% > 20% → corretiva
+    commits = pd.DataFrame([
+        {"mensagem": "fix: bug A", "eh_bot": False},
+        {"mensagem": "fix: bug B", "eh_bot": False},
+        {"mensagem": "feat: algo", "eh_bot": False},
+    ])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v3", pct_threshold=0.20) is True
+
+
+def test_v3_threshold_nao_atingido():
+    # 1 de 10 commits com "fix" = 10% ≤ 20% → não corretiva (sem patch também)
+    commits = pd.DataFrame(
+        [{"mensagem": "fix: typo", "eh_bot": False}]
+        + [{"mensagem": "feat: algo", "eh_bot": False}] * 9
+    )
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v3", pct_threshold=0.20) is False
+
+
+def test_v4_notas_com_bug_keyword_e_corretiva():
+    commits = pd.DataFrame([{"mensagem": "chore: release v1.2.0", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v4",
+                        notas="Fixes a critical bug in the parser") is True
+
+
+def test_v4_notas_sem_keyword_e_sem_patch_nao_e_corretiva():
+    commits = pd.DataFrame([{"mensagem": "feat: nova feature", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v4",
+                        notas="Adds new functionality") is False
+
+
+def test_v5_fix_unico_abaixo_15pct_nao_e_corretiva():
+    # 1 commit de fix em 10 commits = 10% ≤ 15% → sem sinal suficiente
+    commits = pd.DataFrame(
+        [{"mensagem": "fix: typo in readme", "eh_bot": False}]
+        + [{"mensagem": "feat: algo", "eh_bot": False}] * 9
+    )
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v5") is False
+
+
+def test_v5_hotfix_forte_e_corretiva_mesmo_sem_patch():
+    commits = pd.DataFrame([{"mensagem": "hotfix: crash on exit", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v5") is True
+
+
+def test_v5_pct_fix_acima_15pct_e_corretiva():
+    # 2 de 10 = 20% > 15%
+    commits = pd.DataFrame(
+        [{"mensagem": "fix: bug A", "eh_bot": False}] * 2
+        + [{"mensagem": "feat: algo", "eh_bot": False}] * 8
+    )
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v5") is True
+
+
+def test_v5_notas_com_security_e_corretiva():
+    commits = pd.DataFrame([{"mensagem": "chore: bump version", "eh_bot": False}])
+    assert eh_corretiva("v1.1.0", "v1.2.0", commits, variante="v5",
+                        notas="Security vulnerability fix") is True
+
+
 # --- cfr_releases e recuperacao_releases ---
 
 def _releases_seq(rows):
