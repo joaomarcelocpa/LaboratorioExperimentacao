@@ -205,8 +205,8 @@ SCHEMAS: dict[str, Schema] = {
     }),
     "custo_api": Schema("custo_api.csv", "C", {
         "endpoint": _c("str", "caminho", "endpoint chamado"),
-        "chamadas": _c("int", "contagem", "chamadas que saíram da máquina"),
-        "do_cache": _c("int", "contagem", "respostas servidas pelo cache"),
+        "chamadas": _c("int", "contagem", "chamadas que saíram da máquina, somadas em todas as execuções que usaram o mesmo cache"),
+        "do_cache": _c("int", "contagem", "respostas servidas pelo cache, somadas em todas as execuções que usaram o mesmo cache"),
     }),
     "metricas": Schema("metricas.csv", "Todos", {
         "repo": _REPO,

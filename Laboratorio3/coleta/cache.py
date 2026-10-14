@@ -29,6 +29,15 @@ CREATE TABLE IF NOT EXISTS respostas (
   corpo      TEXT NOT NULL,
   gravado_em TEXT NOT NULL
 );
+
+-- Custo acumulado de todas as execuções que usaram ESTE cache. Mora aqui, e
+-- não num CSV, porque o custo é de quem construiu o cache: quem replica com um
+-- cache vazio recomeça do zero em vez de herdar a conta de outra coleta.
+CREATE TABLE IF NOT EXISTS custo (
+  endpoint TEXT PRIMARY KEY,
+  chamadas INTEGER NOT NULL,
+  do_cache INTEGER NOT NULL
+);
 """
 
 
@@ -106,6 +115,24 @@ class Cache:
             ),
         )
         self._con.commit()
+
+    def somar_custo(self, delta: dict[str, tuple[int, int]]) -> None:
+        """Soma (chamadas, do_cache) por endpoint ao acumulado, já com commit."""
+        for endpoint, (chamadas, do_cache) in delta.items():
+            self._con.execute(
+                "INSERT INTO custo (endpoint, chamadas, do_cache) VALUES (?, ?, ?) "
+                "ON CONFLICT(endpoint) DO UPDATE SET "
+                "chamadas = chamadas + excluded.chamadas, "
+                "do_cache = do_cache + excluded.do_cache",
+                (endpoint, int(chamadas), int(do_cache)),
+            )
+        self._con.commit()
+
+    def custo_acumulado(self) -> dict[str, tuple[int, int]]:
+        linhas = self._con.execute(
+            "SELECT endpoint, chamadas, do_cache FROM custo ORDER BY endpoint"
+        ).fetchall()
+        return {ep: (c, h) for ep, c, h in linhas}
 
     def fechar(self) -> None:
         self._con.close()

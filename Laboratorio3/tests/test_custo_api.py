@@ -168,3 +168,62 @@ def test_compares_diferentes_somam_numa_linha_so(cliente):
     custo = cliente.custo()
     assert len(custo) == 1, f"uma linha por compare: {list(custo['endpoint'])}"
     assert custo.iloc[0]["chamadas"] == 3
+
+
+# --- custo acumulado entre execuções sobre o mesmo cache (Issue #66) ---------------
+
+def _cliente_em(caminho):
+    return Cliente(token="tok", cache=Cache(caminho),
+                   agora=lambda: 1000.0, dormir=lambda s: None)
+
+
+@responses.activate
+def test_custo_acumula_entre_execucoes_que_retomam_o_mesmo_cache(tmp_path):
+    responses.add(responses.GET, RELEASES, json=[])
+    responses.add(responses.GET, f"{RELEASES}?page=2", json=[])
+    cache = tmp_path / "c.sqlite"
+
+    primeira = _cliente_em(cache)
+    primeira.get(RELEASES)                    # 1 chamada de verdade
+    escrever_custo_api(tmp_path / "a.csv", primeira)
+
+    segunda = _cliente_em(cache)              # retomada: o mesmo cache em disco
+    segunda.get(RELEASES)                     # servida pelo cache
+    segunda.get(f"{RELEASES}?page=2")         # 1 chamada nova
+    escrever_custo_api(tmp_path / "b.csv", segunda)
+
+    df = pd.read_csv(tmp_path / "b.csv").set_index("endpoint")
+    linha = df.loc["/repos/{owner}/{repo}/releases"]
+    assert linha["chamadas"] == 2 and linha["do_cache"] == 1
+    validar(pd.read_csv(tmp_path / "b.csv"), SCHEMAS["custo_api"])
+
+
+@responses.activate
+def test_escrever_duas_vezes_no_mesmo_processo_nao_conta_em_dobro(tmp_path):
+    responses.add(responses.GET, RELEASES, json=[])
+    c = _cliente_em(tmp_path / "c.sqlite")
+    c.get(RELEASES)
+    escrever_custo_api(tmp_path / "x.csv", c)
+    escrever_custo_api(tmp_path / "x.csv", c)
+    assert pd.read_csv(tmp_path / "x.csv")["chamadas"].sum() == 1
+
+
+@responses.activate
+def test_cache_novo_comeca_do_zero_e_ignora_csv_antigo_em_disco(tmp_path):
+    # um replicador com cache vazio não pode herdar o custo de outra coleta
+    (tmp_path / "custo.csv").write_text(
+        "endpoint,chamadas,do_cache\n/repos/{owner}/{repo}/releases,9999,9999\n")
+    responses.add(responses.GET, RELEASES, json=[])
+    c = _cliente_em(tmp_path / "novo.sqlite")
+    c.get(RELEASES)
+    escrever_custo_api(tmp_path / "custo.csv", c)
+    assert pd.read_csv(tmp_path / "custo.csv")["chamadas"].tolist() == [1]
+
+
+def test_cache_guarda_o_custo_acumulado_depois_de_reabrir(tmp_path):
+    cache = Cache(tmp_path / "c.sqlite")
+    cache.somar_custo({"/x": (2, 1)})
+    cache.somar_custo({"/x": (1, 0), "/y": (0, 4)})
+    cache.fechar()
+    assert Cache(tmp_path / "c.sqlite").custo_acumulado() == {
+        "/x": (3, 1), "/y": (0, 4)}

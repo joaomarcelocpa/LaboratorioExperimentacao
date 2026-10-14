@@ -84,7 +84,7 @@ def _gravar(df: pd.DataFrame, nome: str, pasta: Path, final: bool = False) -> No
     O gzip é determinístico (mtime 0, mesmo nome temporário), então a mesma
     coleta gera os mesmos bytes e o grupo replicador pode compará-los.
     """
-    validar(df, SCHEMAS[ARQUIVOS[nome]], estrito=False)
+    validar(df, SCHEMAS[ARQUIVOS[nome]])   # estrito: coluna fora do contrato é erro
     if final and nome in COMPACTADOS:
         tmp = pasta / f"{nome}.gz.tmp"
         df.to_csv(tmp, index=False,

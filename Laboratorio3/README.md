@@ -172,7 +172,14 @@ restam menos de 50 chamadas, respeita `Retry-After`) e repete erros 5xx com
 espera de 1, 2, 4, 8 e 16 segundos.
 
 `data/processed/custo_api.csv` registra, por endpoint, quantas chamadas
-saíram da máquina e quantas foram servidas pelo cache.
+saíram da máquina e quantas foram servidas pelo cache. O custo **acumula** entre
+execuções: ele é guardado no próprio `cache.sqlite` e soma tudo o que foi
+gasto para construir aquele cache, inclusive nas retomadas depois de uma
+interrupção, então o arquivo dá o custo real da coleta para a Metodologia. Um
+cache novo recomeça do zero (quem replica não herda a conta de outra coleta), e
+um cache anterior a esta mudança só passa a contar a partir da primeira
+execução com ela. `custo_selecao.csv` continua sendo o custo da seleção só na
+execução em curso.
 
 ## Fatias saturadas
 
