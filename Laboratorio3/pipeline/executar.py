@@ -6,6 +6,7 @@ são injetáveis para que os testes rodem sem rede.
 from __future__ import annotations
 
 import os
+import sys
 import time
 from dataclasses import dataclass, field, replace
 from pathlib import Path
@@ -66,6 +67,23 @@ def _gravar(df: pd.DataFrame, nome: str, pasta: Path) -> None:
     tmp = pasta / f"{nome}.tmp"
     df.to_csv(tmp, index=False)
     os.replace(tmp, pasta / nome)
+
+
+def _sem_mascarar(acao, erro_em_voo: bool) -> None:
+    """Roda uma tarefa de fechamento sem deixar que ela esconda o erro original.
+
+    Uma exceção levantada dentro de um `finally` substitui a que já estava
+    subindo (a original fica só como contexto). Se já há erro em voo, a falha
+    do fechamento é avisada em stderr e o original segue; se não há, ela sobe,
+    porque aí é o único erro.
+    """
+    try:
+        acao()
+    except Exception as exc:  # noqa: BLE001
+        if not erro_em_voo:
+            raise
+        print(f"aviso: o fechamento também falhou ({type(exc).__name__}: {exc}); "
+              f"o erro original segue.", file=sys.stderr, flush=True)
 
 
 def _repassa_401(exc: Exception) -> None:
@@ -203,7 +221,8 @@ def executar(
 
         repos = _gravar_saidas(acc, cfg, pasta)
     finally:
-        http.escrever_custo_api(pasta / "custo_api.csv")
+        _sem_mascarar(lambda: http.escrever_custo_api(pasta / "custo_api.csv"),
+                      erro_em_voo=sys.exc_info()[0] is not None)
         print(f"tempo: {time.monotonic() - inicio:.0f}s | "
               f"custo em {pasta / 'custo_api.csv'}", flush=True)
 

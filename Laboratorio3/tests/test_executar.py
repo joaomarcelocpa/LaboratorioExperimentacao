@@ -370,3 +370,36 @@ def test_metadados_sao_pedidos_repo_a_repo(tmp_path):
 def test_gravacao_nao_deixa_arquivo_temporario(tmp_path):
     executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a", "o/b"]))
     assert not [p.name for p in tmp_path.iterdir() if p.name.endswith(".tmp")]
+
+
+# --- erro no finally não pode mascarar o erro original (Issue #65) --------------
+
+def test_erro_original_aparece_quando_a_gravacao_do_custo_tambem_falha(tmp_path, monkeypatch, capsys):
+    def selecionar(cfg, pasta):
+        raise ValueError("a busca quebrou")
+
+    def custo_quebrado(*a, **k):
+        raise OSError("disco cheio")
+
+    monkeypatch.setattr(http, "escrever_custo_api", custo_quebrado)
+    with pytest.raises(ValueError, match="a busca quebrou"):
+        executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"], selecionar=selecionar))
+    assert "disco cheio" in capsys.readouterr().err   # o 2º erro é avisado, não engolido
+
+
+def test_ctrl_c_continua_sendo_ctrl_c_se_o_custo_falhar(tmp_path, monkeypatch):
+    def releases(repo, cfg, session):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(http, "escrever_custo_api",
+                        lambda *a, **k: (_ for _ in ()).throw(OSError("disco cheio")))
+    with pytest.raises(KeyboardInterrupt):
+        executar(_cfg(), pasta=tmp_path,
+                 etapas=_etapas(["o/a"], coletar_releases=releases))
+
+
+def test_sem_erro_original_a_falha_do_custo_aparece(tmp_path, monkeypatch):
+    monkeypatch.setattr(http, "escrever_custo_api",
+                        lambda *a, **k: (_ for _ in ()).throw(OSError("disco cheio")))
+    with pytest.raises(OSError, match="disco cheio"):
+        executar(_cfg(), pasta=tmp_path, etapas=_etapas(["o/a"]))
