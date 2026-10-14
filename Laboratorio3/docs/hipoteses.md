@@ -109,3 +109,63 @@ tendem a cair na mesma classe.
 
 Se a hipótese estiver certa, as conclusões das RQ 01 a 06 só valem
 condicionadas à definição operacional, e isso entra como ameaça à validade.
+
+---
+
+# Hipóteses do Estudo — [C]: RQ 03a, 04, 05 e 08b
+
+Registradas em 14/10/2026, **depois** da rodada de coleta. O texto parte das
+hipóteses informais do plano da sprint (T2) e não foi ajustado a nenhum
+resultado; ainda assim, como o registro é posterior à coleta, isso deve constar
+na seção de ameaças à validade.
+
+## RQ 03a — Taxa de falha no CI
+
+**Hipótese:** A mediana da taxa de falha das execuções de CI no *default
+branch* ficará entre 10% e 25%. Parte relevante dessas falhas, porém, não deve
+ser atribuível ao código: testes instáveis (*flaky*), indisponibilidade de
+*runners* e dependências externas fazem a mesma versão do código falhar e
+depois passar. Por isso, esperamos que a taxa caia de forma perceptível quando
+desconsideramos as falhas seguidas de sucesso no mesmo *commit*.
+
+Esperamos também que esse proxy superestime a taxa de falha em produção
+definida pelo DORA, pois uma falha de *pipeline* impede a entrega antes que ela
+chegue ao usuário.
+
+## RQ 04 — Tempo de recuperação
+
+**Hipótese:** A mediana do tempo de recuperação após uma falha de CI ficará
+abaixo de um dia, o que colocaria a maior parte dos repositórios na faixa
+*High*. Um *default branch* quebrado bloqueia todos os contribuidores, o que
+cria um incentivo forte para corrigi-lo rapidamente.
+
+Ainda assim, esperamos uma cauda longa: alguns repositórios devem conviver com
+*workflows* quebrados por semanas, e uma parcela não desprezível dos episódios
+deve terminar censurada no fim da janela. Ao excluir os episódios compostos
+apenas de falhas instáveis, que costumam se resolver com uma simples
+reexecução, esperamos que a mediana aumente, refletindo o tempo necessário para
+corrigir falhas reais.
+
+## RQ 05 — Velocidade versus estabilidade
+
+**Hipótese:** Seguindo a afirmação do DORA de que velocidade e estabilidade não
+são um *trade-off*, esperamos uma correlação de Spearman fraca e negativa entre
+a frequência de deploys e a taxa de falha: projetos que publicam com mais
+frequência tendem a ter processos de entrega mais automatizados e mudanças
+menores.
+
+Esperamos, contudo, que a magnitude seja pequena (|ρ| < 0,3), já que a
+frequência de releases em projetos *open-source* depende também de fatores
+alheios à qualidade do processo, como o tipo de projeto e a política de
+versionamento.
+
+## RQ 08b — Evolução temporal
+
+**Hipótese:** A maioria dos repositórios não apresentará tendência
+estatisticamente significativa na taxa de falha de CI nem no tempo de
+recuperação ao longo dos doze meses da janela, pois mudanças de processo
+costumam ser lentas e esse período é curto para detectá-las.
+
+Entre os repositórios com tendência significativa, esperamos mais casos de
+melhora do que de piora, já que projetos populares e maduros tendem a
+estabilizar seus *pipelines* com o tempo.
