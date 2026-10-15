@@ -60,7 +60,7 @@ docker run --rm -e GITHUB_TOKEN -v "${PWD}/data:/app/data" lab03-dora --config c
 
 ```bash
 export GITHUB_TOKEN=...        # nunca commitado; veja "Configuração"
-python -m pipeline --config config.yaml              # amostra de n_repos (100)
+python -m pipeline --config config.yaml              # amostra de n_repos (300)
 python -m pipeline --config config.yaml --limite 10  # rodada curta de medição
 ```
 

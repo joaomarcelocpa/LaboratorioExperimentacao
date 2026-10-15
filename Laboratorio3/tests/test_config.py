@@ -33,7 +33,7 @@ def test_config_do_repositorio_carrega():
     cfg = carregar_config(RAIZ / "config.yaml")
     assert cfg.min_releases == 5
     assert cfg.min_runs == 50
-    assert cfg.n_repos == 100
+    assert cfg.n_repos == 300
     assert cfg.seed == 42
     assert cfg.n_dias_issue == 7
     assert "dependabot[bot]" in cfg.bots

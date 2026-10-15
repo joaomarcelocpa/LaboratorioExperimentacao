@@ -2,8 +2,8 @@
 
 Parte do João (A) da seção de Metodologia (#67). Os números vêm de
 `data/processed/funil.csv`, `repos.csv` e `metricas.csv` da rodada de 13 e 14
-de outubro de 2026. Os trechos marcados com **[completar]** dependem de algo
-que ainda não existe.
+de outubro de 2026, e o tipo do projeto vem do consenso da amostra-ouro
+(`data/conferencia/consenso_repositorios.csv`).
 
 ## 1. Fonte de dados e janela
 
@@ -99,8 +99,8 @@ Dados de `repos.csv`, medidos na coleta:
 | Popularidade | estrelas no momento da coleta | quartis: até 1.713 / até 3.061 / até 8.275 / acima |
 | Contribuidores | contribuidores, anônimos incluídos | quartis: até 31,5 / até 77 / até 176,5 / acima |
 | Idade | anos entre a criação e o fim da janela (30/9/2026) | quartis: até 2,0 / até 5,9 / até 9,8 / acima |
-| Linguagem principal | campo `language` da API | ver abaixo |
-| Tipo do projeto | rótulo manual (biblioteca/framework, aplicação/serviço, CLI, outro) | **[completar]** depois do consenso da amostra-ouro. Ver observação abaixo. |
+| Linguagem principal | campo `language` da API | as 7 linguagens com 10 ou mais repositórios, e as demais juntas em "Outras" (ver abaixo) |
+| Tipo do projeto | rótulo manual (biblioteca/framework, aplicação/serviço, CLI, outro) | aplicação/serviço 26, biblioteca/framework 20, CLI 9, outro 5 (só nos 60 da amostra-ouro; ver abaixo) |
 | Automação de release | arquivos de configuração e menção nos workflows (semantic-release, release-please, changesets, goreleaser) | com / sem automação: 54 / 245 |
 | Conventional Commits | proporção de commits no padrão `tipo(escopo): descrição` | proporção de 0 a 1 (mediana 0,31) |
 
@@ -109,13 +109,18 @@ Os quartis são calculados sobre os 299 repositórios da amostra.
 **Linguagem.** Os 299 repositórios têm 32 linguagens principais, mas só 7 têm
 10 ou mais repositórios: TypeScript (70), Python (55), Go (35), JavaScript
 (23), Java (19), Rust (19) e C++ (14). Um grupo com poucos repositórios dá teste
-estatístico fraco. **[completar]** O grupo precisa decidir se junta as demais
-numa categoria "outras".
+estatístico fraco. Por isso as 25 linguagens com menos de 10 repositórios (64
+repositórios no total) foram **agrupadas em "Outras"**, e a RQ 06 compara 8
+grupos: as 7 linguagens acima e "Outras".
 
-**Tipo do projeto.** Ele só existe para os 60 repositórios da amostra-ouro,
-não para os 299. Usá-lo como fator da RQ 06 exige decidir como estender o
-rótulo aos demais (por exemplo, rotulando mais repositórios ou restringindo a
-RQ 06 a esses 60). **[completar]**
+**Tipo do projeto.** O rótulo existe só para os 60 repositórios da
+amostra-ouro, não para os 299. O grupo decidiu usá-lo como fator da RQ 06
+mesmo assim, **restrito a esses 60**: a comparação por tipo usa só eles, e as
+comparações pelos demais fatores usam os 299. O rótulo é o consenso por
+maioria dos três avaliadores (kappa de Fleiss de 0,885 nessa pergunta). Com
+60 repositórios, e só 5 do tipo "outro", os testes por tipo têm pouco poder, e
+cada resultado deve informar o *n* de cada grupo. Essa restrição entra nas
+ameaças à validade.
 
 ### Perfil da amostra
 
@@ -157,6 +162,8 @@ Ameaças à Validade deve mencioná-lo.
   para quem usa outro sistema de CI.
 - **Viés de popularidade:** estrelas e contribuidores são medidos na data da
   coleta, não no início da janela.
+- **Tipo do projeto em só 60 repositórios:** a comparação por tipo (RQ 06)
+  vale para a amostra-ouro, não para os 299, e tem menos poder estatístico.
 - **Amostra não estratificada:** faixas e linguagens pouco frequentes (a faixa
   acima de 50.000 estrelas tem 7 repositórios) têm pouco peso nas comparações.
 
@@ -165,5 +172,5 @@ Ameaças à Validade deve mencioná-lo.
 A mesma seed (42) e os mesmos candidatos geram a mesma amostra. A busca de
 candidatos depende do estado do GitHub no dia da coleta, então uma nova rodada
 em outra data pode encontrar candidatos diferentes. O `config.yaml` traz
-`n_repos: 100`, e a rodada final usou `--limite 300`; quem reproduzir deve
-passar o mesmo valor.
+`n_repos: 300`, o mesmo valor da rodada final, então o comando do README
+(`python -m pipeline --config config.yaml`) reproduz a amostra de 300.

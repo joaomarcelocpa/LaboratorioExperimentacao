@@ -12,7 +12,7 @@ faixas_estrelas:
 
 min_releases: 5
 min_runs: 50
-n_repos: 100
+n_repos: 300
 seed: 42
 
 ambientes_producao: [production, prod, live]
