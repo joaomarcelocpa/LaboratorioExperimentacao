@@ -39,3 +39,87 @@ def test_mapear_linguagem_sem_outras_se_todos_no_top():
 def test_mapear_linguagem_preserva_tamanho():
     s = pd.Series(["Python"] * 3 + ["Go"] * 2 + ["Rust"] * 1)
     assert len(mapear_linguagem(s, top_n=2)) == 6
+
+
+# --- testar_kruskal / testar_mann_whitney / testar_fator_metrica ---
+
+from analise.rq06 import (
+    testar_kruskal as _kruskal,
+    testar_mann_whitney as _mann_whitney,
+    testar_fator_metrica as _fator_metrica,
+)
+
+
+def test_kruskal_grupos_iguais_p_alto():
+    g = {"A": pd.Series([1.0, 2.0, 3.0]), "B": pd.Series([1.0, 2.0, 3.0])}
+    r = _kruskal(g)
+    assert r["pvalue"] > 0.05
+
+
+def test_kruskal_grupos_distintos_p_baixo():
+    g = {"A": pd.Series([1.0, 2.0, 3.0]), "B": pd.Series([100.0, 200.0, 300.0])}
+    r = _kruskal(g)
+    assert r["pvalue"] < 0.05
+
+
+def test_kruskal_epsilon2_entre_0_e_1():
+    g = {"A": pd.Series([1.0, 2.0, 3.0]), "B": pd.Series([4.0, 5.0, 6.0])}
+    r = _kruskal(g)
+    assert 0.0 <= r["epsilon2"] <= 1.0
+
+
+def test_kruskal_n_total_correto():
+    g = {"A": pd.Series([1.0, 2.0]), "B": pd.Series([3.0, 4.0, 5.0])}
+    r = _kruskal(g)
+    assert r["n_total"] == 5
+
+
+def test_mann_whitney_cliff_delta_range():
+    x = pd.Series([1.0, 2.0, 3.0])
+    y = pd.Series([4.0, 5.0, 6.0])
+    r = _mann_whitney(x, y)
+    assert -1.0 <= r["cliff_delta"] <= 1.0
+
+
+def test_mann_whitney_grupos_iguais_delta_zero():
+    x = pd.Series([1.0, 2.0, 3.0])
+    y = pd.Series([1.0, 2.0, 3.0])
+    r = _mann_whitney(x, y)
+    assert abs(r["cliff_delta"]) < 1e-9
+
+
+def test_mann_whitney_n_correto():
+    x = pd.Series([1.0, 2.0])
+    y = pd.Series([3.0, 4.0, 5.0])
+    r = _mann_whitney(x, y)
+    assert r["n1"] == 2 and r["n2"] == 3
+
+
+def test_fator_metrica_dois_grupos_usa_mann_whitney():
+    df = pd.DataFrame({
+        "fator": ["A"] * 5 + ["B"] * 5,
+        "metrica": list(range(5)) + list(range(10, 15)),
+    })
+    r = _fator_metrica(df, "fator", "metrica")
+    assert r["teste"] == "mann_whitney"
+    assert "cliff_delta" in r
+
+
+def test_fator_metrica_tres_grupos_usa_kruskal():
+    df = pd.DataFrame({
+        "fator": ["A"] * 3 + ["B"] * 3 + ["C"] * 3,
+        "metrica": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0],
+    })
+    r = _fator_metrica(df, "fator", "metrica")
+    assert r["teste"] == "kruskal"
+    assert "epsilon2" in r
+
+
+def test_fator_metrica_descarta_nan_na_metrica():
+    # A tem 2 válidos (NaN descartado), B tem 2 válidos → n_total=4
+    df = pd.DataFrame({
+        "fator": ["A", "A", "A", "B", "B"],
+        "metrica": [1.0, float("nan"), 2.0, 3.0, 4.0],
+    })
+    r = _fator_metrica(df, "fator", "metrica")
+    assert r["n_total"] == 4
