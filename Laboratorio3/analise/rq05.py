@@ -6,6 +6,8 @@ from pathlib import Path
 import pandas as pd
 from scipy import stats
 
+from analise import comum
+
 
 def correlacao_spearman(x: pd.Series, y: pd.Series) -> dict:
     """Correlação de Spearman entre x e y, descartando pares com NaN.
@@ -61,21 +63,24 @@ def scatter_freq_cfr(
     plt.close(fig)
 
 
-if __name__ == "__main__":  # pragma: no cover
-    raiz = Path(__file__).parent.parent
-    df = pd.read_csv(raiz / "data/processed/metricas.csv")
+def main() -> None:
+    df = comum.carregar_metricas()
 
     tabela = tabela_correlacoes(df)
     print("\n=== RQ 05 · Correlação Spearman: freq_release × CFR ===")
     print(tabela.to_string(index=False))
+    comum.salvar_tabela(tabela.set_index("variante"), "rq05_spearman")
 
-    saida = raiz / "data/analise"
     for _, row in tabela.iterrows():
         scatter_freq_cfr(
             df,
             variante=row["variante"],
             rho=row["rho"],
             pvalue=row["pvalue"],
-            caminho_saida=saida / f"rq05_scatter_{row['variante']}.png",
+            caminho_saida=comum.SAIDA / f"rq05_scatter_{row['variante']}.png",
         )
-    print(f"\nPlots salvos em {saida}/")
+    print(f"\nPlots salvos em {comum.SAIDA}/")
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()

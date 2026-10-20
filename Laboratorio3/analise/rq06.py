@@ -7,6 +7,8 @@ import pandas as pd
 from scipy import stats
 from statsmodels.stats.multitest import multipletests
 
+from analise import comum
+
 
 def quartis_labels(serie: pd.Series) -> pd.Series:
     """Divide série numérica em 4 quartis rotulados Q1..Q4 (Q1 = menor).
@@ -111,11 +113,10 @@ def montar_fatores(
     return df
 
 
-if __name__ == "__main__":  # pragma: no cover
-    raiz = Path(__file__).parent.parent
-    metricas = pd.read_csv(raiz / "data/processed/metricas.csv")
-    repos = pd.read_csv(raiz / "data/processed/repos.csv")
-    consenso_path = raiz / "data/conferencia/consenso_repositorios.csv"
+def main() -> None:
+    metricas = comum.carregar_metricas()
+    repos = comum.carregar_repos()
+    consenso_path = comum.RAIZ / "data/conferencia/consenso_repositorios.csv"
     consenso = pd.read_csv(consenso_path) if consenso_path.exists() else None
 
     df = montar_fatores(metricas, repos, consenso)
@@ -151,3 +152,8 @@ if __name__ == "__main__":  # pragma: no cover
 
     print("\n=== RQ 06 · Fatores × Métricas DORA (com correção de Holm) ===")
     print(tabela[[c for c in cols_exibir if c in tabela.columns]].to_string(index=False))
+    comum.salvar_tabela(tabela.set_index("fator"), "rq06_fatores")
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()
