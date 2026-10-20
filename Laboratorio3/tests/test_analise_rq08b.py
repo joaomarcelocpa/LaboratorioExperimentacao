@@ -230,3 +230,20 @@ def test_main_grava_tabelas_e_figura_e_e_reexecutavel(tmp_path, monkeypatch):
     assert antes == {n: (tmp_path / "tabelas" / f"{n}.csv").read_bytes() for n in nomes}
     t = pd.read_csv(tmp_path / "tabelas" / "rq08b_tendencias.csv")
     assert set(t["metrica"]) == {"cfr_a", "recuperacao_h"}
+
+
+def test_direcao_vem_do_sinal_do_teste_mesmo_com_inclinacao_de_sen_zero():
+    # CFR zerado quase o ano todo e dois meses de alta no fim: com tantos empates a
+    # mediana das inclinações é 0, mas o Mann-Kendall acusa alta significativa
+    r = rq08b.teste_tendencia(_serie([0.0] * 10 + [0.1, 0.2]), "cfr_a")
+    assert r["p"] < 0.05
+    assert r["inclinacao"] == 0.0
+    assert r["direcao"] == "piora"
+
+
+def test_toda_serie_significativa_tem_direcao():
+    rng = np.random.default_rng(7)
+    for _ in range(200):
+        serie = _serie(np.round(rng.integers(0, 4, 12) / 20, 2))
+        r = rq08b.teste_tendencia(serie, "cfr_a")
+        assert (r["p"] < 0.05) == (r["direcao"] in ("melhora", "piora"))

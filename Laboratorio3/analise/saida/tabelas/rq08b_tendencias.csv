@@ -129,7 +129,7 @@ cfr_a,fccview/jotty,6,False,,,,False,False,,,não testado,não testado
 cfr_a,felangel/bloc,11,True,0.8743670611628918,1.0,0.8743670611628918,False,False,0.0,-0.03636363636363636,sem tendência,sem tendência
 cfr_a,flexprice/flexprice,12,True,0.12806626461954118,1.0,0.12806626461954118,False,False,0.5159381225829129,0.3484848484848485,sem tendência,sem tendência
 cfr_a,flix/flix,6,False,,,,False,False,,,não testado,não testado
-cfr_a,fluxcd/flux2,12,True,0.03943379334462871,1.0,0.03943379334462871,False,False,0.0,0.3939393939393939,sem tendência,sem tendência
+cfr_a,fluxcd/flux2,12,True,0.03943379334462871,1.0,0.03943379334462871,False,False,0.0,0.3939393939393939,piora,sem tendência
 cfr_a,flyingsaucerproject/flyingsaucer,9,True,0.6161549446467565,1.0,0.6161549446467565,False,False,0.0,-0.1388888888888889,sem tendência,sem tendência
 cfr_a,frenck/spook,12,True,0.12319393022771674,1.0,0.12319393022771674,False,False,0.025,0.3181818181818182,sem tendência,sem tendência
 cfr_a,fruitcake/laravel-debugbar,11,True,0.0724947934869995,1.0,0.0724947934869995,False,False,2.5411061285500702,0.43636363636363634,sem tendência,sem tendência

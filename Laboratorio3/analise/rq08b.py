@@ -92,12 +92,10 @@ def teste_tendencia(serie: pd.Series, metrica: str) -> dict:
     except Exception:  # noqa: BLE001 — séries degeneradas: a checagem fica vazia
         p_hr = math.nan
 
-    if p < ALFA and r.slope < 0:
-        direcao = "melhora"
-    elif p < ALFA and r.slope > 0:
-        direcao = "piora"
-    else:
-        direcao = "sem tendência"
+    # A direção vem do sinal do teste (a estatística S), e não da inclinação de
+    # Sen: com muitos empates a mediana das inclinações pode ser 0 num repositório
+    # cuja alta é significativa. A inclinação fica como tamanho de efeito.
+    direcao = {"decreasing": "melhora", "increasing": "piora"}.get(r.trend, "sem tendência")
     resultado.update({
         "testado": True,
         "p": p,
