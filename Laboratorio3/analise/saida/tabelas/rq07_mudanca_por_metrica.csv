@@ -1,0 +1,10 @@
+par,metrica,n,pct_nota_mudou
+C1xC2,freq,299,0.0736
+C1xC2,lead_time,299,0.4783
+C1xC2,cfr,299,0.786
+C1xC3,freq,299,0.1873
+C1xC3,lead_time,299,0.4783
+C1xC3,cfr,299,0.0
+C2xC3,freq,299,0.1237
+C2xC3,lead_time,299,0.0
+C2xC3,cfr,299,0.786
