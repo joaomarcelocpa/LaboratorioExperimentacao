@@ -39,8 +39,8 @@ def test_salvar_tabela_e_figura(tmp_path, monkeypatch):
     fig, ax = plt.subplots()
     ax.plot([1, 2])
     f = comum.salvar_figura(fig, "fig")
-    assert t.exists() and t.suffix == ".csv"
-    assert f.exists() and f.suffix == ".png"
+    assert t.exists() and t.suffix == ".csv" and t.parent.name == "tabelas"
+    assert f.exists() and f.suffix == ".png" and f.parent.name == "figuras"
 
 
 def test_carregar_arquivo_ausente_explica_o_que_fazer(tmp_path, monkeypatch):

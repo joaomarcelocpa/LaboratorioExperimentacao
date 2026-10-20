@@ -43,7 +43,7 @@ Com `make`:
 | `make run` | roda a coleta a partir do `config.yaml` |
 | `make contrato` | regenera o dicionário de dados e falha se tiver mudado |
 | `make run-docker` | constrói a imagem e roda a coleta no container |
-| `make reproduce` | regenera as tabelas e figuras da análise (`analise/saida/`) a partir dos CSVs, sem coletar |
+| `make reproduce` | regenera as tabelas e figuras da análise (`analise/saida/tabelas/` e `analise/saida/figuras/`) a partir dos CSVs, sem coletar |
 
 **Sem `make`** (Windows, PowerShell — nem o Windows padrão nem o Git Bash
 trazem `make`):
@@ -237,7 +237,7 @@ foram feitas antes dessa separação, e em nenhuma linha do
 pipeline/        orquestração e leitura do config
 coleta/          http.py (cliente, cache, rate limit, paginação), coletores
 metricas/        schemas.py (contratos), dicionario.py, funções das RQs
-analise/         scripts da S03 (rq*.py), comum.py, saida/ (tabelas e figuras)
+analise/         scripts da S03 (rq*.py), comum.py, saida/tabelas e saida/figuras
 tests/           pytest, sem rede: responses + fixtures à mão
 data/raw/        cache.sqlite (não versionado)
 data/processed/  CSVs do estudo

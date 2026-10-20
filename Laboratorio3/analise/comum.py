@@ -1,7 +1,7 @@
 """Funções comuns às análises da S03 (RQ 01 a RQ 08).
 
 Cada script de análise lê os CSVs de `data/processed/` por aqui e grava
-tabelas e figuras em `analise/saida/`, para que todos usem os mesmos caminhos
+tabelas em `analise/saida/tabelas/` e figuras em `analise/saida/figuras/`, para que todos usem os mesmos caminhos
 e o mesmo formato.
 """
 from __future__ import annotations
@@ -60,17 +60,19 @@ def tabela_resumo(df: pd.DataFrame, colunas: list[str]) -> pd.DataFrame:
 
 
 def salvar_tabela(tabela: pd.DataFrame, nome: str) -> Path:
-    """Grava `analise/saida/<nome>.csv` e devolve o caminho."""
-    SAIDA.mkdir(parents=True, exist_ok=True)
-    caminho = SAIDA / f"{nome}.csv"
+    """Grava `analise/saida/tabelas/<nome>.csv` e devolve o caminho."""
+    pasta = SAIDA / "tabelas"
+    pasta.mkdir(parents=True, exist_ok=True)
+    caminho = pasta / f"{nome}.csv"
     tabela.to_csv(caminho)
     return caminho
 
 
 def salvar_figura(fig: plt.Figure, nome: str) -> Path:
-    """Grava `analise/saida/<nome>.png` e fecha a figura."""
-    SAIDA.mkdir(parents=True, exist_ok=True)
-    caminho = SAIDA / f"{nome}.png"
+    """Grava `analise/saida/figuras/<nome>.png` e fecha a figura."""
+    pasta = SAIDA / "figuras"
+    pasta.mkdir(parents=True, exist_ok=True)
+    caminho = pasta / f"{nome}.png"
     fig.savefig(caminho, dpi=150, bbox_inches="tight")
     plt.close(fig)
     return caminho

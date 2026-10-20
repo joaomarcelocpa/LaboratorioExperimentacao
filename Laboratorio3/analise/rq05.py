@@ -77,9 +77,9 @@ def main() -> None:
             variante=row["variante"],
             rho=row["rho"],
             pvalue=row["pvalue"],
-            caminho_saida=comum.SAIDA / f"rq05_scatter_{row['variante']}.png",
+            caminho_saida=comum.SAIDA / "figuras" / f"rq05_scatter_{row['variante']}.png",
         )
-    print(f"\nPlots salvos em {comum.SAIDA}/")
+    print(f"\nPlots salvos em {comum.SAIDA / 'figuras'}/")
 
 
 if __name__ == "__main__":  # pragma: no cover
