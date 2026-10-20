@@ -61,7 +61,7 @@ def scatter_freq_cfr(
     plt.close(fig)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     raiz = Path(__file__).parent.parent
     df = pd.read_csv(raiz / "data/processed/metricas.csv")
 

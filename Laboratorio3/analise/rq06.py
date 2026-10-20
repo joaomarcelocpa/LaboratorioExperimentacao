@@ -77,3 +77,77 @@ def testar_fator_metrica(df: pd.DataFrame, fator_col: str, metrica_col: str) -> 
     else:
         resultado.update(testar_kruskal(grupos))
     return resultado
+
+
+def corrigir_holm(resultados: list[dict]) -> pd.DataFrame:
+    """Aplica correção de Holm nos p-valores válidos; skip fica como NaN."""
+    df = pd.DataFrame(resultados)
+    is_skip = df.get("teste", pd.Series(["ok"] * len(df))) == "skip"
+    validos = df["pvalue"].notna() & ~is_skip
+    pvals = df.loc[validos, "pvalue"].values
+    if len(pvals) > 0:
+        _, p_adj, _, _ = multipletests(pvals, method="holm")
+        df.loc[validos, "p_ajustado"] = p_adj
+    df.loc[~validos, "p_ajustado"] = float("nan")
+    return df
+
+
+def montar_fatores(
+    metricas: pd.DataFrame,
+    repos: pd.DataFrame,
+    consenso: pd.DataFrame | None,
+) -> pd.DataFrame:
+    """Junta métricas, fatores de repos e tipo_projeto do consenso num DataFrame."""
+    df = metricas.merge(
+        repos[["repo", "linguagem", "estrelas", "contribuidores", "idade_anos"]],
+        on="repo",
+    )
+    df["linguagem_top"] = mapear_linguagem(df["linguagem"], top_n=7)
+    df["estrelas_q"] = quartis_labels(df["estrelas"])
+    df["contribuidores_q"] = quartis_labels(df["contribuidores"])
+    df["idade_q"] = quartis_labels(df["idade_anos"])
+    if consenso is not None and not consenso.empty:
+        df = df.merge(consenso[["repo", "tipo_projeto"]], on="repo", how="left")
+    return df
+
+
+if __name__ == "__main__":  # pragma: no cover
+    raiz = Path(__file__).parent.parent
+    metricas = pd.read_csv(raiz / "data/processed/metricas.csv")
+    repos = pd.read_csv(raiz / "data/processed/repos.csv")
+    consenso_path = raiz / "data/conferencia/consenso_repositorios.csv"
+    consenso = pd.read_csv(consenso_path) if consenso_path.exists() else None
+
+    df = montar_fatores(metricas, repos, consenso)
+
+    FATORES = ["linguagem_top", "estrelas_q", "contribuidores_q", "idade_q"]
+    if "tipo_projeto" in df.columns:
+        FATORES.append("tipo_projeto")
+
+    METRICAS = [
+        ("freq_release", "RQ01"),
+        ("lt_commit_h", "RQ02b"),
+        ("cfr_a", "RQ03a"),
+        ("cfr_b", "RQ03b"),
+        ("recuperacao_h", "RQ04"),
+    ]
+
+    resultados = []
+    for fator in FATORES:
+        for metrica_col, rq in METRICAS:
+            r = testar_fator_metrica(df, fator, metrica_col)
+            r["rq"] = rq
+            n_grupos = r.get("n_por_grupo", {})
+            r["grupos_n"] = "; ".join(f"{k}={v}" for k, v in n_grupos.items()) if n_grupos else ""
+            resultados.append(r)
+
+    tabela = corrigir_holm(resultados)
+
+    cols_exibir = ["fator", "metrica", "rq", "teste", "pvalue", "p_ajustado", "n_total"]
+    for col_ef in ("epsilon2", "cliff_delta"):
+        if col_ef in tabela.columns:
+            cols_exibir.append(col_ef)
+    cols_exibir.append("grupos_n")
+
+    print("\n=== RQ 06 · Fatores × Métricas DORA (com correção de Holm) ===")
+    print(tabela[[c for c in cols_exibir if c in tabela.columns]].to_string(index=False))

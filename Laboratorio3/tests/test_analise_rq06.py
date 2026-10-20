@@ -123,3 +123,93 @@ def test_fator_metrica_descarta_nan_na_metrica():
     })
     r = _fator_metrica(df, "fator", "metrica")
     assert r["n_total"] == 4
+
+
+def test_fator_metrica_skip_quando_grupos_insuficientes():
+    df = pd.DataFrame({
+        "fator": ["A", "A", "A"],
+        "metrica": [1.0, 2.0, 3.0],
+    })
+    r = _fator_metrica(df, "fator", "metrica")
+    assert r["teste"] == "skip"
+    assert r["n_total"] == 0
+
+
+# --- corrigir_holm ---
+
+from analise.rq06 import corrigir_holm as _corrigir_holm
+
+
+def test_holm_adiciona_coluna_p_ajustado():
+    resultados = [
+        {"fator": "f1", "metrica": "m1", "pvalue": 0.01, "n_total": 10},
+        {"fator": "f1", "metrica": "m2", "pvalue": 0.04, "n_total": 10},
+        {"fator": "f2", "metrica": "m1", "pvalue": 0.20, "n_total": 10},
+    ]
+    df = _corrigir_holm(resultados)
+    assert "p_ajustado" in df.columns
+
+
+def test_holm_p_ajustado_maior_ou_igual_ao_bruto():
+    resultados = [
+        {"fator": "f1", "metrica": "m1", "pvalue": 0.01, "n_total": 10},
+        {"fator": "f1", "metrica": "m2", "pvalue": 0.05, "n_total": 10},
+    ]
+    df = _corrigir_holm(resultados)
+    assert (df["p_ajustado"] >= df["pvalue"]).all()
+
+
+def test_holm_skip_excluido_da_correcao():
+    import math
+    resultados = [
+        {"fator": "f1", "metrica": "m1", "pvalue": 0.01, "teste": "kruskal", "n_total": 10},
+        {"fator": "f2", "metrica": "m1", "pvalue": float("nan"), "teste": "skip", "n_total": 0},
+    ]
+    df = _corrigir_holm(resultados)
+    skip_row = df[df["teste"] == "skip"]
+    assert math.isnan(skip_row["p_ajustado"].iloc[0])
+
+
+# --- montar_fatores ---
+
+from analise.rq06 import montar_fatores as _montar_fatores
+
+
+def _dfs_fake():
+    metricas = pd.DataFrame({
+        "repo": ["a/b", "a/c", "a/d", "a/e", "a/f"],
+        "freq_release": [0.1, 0.2, 0.3, 0.4, 0.5],
+        "cfr_a": [0.1] * 5,
+    })
+    repos = pd.DataFrame({
+        "repo": ["a/b", "a/c", "a/d", "a/e", "a/f"],
+        "linguagem": ["Python", "Go", "Python", "Rust", "Go"],
+        "estrelas": [100, 200, 300, 400, 500],
+        "contribuidores": [10, 20, 30, 40, 50],
+        "idade_anos": [1.0, 2.0, 3.0, 4.0, 5.0],
+    })
+    return metricas, repos
+
+
+def test_montar_fatores_cria_colunas_de_quartil():
+    m, r = _dfs_fake()
+    df = _montar_fatores(m, r, None)
+    for col in ("linguagem_top", "estrelas_q", "contribuidores_q", "idade_q"):
+        assert col in df.columns, f"coluna ausente: {col}"
+
+
+def test_montar_fatores_tipo_projeto_ausente_sem_consenso():
+    m, r = _dfs_fake()
+    df = _montar_fatores(m, r, None)
+    assert "tipo_projeto" not in df.columns
+
+
+def test_montar_fatores_tipo_projeto_presente_com_consenso():
+    m, r = _dfs_fake()
+    consenso = pd.DataFrame({
+        "repo": ["a/b", "a/c"],
+        "tipo_projeto": ["biblioteca", "aplicacao"],
+    })
+    df = _montar_fatores(m, r, consenso)
+    assert "tipo_projeto" in df.columns
+    assert df.loc[df["repo"] == "a/b", "tipo_projeto"].iloc[0] == "biblioteca"
