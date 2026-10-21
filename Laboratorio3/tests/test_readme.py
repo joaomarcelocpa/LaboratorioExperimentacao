@@ -21,6 +21,8 @@ def test_readme_documenta_cada_csv_do_contrato(schema):
     "fatias_saturadas.csv",
     "fatias_nao_coletadas.csv",
     "custo_selecao.csv",
+    "python -m analise.painel",
+    "github.io/LaboratorioExperimentacao/Laboratorio3/dashboard",
     "acumula",
     "Limitações conhecidas",
     "pytorch/pytorch",

@@ -44,6 +44,7 @@ Com `make`:
 | `make contrato` | regenera o dicionário de dados e falha se tiver mudado |
 | `make run-docker` | constrói a imagem e roda a coleta no container |
 | `make reproduce` | regenera as tabelas e figuras da análise (`analise/saida/tabelas/` e `analise/saida/figuras/`) a partir dos CSVs, sem coletar |
+| `make dashboard` | regenera o painel das RQs em `dashboard/` (página estática e CSVs), a partir das tabelas de `analise/saida/` |
 
 **Sem `make`** (Windows, PowerShell — nem o Windows padrão nem o Git Bash
 trazem `make`):
@@ -207,6 +208,33 @@ saturação, por isso não entram no arquivo acima.
 Os dois são diagnóstico, não dataset de análise: não aparecem em
 `docs/dicionario_dados.md` nem passam pelo validador de contratos, e só existem
 quando há algo a registrar.
+
+## Painel das RQs
+
+Uma página estática com uma aba por pergunta de pesquisa: a hipótese, o que os
+dados mostram (com veredito) e a conclusão, mais gráficos das métricas
+coletadas. Ela é servida pelo GitHub Pages, direto da pasta `dashboard/` da
+`main`:
+
+https://joaomarcelocpa.github.io/LaboratorioExperimentacao/Laboratorio3/dashboard/
+
+A página não tem dados embutidos: ela lê os CSVs de `dashboard/data/`, que são
+cópias dos arquivos de `data/` e de `analise/saida/tabelas/` mais quatro
+conjuntos calculados (`medianas`, `observados`, `rq06_grupos` e `heuristica_f1`).
+Cada número da tela é uma marca ligada a uma linha de um desses CSVs, e a aba
+"Visão geral" lista a origem de cada arquivo.
+
+```bash
+make reproduce      # regenera as tabelas da análise
+make dashboard      # regenera dashboard/ a partir delas (sem make: python -m analise.painel)
+python -m http.server --directory dashboard 8000   # prévia em http://localhost:8000
+```
+
+Abrir o `index.html` direto do disco não funciona, porque o navegador bloqueia a
+leitura dos CSVs; use o servidor acima. A pasta `dashboard/` é versionada, e um
+teste falha se ela ficar desatualizada em relação ao gerador. Os textos de
+veredito e de conclusão ficam em `analise/painel/conteudo.py`, e são uma leitura
+dos dados, em rascunho para a seção de Resultados e Discussão do artigo.
 
 ## Limitações conhecidas
 

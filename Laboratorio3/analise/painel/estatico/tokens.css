@@ -1,0 +1,31 @@
+/* Tokens de cor e medida do painel. Tema claro por padrão e escuro por preferência do sistema. */
+:root {
+  color-scheme: light;
+  --color-fg: #1d2127; --color-fg-muted: #5a6370; --color-bg: #ffffff; --color-panel: #f5f6f8; --color-border-line: #dde1e7;
+  --color-ok: #17784a; --color-warn: #9a5a00; --color-bad: #bf2f2a;
+  --px-chart-grid: #e7eaee; --px-chart-axis: #9aa3ad; --px-chart-reference: #66707c; --px-chart-muted: #b3bbc5;
+  --px-surface-popover: #ffffff; --px-border: #d5dae0; --px-shadow-popover: 0 4px 14px rgba(0, 0, 0, .14); --px-text-secondary: #5a6370;
+  --px-radius: 10px;
+  --px-pad-xs: 4px; --px-pad-sm: 8px; --px-pad-md: 14px; --px-pad-lg: 18px; --px-pad-xl: 32px;
+  --px-gap-xs: 6px; --px-gap-sm: 10px; --px-gap-md: 14px; --px-gap-lg: 22px;
+  --px-font-size-caption: 12px; --px-font-size-body: 14px; --px-font-size-heading: 15px; --px-font-size-title: 20px;
+  --px-font-weight-medium: 500; --px-dur-slow: 240ms; --px-ease-out: cubic-bezier(.2, .7, .2, 1);
+  --fonte-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-serif: Georgia, "Times New Roman", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --color-fg: #e8eaed; --color-fg-muted: #9aa3ad; --color-bg: #16181c; --color-panel: #1f2227; --color-border-line: #33383f;
+    --color-ok: #4cc38a; --color-warn: #e0a13a; --color-bad: #f0706a;
+    --px-chart-grid: #2a2e35; --px-chart-axis: #6b7480; --px-chart-reference: #9aa3ad; --px-chart-muted: #4a515b;
+    --px-surface-popover: #262a30; --px-border: #3a4048; --px-text-secondary: #9aa3ad;
+  }
+}
+body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: 14px/1.4 var(--fonte-sans); }
+#dash-root { padding: 0 clamp(14px, 3vw, 32px); }
+.px-rodape { margin: 0; padding: var(--px-pad-md) 0 var(--px-pad-xl); color: var(--color-fg-muted); font-size: var(--px-font-size-caption); border-top: 1px solid var(--color-border-line); }
+.px-rodape a, .px-card a { color: inherit; }
+.px-aviso { margin: var(--px-pad-md) 0; padding: var(--px-pad-md); border: 1px solid var(--color-bad); border-radius: var(--px-radius); color: var(--color-bad); }
+.px-skel, .dash-skeleton { background: color-mix(in srgb, var(--color-fg) 8%, transparent); border-radius: 6px; min-height: 8rem; }
+code { font-size: .92em; }

@@ -1,0 +1,9 @@
+etapa,entraram,sairam,motivo
+duplicata,65450,26,já veio de outra faixa de estrelas
+fork,65424,0,é um fork
+arquivado,65424,5361,está arquivado
+sem_push_na_janela,60063,22710,sem push desde 2025-10-01: não pode ter runs de push na janela
+nao_examinados,37353,35999,"não examinados: a amostra de 300 fechou antes (ordem aleatória, seed=42)"
+usa_actions,1354,240,não usa GitHub Actions
+min_releases,1114,711,menos de 5 releases na janela
+min_runs,403,103,menos de 50 runs válidos na janela
