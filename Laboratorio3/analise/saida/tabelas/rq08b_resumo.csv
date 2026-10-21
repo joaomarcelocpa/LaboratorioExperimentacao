@@ -1,0 +1,3 @@
+metrica,repos,testados,excluidos,melhora,pct_melhora,piora,pct_piora,sem_tendencia,pct_sem_tendencia,melhora_holm,pct_melhora_holm,piora_holm,pct_piora_holm,sem_tendencia_holm,pct_sem_tendencia_holm,difere_hamed_rao
+cfr_a,299,211,88,12,0.05687203791469194,11,0.052132701421800945,188,0.8909952606635071,0,0.0,1,0.004739336492890996,210,0.995260663507109,0
+recuperacao_h,299,94,205,4,0.0425531914893617,2,0.02127659574468085,88,0.9361702127659575,0,0.0,0,0.0,94,1.0,0
