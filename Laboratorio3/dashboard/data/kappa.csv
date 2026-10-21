@@ -1,0 +1,4 @@
+dimensao,n_itens,n_avaliadores,kappa,interpretacao,pct_unanime
+tipo_projeto,60,3,0.8850050196221595,quase perfeita,0.8833333333333333
+entregas_reais,60,3,0.23620933521923682,razoável,0.95
+corretiva,300,3,0.6614233261772435,substancial,0.75

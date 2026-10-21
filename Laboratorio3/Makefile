@@ -1,4 +1,4 @@
-.PHONY: test run contrato docker-build run-docker reproduce
+.PHONY: test run contrato docker-build run-docker reproduce dashboard
 
 IMAGEM ?= lab03-dora
 CONFIG ?= config.yaml
@@ -21,3 +21,6 @@ run-docker: docker-build
 
 reproduce:
 	python -m analise
+
+dashboard:
+	python -m analise.painel

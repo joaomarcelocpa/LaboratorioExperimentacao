@@ -1,0 +1,33 @@
+id,valor,descricao
+n_repos,299.0,linhas de metricas.csv
+rq01_n_elite,3.0,repositórios com freq_release >= 7 por semana
+rq01_pct_tag_ge_release,0.983278,fração com freq_tag >= freq_release
+rq02_mediana_dias,8.326505,mediana de lt_release_h dividida por 24
+rq02_pct_1a7d,0.277592,fração com lt_release_h entre 1 e 7 dias
+rq02_pct_a_maior_b,0.662207,fração com lt_release_h > lt_commit_h
+rq02_dif_pct,0.024056,1 - mediana(b) / mediana(a)
+rq03a_pct_10a25,0.170569,fração com cfr_a entre 10% e 25%
+rq03a_pct_abaixo10,0.735786,fração com cfr_a abaixo de 10%
+rq03a_queda_flaky_pp,0.658992,"mediana do bruto menos a do sem flaky, em p.p."
+rq03b_pct_abaixo30,0.38796,fração com cfr_b abaixo de 30%
+rq04_n_repos,273.0,repositórios com recuperacao_h
+rq04_n_eps,13745.0,linhas de episodios.csv
+rq04_eps_censurados,76.0,episódios censurados
+rq04_pct_eps_censurados,0.005529,episódios censurados / total
+rq04_eps_so_flaky,3.0,episódios só de flaky
+rq04_repos_com_censura,48.0,repositórios com pct_censurados > 0
+rq04_repos_acima_1dia,44.0,repositórios com recuperacao_h > 24
+rq04_repos_acima_1sem,9.0,repositórios com recuperacao_h >= 168
+rq04_n_high,140.0,repositórios com recuperacao_h entre 1 h e 24 h
+rq04_pct_high,0.512821,"fração acima, entre os que têm recuperacao_h"
+rq04_sem_recuperacao,26.0,repositórios sem episódio de falha
+rq06_n_testes,25.0,linhas de rq06_fatores.csv
+rq06_eps_baixo,13.0,"testes com epsilon2 < 0,06"
+rq06_sig_holm,7.0,"testes com p ajustado < 0,05"
+rq07_n_mudou_algum,165.0,repositórios que mudam em pelo menos um par
+rq07_pct_mudou_algum,0.551839,fração acima
+rq08a_pct_rework_1,0.51505,fração com rework_rate = 1
+rq08a_n_rework_1,154.0,repositórios com rework_rate = 1
+rq08a_rho_cfr_b,-0.193343,Spearman entre rework_rate e cfr_b
+rq08a_pct_maior_cfr_b,0.913043,fração com rework_rate > cfr_b
+rq08a_dif_pp,62.5,"mediana de rework_rate menos mediana de cfr_b, em p.p."
