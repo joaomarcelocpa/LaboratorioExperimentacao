@@ -1,31 +1,63 @@
-/* Tokens de cor e medida do painel. Tema claro por padrão e escuro por preferência do sistema. */
+/* Tokens de cor e medida do painel, no mesmo esquema dos painéis dos Labs 1 e 2.
+   Tema claro por padrão, escuro pela preferência do sistema, e o botão do topo força um dos dois (data-theme). */
 :root {
   color-scheme: light;
-  --color-fg: #1d2127; --color-fg-muted: #5a6370; --color-bg: #ffffff; --color-panel: #f5f6f8; --color-border-line: #dde1e7;
-  --color-ok: #17784a; --color-warn: #9a5a00; --color-bad: #bf2f2a;
-  --px-chart-grid: #e7eaee; --px-chart-axis: #9aa3ad; --px-chart-reference: #66707c; --px-chart-muted: #b3bbc5;
-  --px-surface-popover: #ffffff; --px-border: #d5dae0; --px-shadow-popover: 0 4px 14px rgba(0, 0, 0, .14); --px-text-secondary: #5a6370;
-  --px-radius: 10px;
-  --px-pad-xs: 4px; --px-pad-sm: 8px; --px-pad-md: 14px; --px-pad-lg: 18px; --px-pad-xl: 32px;
-  --px-gap-xs: 6px; --px-gap-sm: 10px; --px-gap-md: 14px; --px-gap-lg: 22px;
-  --px-font-size-caption: 12px; --px-font-size-body: 14px; --px-font-size-heading: 15px; --px-font-size-title: 20px;
-  --px-font-weight-medium: 500; --px-dur-slow: 240ms; --px-ease-out: cubic-bezier(.2, .7, .2, 1);
-  --fonte-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --fonte-serif: Georgia, "Times New Roman", serif;
+  --surface: #fcfcfb; --surface-card: #ffffff; --surface-sunken: #f2f4f3;
+  --ink: #0b0b0b; --ink-secondary: #52514e; --ink-muted: #898781;
+  --accent: #0f8a7c; --accent-wash: #e6f5f2; --accent-strong: #0a5c53;
+  --ok: #0c8a5a; --warn: #b36a00; --bad: #c9403f;
+  --grid: #e1e0d9; --border: rgba(11, 11, 11, .10); --border-strong: rgba(11, 11, 11, .16);
+  --shadow: 0 1px 2px rgba(11, 11, 11, .04), 0 6px 16px rgba(11, 11, 11, .05);
+  --c1: #4c72b0; --c2: #dd8452; --c3: #55a868; --c4: #c44e52; --c5: #8172b3; --c6: #937860; --c7: #da8bc3; --c8: #8c8c8c;
+  --px-chart-muted: #b3b8b4;
+  --radius: 14px;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --color-fg: #e8eaed; --color-fg-muted: #9aa3ad; --color-bg: #16181c; --color-panel: #1f2227; --color-border-line: #33383f;
-    --color-ok: #4cc38a; --color-warn: #e0a13a; --color-bad: #f0706a;
-    --px-chart-grid: #2a2e35; --px-chart-axis: #6b7480; --px-chart-reference: #9aa3ad; --px-chart-muted: #4a515b;
-    --px-surface-popover: #262a30; --px-border: #3a4048; --px-text-secondary: #9aa3ad;
+    --surface: #161918; --surface-card: #1d2120; --surface-sunken: #121514;
+    --ink: #ffffff; --ink-secondary: #c1c7c4; --ink-muted: #8d938f;
+    --accent: #35c2ae; --accent-wash: #10312d; --accent-strong: #8fe4d6;
+    --ok: #4cc38a; --warn: #e0a13a; --bad: #ec7a72;
+    --grid: #2a2e2c; --border: rgba(255, 255, 255, .10); --border-strong: rgba(255, 255, 255, .16);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .2), 0 6px 20px rgba(0, 0, 0, .35);
+    --c1: #7fa2d8; --c2: #f0a877; --c3: #6cc58b; --c4: #ec7a72; --c5: #a99bd9; --c6: #c0a58e; --c7: #eba9d6; --c8: #a3a8a5;
+    --px-chart-muted: #4a514e;
   }
 }
-body { margin: 0; background: var(--color-bg); color: var(--color-fg); font: 14px/1.4 var(--fonte-sans); }
-#dash-root { padding: 0 clamp(14px, 3vw, 32px); }
-.px-rodape { margin: 0; padding: var(--px-pad-md) 0 var(--px-pad-xl); color: var(--color-fg-muted); font-size: var(--px-font-size-caption); border-top: 1px solid var(--color-border-line); }
-.px-rodape a, .px-card a { color: inherit; }
-.px-aviso { margin: var(--px-pad-md) 0; padding: var(--px-pad-md); border: 1px solid var(--color-bad); border-radius: var(--px-radius); color: var(--color-bad); }
-.px-skel, .dash-skeleton { background: color-mix(in srgb, var(--color-fg) 8%, transparent); border-radius: 6px; min-height: 8rem; }
-code { font-size: .92em; }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --surface: #161918; --surface-card: #1d2120; --surface-sunken: #121514;
+  --ink: #ffffff; --ink-secondary: #c1c7c4; --ink-muted: #8d938f;
+  --accent: #35c2ae; --accent-wash: #10312d; --accent-strong: #8fe4d6;
+  --ok: #4cc38a; --warn: #e0a13a; --bad: #ec7a72;
+  --grid: #2a2e2c; --border: rgba(255, 255, 255, .10); --border-strong: rgba(255, 255, 255, .16);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .2), 0 6px 20px rgba(0, 0, 0, .35);
+  --c1: #7fa2d8; --c2: #f0a877; --c3: #6cc58b; --c4: #ec7a72; --c5: #a99bd9; --c6: #c0a58e; --c7: #eba9d6; --c8: #a3a8a5;
+  --px-chart-muted: #4a514e;
+}
+/* Nomes que o page.js e o page.css já usam, apontando para os tokens acima. */
+:root {
+  --color-fg: var(--ink); --color-fg-muted: var(--ink-secondary); --color-bg: var(--surface-card);
+  --color-panel: var(--surface-sunken); --color-border-line: var(--border-strong);
+  --color-ok: var(--ok); --color-warn: var(--warn); --color-bad: var(--bad);
+  --px-chart-grid: var(--grid); --px-chart-axis: var(--ink-muted); --px-chart-reference: var(--ink-secondary);
+  --px-surface-popover: var(--ink); --px-border: transparent; --px-shadow-popover: var(--shadow); --px-text-secondary: var(--surface-sunken);
+  --px-radius: var(--radius);
+  --px-pad-xs: 4px; --px-pad-sm: 8px; --px-pad-md: 14px; --px-pad-lg: 20px; --px-pad-xl: 48px;
+  --px-gap-xs: 6px; --px-gap-sm: 10px; --px-gap-md: 16px; --px-gap-lg: 24px;
+  --px-font-size-caption: 12.5px; --px-font-size-body: 14.5px; --px-font-size-heading: 15px; --px-font-size-title: 20px;
+  --px-font-weight-medium: 700; --px-dur-slow: 180ms; --px-ease-out: ease;
+  --fonte-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fonte-serif: var(--fonte-sans);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { background: var(--surface); color: var(--ink); font: 15px/1.5 var(--fonte-sans); -webkit-font-smoothing: antialiased; }
+#dash-root { padding: 0; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.px-rodape { margin: 0; padding: 16px 0 var(--px-pad-xl); color: var(--ink-muted); font-size: 12px; border-top: 1px solid var(--border); }
+.px-rodape a, .px-card a { color: var(--accent-strong); }
+.px-aviso { margin: var(--px-pad-md) 0; padding: var(--px-pad-md); border: 1px solid var(--bad); border-radius: var(--radius); color: var(--bad); }
+.px-skel, .dash-skeleton { background: var(--surface-sunken); border-radius: 8px; min-height: 8rem; }
+code { font-size: .92em; background: var(--surface-sunken); padding: 1px 5px; border-radius: 4px; }

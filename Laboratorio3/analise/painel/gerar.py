@@ -23,6 +23,10 @@ FAVICON = ("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox
            "fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
 
 
+ICONES = ('<svg class="i-sol" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v3M12 18.5v3M4.6 4.6l2.1 2.1M17.3 17.3l2.1 2.1M2.5 12h3M18.5 12h3M4.6 19.4l2.1-2.1M17.3 6.7l2.1-2.1"/></svg>'
+          '<svg class="i-lua" viewBox="0 0 24 24"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>')
+
+
 def _ler(nome: str) -> str:
     return (ESTATICO / nome).read_text(encoding="utf-8")
 
@@ -37,6 +41,10 @@ def pagina() -> str:
 <title>Painel DORA Lab03</title>
 <meta name="description" content="Hipóteses, resultados e conclusões das perguntas de pesquisa do Lab03, sobre métricas DORA em repositórios open-source.">
 <link rel="icon" href="{FAVICON}">
+<script>
+// Aplica o tema salvo antes da primeira pintura, para não haver flash claro/escuro.
+(function () {{ try {{ var t = localStorage.getItem("dashboard-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); }} catch (e) {{ /* segue o sistema */ }} }})();
+</script>
 <style>
 {_ler("tokens.css")}
 {_ler("page.css")}
@@ -44,14 +52,23 @@ def pagina() -> str:
 </head>
 <body>
 <div id="dash-root">
-<div class="px">
-  <div class="px-top">
-    <h1 class="px-title">{conteudo.titulo_html()}</h1>
-    <p class="px-lede">Uma aba por pergunta de pesquisa: a hipótese, o que os dados mostram e a conclusão. A cor do ponto em cada aba indica se a hipótese se confirmou, se confirmou em parte ou se foi refutada.</p>
+<header class="px-topbar">
+  <div class="px-topbar-in">
+    <div class="px-bar-row">
+      <div class="px-brand">
+        <div class="px-brand-title">{conteudo.titulo_html()}</div>
+        <div class="px-brand-sub">Lab 3 · RQ 01–08 · hipóteses, resultados e conclusões</div>
+      </div>
+      <button type="button" class="px-theme" id="px-theme" aria-label="Alternar tema">{ICONES}</button>
+    </div>
+    <nav class="px-tabs" role="tablist" aria-label="Perguntas de pesquisa">{conteudo.navegacao()}</nav>
   </div>
-  <nav class="px-tabs" role="tablist" aria-label="Perguntas de pesquisa">{conteudo.navegacao()}</nav>
+</header>
+<div class="px">
+  <main class="px-main">
   <div id="px-pages"></div>
-  <p class="px-rodape">Página estática gerada por <code>python -m analise.painel</code> a partir dos CSVs do repositório. As hipóteses estão em <code>docs/hipoteses.md</code>. Os vereditos e as conclusões são uma leitura dos dados, em rascunho para a seção de Resultados e Discussão do artigo.</p>
+  <p class="px-rodape">Página estática gerada por <code>python -m analise.painel</code> a partir dos CSVs do repositório. As hipóteses estão em <code>docs/hipoteses.md</code>. Os vereditos e as conclusões são uma leitura dos dados, em rascunho para a seção de Resultados e Discussão do artigo. A cor do ponto em cada aba indica se a hipótese se confirmou, se confirmou em parte ou se foi refutada.</p>
+  </main>
 </div>
 </div>
 {conteudo.PAGINAS}

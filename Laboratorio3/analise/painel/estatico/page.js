@@ -528,7 +528,7 @@
   function render() {
     const cur = host.querySelector('.px-page:not([hidden])');
     if (!cur) return;
-    fillMarks(document.querySelector('.px'));
+    fillMarks(document.getElementById('dash-root'));
     cur.querySelectorAll('[data-chart]').forEach(drawChart);
   }
   tabs.forEach((t) => t.addEventListener('click', () => show(t.dataset.tab)));
