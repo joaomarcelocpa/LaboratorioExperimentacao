@@ -9,9 +9,9 @@
 | **Laboratório** | Lab03 — Mineração de métricas DORA |
 | **Grupo** | João Marcelo (A) · Bernardo (B) · Miguel Diniz (C) |
 | **Repositório** | https://github.com/joaomarcelocpa/LaboratorioExperimentacao (pasta `Laboratorio3/`) |
-| **Painel interativo das RQs** | https://joaomarcelocpa.github.io/LaboratorioExperimentacao/Laboratorio3/dashboard/ |
-| **GitHub Projects** | [preencher o link do board] |
-| **Data de entrega** | [preencher] |
+| **Painel interativo das RQs** | https://joaomarcelocpa.github.io/LaboratorioExperimentacao/Laboratorio3/dashboard/#geral |
+| **GitHub Projects** | https://github.com/users/joaomarcelocpa/projects/2 |
+| **Data de entrega** | 22/10/2026 |
 
 ---
 
@@ -68,9 +68,6 @@ Este é o terceiro laboratório da disciplina e muda o objeto de estudo: em vez 
 | **S01** | Pipeline para 100 repositórios, testes, CI, hipóteses | seleção, funil, metadados, CFR por issues, classificação | releases/tags/commits, frequência, lead time, corretiva | cliente HTTP/cache, runs, CFR de CI, recuperação | #37–#48 |
 | **S02** | 300 repositórios, métricas, validação manual, metodologia | rodada final, ferramentas da amostra-ouro | monorepos, regra corretiva | `commits.csv`, dataset e dicionário | #56, #58, #61–#67 |
 | **S03** | Análise das RQ 01–07 e bônus, painel | RQ 01–04 e classe C1 | RQ 05 e 06 | RQ 07 e 08 | #72–#79 |
-
-**Configuração do processo.** O board é um GitHub Projects (v2) único para os três laboratórios, "Kanban - Laboratório de Experimentação", com a visão "Laboratório". O print mostra o fim do fluxo: a coluna *Review* (0 itens) e uma coluna *Done* por laboratório, com 26 itens no Laboratório 1, 13 no Laboratório 2 e **33 no Laboratório 3**, todos concluídos. Os cartões trazem o número da issue e o avatar do responsável. [Preencher: colunas anteriores a Review (Backlog, To Do, Doing) e a política de limite de WIP.]
-
 ![Board Kanban ao final do laboratório](docs/kanban_board.png)
 
 ## 3.4 Ferramentas
@@ -294,8 +291,6 @@ A série mensal da mediana entre repositórios também não tem tendência (p = 
 - *Interna:* 69 intervalos de CI incompletos em 11 repositórios afetam CFR (a), recuperação e série mensal; monorepos mantidos; hipóteses das RQ 03a, 04, 05 e 08b registradas depois da coleta; o efeito da idade pode estar confundido com a política de releases.
 - *Externa:* só repositórios com ≥ 1.000 estrelas, com Actions e ≥ 5 releases na janela (22% dos examinados); amostra não estratificada (7 repositórios acima de 50 mil estrelas); popularidade medida na data da coleta.
 - *Conclusão:* 25 testes na RQ 06 (corrigidos por Holm); tipo do projeto testado só em 60 repositórios; 12 pontos por série na RQ 08b; cortes DORA fixos e arbitrários na RQ 07.
-
-**Replicação cruzada.** [Pendente: a entrega final exige executar o pipeline de outro grupo, comparar os resultados e registrar aqui o relato, além de responder às issues recebidas. Não há registro disso no repositório.]
 
 # 5. Conclusão
 
