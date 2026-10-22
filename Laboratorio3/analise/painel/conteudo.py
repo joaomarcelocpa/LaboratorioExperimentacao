@@ -6,7 +6,6 @@ a leitura dos dados e podem ser reescritos aqui, sem mexer nos números.
 """
 from __future__ import annotations
 
-from analise.painel.dados import FONTES
 
 
 # ---------- marcas: todo número vem de um conjunto de dados ----------------------------------------------
@@ -103,20 +102,6 @@ def two(a, b):
     return f'<div class="px-two">{a}{b}</div>'
 
 
-BASE_GH = "https://github.com/joaomarcelocpa/LaboratorioExperimentacao/blob/main/Laboratorio3/"
-
-
-def fontes_card() -> str:
-    linhas = "".join(
-        f'<tr><td>{tit}</td><td>{desc}</td><td>'
-        + (f'<a href="{BASE_GH}{arq}">{arq}</a>' if arq else "calculado de <code>metricas.csv</code> e das tabelas")
-        + "</td></tr>"
-        for _, (arq, tit, desc) in FONTES.items())
-    return ('<article class="px-card"><h3>De onde vêm os números</h3>'
-            '<p class="note">Cada número da página é lido de um destes CSVs, que ficam em <code>dashboard/data/</code>. '
-            'Os calculados para o painel (<code>python -m analise.painel</code>) dizem a conta em <code>observados.csv</code>.</p>'
-            '<div class="px-tablewrap"><table class="px-score"><thead><tr><th>Conjunto</th><th>O que é</th><th>Origem no repositório</th></tr></thead>'
-            f'<tbody>{linhas}</tbody></table></div></article>')
 
 
 # =====================================================================================================
@@ -136,6 +121,10 @@ geral = page(
             V("classes_c1", "pct", "pct0", "classe=Elite") + " da amostra"),
         kpi("Concordância na conferência manual", V("kappa", "kappa", "d2", "dimensao=corretiva"),
             "κ de Fleiss, release corretiva"),
+    ),
+    grid(
+        chart("Funil de seleção", "De todos os candidatos da busca até a amostra.", "funnel", "funil"),
+        chart("Concordância entre os avaliadores", "Três pessoas rotularam 60 repositórios e 300 releases, cada uma sem ver as respostas das outras nem a saída da heurística.", "bars", "kappa", preset="kappa"),
     ),
     '<article class="px-card"><h3>Hipóteses e vereditos</h3>'
     '<p class="note">Cada linha leva à aba da pergunta. O veredito compara a hipótese registrada no repositório com o que os dados mostram.</p>'
@@ -157,24 +146,6 @@ geral = page(
     + score_row("rq08", "RQ 08 · Bônus", "08a: rework maior que o CFR (b). 08b: maioria sem tendência", "par",
                 f"{R8('cfr_a', 'pct_sem_tendencia', 'pct1')} dos repositórios sem tendência no CFR de CI")
     + '</tbody></table></div></article>',
-    grid(
-        chart("Funil de seleção", "De todos os candidatos da busca até a amostra.", "funnel", "funil"),
-        chart("Classe DORA de referência (C1)", "Release como deploy, lead time (a) e CFR (a); a classe é a mediana das quatro notas.", "classes", "classes_c1"),
-    ),
-    grid(
-        chart("Concordância entre os avaliadores", "Três pessoas rotularam 60 repositórios e 300 releases, cada uma sem ver as respostas das outras nem a saída da heurística.", "bars", "kappa", preset="kappa"),
-        '<article class="px-card"><h3>Como ler este painel</h3>'
-        '<p class="note">Os números vêm dos CSVs gerados pelo pipeline, e a conclusão de cada aba é uma leitura desses números.</p>'
-        f'<ul style="margin:0;padding-left:1.1rem;display:flex;flex-direction:column;gap:6px;line-height:1.5">'
-        f'<li><b>Confirmada:</b> {chip("ok")} o que a hipótese afirmava aparece nos dados.</li>'
-        f'<li><b>Parcial:</b> {chip("par")} parte da hipótese se sustenta e parte não.</li>'
-        f'<li><b>Refutada:</b> {chip("bad")} os dados contradizem a hipótese.</li>'
-        f'<li><b>Não testável ou não testada:</b> {chip("nt")} faltam dados, ou a análise não cobriu esse ponto.</li></ul>'
-        '<p class="note"><b>Origem das hipóteses.</b> As das RQ 01, 02, 03b, 06, 07 e 08a foram escritas antes de qualquer análise. '
-        'As das RQ 03a, 04, 05 e 08b foram registradas depois da coleta, a partir das hipóteses informais do plano, sem ajuste aos resultados; '
-        'isso entra como ameaça à validade.</p></article>',
-    ),
-    fontes_card(),
 )
 
 # =====================================================================================================

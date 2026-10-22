@@ -8,6 +8,14 @@ change failure rate e tempo de recuperação.
 A coleta é feita por script próprio, via API REST do GitHub com `requests` —
 o enunciado proíbe bibliotecas prontas de acesso à API.
 
+## Para quem vai replicar
+
+Este repositório é um monorepo: o pipeline está na pasta `Laboratorio3/`, e
+todos os comandos abaixo rodam de dentro dela. O passo a passo da replicação
+cruzada (subamostra de 30 repositórios, comparação com os CSVs originais e
+modelo de Issue) está em [docs/replicacao.md](docs/replicacao.md). Leia-o
+depois de "Requisitos" e "Configuração" abaixo.
+
 ## Requisitos
 
 - Python 3.12
