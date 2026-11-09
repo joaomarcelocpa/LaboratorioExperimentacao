@@ -1,0 +1,3 @@
+teste,n,sigma_log,repeticoes,erro_tipo_i,margem_erro_95
+welch,30,2.5225,10000,0.0141,0.0023109048336961
+mann_whitney,30,2.5225,10000,0.0474,0.004164861183569027
