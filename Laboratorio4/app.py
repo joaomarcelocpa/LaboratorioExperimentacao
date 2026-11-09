@@ -5,7 +5,11 @@ Uso: streamlit run app.py
 
 from pathlib import Path
 
+import numpy as np
+import pandas as pd
 import streamlit as st
+
+from src.testes import ALFA, aplicar_testes
 
 RAIZ = Path(__file__).parent
 FIGURAS = RAIZ / "results" / "figures"
@@ -18,6 +22,15 @@ st.set_page_config(page_title="Lab 04: testes de hipótese por dentro", layout="
 
 def em_construcao(sprint: str) -> None:
     st.info(f"Esta seção será preenchida na {sprint}.")
+
+
+def mostrar_grafico(padrao: str, legenda: str, nome: str) -> None:
+    """Mostra a figura que casa com o padrão em results/figures, ou avisa que ainda não existe."""
+    figuras = sorted(FIGURAS.glob(padrao))
+    if figuras:
+        st.image(str(figuras[0]), caption=legenda)
+    else:
+        st.info(f"O {nome} aparece aqui assim que a figura for salva em results/figures/ ({padrao}).")
 
 
 st.title("Lab 04: testes de hipótese por dentro")
@@ -78,13 +91,63 @@ st.markdown(
 )
 
 st.header("4. Erro tipo I")
-em_construcao("Sprint 2 (gráfico G3)")
+mostrar_grafico("g3*.png", "G3: erro tipo I dos dois testes em cada situação simulada.", "G3")
 
 st.header("5. Poder")
-em_construcao("Sprint 2 (gráfico G4)")
+mostrar_grafico("g4*.png", "G4: curvas de poder dos dois testes.", "G4")
+
+
+@st.cache_data
+def testar_dados_reais() -> dict:
+    dados = pd.read_csv(RAIZ / "data" / "raw" / "prs.csv")
+    horas = dados.groupby("grupo").horas_ate_merge
+    com_bot, sem_bot = (horas.get_group(g).to_numpy() for g in ("com_bot", "sem_bot"))
+    return {
+        "resultado": aplicar_testes(com_bot, sem_bot),
+        "mediana_com_bot": float(np.median(com_bot)),
+        "mediana_sem_bot": float(np.median(sem_bot)),
+        "n": (len(com_bot), len(sem_bot)),
+    }
+
+
+def decisao(p: float) -> str:
+    return "rejeita H₀" if p < ALFA else "não rejeita H₀"
+
 
 st.header("6. Dados reais")
-em_construcao("entrega final (tabela com estatística, p-valor, tamanho do efeito e conclusão)")
+real = testar_dados_reais()
+r = real["resultado"]
+welch, mw = r["welch"], r["mann_whitney"]
+tabela = pd.DataFrame(
+    [
+        {
+            "Teste": "t de Welch",
+            "Estatística": f"t = {welch['t']:.2f} (gl = {welch['gl']:.1f})",
+            "p-valor": f"{welch['p']:.3f}",
+            "Tamanho do efeito": f"d de Cohen = {r['d_cohen']:.2f} (horas); {r['d_cohen_log']:.2f} (log das horas)",
+            "Conclusão": f"{decisao(welch['p'])} (α = {ALFA})",
+        },
+        {
+            "Teste": "Mann-Whitney",
+            "Estatística": f"U = {mw['U']:.1f}",
+            "p-valor": f"{mw['p']:.3f}",
+            "Tamanho do efeito": f"P(com bot > sem bot) = {r['prob_superioridade']:.2f}",
+            "Conclusão": f"{decisao(mw['p'])} (α = {ALFA})",
+        },
+    ]
+)
+st.table(tabela.set_index("Teste"))
+razao = real["mediana_sem_bot"] / real["mediana_com_bot"]
+concordam = "Os dois testes chegaram à mesma conclusão" if r["concordam"] else "Os dois testes discordam"
+st.markdown(
+    f"{concordam} (testes bicaudais, α = {ALFA}) nos {real['n'][0]} + {real['n'][1]} PRs reais. "
+    f"A mediana do tempo até o merge é de {real['mediana_com_bot']:.1f} h com bot e "
+    f"{real['mediana_sem_bot']:.1f} h sem bot, ou seja, PRs sem bot demoram cerca de "
+    f"{razao:.1f} vezes mais. O efeito é de tamanho pequeno a médio e relevante na prática "
+    "(horas contra dias para mesclar), mas com 30 PRs por grupo e dados tão assimétricos a amostra "
+    "é pequena para afirmar a diferença: não rejeitar H₀ aqui não prova que o bot não faz "
+    "diferença, só que esta amostra não bastou para detectá-la."
+)
 
 st.header("7. Conclusão")
 em_construcao("entrega final")
