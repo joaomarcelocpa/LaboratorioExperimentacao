@@ -92,9 +92,26 @@ st.markdown(
 
 st.header("4. Erro tipo I")
 mostrar_grafico("g3*.png", "G3: erro tipo I dos dois testes em cada situação simulada.", "G3")
+st.markdown(
+    "Com dados lognormais e σ_log ≈ 2,5, o t de Welch ficou **muito conservador**: em 10.000 "
+    "simulações sem efeito, rejeitou H₀ apenas 1,4% das vezes — bem abaixo do α = 5% esperado. "
+    "Isso acontece porque a variância da média amostral cresce muito com a cauda longa da lognormal, "
+    "tornando a estatística t raramente extrema o suficiente para rejeitar. "
+    "O Mann-Whitney ficou próximo do esperado (4,7%), pois compara postos em vez de médias e é "
+    "naturalmente robusto à assimetria. O gráfico também exibe o comportamento nas situações com "
+    "pressupostos violados (Q3), onde essa diferença tende a se acentuar."
+)
 
 st.header("5. Poder")
 mostrar_grafico("g4*.png", "G4: curvas de poder dos dois testes.", "G4")
+st.markdown(
+    "O Mann-Whitney detecta o efeito com muito mais poder em todos os tamanhos de efeito simulados. "
+    "Com razão de medianas = 2 (próxima da observada nos dados reais), o MW chega a 16,5% de poder "
+    "contra apenas 3,3% do Welch; com razão = 5, o MW atinge 65% enquanto o Welch fica em 13%. "
+    "A diferença aumenta conforme o efeito cresce porque o Welch começa já defasado — ele perde "
+    "poder justamente por ser conservador sob lognormal. A vantagem do MW se mantém (ou cresce) "
+    "nas situações de Q3; apenas com dados próximos da normal o Welch poderia competir."
+)
 
 
 @st.cache_data
@@ -150,4 +167,23 @@ st.markdown(
 )
 
 st.header("7. Conclusão")
-em_construcao("entrega final")
+st.markdown(
+    "**Palpite vs. resultado.** Antes de simular, o grupo esperava que o Mann-Whitney se saísse "
+    "melhor, pois com dados lognormais cheios de outliers a média (que o Welch compara) é instável. "
+    "A simulação confirmou: o Welch ficou conservador demais (erro tipo I de 1,4% em vez de 5%), "
+    "enquanto o Mann-Whitney manteve o controle sobre α e apresentou poder muito superior em todos "
+    "os tamanhos de efeito. Não houve surpresa — o resultado foi exatamente o esperado."
+)
+st.markdown(
+    "**Recomendação.** Para o cenário de tempo até o merge de PRs com dados assimétricos e "
+    "amostras pequenas (n ≈ 30), **use o Mann-Whitney**. Ele controla melhor o erro tipo I e "
+    "detecta o efeito com mais poder quando os dados são lognormais ou têm outliers."
+)
+st.markdown(
+    "**Quando mudar a escolha.** Use o t de Welch se: (1) os dados forem aproximadamente normais "
+    "(por exemplo, após transformação log bem-sucedida); (2) a amostra for grande o suficiente "
+    "para o TLC estabilizar a média (n ≥ 100 por grupo, dependendo da assimetria); ou (3) "
+    "a comparação de médias tiver interpretação direta e relevante para o problema. "
+    "A principal limitação deste estudo é a amostra pequena (30 por grupo) e o fato de todos "
+    "os PRs serem de agentes de IA — os resultados podem não se generalizar para PRs humanos."
+)
