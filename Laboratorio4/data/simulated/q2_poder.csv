@@ -1,0 +1,11 @@
+razao_medianas,teste,poder
+1.0,welch,0.0141
+1.0,mann_whitney,0.0474
+1.5,welch,0.0207
+1.5,mann_whitney,0.0858
+2.0,welch,0.0331
+2.0,mann_whitney,0.165
+3.0,welch,0.0665
+3.0,mann_whitney,0.36
+5.0,welch,0.1282
+5.0,mann_whitney,0.6529
