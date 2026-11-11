@@ -5,10 +5,13 @@ Uso: streamlit run app.py
 
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import streamlit as st
 
+from src.gerador import CORES_TESTE, ROTULOS_TESTE
+from src.simulacao import SIGMA_REF, simular
 from src.testes import ALFA, aplicar_testes
 
 RAIZ = Path(__file__).parent
@@ -186,4 +189,58 @@ st.markdown(
     "a comparação de médias tiver interpretação direta e relevante para o problema. "
     "A principal limitação deste estudo é a amostra pequena (30 por grupo) e o fato de todos "
     "os PRs serem de agentes de IA — os resultados podem não se generalizar para PRs humanos."
+)
+
+st.header("Bônus: poder interativo")
+st.markdown(
+    "Ajuste o tamanho da amostra, a assimetria e o tamanho do efeito e veja como o poder dos "
+    "dois testes muda. Os valores vêm do mesmo motor de simulação (`src/simulacao.py`), com "
+    "menos repetições para responder rápido."
+)
+
+RAZOES_CURVA = [1.0, 1.25, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]
+
+
+@st.cache_data
+def curva_de_poder(n: int, sigma: float, repeticoes: int) -> pd.DataFrame:
+    linhas = []
+    for razao in RAZOES_CURVA:
+        for teste, taxa in simular(
+            n=n, razao_medianas=razao, sigma=sigma, repeticoes=repeticoes
+        ).items():
+            linhas.append({"razao": razao, "teste": teste, "poder": taxa * 100})
+    return pd.DataFrame(linhas)
+
+
+c_n, c_sigma, c_razao, c_rep = st.columns(4)
+n_int = c_n.slider("Observações por grupo (n)", 5, 200, 30, step=5)
+sigma_int = c_sigma.slider("Assimetria (σ do log)", 0.5, 4.0, round(float(SIGMA_REF), 2), step=0.1)
+razao_int = c_razao.select_slider("Razão das medianas", options=RAZOES_CURVA, value=2.0)
+rep_int = c_rep.select_slider("Repetições", options=[500, 1000, 2000, 5000], value=1000)
+
+curva = curva_de_poder(n_int, sigma_int, rep_int)
+fig, ax = plt.subplots(figsize=(8, 4.2))
+for teste, rotulo in ROTULOS_TESTE.items():
+    d = curva[curva["teste"] == teste]
+    ax.plot(d["razao"], d["poder"], marker="o", linewidth=2, color=CORES_TESTE[teste], label=rotulo)
+    destaque = d[d["razao"] == razao_int]
+    ax.scatter(destaque["razao"], destaque["poder"], s=160, facecolors="none",
+               edgecolors="black", linewidths=1.8, zorder=5)
+ax.axhline(ALFA * 100, color="black", linestyle="--", linewidth=1, label="Nível nominal (5%)")
+ax.set_title(f"Poder × tamanho do efeito (n = {n_int}, σ = {sigma_int:.2f})", fontweight="bold")
+ax.set_xlabel("Razão das medianas (grupo B ÷ grupo A, adimensional)")
+ax.set_ylabel("Poder: rejeições de H₀ (%)")
+ax.set_ylim(0, 100)
+ax.grid(alpha=0.3)
+ax.legend(loc="upper left")
+st.pyplot(fig)
+plt.close(fig)
+
+atual = curva[curva["razao"] == razao_int].set_index("teste")["poder"]
+m_welch, m_mw = st.columns(2)
+m_welch.metric(f"t de Welch (razão {razao_int})", f"{atual['welch']:.1f}%")
+m_mw.metric(f"Mann-Whitney (razão {razao_int})", f"{atual['mann_whitney']:.1f}%")
+st.caption(
+    "Com razão = 1 não há efeito, então o valor é o erro tipo I (o esperado é perto de 5%). "
+    "Com razão > 1 é o poder."
 )
