@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import stats
 
-from src.gerador import FIGURES_DIR, gerar_dados
+from src.gerador import CORES_TESTE, FIGURES_DIR, gerar_dados
 from src.testes import ALFA, aplicar_testes
 
-COR_WELCH = "#2E7D32"
+COR_WELCH = CORES_TESTE["welch"]
 COR_REJEICAO = "#C62828"
 
 
