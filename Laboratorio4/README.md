@@ -28,6 +28,9 @@ Todas as simulações usam `numpy.random.default_rng(42)`, então os resultados 
 | `python -m src.g2` | G2 em `results/figures/` |
 | `python -m src.testes` | os dois testes em um conjunto simulado |
 | `python -m src.simulacao` | Q1 em `data/simulated/q1_erro_tipo_i.csv` |
+| `python -m src.q2` | Q2 em `data/simulated/q2_poder.csv` |
+| `python -m src.q3` | Q3 em `data/simulated/q3_situacoes.csv` |
+| `python -m src.g3_g4` | G3 e G4 em `results/figures/` |
 | `python -m pytest` | testes automatizados |
 
 O `data/raw/prs.csv` já está no repositório, então o primeiro comando só é necessário para refazer a amostra (a origem está em `data/raw/FONTE.md`).

@@ -29,7 +29,7 @@ Recomendamos o Mann-Whitney: ele controlou melhor o α e teve muito mais poder n
 O t de Welch compara as **médias** dos dois grupos. O Mann-Whitney compara os **postos** (ranks) — a ideia é: se sortearmos um PR de cada grupo, qual tem maior chance de ter demorado mais? Não assume nenhuma distribuição, só a ordem dos valores.
 
 **6. No G2: o que é a distribuição da estatística sob H₀, e por que a região de rejeição fica onde fica?**
-Sob H₀, a estatística t segue aproximadamente uma distribuição t de Student com graus de liberdade calculados pelo método de Welch (~55 no nosso caso). A região de rejeição fica nas duas caudas porque o teste é bicaudal: valores de t muito positivos ou muito negativos são igualmente evidência contra H₀.
+Sob H₀, a estatística t segue aproximadamente uma distribuição t de Student com graus de liberdade calculados pelo método de Welch (≈29 no exemplo do G2). A região de rejeição fica nas duas caudas porque o teste é bicaudal: valores de t muito positivos ou muito negativos são igualmente evidência contra H₀.
 
 **7. O que significa o p-valor do exemplo mostrado no G2? E o que ele não significa?**
 O p-valor é a probabilidade de obter uma estatística tão extrema quanto a observada (ou mais) se H₀ fosse verdadeira. No exemplo, p = 0,184 significa que há 18,4% de chance de ver esse t só por acaso sob H₀. O p-valor **não** é a probabilidade de H₀ ser verdadeira, nem a probabilidade de erro.
