@@ -5,16 +5,18 @@ Compara o **t de Welch** e o **Mann-Whitney** no tempo até o merge de PRs revis
 
 ## Como rodar
 
-Com Python 3 instalado, na pasta do projeto:
+O dashboard é uma página HTML única, `dashboard.html`, na raiz da pasta. Ela já vem pronta no repositório: basta abrir o arquivo no navegador (duplo clique), sem servidor e sem instalar nada.
+
+Para regenerar a página a partir dos dados e abri-la, com Python 3 instalado, na pasta do projeto:
 
 ```bash
-python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && streamlit run app.py
+python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && python -m src.painel --abrir
 ```
 
-O dashboard abre no navegador (normalmente em <http://localhost:8501>). Nas próximas vezes basta ativar o ambiente e rodar o último comando:
+Nas próximas vezes basta ativar o ambiente e rodar o último comando:
 
 ```bash
-source .venv/bin/activate && streamlit run app.py
+source .venv/bin/activate && python -m src.painel --abrir
 ```
 
 ## Como reproduzir os resultados
@@ -31,6 +33,7 @@ Todas as simulações usam `numpy.random.default_rng(42)`, então os resultados 
 | `python -m src.q2` | Q2 em `data/simulated/q2_poder.csv` |
 | `python -m src.q3` | Q3 em `data/simulated/q3_situacoes.csv` |
 | `python -m src.g3_g4` | G3 e G4 em `results/figures/` |
+| `python -m src.painel` | `dashboard.html`, com todos os dados embutidos |
 | `python -m pytest` | testes automatizados |
 
 O `data/raw/prs.csv` já está no repositório, então o primeiro comando só é necessário para refazer a amostra (a origem está em `data/raw/FONTE.md`).
@@ -38,8 +41,8 @@ O `data/raw/prs.csv` já está no repositório, então o primeiro comando só é
 ## Estrutura
 
 ```
-app.py            dashboard (Streamlit)
-src/              gerador, testes, G2, motor de simulação
+dashboard.html    dashboard (página única, gerada por src/painel.py)
+src/              gerador, testes, G2, motor de simulação, painel
 data/raw/         dados reais e fonte
 data/simulated/   resultados das simulações
 results/figures/  gráficos G1 a G4

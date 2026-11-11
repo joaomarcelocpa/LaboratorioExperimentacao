@@ -4,7 +4,5 @@ pandas
 statsmodels
 matplotlib
 seaborn
-plotly
-streamlit
 pytest
 pyarrow
