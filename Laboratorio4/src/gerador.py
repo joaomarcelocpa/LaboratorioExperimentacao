@@ -15,6 +15,11 @@ CORES = {"com_bot": "#2196F3", "sem_bot": "#FF9800"}
 
 ROTULOS = {"com_bot": "Com bot", "sem_bot": "Sem bot"}
 
+# Cor de cada teste em G2, G3 e G4 (mesmas cores de CORES)
+CORES_TESTE = {"welch": CORES["com_bot"], "mann_whitney": CORES["sem_bot"]}
+
+ROTULOS_TESTE = {"welch": "t de Welch", "mann_whitney": "Mann-Whitney"}
+
 FIGURES_DIR = Path(__file__).parent.parent / "results" / "figures"
 
 
