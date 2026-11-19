@@ -30,7 +30,7 @@ Página única servida pela aplicação (`static/index.html`, `app.js`, `estilo.
 
 Vêm do planejamento (seções 3.2 e 3.3): Java 21, Spring Boot 3, Maven, PostgreSQL, arquitetura hexagonal, regras ArchUnit, contrato de execução, interface mínima com `data-testid`, sem `CLAUDE.md`.
 
-Decisões de implementação (mais detalhes em `docs/superpowers/specs/2026-11-18-semente-design.md`):
+Decisões de implementação:
 
 - `application` sem anotações Spring; `config` monta o serviço e registra o escaneamento JPA.
 - Entidade JPA separada do modelo de domínio, com mapeamento no adaptador.
@@ -58,7 +58,13 @@ Testes da semente (domínio, serviço, controlador e ArchUnit), sem JDK local:
 docker run --rm -v "<caminho>/seed:/w" -w /w maven:3.9-eclipse-temurin-21 mvn -B test
 ```
 
-Testes de regressão (HTTP e interface): ver `tests/regression/README.md`.
+Testes de regressão (HTTP e interface), com a semente no ar em `localhost:8080` e sem JDK local (o container enxerga a semente por `host.docker.internal`):
+
+```
+docker run --rm -v "<caminho>/tests/regression:/w" -w /w -e BASE_URL=http://host.docker.internal:8080 mcr.microsoft.com/playwright/java:v1.48.0-jammy mvn -B test
+```
+
+Com JDK 21 e Maven locais: `mvn test` em `tests/regression` (`BASE_URL` muda o endereço).
 
 ## Estado verificado
 
