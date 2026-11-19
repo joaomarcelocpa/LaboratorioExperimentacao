@@ -53,6 +53,14 @@ class TarefaTest {
     }
 
     @Test
+    void truncaInstantesParaMicrossegundos() {
+        Instant comNanos = Instant.parse("2026-12-01T15:00:00.123456789Z");
+        Tarefa t = Tarefa.nova("t", null, "ana", comNanos);
+        assertEquals(Instant.parse("2026-12-01T15:00:00.123456Z"), t.vencimento());
+        assertEquals(0, t.criadaEm().getNano() % 1000);
+    }
+
+    @Test
     void atualizadaPreservaIdStatusECriadaEm() {
         Tarefa t = Tarefa.nova("t", null, "ana", VENC).concluida();
         Tarefa a = t.atualizada("novo", "desc", "bia", VENC.plusSeconds(60));

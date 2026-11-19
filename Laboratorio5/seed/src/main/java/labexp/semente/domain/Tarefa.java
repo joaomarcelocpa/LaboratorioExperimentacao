@@ -1,6 +1,7 @@
 package labexp.semente.domain;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 public record Tarefa(
@@ -22,9 +23,11 @@ public record Tarefa(
         if (descricao != null && descricao.length() > MAX_DESCRICAO) {
             throw new TarefaInvalidaException("descricao excede " + MAX_DESCRICAO + " caracteres");
         }
+        criadaEm = criadaEm == null ? null : criadaEm.truncatedTo(ChronoUnit.MICROS);
         if (vencimento == null) {
             throw new TarefaInvalidaException("vencimento e obrigatorio");
         }
+        vencimento = vencimento.truncatedTo(ChronoUnit.MICROS);
     }
 
     public static Tarefa nova(String titulo, String descricao, String responsavel, Instant vencimento) {
