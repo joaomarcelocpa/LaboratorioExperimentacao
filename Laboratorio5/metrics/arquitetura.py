@@ -5,12 +5,14 @@ arquitetura da semente (`mvn test`). Quando o Maven não está disponível,
 `verificar_estaticamente` aplica as mesmas 5 regras sobre os imports dos
 fontes; os dois caminhos devolvem a fonte usada.
 
-Regras:
-  R1 domain não depende de application, de adaptadores nem de Spring/JPA.
-  R2 application depende só de domain (e do JDK).
-  R3 adaptadores de entrada e de saída não dependem entre si.
-  R4 sem ciclos entre pacotes.
-  R5 controladores não acessam repositórios diretamente.
+Regras, espelhando seed/src/test/java/labexp/semente/ArquiteturaTest.java:
+  R1 domain só depende de domain e do JDK (java..).
+  R2 application só depende de application, domain e do JDK.
+  R3 entrada não depende de saída; saída não depende de entrada, de
+     application.port.in nem de application.service.
+  R4 sem ciclos entre os pacotes de primeiro nível nem entre adapter.in e adapter.out.
+  R5 adaptadores de entrada não dependem de application.port.out, application.service,
+     adaptadores de saída, Spring Data nem JPA.
 """
 
 from __future__ import annotations
@@ -20,15 +22,15 @@ import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 
-from metrics.grafo import ciclos, dependencias
-from metrics.java import PREFIXOS_FRAMEWORK, Projeto, camada, pacote_do_import
+from metrics.grafo import ciclos, dependencias, grafo_de_modulos
+from metrics.java import Projeto, camada, pacote_do_import, relativo
 
 REGRAS = {
-    "R1": "domain não depende de application, adaptadores nem Spring/JPA",
-    "R2": "application depende só de domain",
-    "R3": "adaptadores de entrada e de saída não dependem entre si",
-    "R4": "sem ciclos entre pacotes",
-    "R5": "controladores não acessam repositórios diretamente",
+    "R1": "domain só depende de domain e do JDK",
+    "R2": "application só depende de application, domain e do JDK",
+    "R3": "entrada e saída independentes (saída também não usa port.in nem service)",
+    "R4": "sem ciclos entre pacotes de primeiro nível nem entre adaptadores",
+    "R5": "adaptadores de entrada não acessam repositórios, serviço, saída, Spring Data nem JPA",
 }
 
 
@@ -52,25 +54,31 @@ def verificar_estaticamente(p: Projeto, usar_jdeps: bool = True) -> Resultado:
         por[regra] += 1
         det.append(f"{regra} {arquivo.caminho.relative_to(p.raiz)}: {texto}")
 
+    def sob(pacote, *prefixo):
+        return relativo(pacote, p.pacote_base)[: len(prefixo)] == list(prefixo)
+
     for a in p.arquivos:
         orig = camada(a.pacote, p.pacote_base)
         for imp in a.imports:
             dest_pacote = pacote_do_import(imp, p)
             dest = camada(dest_pacote, p.pacote_base) if dest_pacote else None
             externo = dest_pacote is None
-            if orig == "domain":
-                if (dest in ("application", "entrada", "saida")) or (externo and imp.startswith(PREFIXOS_FRAMEWORK)):
-                    registra("R1", a, f"importa {imp}")
-            if orig == "application":
-                interno_proibido = dest not in (None, "domain", "application")
-                if interno_proibido or (externo and not imp.startswith("java.")):
-                    registra("R2", a, f"importa {imp}")
-            if (orig, dest) in (("entrada", "saida"), ("saida", "entrada")):
+            if orig == "domain" and ((not externo and dest != "domain") or (externo and not imp.startswith("java."))):
+                registra("R1", a, f"importa {imp}")
+            if orig == "application" and ((not externo and dest not in ("domain", "application")) or (externo and not imp.startswith("java."))):
+                registra("R2", a, f"importa {imp}")
+            if (orig == "entrada" and dest == "saida") or (
+                orig == "saida" and (dest == "entrada" or (dest_pacote and (sob(dest_pacote, "application", "port", "in") or sob(dest_pacote, "application", "service"))))
+            ):
                 registra("R3", a, f"importa {imp}")
-            if a.nome.endswith("Controller") and imp.rsplit(".", 1)[-1].endswith("Repository"):
+            if orig == "entrada" and (
+                dest == "saida"
+                or (dest_pacote and (sob(dest_pacote, "application", "port", "out") or sob(dest_pacote, "application", "service")))
+                or imp.startswith(("org.springframework.data", "jakarta.persistence", "javax.persistence"))
+            ):
                 registra("R5", a, f"importa {imp}")
     grafo, _ = dependencias(p, usar_jdeps)
-    por["R4"] = ciclos(grafo)
+    por["R4"] = ciclos(grafo_de_modulos(grafo, p.pacote_base))
     if por["R4"]:
         det.append(f"R4 {por['R4']} ciclo(s) entre pacotes")
     return Resultado(sum(por.values()), por, "estatica", det)

@@ -99,6 +99,22 @@ def ciclos(g: dict[str, set[str]]) -> int:
     return len(componentes_ciclicos(g))
 
 
+def grafo_de_modulos(g: dict[str, set[str]], pacote_base: str) -> dict[str, set[str]]:
+    """Agrupa o grafo de pacotes por módulo (primeiro segmento; adapter.X para adaptadores)."""
+    from metrics.java import modulo
+
+    m: dict[str, set[str]] = {}
+    for origem, destinos in g.items():
+        mo = modulo(origem, pacote_base)
+        m.setdefault(mo, set())
+        for d in destinos:
+            md = modulo(d, pacote_base)
+            m.setdefault(md, set())
+            if md != mo:
+                m[mo].add(md)
+    return m
+
+
 def classes_compiladas(raiz: Path) -> Path | None:
     for c in (raiz / "target" / "classes", raiz / "build" / "classes" / "java" / "main"):
         if c.is_dir() and any(c.rglob("*.class")):

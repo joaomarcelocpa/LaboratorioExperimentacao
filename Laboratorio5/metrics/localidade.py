@@ -24,7 +24,7 @@ def _git(raiz: Path, *args: str) -> str:
 
 def arquivos_do_commit(raiz: Path, commit: str = "HEAD") -> list[str]:
     """Caminhos alterados pelo commit (o primeiro commit conta tudo o que ele adiciona)."""
-    saida = _git(raiz, "show", "--no-renames", "--name-only", "--pretty=format:", commit)
+    saida = _git(raiz, "show", "--no-renames", "--relative", "--name-only", "--pretty=format:", commit)
     return [l for l in saida.splitlines() if l.strip()]
 
 
