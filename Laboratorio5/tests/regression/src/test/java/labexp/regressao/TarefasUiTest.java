@@ -4,6 +4,7 @@ import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertTha
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.microsoft.playwright.Browser;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
@@ -103,6 +104,44 @@ class TarefasUiTest extends Base {
         page.getByTestId("form-salvar").click();
         assertThat(page.getByTestId("form-erro")).isVisible();
         assertThat(page.getByTestId("form-erro")).not().isEmpty();
+    }
+
+    @Test
+    void cancelarEdicaoLimpaOFormulario() {
+        String resp = criarPelaTela("Cancelar");
+        item(resp).getByTestId("botao-editar").click();
+        assertThat(page.getByTestId("form-cancelar")).isVisible();
+        page.getByTestId("form-cancelar").click();
+        assertThat(page.getByTestId("form-titulo")).hasValue("");
+        assertThat(page.getByTestId("form-cancelar")).isHidden();
+    }
+
+    @Test
+    void vencimentoEDescricaoIdaEVoltaForaDeUtc() {
+        try (BrowserContext ctx = browser.newContext(
+                new Browser.NewContextOptions().setTimezoneId("America/Sao_Paulo"))) {
+            Page p = ctx.newPage();
+            p.navigate(BASE_URL);
+            String resp = responsavelUnico();
+            p.getByTestId("form-titulo").fill("Fuso");
+            p.getByTestId("form-descricao").fill("com descricao");
+            p.getByTestId("form-responsavel").fill(resp);
+            p.getByTestId("form-vencimento").fill("2026-12-01T12:00");
+            p.getByTestId("form-salvar").click();
+            Locator it = p.getByTestId("tarefa-item").filter(new Locator.FilterOptions().setHasText(resp));
+            assertThat(it).hasCount(1);
+
+            for (var t : api.listar().json()) {
+                if (t.get("responsavel").asText().equals(resp)) {
+                    assertEquals("2026-12-01T15:00:00Z", t.get("vencimento").asText());
+                    assertEquals("com descricao", t.get("descricao").asText());
+                }
+            }
+
+            it.getByTestId("botao-editar").click();
+            assertThat(p.getByTestId("form-vencimento")).hasValue("2026-12-01T12:00");
+            assertThat(p.getByTestId("form-descricao")).hasValue("com descricao");
+        }
     }
 
     @Test

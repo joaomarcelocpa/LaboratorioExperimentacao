@@ -131,6 +131,60 @@ class TarefasHttpTest extends Base {
     }
 
     @Test
+    void descricaoVoltaNoCicloEAceitaAte2000() {
+        String resp = responsavelUnico();
+        Resposta criada = api.enviar("POST", "/tarefas", ApiClient.corpo("t", "detalhes", resp, VENCIMENTO));
+        assertEquals(201, criada.status());
+        String id = criada.id();
+        assertEquals("detalhes", api.consultar(id).json().get("descricao").asText());
+
+        Resposta cheia = api.enviar("PUT", "/tarefas/" + id,
+                ApiClient.corpo("t", "d".repeat(2000), resp, VENCIMENTO));
+        assertEquals(200, cheia.status());
+        assertEquals(2000, api.consultar(id).json().get("descricao").asText().length());
+
+        erro(api.enviar("PUT", "/tarefas/" + id, ApiClient.corpo("t", "d".repeat(2001), resp, VENCIMENTO)),
+                400, "requisicao_invalida");
+    }
+
+    @Test
+    void listaNaOrdemDeCriacao() {
+        String resp = responsavelUnico();
+        String a = api.criar("a", resp, VENCIMENTO).id();
+        String b = api.criar("b", resp, VENCIMENTO).id();
+        String c = api.criar("c", resp, VENCIMENTO).id();
+        var ids = StreamSupport.stream(api.listar().json().spliterator(), false)
+                .filter(t -> t.get("responsavel").asText().equals(resp))
+                .map(t -> t.get("id").asText())
+                .toList();
+        assertEquals(java.util.List.of(a, b, c), ids);
+    }
+
+    @Test
+    void putInvalidoDa400() {
+        String resp = responsavelUnico();
+        String id = api.criar("t", resp, VENCIMENTO).id();
+        erro(api.atualizar(id, "  ", resp, VENCIMENTO), 400, "requisicao_invalida");
+        erro(api.atualizar(id, "t", resp, null), 400, "requisicao_invalida");
+    }
+
+    @Test
+    void uuidValidoInexistenteDa404EmPutConcluirEDelete() {
+        String inexistente = "00000000-0000-0000-0000-000000000000";
+        erro(api.atualizar(inexistente, "t", "ana", VENCIMENTO), 404, "nao_encontrada");
+        erro(api.concluir(inexistente), 404, "nao_encontrada");
+        erro(api.excluir(inexistente), 404, "nao_encontrada");
+    }
+
+    @Test
+    void concluirDuasVezesNaoMudaNada() {
+        String id = api.criar("t", responsavelUnico(), VENCIMENTO).id();
+        Resposta primeira = api.concluir(id);
+        Resposta segunda = api.concluir(id);
+        assertEquals(primeira.json(), segunda.json());
+    }
+
+    @Test
     void healthResponde200() {
         assertEquals(200, api.enviar("GET", "/health", null).status());
     }

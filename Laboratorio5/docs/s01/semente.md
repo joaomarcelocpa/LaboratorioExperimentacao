@@ -63,6 +63,6 @@ Testes de regressão (HTTP e interface): ver `tests/regression/README.md`.
 ## Estado verificado
 
 - Testes da semente: 36 (domínio 10, serviço 10, controlador 11, ArchUnit 5), todos passando.
-- ArchUnit: 5 regras, zero violações. A regra 1 foi testada com uma violação injetada e falhou como esperado; revertida em seguida.
-- Regressão: 22 testes (16 HTTP, 6 interface), 22 de 22 em duas rodadas seguidas, sem acesso ao banco. Com a aplicação parada, os 22 falham.
+- ArchUnit: 5 regras, zero violações. As regras 1, 3 e 5 foram testadas com violações injetadas (Spring no domínio; controlador chamando o serviço; persistência chamando `port.in`) e falharam como esperado; revertidas em seguida.
+- Regressão: 29 testes (21 HTTP, 8 interface), 29 de 29 em duas rodadas seguidas, sem acesso ao banco. Com a aplicação parada, falham todos. Os testes de `descricao` foram checados com uma mutação (descrição não persiste) e falharam como esperado.
 - Tamanho de `src/main`: 734 linhas (Java 482, JS 137, CSS 77, HTML 38).

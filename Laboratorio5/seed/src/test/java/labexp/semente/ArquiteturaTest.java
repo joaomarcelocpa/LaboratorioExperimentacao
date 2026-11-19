@@ -34,7 +34,10 @@ class ArquiteturaTest {
                 .should().dependOnClassesThat().resideInAPackage("labexp.semente.adapter.out..")
                 .check(classes);
         noClasses().that().resideInAPackage("labexp.semente.adapter.out..")
-                .should().dependOnClassesThat().resideInAPackage("labexp.semente.adapter.in..")
+                .should().dependOnClassesThat().resideInAnyPackage(
+                        "labexp.semente.adapter.in..",
+                        "labexp.semente.application.port.in..",
+                        "labexp.semente.application.service..")
                 .check(classes);
     }
 
@@ -46,11 +49,13 @@ class ArquiteturaTest {
 
     @ArchTest
     static void controladoresNaoAcessamRepositorios(JavaClasses classes) {
-        noClasses().that().resideInAPackage("labexp.semente.adapter.in.web..")
+        noClasses().that().resideInAPackage("labexp.semente.adapter.in..")
                 .should().dependOnClassesThat().resideInAnyPackage(
                         "labexp.semente.application.port.out..",
+                        "labexp.semente.application.service..",
                         "labexp.semente.adapter.out..",
-                        "org.springframework.data..")
+                        "org.springframework.data..",
+                        "jakarta.persistence..")
                 .check(classes);
     }
 }
