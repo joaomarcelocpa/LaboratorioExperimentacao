@@ -1,0 +1,19 @@
+hipotese,teste,p,p_holm,rejeita_h0
+H1,GLMM: inclinação do passo (regenerado),0.20022376119577,1.0,False
+H4,GLMM: interação modo × passo,2.6045023268301883e-86,4.42765395561132e-85,True
+H4,log-rank: passo da 1ª regressão,0.948349396595434,1.0,False
+H2,crescimento files_touched: modo × passo,0.08772259691539264,0.7895033722385337,False
+H2,crescimento dup_pct: modo × passo,5.790016069014809e-101,1.0422028924226656e-99,True
+H5,GLMM: pedido que tensiona (regressão),0.011947725223992015,0.1433727026879042,False
+H5,misto: pedido que tensiona (violações novas),0.000560040472791157,0.008400607091867355,True
+H3,variância entre cadeias × passo (incremental),3.762571807085396e-09,6.020114891336634e-08,True
+Extra,"Wilcoxon pareado, passo 1",1.0,1.0,False
+Extra,"Wilcoxon pareado, passo 2",0.375,1.0,False
+Extra,"Wilcoxon pareado, passo 3",0.69140625,1.0,False
+Extra,"Wilcoxon pareado, passo 4",1.0,1.0,False
+Extra,"Wilcoxon pareado, passo 5",0.0546875,0.546875,False
+Extra,"Wilcoxon pareado, passo 6",0.40625,1.0,False
+Extra,"Wilcoxon pareado, passo 7",0.84375,1.0,False
+Extra,"Wilcoxon pareado, passo 8",0.044921875,0.494140625,False
+Extra,"Wilcoxon pareado, passo 9",0.0078125,0.1015625,False
+Extra,"Wilcoxon pareado, passo 10",0.001953125,0.02734375,True

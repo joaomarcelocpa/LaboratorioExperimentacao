@@ -1,0 +1,1 @@
+Parametros(p_base=0.005, sd_cadeia=0.5, inclinacao_regen=0.03, inclinacao_extra_inc=0.15, efeito_tensiona=0.5, reg_total_base=40, reg_total_por_passo=6, cadeia_compartilhada=False, p_falha_execucao=0.03, p_agente_roda_testes=0.6, versao='sintetico', modelo='claude-sonnet-5-5', extras={})
