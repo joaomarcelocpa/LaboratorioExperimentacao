@@ -1,0 +1,1 @@
+commit_id,cadeia_id,modo,passo,tipo_pedido,funcionalidade_manual,regressao_manual,violacao_arq_manual,deriva_doc_manual,regressao_automatico,violacao_arq_automatico,deriva_doc_automatico,regressao_tp_tn_fp_fn,violacao_arq_tp_tn_fp_fn,deriva_doc_tp_tn_fp_fn,observacao
