@@ -1,3 +1,3 @@
 mode,cadeias,passos_executados,passos_ok,passos_com_nova_tentativa,cadeias_censuradas_por_falha,cadeias_completas,custo_total_usd,tokens_totais,duracao_total_h,agente_rodou_testes_pct
-incremental,12,120,120,3,0,12,59.7691,22408852.0,6.835166666666666,53.333333333333336
-regenerado,12,120,120,5,0,12,61.6033,21379830.0,6.951944444444444,67.5
+incremental,12,120,120,5,0,12,56.2565,22377860.0,7.597194444444445,62.5
+regenerado,12,120,119,4,1,11,60.4006,24008103.0,7.218666666666666,56.666666666666664

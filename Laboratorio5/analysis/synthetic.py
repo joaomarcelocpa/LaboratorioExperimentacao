@@ -14,10 +14,16 @@ import pandas as pd
 
 from analysis.schema import NOMES, PASSO_MAX
 
-# Tipo de cada pedido: P1 a P4 vêm do piloto; P5 a P10 são provisórios (S02).
+# Tipo de cada pedido (docs/s02/protocolo-congelado.md, seção 2), pela chave Pn.
 TIPO_DO_PEDIDO = {
     1: "cabe", 2: "cabe", 3: "tensiona", 4: "cabe",
-    5: "cabe", 6: "tensiona", 7: "cabe", 8: "tensiona", 9: "cabe", 10: "tensiona",
+    5: "tensiona", 6: "tensiona", 7: "cabe", 8: "cabe", 9: "tensiona", 10: "tensiona",
+}
+
+# Ordens das cadeias (protocolo congelado, seção 3): pedido Pn feito em cada passo 1..10.
+ORDENS = {
+    "A": (1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    "B": (2, 1, 4, 3, 6, 5, 8, 7, 10, 9),
 }
 
 
@@ -33,6 +39,7 @@ class Parametros:
     reg_total_base: int = 40
     reg_total_por_passo: int = 6  # a suíte de regressão cresce com os pedidos aceitos
     cadeia_compartilhada: bool = False  # True: a cadeia i tem o mesmo efeito nos dois modos (pareamento real)
+    duas_ordens: bool = True      # cadeias pares na Ordem B, ímpares na Ordem A (metade em cada, por modo)
     p_falha_execucao: float = 0.03
     p_agente_roda_testes: float = 0.6
     versao: str = "sintetico"
@@ -78,17 +85,19 @@ def gerar(
 
     for cadeia in range(1, n_cadeias + 1):
         u_comum = rng.normal(0, par.sd_cadeia)
+        ordem = ORDENS["B" if par.duas_ordens and cadeia % 2 == 0 else "A"]
         for modo in ("incremental", "regenerado"):
             u = u_comum if par.cadeia_compartilhada else rng.normal(0, par.sd_cadeia)
             viol = 0
             ccn = 6
             for passo in range(0, passos + 1):
-                tipo = "semente" if passo == 0 else TIPO_DO_PEDIDO[passo]
+                pedido = 0 if passo == 0 else ordem[passo - 1]
+                tipo = "semente" if passo == 0 else TIPO_DO_PEDIDO[pedido]
                 tens = 1 if tipo == "tensiona" else 0
                 relogio += int(rng.integers(120, 900))
                 linha = dict.fromkeys(NOMES)
                 linha.update(
-                    chain_id=cadeia, mode=modo, step=passo, request_id=f"P{passo}",
+                    chain_id=cadeia, mode=modo, step=passo, request_id=f"P{pedido}",
                     request_type=tipo,
                     timestamp=(inicio + pd.Timedelta(seconds=relogio)).strftime("%Y-%m-%dT%H:%M:%SZ"),
                     tool_version=par.versao, model_id=par.modelo,

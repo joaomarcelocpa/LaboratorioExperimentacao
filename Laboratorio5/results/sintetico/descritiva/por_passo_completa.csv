@@ -1,299 +1,299 @@
 mode,step,metrica,n,media,dp,mediana,minimo,maximo,unidade
 incremental,0,taxa_regressao,12,0.0,0.0,0.0,0.0,0.0,% da suíte de regressão falhando
-incremental,1,taxa_regressao,12,0.5434782608695652,0.9831891671014031,0.0,0.0,2.1739130434782608,% da suíte de regressão falhando
-incremental,2,taxa_regressao,12,1.4423076923076923,1.665433468816228,0.9615384615384616,0.0,3.8461538461538463,% da suíte de regressão falhando
-incremental,3,taxa_regressao,12,1.5804597701149425,2.377507532590429,0.0,0.0,6.896551724137931,% da suíte de regressão falhando
-incremental,4,taxa_regressao,12,0.9114583333333334,1.0446217553461272,0.78125,0.0,3.125,% da suíte de regressão falhando
-incremental,5,taxa_regressao,12,1.7857142857142858,2.1211016845533863,1.4285714285714286,0.0,7.142857142857143,% da suíte de regressão falhando
-incremental,6,taxa_regressao,12,1.5350877192982457,1.6675058745076943,1.3157894736842106,0.0,5.2631578947368425,% da suíte de regressão falhando
-incremental,7,taxa_regressao,12,1.2195121951219512,2.1440221292476402,0.0,0.0,7.317073170731708,% da suíte de regressão falhando
-incremental,8,taxa_regressao,12,2.4621212121212124,2.211644727731599,1.7045454545454546,0.0,6.818181818181818,% da suíte de regressão falhando
-incremental,9,taxa_regressao,12,2.9255319148936167,2.318563267840784,2.127659574468085,0.0,8.51063829787234,% da suíte de regressão falhando
-incremental,10,taxa_regressao,12,4.833333333333333,3.9504506839170395,3.0,1.0,13.0,% da suíte de regressão falhando
+incremental,1,taxa_regressao,12,0.5434782608695652,1.3512642619740458,0.0,0.0,4.3478260869565215,% da suíte de regressão falhando
+incremental,2,taxa_regressao,12,0.4807692307692308,0.8697442632050874,0.0,0.0,1.9230769230769231,% da suíte de regressão falhando
+incremental,3,taxa_regressao,12,0.8620689655172414,1.1624135559711068,0.0,0.0,3.4482758620689653,% da suíte de regressão falhando
+incremental,4,taxa_regressao,12,1.171875,1.3531646934131853,1.5625,0.0,4.6875,% da suíte de regressão falhando
+incremental,5,taxa_regressao,12,2.380952380952381,1.8609684207969417,1.4285714285714286,0.0,5.714285714285714,% da suíte de regressão falhando
+incremental,6,taxa_regressao,12,2.192982456140351,1.51934281365691,1.3157894736842106,0.0,5.2631578947368425,% da suíte de regressão falhando
+incremental,7,taxa_regressao,12,1.9308943089430894,1.6816516693932304,1.2195121951219512,0.0,6.097560975609756,% da suíte de regressão falhando
+incremental,8,taxa_regressao,12,1.609848484848485,2.2445742522255903,1.1363636363636365,0.0,7.954545454545454,% da suíte de regressão falhando
+incremental,9,taxa_regressao,12,5.141843971631206,2.5593628403073874,4.787234042553191,2.127659574468085,9.574468085106384,% da suíte de regressão falhando
+incremental,10,taxa_regressao,12,4.666666666666667,3.749747466244368,4.0,1.0,15.0,% da suíte de regressão falhando
 regenerado,0,taxa_regressao,12,0.0,0.0,0.0,0.0,0.0,% da suíte de regressão falhando
 regenerado,1,taxa_regressao,12,0.36231884057971014,0.8461945045233945,0.0,0.0,2.1739130434782608,% da suíte de regressão falhando
-regenerado,2,taxa_regressao,12,0.6410256410256411,1.2525748986133263,0.0,0.0,3.8461538461538463,% da suíte de regressão falhando
-regenerado,3,taxa_regressao,12,1.0057471264367817,1.152686074864692,0.8620689655172413,0.0,3.4482758620689653,% da suíte de regressão falhando
-regenerado,4,taxa_regressao,12,0.9114583333333334,1.239002282966811,0.0,0.0,3.125,% da suíte de regressão falhando
-regenerado,5,taxa_regressao,12,0.4761904761904762,0.7033799484533299,0.0,0.0,1.4285714285714286,% da suíte de regressão falhando
-regenerado,6,taxa_regressao,12,0.8771929824561404,1.4119562368122627,0.0,0.0,3.9473684210526314,% da suíte de regressão falhando
-regenerado,7,taxa_regressao,12,0.9146341463414634,1.056128541200535,1.2195121951219512,0.0,3.658536585365854,% da suíte de regressão falhando
-regenerado,8,taxa_regressao,12,0.662878787878788,0.5851461938004968,1.1363636363636365,0.0,1.1363636363636365,% da suíte de regressão falhando
-regenerado,9,taxa_regressao,12,0.7978723404255318,0.9213036210472753,1.0638297872340425,0.0,3.1914893617021276,% da suíte de regressão falhando
-regenerado,10,taxa_regressao,12,0.8333333333333334,0.7177405625652734,1.0,0.0,2.0,% da suíte de regressão falhando
+regenerado,2,taxa_regressao,12,0.4807692307692308,0.8697442632050874,0.0,0.0,1.9230769230769231,% da suíte de regressão falhando
+regenerado,3,taxa_regressao,12,1.2931034482758619,1.0716923457035534,1.7241379310344827,0.0,3.4482758620689653,% da suíte de regressão falhando
+regenerado,4,taxa_regressao,12,1.4322916666666667,2.1546162014100765,0.0,0.0,6.25,% da suíte de regressão falhando
+regenerado,5,taxa_regressao,12,1.1904761904761905,1.339195523658703,1.4285714285714286,0.0,4.285714285714286,% da suíte de regressão falhando
+regenerado,6,taxa_regressao,12,0.7675438596491229,1.043370343550999,0.0,0.0,2.6315789473684212,% da suíte de regressão falhando
+regenerado,7,taxa_regressao,12,0.6097560975609756,0.9728341892895921,0.0,0.0,2.4390243902439024,% da suíte de regressão falhando
+regenerado,8,taxa_regressao,12,0.7575757575757577,0.8846578910926397,0.5681818181818182,0.0,2.272727272727273,% da suíte de regressão falhando
+regenerado,9,taxa_regressao,12,0.975177304964539,0.9578049333814042,1.0638297872340425,0.0,2.127659574468085,% da suíte de regressão falhando
+regenerado,10,taxa_regressao,11,0.8181818181818182,1.0787197799411874,0.0,0.0,3.0,% da suíte de regressão falhando
 incremental,0,arch_violations,12,0.0,0.0,0.0,0.0,0.0,violações ArchUnit (contagem)
-incremental,1,arch_violations,12,0.4166666666666667,0.5149286505444373,0.0,0.0,1.0,violações ArchUnit (contagem)
-incremental,2,arch_violations,12,0.5833333333333334,0.6685579234215215,0.5,0.0,2.0,violações ArchUnit (contagem)
-incremental,3,arch_violations,12,1.1666666666666667,1.1146408580454255,1.0,0.0,4.0,violações ArchUnit (contagem)
-incremental,4,arch_violations,12,1.3333333333333333,1.2309149097933272,1.0,0.0,4.0,violações ArchUnit (contagem)
-incremental,5,arch_violations,12,1.5833333333333333,1.164500152881315,1.5,0.0,4.0,violações ArchUnit (contagem)
-incremental,6,arch_violations,12,2.3333333333333335,1.4354811251305468,2.0,0.0,4.0,violações ArchUnit (contagem)
-incremental,7,arch_violations,12,2.5833333333333335,1.5050420310248864,2.5,0.0,5.0,violações ArchUnit (contagem)
-incremental,8,arch_violations,12,3.3333333333333335,1.6143297699232972,3.5,0.0,6.0,violações ArchUnit (contagem)
-incremental,9,arch_violations,12,3.4166666666666665,1.6764862244009227,3.5,0.0,6.0,violações ArchUnit (contagem)
-incremental,10,arch_violations,12,3.9166666666666665,1.9752253419585197,4.0,0.0,7.0,violações ArchUnit (contagem)
+incremental,1,arch_violations,12,0.08333333333333333,0.2886751345948129,0.0,0.0,1.0,violações ArchUnit (contagem)
+incremental,2,arch_violations,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,violações ArchUnit (contagem)
+incremental,3,arch_violations,12,0.5,0.5222329678670935,0.5,0.0,1.0,violações ArchUnit (contagem)
+incremental,4,arch_violations,12,1.0,0.7385489458759964,1.0,0.0,2.0,violações ArchUnit (contagem)
+incremental,5,arch_violations,12,1.75,1.0552897060221726,2.0,0.0,3.0,violações ArchUnit (contagem)
+incremental,6,arch_violations,12,2.3333333333333335,1.5569978883230458,3.0,0.0,5.0,violações ArchUnit (contagem)
+incremental,7,arch_violations,12,2.4166666666666665,1.4433756729740643,3.0,0.0,5.0,violações ArchUnit (contagem)
+incremental,8,arch_violations,12,2.6666666666666665,1.775250729197189,3.0,0.0,6.0,violações ArchUnit (contagem)
+incremental,9,arch_violations,12,3.1666666666666665,1.5275252316519468,3.0,1.0,6.0,violações ArchUnit (contagem)
+incremental,10,arch_violations,12,3.6666666666666665,1.5569978883230462,3.5,2.0,7.0,violações ArchUnit (contagem)
 regenerado,0,arch_violations,12,0.0,0.0,0.0,0.0,0.0,violações ArchUnit (contagem)
-regenerado,1,arch_violations,12,0.25,0.4522670168666455,0.0,0.0,1.0,violações ArchUnit (contagem)
-regenerado,2,arch_violations,12,0.25,0.4522670168666455,0.0,0.0,1.0,violações ArchUnit (contagem)
-regenerado,3,arch_violations,12,0.4166666666666667,0.6685579234215214,0.0,0.0,2.0,violações ArchUnit (contagem)
-regenerado,4,arch_violations,12,0.5833333333333334,0.6685579234215215,0.5,0.0,2.0,violações ArchUnit (contagem)
-regenerado,5,arch_violations,12,0.25,0.4522670168666455,0.0,0.0,1.0,violações ArchUnit (contagem)
-regenerado,6,arch_violations,12,1.1666666666666667,0.8348471099367218,1.0,0.0,2.0,violações ArchUnit (contagem)
-regenerado,7,arch_violations,12,0.6666666666666666,0.6513389472789296,1.0,0.0,2.0,violações ArchUnit (contagem)
-regenerado,8,arch_violations,12,0.5833333333333334,0.996204919895622,0.0,0.0,3.0,violações ArchUnit (contagem)
-regenerado,9,arch_violations,12,0.9166666666666666,0.90033663737852,1.0,0.0,2.0,violações ArchUnit (contagem)
-regenerado,10,arch_violations,12,1.0833333333333333,1.378954368902449,1.0,0.0,5.0,violações ArchUnit (contagem)
+regenerado,1,arch_violations,12,0.4166666666666667,0.5149286505444373,0.0,0.0,1.0,violações ArchUnit (contagem)
+regenerado,2,arch_violations,12,0.4166666666666667,0.5149286505444373,0.0,0.0,1.0,violações ArchUnit (contagem)
+regenerado,3,arch_violations,12,0.6666666666666666,0.8876253645985945,0.0,0.0,2.0,violações ArchUnit (contagem)
+regenerado,4,arch_violations,12,0.5833333333333334,0.5149286505444373,1.0,0.0,1.0,violações ArchUnit (contagem)
+regenerado,5,arch_violations,12,0.8333333333333334,0.9374368665610922,1.0,0.0,3.0,violações ArchUnit (contagem)
+regenerado,6,arch_violations,12,1.0833333333333333,0.7929614610987591,1.0,0.0,3.0,violações ArchUnit (contagem)
+regenerado,7,arch_violations,12,0.4166666666666667,0.6685579234215215,0.0,0.0,2.0,violações ArchUnit (contagem)
+regenerado,8,arch_violations,12,0.75,0.4522670168666455,1.0,0.0,1.0,violações ArchUnit (contagem)
+regenerado,9,arch_violations,12,1.0,0.8528028654224418,1.0,0.0,2.0,violações ArchUnit (contagem)
+regenerado,10,arch_violations,11,1.1818181818181819,0.8738628975053029,1.0,0.0,3.0,violações ArchUnit (contagem)
 incremental,0,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
 incremental,1,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
 incremental,2,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
 incremental,3,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-incremental,4,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
-incremental,5,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-incremental,6,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-incremental,7,cycles,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,ciclos entre pacotes (contagem)
-incremental,8,cycles,12,0.25,0.45226701686664544,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+incremental,4,cycles,12,0.3333333333333333,0.8876253645985945,0.0,0.0,3.0,ciclos entre pacotes (contagem)
+incremental,5,cycles,12,0.3333333333333333,0.6513389472789296,0.0,0.0,2.0,ciclos entre pacotes (contagem)
+incremental,6,cycles,12,0.3333333333333333,0.4923659639173309,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+incremental,7,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
+incremental,8,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
 incremental,9,cycles,12,0.4166666666666667,0.6685579234215215,0.0,0.0,2.0,ciclos entre pacotes (contagem)
-incremental,10,cycles,12,0.8333333333333334,0.8348471099367218,1.0,0.0,2.0,ciclos entre pacotes (contagem)
+incremental,10,cycles,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,ciclos entre pacotes (contagem)
 regenerado,0,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-regenerado,1,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
-regenerado,2,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-regenerado,3,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-regenerado,4,cycles,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+regenerado,1,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
+regenerado,2,cycles,12,0.08333333333333333,0.2886751345948129,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+regenerado,3,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+regenerado,4,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
 regenerado,5,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
-regenerado,6,cycles,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,ciclos entre pacotes (contagem)
-regenerado,7,cycles,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,ciclos entre pacotes (contagem)
+regenerado,6,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
+regenerado,7,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
 regenerado,8,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-regenerado,9,cycles,12,0.0,0.0,0.0,0.0,0.0,ciclos entre pacotes (contagem)
-regenerado,10,cycles,12,0.25,0.8660254037844386,0.0,0.0,3.0,ciclos entre pacotes (contagem)
+regenerado,9,cycles,12,0.25,0.621581560508061,0.0,0.0,2.0,ciclos entre pacotes (contagem)
+regenerado,10,cycles,11,0.36363636363636365,0.9244162777371753,0.0,0.0,3.0,ciclos entre pacotes (contagem)
 incremental,0,files_touched,12,0.0,0.0,0.0,0.0,0.0,arquivos no diff do passo
-incremental,1,files_touched,12,3.1666666666666665,1.337115846843043,2.5,2.0,5.0,arquivos no diff do passo
-incremental,2,files_touched,12,3.0833333333333335,0.996204919895622,3.0,2.0,5.0,arquivos no diff do passo
-incremental,3,files_touched,12,4.333333333333333,1.3026778945578592,4.0,3.0,7.0,arquivos no diff do passo
-incremental,4,files_touched,12,3.75,1.1381803659589922,3.5,2.0,6.0,arquivos no diff do passo
-incremental,5,files_touched,12,4.333333333333333,1.669694219873444,4.0,2.0,8.0,arquivos no diff do passo
-incremental,6,files_touched,12,3.5833333333333335,1.1645001528813148,4.0,2.0,5.0,arquivos no diff do passo
-incremental,7,files_touched,12,5.25,1.712255291076124,5.0,3.0,9.0,arquivos no diff do passo
-incremental,8,files_touched,12,6.083333333333333,1.6764862244009227,6.0,3.0,9.0,arquivos no diff do passo
-incremental,9,files_touched,12,7.083333333333333,2.539088359425425,7.0,3.0,12.0,arquivos no diff do passo
-incremental,10,files_touched,12,5.75,1.9598237397554636,5.5,3.0,9.0,arquivos no diff do passo
+incremental,1,files_touched,12,3.0833333333333335,0.90033663737852,3.0,2.0,5.0,arquivos no diff do passo
+incremental,2,files_touched,12,3.75,1.3568010505999362,4.0,2.0,6.0,arquivos no diff do passo
+incremental,3,files_touched,12,3.9166666666666665,0.9962049198956219,4.0,3.0,6.0,arquivos no diff do passo
+incremental,4,files_touched,12,4.333333333333333,1.6143297699232975,4.5,2.0,7.0,arquivos no diff do passo
+incremental,5,files_touched,12,3.6666666666666665,1.1547005383792515,4.0,2.0,5.0,arquivos no diff do passo
+incremental,6,files_touched,12,5.166666666666667,1.5859229221975182,5.0,3.0,8.0,arquivos no diff do passo
+incremental,7,files_touched,12,4.333333333333333,1.3706888336846839,4.5,2.0,6.0,arquivos no diff do passo
+incremental,8,files_touched,12,5.75,2.8959218974902683,5.5,2.0,13.0,arquivos no diff do passo
+incremental,9,files_touched,12,5.75,2.8324419275118906,5.0,2.0,10.0,arquivos no diff do passo
+incremental,10,files_touched,12,5.083333333333333,1.1645001528813153,5.0,3.0,7.0,arquivos no diff do passo
 regenerado,0,files_touched,12,0.0,0.0,0.0,0.0,0.0,arquivos no diff do passo
-regenerado,1,files_touched,12,10.583333333333334,1.6213537179739275,10.0,9.0,13.0,arquivos no diff do passo
-regenerado,2,files_touched,12,10.833333333333334,1.5275252316519465,10.5,9.0,14.0,arquivos no diff do passo
-regenerado,3,files_touched,12,9.666666666666666,1.497472618255253,9.5,8.0,13.0,arquivos no diff do passo
-regenerado,4,files_touched,12,10.5,1.8829377433825436,10.5,8.0,15.0,arquivos no diff do passo
-regenerado,5,files_touched,12,10.666666666666666,1.3026778945578592,10.5,8.0,13.0,arquivos no diff do passo
-regenerado,6,files_touched,12,11.583333333333334,1.9286515936521478,11.5,8.0,15.0,arquivos no diff do passo
-regenerado,7,files_touched,12,11.5,1.623688281771977,11.0,10.0,15.0,arquivos no diff do passo
-regenerado,8,files_touched,12,12.583333333333334,1.6764862244009222,12.5,10.0,15.0,arquivos no diff do passo
-regenerado,9,files_touched,12,11.916666666666666,1.6213537179739268,13.0,9.0,14.0,arquivos no diff do passo
-regenerado,10,files_touched,12,11.5,1.834021909257456,12.0,8.0,14.0,arquivos no diff do passo
+regenerado,1,files_touched,12,9.75,1.3568010505999362,10.0,8.0,12.0,arquivos no diff do passo
+regenerado,2,files_touched,12,9.5,1.5075567228888176,9.0,8.0,13.0,arquivos no diff do passo
+regenerado,3,files_touched,12,10.75,1.7645499039801522,11.0,8.0,15.0,arquivos no diff do passo
+regenerado,4,files_touched,12,11.083333333333334,1.8319554050414562,10.0,9.0,14.0,arquivos no diff do passo
+regenerado,5,files_touched,12,10.25,1.4847711791873706,10.0,8.0,13.0,arquivos no diff do passo
+regenerado,6,files_touched,12,11.75,2.179449471770337,12.0,8.0,15.0,arquivos no diff do passo
+regenerado,7,files_touched,12,12.333333333333334,1.7232808737106582,12.0,10.0,15.0,arquivos no diff do passo
+regenerado,8,files_touched,12,11.0,1.9540168418367883,10.0,9.0,14.0,arquivos no diff do passo
+regenerado,9,files_touched,12,12.5,1.9306145983268455,13.0,10.0,16.0,arquivos no diff do passo
+regenerado,10,files_touched,11,12.181818181818182,1.6011359603844901,12.0,10.0,15.0,arquivos no diff do passo
 incremental,0,modules_touched,12,0.0,0.0,0.0,0.0,0.0,módulos no diff do passo
-incremental,1,modules_touched,12,2.25,0.8660254037844386,2.0,1.0,4.0,módulos no diff do passo
-incremental,2,modules_touched,12,2.1666666666666665,0.5773502691896257,2.0,1.0,3.0,módulos no diff do passo
-incremental,3,modules_touched,12,2.25,0.8660254037844386,2.0,1.0,4.0,módulos no diff do passo
-incremental,4,modules_touched,12,2.3333333333333335,0.7784989441615229,2.0,1.0,4.0,módulos no diff do passo
-incremental,5,modules_touched,12,1.8333333333333333,0.7177405625652734,2.0,1.0,3.0,módulos no diff do passo
-incremental,6,modules_touched,12,2.25,0.753778361444409,2.0,1.0,3.0,módulos no diff do passo
-incremental,7,modules_touched,12,2.3333333333333335,0.7784989441615229,2.0,1.0,4.0,módulos no diff do passo
-incremental,8,modules_touched,12,2.5833333333333335,0.7929614610987591,2.0,2.0,4.0,módulos no diff do passo
-incremental,9,modules_touched,12,2.8333333333333335,1.1146408580454257,3.0,1.0,5.0,módulos no diff do passo
-incremental,10,modules_touched,12,2.4166666666666665,0.7929614610987591,2.0,1.0,4.0,módulos no diff do passo
+incremental,1,modules_touched,12,2.3333333333333335,0.8876253645985945,2.0,1.0,4.0,módulos no diff do passo
+incremental,2,modules_touched,12,2.3333333333333335,0.6513389472789296,2.0,1.0,3.0,módulos no diff do passo
+incremental,3,modules_touched,12,2.4166666666666665,0.9962049198956219,3.0,1.0,4.0,módulos no diff do passo
+incremental,4,modules_touched,12,2.0833333333333335,0.7929614610987591,2.0,1.0,4.0,módulos no diff do passo
+incremental,5,modules_touched,12,2.3333333333333335,0.9847319278346618,2.0,1.0,4.0,módulos no diff do passo
+incremental,6,modules_touched,12,2.25,0.9653072991634228,2.0,1.0,4.0,módulos no diff do passo
+incremental,7,modules_touched,12,2.0,0.8528028654224418,2.0,1.0,4.0,módulos no diff do passo
+incremental,8,modules_touched,12,2.5,0.674199862463242,3.0,1.0,3.0,módulos no diff do passo
+incremental,9,modules_touched,12,2.8333333333333335,0.9374368665610922,3.0,1.0,4.0,módulos no diff do passo
+incremental,10,modules_touched,12,2.6666666666666665,0.8876253645985945,3.0,1.0,4.0,módulos no diff do passo
 regenerado,0,modules_touched,12,0.0,0.0,0.0,0.0,0.0,módulos no diff do passo
-regenerado,1,modules_touched,12,2.5833333333333335,1.2401124093721456,2.5,1.0,4.0,módulos no diff do passo
-regenerado,2,modules_touched,12,2.3333333333333335,1.0730867399773196,2.0,1.0,4.0,módulos no diff do passo
-regenerado,3,modules_touched,12,2.6666666666666665,0.8876253645985945,3.0,1.0,4.0,módulos no diff do passo
-regenerado,4,modules_touched,12,2.4166666666666665,0.90033663737852,2.5,1.0,4.0,módulos no diff do passo
-regenerado,5,modules_touched,12,2.25,1.1381803659589922,2.0,1.0,4.0,módulos no diff do passo
-regenerado,6,modules_touched,12,2.0833333333333335,0.7929614610987591,2.0,1.0,3.0,módulos no diff do passo
-regenerado,7,modules_touched,12,2.25,1.1381803659589922,2.0,1.0,4.0,módulos no diff do passo
-regenerado,8,modules_touched,12,2.6666666666666665,0.9847319278346618,3.0,1.0,4.0,módulos no diff do passo
-regenerado,9,modules_touched,12,2.0,0.8528028654224418,2.0,1.0,3.0,módulos no diff do passo
-regenerado,10,modules_touched,12,2.1666666666666665,0.9374368665610923,2.0,1.0,4.0,módulos no diff do passo
+regenerado,1,modules_touched,12,2.3333333333333335,0.7784989441615229,2.5,1.0,3.0,módulos no diff do passo
+regenerado,2,modules_touched,12,1.4166666666666667,0.6685579234215215,1.0,1.0,3.0,módulos no diff do passo
+regenerado,3,modules_touched,12,2.4166666666666665,0.6685579234215214,2.5,1.0,3.0,módulos no diff do passo
+regenerado,4,modules_touched,12,2.1666666666666665,0.8348471099367218,2.0,1.0,3.0,módulos no diff do passo
+regenerado,5,modules_touched,12,1.9166666666666667,0.9962049198956219,2.0,1.0,4.0,módulos no diff do passo
+regenerado,6,modules_touched,12,2.3333333333333335,0.8876253645985945,2.0,1.0,4.0,módulos no diff do passo
+regenerado,7,modules_touched,12,2.25,0.7537783614444091,2.0,1.0,3.0,módulos no diff do passo
+regenerado,8,modules_touched,12,2.5833333333333335,1.0836246694508318,2.5,1.0,4.0,módulos no diff do passo
+regenerado,9,modules_touched,12,2.5833333333333335,1.378954368902449,2.0,1.0,5.0,módulos no diff do passo
+regenerado,10,modules_touched,11,2.3636363636363638,0.674199862463242,2.0,1.0,3.0,módulos no diff do passo
 incremental,0,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
-incremental,1,doc_drift,12,0.25,0.4522670168666455,0.0,0.0,1.0,deriva documento × código (contagem)
-incremental,2,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
-incremental,3,doc_drift,12,0.6666666666666666,0.8876253645985944,0.5,0.0,3.0,deriva documento × código (contagem)
-incremental,4,doc_drift,12,0.3333333333333333,0.49236596391733095,0.0,0.0,1.0,deriva documento × código (contagem)
-incremental,5,doc_drift,12,0.4166666666666667,0.7929614610987591,0.0,0.0,2.0,deriva documento × código (contagem)
-incremental,6,doc_drift,12,0.5833333333333334,0.9962049198956219,0.0,0.0,3.0,deriva documento × código (contagem)
-incremental,7,doc_drift,12,0.5833333333333334,0.90033663737852,0.0,0.0,2.0,deriva documento × código (contagem)
-incremental,8,doc_drift,12,0.6666666666666666,0.778498944161523,0.5,0.0,2.0,deriva documento × código (contagem)
-incremental,9,doc_drift,12,0.75,0.8660254037844386,0.5,0.0,2.0,deriva documento × código (contagem)
-incremental,10,doc_drift,12,0.4166666666666667,0.5149286505444373,0.0,0.0,1.0,deriva documento × código (contagem)
+incremental,1,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+incremental,2,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
+incremental,3,doc_drift,12,0.3333333333333333,0.778498944161523,0.0,0.0,2.0,deriva documento × código (contagem)
+incremental,4,doc_drift,12,0.3333333333333333,0.4923659639173309,0.0,0.0,1.0,deriva documento × código (contagem)
+incremental,5,doc_drift,12,0.4166666666666667,0.5149286505444373,0.0,0.0,1.0,deriva documento × código (contagem)
+incremental,6,doc_drift,12,0.25,0.4522670168666455,0.0,0.0,1.0,deriva documento × código (contagem)
+incremental,7,doc_drift,12,0.5833333333333334,0.7929614610987591,0.0,0.0,2.0,deriva documento × código (contagem)
+incremental,8,doc_drift,12,0.8333333333333334,1.1146408580454255,0.0,0.0,3.0,deriva documento × código (contagem)
+incremental,9,doc_drift,12,0.75,0.7537783614444091,1.0,0.0,2.0,deriva documento × código (contagem)
+incremental,10,doc_drift,12,0.8333333333333334,0.7177405625652734,1.0,0.0,2.0,deriva documento × código (contagem)
 regenerado,0,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
-regenerado,1,doc_drift,12,0.3333333333333333,0.49236596391733095,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,2,doc_drift,12,0.16666666666666666,0.38924947208076144,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,3,doc_drift,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,4,doc_drift,12,0.16666666666666666,0.3892494720807615,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,5,doc_drift,12,0.16666666666666666,0.38924947208076144,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,6,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
-regenerado,7,doc_drift,12,0.16666666666666666,0.38924947208076144,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,8,doc_drift,12,0.25,0.45226701686664544,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,9,doc_drift,12,0.25,0.45226701686664544,0.0,0.0,1.0,deriva documento × código (contagem)
-regenerado,10,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,1,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,2,doc_drift,12,0.25,0.45226701686664544,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,3,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,4,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
+regenerado,5,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,6,doc_drift,12,0.16666666666666666,0.5773502691896257,0.0,0.0,2.0,deriva documento × código (contagem)
+regenerado,7,doc_drift,12,0.3333333333333333,0.4923659639173309,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,8,doc_drift,12,0.0,0.0,0.0,0.0,0.0,deriva documento × código (contagem)
+regenerado,9,doc_drift,12,0.08333333333333333,0.28867513459481287,0.0,0.0,1.0,deriva documento × código (contagem)
+regenerado,10,doc_drift,11,0.09090909090909091,0.30151134457776363,0.0,0.0,1.0,deriva documento × código (contagem)
 incremental,0,max_ccn,12,6.0,0.0,6.0,6.0,6.0,maior complexidade ciclomática
-incremental,1,max_ccn,12,6.25,0.9653072991634227,6.0,5.0,8.0,maior complexidade ciclomática
-incremental,2,max_ccn,12,6.333333333333333,1.3706888336846836,6.0,4.0,8.0,maior complexidade ciclomática
-incremental,3,max_ccn,12,7.416666666666667,1.0836246694508316,7.0,6.0,10.0,maior complexidade ciclomática
-incremental,4,max_ccn,12,8.416666666666666,1.5642792899510296,8.5,6.0,11.0,maior complexidade ciclomática
-incremental,5,max_ccn,12,9.25,1.864744681524183,9.0,6.0,12.0,maior complexidade ciclomática
-incremental,6,max_ccn,12,9.666666666666666,2.424621182533032,10.0,5.0,14.0,maior complexidade ciclomática
-incremental,7,max_ccn,12,10.416666666666666,2.1514618004482156,10.5,6.0,13.0,maior complexidade ciclomática
-incremental,8,max_ccn,12,10.666666666666666,2.3484359721209165,11.0,5.0,13.0,maior complexidade ciclomática
-incremental,9,max_ccn,12,11.916666666666666,2.7122058561364044,12.0,5.0,15.0,maior complexidade ciclomática
-incremental,10,max_ccn,12,12.0,2.860387767736777,12.0,5.0,16.0,maior complexidade ciclomática
+incremental,1,max_ccn,12,6.666666666666667,1.0730867399773196,7.0,5.0,8.0,maior complexidade ciclomática
+incremental,2,max_ccn,12,6.916666666666667,1.6764862244009227,7.0,4.0,9.0,maior complexidade ciclomática
+incremental,3,max_ccn,12,7.833333333333333,2.2087978356535665,8.0,4.0,11.0,maior complexidade ciclomática
+incremental,4,max_ccn,12,8.5,2.23606797749979,8.5,5.0,12.0,maior complexidade ciclomática
+incremental,5,max_ccn,12,8.583333333333334,2.712205856136405,9.0,4.0,14.0,maior complexidade ciclomática
+incremental,6,max_ccn,12,8.25,3.194455423784382,8.0,4.0,15.0,maior complexidade ciclomática
+incremental,7,max_ccn,12,8.25,3.4145410978769766,8.5,4.0,15.0,maior complexidade ciclomática
+incremental,8,max_ccn,12,9.0,3.7172815091383407,9.0,5.0,17.0,maior complexidade ciclomática
+incremental,9,max_ccn,12,10.0,3.884701930767545,9.5,4.0,19.0,maior complexidade ciclomática
+incremental,10,max_ccn,12,10.333333333333334,3.7979260688226173,10.5,5.0,18.0,maior complexidade ciclomática
 regenerado,0,max_ccn,12,6.0,0.0,6.0,6.0,6.0,maior complexidade ciclomática
-regenerado,1,max_ccn,12,7.25,1.1381803659589922,7.5,5.0,9.0,maior complexidade ciclomática
-regenerado,2,max_ccn,12,8.25,1.9128750375000738,8.0,6.0,13.0,maior complexidade ciclomática
-regenerado,3,max_ccn,12,8.416666666666666,1.6213537179739277,8.5,6.0,11.0,maior complexidade ciclomática
-regenerado,4,max_ccn,12,7.666666666666667,1.6143297699232972,7.5,5.0,10.0,maior complexidade ciclomática
-regenerado,5,max_ccn,12,8.0,2.0,7.5,6.0,12.0,maior complexidade ciclomática
-regenerado,6,max_ccn,12,8.333333333333334,1.435481125130547,8.0,7.0,11.0,maior complexidade ciclomática
-regenerado,7,max_ccn,12,8.583333333333334,1.7816403745544227,8.5,6.0,11.0,maior complexidade ciclomática
-regenerado,8,max_ccn,12,8.583333333333334,1.6764862244009224,8.5,6.0,11.0,maior complexidade ciclomática
-regenerado,9,max_ccn,12,8.5,1.6787441193290353,9.0,5.0,11.0,maior complexidade ciclomática
-regenerado,10,max_ccn,12,9.5,1.8829377433825438,9.0,6.0,13.0,maior complexidade ciclomática
+regenerado,1,max_ccn,12,7.25,2.179449471770337,8.0,4.0,11.0,maior complexidade ciclomática
+regenerado,2,max_ccn,12,7.5,1.314257481345542,7.5,5.0,10.0,maior complexidade ciclomática
+regenerado,3,max_ccn,12,7.833333333333333,1.8504708655481241,8.5,5.0,11.0,maior complexidade ciclomática
+regenerado,4,max_ccn,12,9.0,1.4770978917519924,9.0,7.0,11.0,maior complexidade ciclomática
+regenerado,5,max_ccn,12,8.75,1.3568010505999362,8.5,7.0,11.0,maior complexidade ciclomática
+regenerado,6,max_ccn,12,9.0,1.651445647689541,9.0,6.0,11.0,maior complexidade ciclomática
+regenerado,7,max_ccn,12,8.75,1.055289706022173,9.0,7.0,10.0,maior complexidade ciclomática
+regenerado,8,max_ccn,12,9.583333333333334,2.0652243256245835,9.5,5.0,13.0,maior complexidade ciclomática
+regenerado,9,max_ccn,12,8.916666666666666,1.5642792899510294,9.0,6.0,12.0,maior complexidade ciclomática
+regenerado,10,max_ccn,11,9.090909090909092,1.7580981459830651,9.0,6.0,12.0,maior complexidade ciclomática
 incremental,0,dup_pct,12,1.0,0.0,1.0,1.0,1.0,% de linhas duplicadas
-incremental,1,dup_pct,12,1.615,0.28253720591680087,1.55,1.36,2.43,% de linhas duplicadas
-incremental,2,dup_pct,12,1.9725,0.23281381558505654,2.01,1.63,2.34,% de linhas duplicadas
-incremental,3,dup_pct,12,2.1300000000000003,0.12784934315613264,2.1550000000000002,1.91,2.35,% de linhas duplicadas
-incremental,4,dup_pct,12,2.3925,0.1299737735782947,2.39,2.2,2.71,% de linhas duplicadas
-incremental,5,dup_pct,12,2.703333333333333,0.18152552203895495,2.66,2.52,3.15,% de linhas duplicadas
-incremental,6,dup_pct,12,3.078333333333333,0.2572877177343873,2.9850000000000003,2.83,3.56,% de linhas duplicadas
-incremental,7,dup_pct,12,3.390833333333333,0.18961484087166766,3.385,3.16,3.69,% de linhas duplicadas
-incremental,8,dup_pct,12,3.7566666666666664,0.26537566283335495,3.7350000000000003,3.44,4.33,% de linhas duplicadas
-incremental,9,dup_pct,12,3.966666666666667,0.19288872596930204,3.91,3.74,4.37,% de linhas duplicadas
-incremental,10,dup_pct,12,4.3875,0.2481980514171547,4.27,4.07,4.83,% de linhas duplicadas
+incremental,1,dup_pct,12,1.5525,0.24015619917045655,1.5150000000000001,1.3,2.13,% de linhas duplicadas
+incremental,2,dup_pct,12,1.9333333333333333,0.1722753257979444,1.9249999999999998,1.64,2.24,% de linhas duplicadas
+incremental,3,dup_pct,12,2.2291666666666665,0.2512679964910097,2.175,1.91,2.78,% de linhas duplicadas
+incremental,4,dup_pct,12,2.486666666666667,0.21634708365508556,2.4299999999999997,2.21,2.84,% de linhas duplicadas
+incremental,5,dup_pct,12,2.8074999999999997,0.18216501011196104,2.785,2.57,3.17,% de linhas duplicadas
+incremental,6,dup_pct,12,3.1358333333333337,0.21330551428465805,3.175,2.87,3.5,% de linhas duplicadas
+incremental,7,dup_pct,12,3.5825,0.38931466590780917,3.525,3.11,4.27,% de linhas duplicadas
+incremental,8,dup_pct,12,3.8524999999999996,0.35708733334628895,3.715,3.44,4.62,% de linhas duplicadas
+incremental,9,dup_pct,12,4.004166666666666,0.213049645658357,3.965,3.74,4.47,% de linhas duplicadas
+incremental,10,dup_pct,12,4.225,0.13839994745138254,4.22,4.02,4.47,% de linhas duplicadas
 regenerado,0,dup_pct,12,1.0,0.0,1.0,1.0,1.0,% de linhas duplicadas
-regenerado,1,dup_pct,12,1.4316666666666666,0.3073888071935587,1.29,1.12,1.88,% de linhas duplicadas
-regenerado,2,dup_pct,12,1.5958333333333332,0.265482693609321,1.56,1.24,2.05,% de linhas duplicadas
-regenerado,3,dup_pct,12,1.5666666666666667,0.19523102088334096,1.53,1.34,1.92,% de linhas duplicadas
-regenerado,4,dup_pct,12,1.7241666666666668,0.30473411162500136,1.62,1.41,2.34,% de linhas duplicadas
-regenerado,5,dup_pct,12,1.7583333333333335,0.18034478762704073,1.71,1.52,2.22,% de linhas duplicadas
-regenerado,6,dup_pct,12,1.9633333333333332,0.3118954758870155,1.97,1.6,2.65,% de linhas duplicadas
-regenerado,7,dup_pct,12,2.0841666666666665,0.2208025993478969,2.07,1.81,2.61,% de linhas duplicadas
-regenerado,8,dup_pct,12,2.1166666666666667,0.24336031398780378,2.045,1.8,2.56,% de linhas duplicadas
-regenerado,9,dup_pct,12,2.294166666666667,0.2923403475195971,2.235,1.93,2.85,% de linhas duplicadas
-regenerado,10,dup_pct,12,2.32,0.3326204498168501,2.215,2.02,3.2,% de linhas duplicadas
-incremental,0,loc,12,798.8333333333334,129.59645992172173,814.5,602.0,949.0,linhas de código (src/main)
-incremental,1,loc,12,789.1666666666666,40.96524765153405,795.0,711.0,854.0,linhas de código (src/main)
-incremental,2,loc,12,880.25,34.10445185549296,882.0,834.0,937.0,linhas de código (src/main)
-incremental,3,loc,12,998.75,44.57297387431087,1002.0,917.0,1073.0,linhas de código (src/main)
-incremental,4,loc,12,1062.75,43.13851896138553,1054.0,986.0,1140.0,linhas de código (src/main)
-incremental,5,loc,12,1165.0833333333333,33.92895875832682,1181.0,1110.0,1212.0,linhas de código (src/main)
-incremental,6,loc,12,1222.1666666666667,58.98510340961032,1234.5,1117.0,1304.0,linhas de código (src/main)
-incremental,7,loc,12,1337.6666666666667,38.433728873887766,1333.0,1274.0,1409.0,linhas de código (src/main)
-incremental,8,loc,12,1437.0,40.1542480487885,1441.5,1381.0,1509.0,linhas de código (src/main)
-incremental,9,loc,12,1526.1666666666667,44.81443219916252,1534.5,1443.0,1593.0,linhas de código (src/main)
-incremental,10,loc,12,1603.4166666666667,36.57982139559094,1605.0,1541.0,1664.0,linhas de código (src/main)
-regenerado,0,loc,12,815.0833333333334,131.80733758946897,835.5,620.0,995.0,linhas de código (src/main)
-regenerado,1,loc,12,787.4166666666666,27.05703851742338,786.5,731.0,830.0,linhas de código (src/main)
-regenerado,2,loc,12,881.6666666666666,52.051256789181714,891.5,795.0,953.0,linhas de código (src/main)
-regenerado,3,loc,12,972.4166666666666,47.41970885485052,973.5,879.0,1040.0,linhas de código (src/main)
-regenerado,4,loc,12,1040.3333333333333,35.46915006115323,1042.0,990.0,1100.0,linhas de código (src/main)
-regenerado,5,loc,12,1152.5833333333333,33.57070783052429,1151.0,1104.0,1226.0,linhas de código (src/main)
-regenerado,6,loc,12,1261.75,19.554701829390385,1255.5,1236.0,1301.0,linhas de código (src/main)
-regenerado,7,loc,12,1336.25,47.06885671786892,1337.0,1260.0,1405.0,linhas de código (src/main)
-regenerado,8,loc,12,1422.5833333333333,43.32636890421624,1428.0,1347.0,1486.0,linhas de código (src/main)
-regenerado,9,loc,12,1522.1666666666667,53.746599610551854,1532.5,1403.0,1598.0,linhas de código (src/main)
-regenerado,10,loc,12,1595.9166666666667,49.553384130530134,1605.0,1513.0,1676.0,linhas de código (src/main)
-incremental,1,tokens_in,12,128092.58333333333,47604.10266402434,107867.0,85995.0,239713.0,tokens de entrada
-incremental,2,tokens_in,12,198163.33333333334,75256.77872377203,187101.0,60337.0,339573.0,tokens de entrada
-incremental,3,tokens_in,12,169267.58333333334,80652.25660311212,149408.0,81613.0,355712.0,tokens de entrada
-incremental,4,tokens_in,12,202225.66666666666,85712.2485055595,171262.5,98368.0,410010.0,tokens de entrada
-incremental,5,tokens_in,12,154873.08333333334,46937.67600951545,152240.0,76424.0,237071.0,tokens de entrada
-incremental,6,tokens_in,12,151406.41666666666,39787.72455843484,163157.5,70047.0,195164.0,tokens de entrada
-incremental,7,tokens_in,12,162227.58333333334,74215.79378769643,160187.0,89415.0,366933.0,tokens de entrada
-incremental,8,tokens_in,12,181257.08333333334,104511.12043175843,140732.0,84610.0,429624.0,tokens de entrada
-incremental,9,tokens_in,12,185492.66666666666,90306.86794010473,167191.0,84060.0,365434.0,tokens de entrada
-incremental,10,tokens_in,12,189119.58333333334,75722.84197046049,175117.5,81184.0,324313.0,tokens de entrada
-regenerado,1,tokens_in,12,144035.0,41289.116250257444,145382.0,77565.0,234769.0,tokens de entrada
-regenerado,2,tokens_in,12,174456.91666666666,61394.64777006711,161405.0,82719.0,263640.0,tokens de entrada
-regenerado,3,tokens_in,12,186713.83333333334,68964.01348639386,178952.5,81363.0,326912.0,tokens de entrada
-regenerado,4,tokens_in,12,174414.58333333334,115062.45624834155,151430.0,64334.0,498759.0,tokens de entrada
-regenerado,5,tokens_in,12,181451.75,67807.2543345206,177299.0,95474.0,316019.0,tokens de entrada
-regenerado,6,tokens_in,12,138749.0,46742.50710201388,121636.5,85139.0,228465.0,tokens de entrada
-regenerado,7,tokens_in,12,165040.08333333334,67545.62260826291,128004.5,97466.0,285815.0,tokens de entrada
-regenerado,8,tokens_in,12,181909.41666666666,69590.66259787016,172063.0,56348.0,322128.0,tokens de entrada
-regenerado,9,tokens_in,12,157723.33333333334,59641.439505116105,152008.0,73027.0,285030.0,tokens de entrada
-regenerado,10,tokens_in,12,147262.83333333334,53155.41096348489,139459.5,64205.0,249542.0,tokens de entrada
-incremental,1,tokens_out,12,15156.166666666666,7636.11843130852,12892.5,7503.0,29774.0,tokens de saída
-incremental,2,tokens_out,12,13580.083333333334,3292.1507603370596,13318.5,8968.0,22657.0,tokens de saída
-incremental,3,tokens_out,12,12471.166666666666,5183.469807226067,11976.0,3849.0,19672.0,tokens de saída
-incremental,4,tokens_out,12,15805.833333333334,4299.690556166557,15867.5,9065.0,22836.0,tokens de saída
-incremental,5,tokens_out,12,15603.0,4581.038885747126,15619.5,7893.0,23052.0,tokens de saída
-incremental,6,tokens_out,12,18292.333333333332,5637.090857289186,19864.0,7660.0,25508.0,tokens de saída
-incremental,7,tokens_out,12,14574.416666666666,10365.081058827307,12943.0,6041.0,44922.0,tokens de saída
-incremental,8,tokens_out,12,12268.416666666666,4379.37775692835,10597.0,5694.0,20123.0,tokens de saída
-incremental,9,tokens_out,12,14695.916666666666,4166.985011172147,14039.5,8003.0,21080.0,tokens de saída
-incremental,10,tokens_out,12,12831.416666666666,3530.763771566438,11846.5,8756.0,18484.0,tokens de saída
-regenerado,1,tokens_out,12,12178.583333333334,4015.7532851221945,11857.0,5035.0,17057.0,tokens de saída
-regenerado,2,tokens_out,12,12721.5,4038.313520630746,11829.5,7157.0,20067.0,tokens de saída
-regenerado,3,tokens_out,12,14092.916666666666,5592.628304836699,14541.5,5037.0,22987.0,tokens de saída
-regenerado,4,tokens_out,12,12539.333333333334,4580.498490802331,11830.5,7424.0,22044.0,tokens de saída
-regenerado,5,tokens_out,12,12825.416666666666,5022.6147022213145,13555.5,4337.0,21085.0,tokens de saída
-regenerado,6,tokens_out,12,11971.25,5747.835642064047,12299.5,3799.0,24822.0,tokens de saída
-regenerado,7,tokens_out,12,13940.416666666666,6901.473867072074,12649.0,6545.0,28955.0,tokens de saída
-regenerado,8,tokens_out,12,11883.0,3873.4752308019683,12310.0,6608.0,20483.0,tokens de saída
-regenerado,9,tokens_out,12,13726.0,4510.985721748428,13258.0,8787.0,25379.0,tokens de saída
-regenerado,10,tokens_out,12,14017.333333333334,6866.838631268307,12492.0,7030.0,34755.0,tokens de saída
-incremental,1,cost_usd,12,0.48020833333333335,0.14687162891037833,0.43945,0.2671,0.7577,custo (USD)
-incremental,2,cost_usd,12,0.50925,0.19423071332824787,0.44079999999999997,0.288,0.8323,custo (USD)
-incremental,3,cost_usd,12,0.53225,0.25142163969931247,0.52625,0.1594,0.9692,custo (USD)
-incremental,4,cost_usd,12,0.5000833333333333,0.2019029192158419,0.4106,0.2785,0.8884,custo (USD)
-incremental,5,cost_usd,12,0.4103583333333333,0.17648103404838686,0.384,0.1697,0.7606,custo (USD)
-incremental,6,cost_usd,12,0.5838,0.23160505960873054,0.49745,0.376,1.039,custo (USD)
-incremental,7,cost_usd,12,0.5809333333333334,0.34569721994657104,0.52645,0.1622,1.3701,custo (USD)
-incremental,8,cost_usd,12,0.4355,0.08899925433804079,0.43025,0.2858,0.5911,custo (USD)
-incremental,9,cost_usd,12,0.40005833333333335,0.34156650213214396,0.30715000000000003,0.1532,1.4188,custo (USD)
-incremental,10,cost_usd,12,0.5483166666666667,0.38918683018298394,0.46030000000000004,0.1905,1.6776,custo (USD)
-regenerado,1,cost_usd,12,0.46065,0.1975228341230451,0.4374,0.1567,0.7778,custo (USD)
-regenerado,2,cost_usd,12,0.4163333333333334,0.14962727834269532,0.41705000000000003,0.1545,0.6849,custo (USD)
-regenerado,3,cost_usd,12,0.5118083333333333,0.26408609979713166,0.4058,0.238,1.0665,custo (USD)
-regenerado,4,cost_usd,12,0.5675083333333334,0.5176313736773995,0.41574999999999995,0.1953,2.1049,custo (USD)
-regenerado,5,cost_usd,12,0.5068916666666666,0.14766759636139373,0.5153000000000001,0.2722,0.7393,custo (USD)
-regenerado,6,cost_usd,12,0.45987500000000003,0.23585035750738997,0.38625,0.1627,0.8607,custo (USD)
-regenerado,7,cost_usd,12,0.6742,0.27631173436076606,0.6385000000000001,0.307,1.1975,custo (USD)
-regenerado,8,cost_usd,12,0.4718583333333333,0.18168758129539206,0.4147,0.1817,0.7863,custo (USD)
-regenerado,9,cost_usd,12,0.5041083333333333,0.2667412176566825,0.4415,0.1499,0.9762,custo (USD)
-regenerado,10,cost_usd,12,0.560375,0.3959395985271215,0.4062,0.1573,1.4462,custo (USD)
-incremental,1,duration_s,12,211.4416666666667,48.00555760124093,214.35000000000002,110.1,276.3,duração (s)
-incremental,2,duration_s,12,204.48333333333335,76.024599288452,206.7,65.9,292.7,duração (s)
-incremental,3,duration_s,12,224.42499999999998,129.39689559996827,198.9,106.1,616.4,duração (s)
-incremental,4,duration_s,12,182.70833333333334,84.57053493261041,169.55,94.4,357.4,duração (s)
-incremental,5,duration_s,12,186.975,68.04427869877351,172.8,92.9,340.9,duração (s)
-incremental,6,duration_s,12,237.71666666666667,114.52395409086284,254.25,77.4,490.6,duração (s)
-incremental,7,duration_s,12,175.6916666666667,55.1738649977313,191.2,107.0,279.8,duração (s)
-incremental,8,duration_s,12,202.75833333333333,42.20162552520575,200.4,144.7,259.3,duração (s)
-incremental,9,duration_s,12,207.28333333333333,73.04093289921671,211.55,77.2,327.3,duração (s)
-incremental,10,duration_s,12,217.0666666666667,83.6050056497634,199.64999999999998,62.4,359.5,duração (s)
-regenerado,1,duration_s,12,187.6833333333333,61.70638442485411,186.15,83.8,284.2,duração (s)
-regenerado,2,duration_s,12,162.03333333333333,47.276985239472836,157.0,84.9,256.4,duração (s)
-regenerado,3,duration_s,12,219.04999999999998,77.37537193331082,200.55,113.9,337.6,duração (s)
-regenerado,4,duration_s,12,236.45000000000002,83.87198578786602,224.5,135.2,426.7,duração (s)
-regenerado,5,duration_s,12,231.6833333333333,128.88354033660377,215.39999999999998,70.8,597.4,duração (s)
-regenerado,6,duration_s,12,213.29166666666666,52.925152266424725,213.35,147.7,322.2,duração (s)
-regenerado,7,duration_s,12,217.48333333333335,58.12587959582099,220.60000000000002,122.6,309.9,duração (s)
-regenerado,8,duration_s,12,175.65833333333333,72.77312763692794,161.0,81.5,362.4,duração (s)
-regenerado,9,duration_s,12,191.975,92.19791089133894,172.9,72.6,384.1,duração (s)
-regenerado,10,duration_s,12,250.275,123.53757709517156,187.60000000000002,140.1,491.1,duração (s)
-incremental,1,turns,12,25.75,9.156468155949055,28.5,11.0,37.0,turnos do agente
-incremental,2,turns,12,21.75,7.712150979284102,22.0,9.0,32.0,turnos do agente
-incremental,3,turns,12,21.166666666666668,5.9518268140330175,21.0,11.0,34.0,turnos do agente
-incremental,4,turns,12,25.833333333333332,5.373898759633259,25.0,13.0,35.0,turnos do agente
-incremental,5,turns,12,23.75,10.737572097334414,28.0,8.0,39.0,turnos do agente
-incremental,6,turns,12,25.416666666666668,9.02983271095754,25.5,10.0,39.0,turnos do agente
-incremental,7,turns,12,21.666666666666668,9.335497584570152,21.0,10.0,37.0,turnos do agente
-incremental,8,turns,12,19.416666666666668,9.375580790090561,16.0,9.0,37.0,turnos do agente
-incremental,9,turns,12,21.416666666666668,8.764166021967297,23.0,8.0,35.0,turnos do agente
-incremental,10,turns,12,28.75,9.166391180433402,30.5,9.0,39.0,turnos do agente
-regenerado,1,turns,12,23.083333333333332,9.29768625502978,21.5,10.0,37.0,turnos do agente
-regenerado,2,turns,12,23.25,9.136589775582173,22.0,9.0,38.0,turnos do agente
-regenerado,3,turns,12,24.666666666666668,9.08878763125537,25.0,11.0,37.0,turnos do agente
-regenerado,4,turns,12,22.916666666666668,10.941649645720565,24.0,8.0,39.0,turnos do agente
-regenerado,5,turns,12,23.166666666666668,9.72189032622522,22.0,8.0,38.0,turnos do agente
-regenerado,6,turns,12,22.666666666666668,9.9666109251507,24.0,9.0,39.0,turnos do agente
-regenerado,7,turns,12,21.583333333333332,9.139905841302676,21.0,11.0,38.0,turnos do agente
-regenerado,8,turns,12,26.583333333333332,9.912878064172459,28.5,9.0,39.0,turnos do agente
-regenerado,9,turns,12,20.666666666666668,10.89898521826132,15.0,8.0,37.0,turnos do agente
-regenerado,10,turns,12,24.333333333333332,9.679719505077081,24.5,10.0,38.0,turnos do agente
+regenerado,1,dup_pct,12,1.4266666666666667,0.18222530177245042,1.41,1.17,1.84,% de linhas duplicadas
+regenerado,2,dup_pct,12,1.55,0.271092067554381,1.4849999999999999,1.23,2.15,% de linhas duplicadas
+regenerado,3,dup_pct,12,1.7591666666666665,0.3619256159974747,1.745,1.36,2.42,% de linhas duplicadas
+regenerado,4,dup_pct,12,1.78,0.34080119504698714,1.6949999999999998,1.42,2.43,% de linhas duplicadas
+regenerado,5,dup_pct,12,1.7608333333333333,0.1719650246328296,1.79,1.5,1.99,% de linhas duplicadas
+regenerado,6,dup_pct,12,1.8733333333333333,0.2645522231769727,1.775,1.62,2.38,% de linhas duplicadas
+regenerado,7,dup_pct,12,2.1,0.31823376199380116,2.06,1.7,2.56,% de linhas duplicadas
+regenerado,8,dup_pct,12,2.1758333333333333,0.1559987373686276,2.13,1.9,2.44,% de linhas duplicadas
+regenerado,9,dup_pct,12,2.1875,0.2921433334387886,2.115,1.97,3.05,% de linhas duplicadas
+regenerado,10,dup_pct,11,2.2963636363636364,0.28924981338879824,2.21,2.01,2.9,% de linhas duplicadas
+incremental,0,loc,12,830.5,121.95490970026586,859.0,605.0,992.0,linhas de código (src/main)
+incremental,1,loc,12,794.5833333333334,27.688062190749065,798.5,747.0,833.0,linhas de código (src/main)
+incremental,2,loc,12,871.5,43.20037878621815,862.5,818.0,958.0,linhas de código (src/main)
+incremental,3,loc,12,962.1666666666666,47.94852037404914,974.5,893.0,1018.0,linhas de código (src/main)
+incremental,4,loc,12,1049.1666666666667,45.4729356737376,1051.5,945.0,1135.0,linhas de código (src/main)
+incremental,5,loc,12,1159.8333333333333,38.23808984705586,1160.0,1086.0,1223.0,linhas de código (src/main)
+incremental,6,loc,12,1251.25,34.86108797133928,1269.0,1183.0,1294.0,linhas de código (src/main)
+incremental,7,loc,12,1317.5833333333333,26.783503516270248,1318.0,1267.0,1356.0,linhas de código (src/main)
+incremental,8,loc,12,1414.25,45.831955902167024,1426.5,1329.0,1470.0,linhas de código (src/main)
+incremental,9,loc,12,1506.9166666666667,35.684114961787415,1501.0,1437.0,1576.0,linhas de código (src/main)
+incremental,10,loc,12,1608.5,35.64088561291272,1604.5,1540.0,1657.0,linhas de código (src/main)
+regenerado,0,loc,12,793.4166666666666,101.95761894339265,803.5,668.0,999.0,linhas de código (src/main)
+regenerado,1,loc,12,777.5,29.290085198051084,782.0,722.0,815.0,linhas de código (src/main)
+regenerado,2,loc,12,891.6666666666666,28.649395783993043,893.0,850.0,935.0,linhas de código (src/main)
+regenerado,3,loc,12,969.6666666666666,41.10150037812893,976.5,881.0,1022.0,linhas de código (src/main)
+regenerado,4,loc,12,1049.0,29.1391645228704,1050.0,1011.0,1105.0,linhas de código (src/main)
+regenerado,5,loc,12,1146.75,43.31097908257107,1137.5,1070.0,1210.0,linhas de código (src/main)
+regenerado,6,loc,12,1234.5833333333333,25.833235581437773,1230.0,1210.0,1283.0,linhas de código (src/main)
+regenerado,7,loc,12,1332.0833333333333,29.515660968784697,1325.5,1294.0,1389.0,linhas de código (src/main)
+regenerado,8,loc,12,1404.0833333333333,29.822073378725033,1407.5,1345.0,1437.0,linhas de código (src/main)
+regenerado,9,loc,12,1509.5,35.23815081310697,1519.0,1446.0,1572.0,linhas de código (src/main)
+regenerado,10,loc,11,1599.5454545454545,28.779727713665544,1603.0,1559.0,1640.0,linhas de código (src/main)
+incremental,1,tokens_in,12,152182.58333333334,57448.489878812834,153303.5,53573.0,247218.0,tokens de entrada
+incremental,2,tokens_in,12,215517.83333333334,111455.649722482,191810.5,86201.0,510420.0,tokens de entrada
+incremental,3,tokens_in,12,159033.75,51104.87573985836,159127.5,86093.0,253317.0,tokens de entrada
+incremental,4,tokens_in,12,179815.58333333334,53125.41923592156,172203.0,103694.0,274803.0,tokens de entrada
+incremental,5,tokens_in,12,149114.08333333334,52339.91006602607,140075.5,82319.0,263056.0,tokens de entrada
+incremental,6,tokens_in,12,194534.75,78000.18995912184,167940.0,96686.0,398527.0,tokens de entrada
+incremental,7,tokens_in,12,149595.66666666666,43360.22384488793,158727.0,84928.0,207259.0,tokens de entrada
+incremental,8,tokens_in,12,199108.83333333334,93280.63023024403,174450.5,105842.0,466912.0,tokens de entrada
+incremental,9,tokens_in,12,173584.41666666666,87888.77822613837,157469.0,70763.0,376396.0,tokens de entrada
+incremental,10,tokens_in,12,144823.41666666666,55518.523679380014,140914.0,80350.0,270734.0,tokens de entrada
+regenerado,1,tokens_in,12,216030.75,108031.68978181187,202358.5,93037.0,465372.0,tokens de entrada
+regenerado,2,tokens_in,12,170318.25,69230.52496632996,143768.5,98424.0,331842.0,tokens de entrada
+regenerado,3,tokens_in,12,174299.41666666666,67877.12399684693,147024.0,87190.0,331330.0,tokens de entrada
+regenerado,4,tokens_in,12,163800.33333333334,50151.397738762134,156089.5,85604.0,276233.0,tokens de entrada
+regenerado,5,tokens_in,12,213876.16666666666,73260.67971768328,209258.0,124181.0,334601.0,tokens de entrada
+regenerado,6,tokens_in,12,207653.83333333334,145042.60258460324,149880.5,63721.0,602239.0,tokens de entrada
+regenerado,7,tokens_in,12,162735.91666666666,59526.92923445097,168833.5,71303.0,286061.0,tokens de entrada
+regenerado,8,tokens_in,12,169482.75,26511.347961769126,174697.5,105559.0,203222.0,tokens de entrada
+regenerado,9,tokens_in,12,209355.75,66464.64424875556,191304.5,92493.0,326393.0,tokens de entrada
+regenerado,10,tokens_in,11,168965.0,61758.1271250999,204585.0,72719.0,230367.0,tokens de entrada
+incremental,1,tokens_out,12,13917.75,4339.5944118190255,12534.0,8785.0,21654.0,tokens de saída
+incremental,2,tokens_out,12,12854.833333333334,3390.8914578305034,12695.5,8627.0,19958.0,tokens de saída
+incremental,3,tokens_out,12,17950.416666666668,6942.900028850053,17149.5,9092.0,32027.0,tokens de saída
+incremental,4,tokens_out,12,16563.416666666668,4345.3490383571625,16522.0,10629.0,22836.0,tokens de saída
+incremental,5,tokens_out,12,14193.416666666666,4558.961453870693,13870.0,8518.0,24123.0,tokens de saída
+incremental,6,tokens_out,12,13631.166666666666,6498.506161675415,10868.5,7565.0,26661.0,tokens de saída
+incremental,7,tokens_out,12,13007.416666666666,4655.721279113246,11870.0,5634.0,20570.0,tokens de saída
+incremental,8,tokens_out,12,12442.416666666666,5588.522661480294,10569.0,6367.0,24025.0,tokens de saída
+incremental,9,tokens_out,12,14747.833333333334,6443.1414674595635,13004.5,6568.0,26304.0,tokens de saída
+incremental,10,tokens_out,12,18202.083333333332,5593.776793062633,18182.5,9902.0,29744.0,tokens de saída
+regenerado,1,tokens_out,12,11609.916666666666,5273.9377466993865,10276.0,4447.0,22926.0,tokens de saída
+regenerado,2,tokens_out,12,18070.166666666668,11965.527347215822,14368.0,7767.0,53189.0,tokens de saída
+regenerado,3,tokens_out,12,16403.416666666668,4340.41291413058,15956.0,11224.0,27133.0,tokens de saída
+regenerado,4,tokens_out,12,14184.833333333334,4026.7940063649853,14780.0,7611.0,20326.0,tokens de saída
+regenerado,5,tokens_out,12,15435.25,8091.423721503472,13619.0,5365.0,31195.0,tokens de saída
+regenerado,6,tokens_out,12,13197.5,6494.580754892357,10966.0,6608.0,25239.0,tokens de saída
+regenerado,7,tokens_out,12,13129.416666666666,4529.2607154797215,11308.5,8782.0,24770.0,tokens de saída
+regenerado,8,tokens_out,12,14564.333333333334,4710.9070605705365,13577.0,5552.0,23236.0,tokens de saída
+regenerado,9,tokens_out,12,11705.25,4761.717339650399,10968.0,5302.0,23131.0,tokens de saída
+regenerado,10,tokens_out,11,12773.636363636364,6173.978915945977,10248.0,6019.0,23973.0,tokens de saída
+incremental,1,cost_usd,12,0.3909416666666667,0.14804721272948607,0.38234999999999997,0.1799,0.6808,custo (USD)
+incremental,2,cost_usd,12,0.5147333333333334,0.23899599971294058,0.48324999999999996,0.1455,1.0032,custo (USD)
+incremental,3,cost_usd,12,0.49419166666666664,0.2187518870914274,0.47085,0.1506,0.834,custo (USD)
+incremental,4,cost_usd,12,0.5463166666666667,0.22591834741111597,0.5542,0.1692,0.9044,custo (USD)
+incremental,5,cost_usd,12,0.410825,0.1512669712492092,0.37539999999999996,0.2605,0.8461,custo (USD)
+incremental,6,cost_usd,12,0.4562,0.3346766118889316,0.37095,0.174,1.3701,custo (USD)
+incremental,7,cost_usd,12,0.5151916666666666,0.389803098215994,0.39705,0.1863,1.5626,custo (USD)
+incremental,8,cost_usd,12,0.569875,0.23290442879976642,0.5548,0.2677,0.9242,custo (USD)
+incremental,9,cost_usd,12,0.39114166666666667,0.1563583207561944,0.3807,0.1484,0.7297,custo (USD)
+incremental,10,cost_usd,12,0.398625,0.15776718246719237,0.35509999999999997,0.208,0.6763,custo (USD)
+regenerado,1,cost_usd,12,0.49219999999999997,0.22955395483811247,0.48164999999999997,0.1891,1.0224,custo (USD)
+regenerado,2,cost_usd,12,0.5153416666666667,0.2853858710216536,0.4734,0.1565,1.1174,custo (USD)
+regenerado,3,cost_usd,12,0.40840000000000004,0.11550249898910096,0.4273,0.2309,0.6768,custo (USD)
+regenerado,4,cost_usd,12,0.5222583333333334,0.24342036016410837,0.5184,0.1878,0.9733,custo (USD)
+regenerado,5,cost_usd,12,0.590625,0.2891234342409358,0.62185,0.1968,1.2159,custo (USD)
+regenerado,6,cost_usd,12,0.5428499999999999,0.30100386134641954,0.45385,0.1773,1.1166,custo (USD)
+regenerado,7,cost_usd,12,0.49656666666666666,0.27029282886035527,0.4832,0.2071,1.2407,custo (USD)
+regenerado,8,cost_usd,12,0.3589166666666667,0.20769945434048048,0.30105000000000004,0.1573,0.8698,custo (USD)
+regenerado,9,cost_usd,12,0.4996,0.24798362116002012,0.4423,0.2046,0.9064,custo (USD)
+regenerado,10,cost_usd,11,0.6363363636363636,0.5038455780747257,0.4631,0.1951,1.8337,custo (USD)
+incremental,1,duration_s,12,193.79166666666666,77.41163241615133,174.0,98.6,321.0,duração (s)
+incremental,2,duration_s,12,248.6,110.77943688412411,255.3,94.5,437.2,duração (s)
+incremental,3,duration_s,12,241.27499999999998,110.44763567986743,208.05,103.2,456.7,duração (s)
+incremental,4,duration_s,12,223.26666666666665,95.06667835437048,218.65,91.0,425.3,duração (s)
+incremental,5,duration_s,12,236.15,82.3219676856449,235.05,127.0,372.0,duração (s)
+incremental,6,duration_s,12,208.75,131.84661542868668,162.65,107.0,583.3,duração (s)
+incremental,7,duration_s,12,223.59166666666667,100.57858490963292,182.60000000000002,121.8,489.7,duração (s)
+incremental,8,duration_s,12,275.825,101.4201264318604,253.45,102.5,502.6,duração (s)
+incremental,9,duration_s,12,226.92499999999998,83.18223286036725,226.6,110.9,396.4,duração (s)
+incremental,10,duration_s,12,200.98333333333335,73.21619087374464,223.4,100.1,315.1,duração (s)
+regenerado,1,duration_s,12,191.75833333333333,51.779874263924974,184.5,93.9,280.8,duração (s)
+regenerado,2,duration_s,12,192.16666666666666,84.23455707760684,180.45,99.2,345.7,duração (s)
+regenerado,3,duration_s,12,216.67499999999998,91.74600437175353,174.8,117.8,386.4,duração (s)
+regenerado,4,duration_s,12,221.58333333333334,76.31171521324808,186.95,139.2,391.4,duração (s)
+regenerado,5,duration_s,12,163.98333333333332,47.49665697964883,160.25,97.1,249.2,duração (s)
+regenerado,6,duration_s,12,218.17499999999998,62.26237919993392,213.4,103.1,319.8,duração (s)
+regenerado,7,duration_s,12,213.75833333333333,101.52762685669116,190.25,100.9,392.6,duração (s)
+regenerado,8,duration_s,12,239.74166666666667,80.87345286797071,222.2,120.5,384.1,duração (s)
+regenerado,9,duration_s,12,229.33333333333334,102.18652582706812,215.45,137.4,514.9,duração (s)
+regenerado,10,duration_s,11,242.6909090909091,87.78989069984601,221.4,101.1,354.6,duração (s)
+incremental,1,turns,12,23.916666666666668,11.333444740985401,22.5,9.0,39.0,turnos do agente
+incremental,2,turns,12,23.083333333333332,8.306167843381463,22.0,9.0,39.0,turnos do agente
+incremental,3,turns,12,24.083333333333332,10.765756599120897,21.5,9.0,39.0,turnos do agente
+incremental,4,turns,12,22.0,9.175065023301915,22.5,9.0,36.0,turnos do agente
+incremental,5,turns,12,22.25,9.126634349279835,22.5,8.0,33.0,turnos do agente
+incremental,6,turns,12,18.583333333333332,9.100033299972372,16.5,9.0,39.0,turnos do agente
+incremental,7,turns,12,23.833333333333332,11.746050271035664,21.0,9.0,38.0,turnos do agente
+incremental,8,turns,12,25.916666666666668,8.659816640231146,25.0,15.0,39.0,turnos do agente
+incremental,9,turns,12,21.083333333333332,8.918401134053052,18.5,10.0,38.0,turnos do agente
+incremental,10,turns,12,20.75,8.9150026767956,23.0,9.0,34.0,turnos do agente
+regenerado,1,turns,12,27.916666666666668,9.268307027257736,28.0,13.0,39.0,turnos do agente
+regenerado,2,turns,12,20.5,8.328483437195295,21.0,9.0,32.0,turnos do agente
+regenerado,3,turns,12,23.583333333333332,8.57542295096159,23.0,9.0,36.0,turnos do agente
+regenerado,4,turns,12,25.916666666666668,11.220584438945913,26.0,10.0,39.0,turnos do agente
+regenerado,5,turns,12,25.083333333333332,5.900051360844756,24.5,11.0,34.0,turnos do agente
+regenerado,6,turns,12,24.833333333333332,9.656211692088375,25.5,9.0,37.0,turnos do agente
+regenerado,7,turns,12,20.25,10.58407895249876,18.0,8.0,37.0,turnos do agente
+regenerado,8,turns,12,26.833333333333332,8.244373655390504,26.5,11.0,38.0,turnos do agente
+regenerado,9,turns,12,21.333333333333332,9.930058439206718,19.5,8.0,37.0,turnos do agente
+regenerado,10,turns,11,18.818181818181817,8.24400608706934,17.0,8.0,32.0,turnos do agente

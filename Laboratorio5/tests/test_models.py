@@ -65,3 +65,36 @@ def test_variancia_entre_cadeias_formato(df):
     v = models.variancia_entre_cadeias(df)
     assert {"mode", "step", "variancia", "cadeias"} <= set(v.columns)
     assert set(v.attrs["tendencia"]["mode"]) == {"incremental", "regenerado"}
+
+
+def test_ordem_deduzida_do_pedido_do_passo_1(df):
+    ordem = models.ordem_das_cadeias(df)
+    assert set(ordem) == {"A", "B"}
+    assert ordem.loc[(1, "incremental")] == "A" and ordem.loc[(2, "regenerado")] == "B"
+
+
+def test_tipos_seguem_o_protocolo_congelado(df):
+    tipos = df[df["step"] >= 1].groupby("request_id")["request_type"].first()
+    assert sorted(tipos[tipos == "tensiona"].index) == ["P10", "P3", "P5", "P6", "P9"]
+
+
+def test_glmm_com_covariaveis_mantem_a_interacao(df):
+    cov = models.glmm_covariaveis(df).set_index("termo")
+    assert {"rodou_testes", "ordem_b", "inc:step"} <= set(cov.index)
+    base = models.glmm_regressao(df).set_index("termo")
+    assert np.sign(cov.loc["inc:step", "coef"]) == np.sign(base.loc["inc:step", "coef"])
+
+
+def test_glmm_sem_variacao_no_desfecho_falha_com_mensagem(df):
+    sem_regressao = df.assign(reg_failed=0)
+    with pytest.raises(ValueError, match="sem variação"):
+        models.glmm_regressao(sem_regressao)
+
+
+def test_diagnostico_tem_uma_linha_por_verificacao(df):
+    from analysis import diagnostico
+    glmm, gee = models.glmm_regressao(df), models.glmm_sensibilidade(df)
+    d = diagnostico.diagnosticar(df, glmm, gee, "GLMM")
+    assert {"modelo", "verificacao", "valor", "ok", "se_falhar"} <= set(d.columns)
+    assert d["modelo"].str.startswith("crescimento").sum() == 15
+    assert d.loc[d["verificacao"] == "otimizador convergiu", "ok"].all()

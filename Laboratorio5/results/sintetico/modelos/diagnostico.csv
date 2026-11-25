@@ -1,0 +1,23 @@
+modelo,verificacao,valor,ok,se_falhar
+GLMM regressão,modelo usado como principal,GLMM,True,GLMM não estimável: GEE vira o principal (plano B) e o fato vai para as ameaças
+GLMM regressão,testes que falharam (incremental),211,True,sem eventos num modo há separação: reportar só a descritiva e o log-rank
+GLMM regressão,testes que falharam (regenerado),76,True,sem eventos num modo há separação: reportar só a descritiva e o log-rank
+GLMM regressão,dp do intercepto da cadeia (logit),0.2886167043937659,True,efeito de cadeia ~0 (ajuste singular): o GEE e o GLM sem efeito aleatório bastam
+GLMM regressão,"sobredispersão (Pearson χ²/gl, GLM sem cadeia)",1.286550274950246,True,testes falham em bloco: preferir os erros robustos do GEE e declarar na ameaça
+GLMM regressão,GLMM e GEE concordam no sinal de modo × passo,0.252 / 0.243,True,vale o mais conservador; divergência vai para as ameaças
+GLMM regressão,"GLMM e GEE concordam na significância (α = 0,05)",p = 0.0000 / 0.0009,True,vale o mais conservador; divergência vai para as ameaças
+crescimento arch_violations,efeitos aleatórios usados,intercepto+inclinação (lbfgs),True,inclinação por cadeia não estimável: modelo só com intercepto (registrado na tabela)
+crescimento arch_violations,otimizador convergiu,True,True,"nenhum otimizador (lbfgs, powell, nm, bfgs) convergiu: tratar o resultado como exploratório"
+crescimento arch_violations,variância do intercepto da cadeia,0.015120359755661807,True,ajuste singular: o efeito de cadeia não aparece nos dados; resultado ≈ OLS
+crescimento arch_violations,normalidade dos resíduos (Shapiro p),0.0021203719672355037,False,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)
+crescimento arch_violations,assimetria dos resíduos,0.42935816349400263,True,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)
+crescimento files_touched,efeitos aleatórios usados,intercepto+inclinação (powell),True,inclinação por cadeia não estimável: modelo só com intercepto (registrado na tabela)
+crescimento files_touched,otimizador convergiu,True,True,"nenhum otimizador (lbfgs, powell, nm, bfgs) convergiu: tratar o resultado como exploratório"
+crescimento files_touched,variância do intercepto da cadeia,5.523721867742956e-07,False,ajuste singular: o efeito de cadeia não aparece nos dados; resultado ≈ OLS
+crescimento files_touched,normalidade dos resíduos (Shapiro p),1.759716577765826e-05,False,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)
+crescimento files_touched,assimetria dos resíduos,-0.41692960947790775,True,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)
+crescimento dup_pct,efeitos aleatórios usados,intercepto+inclinação (powell),True,inclinação por cadeia não estimável: modelo só com intercepto (registrado na tabela)
+crescimento dup_pct,otimizador convergiu,True,True,"nenhum otimizador (lbfgs, powell, nm, bfgs) convergiu: tratar o resultado como exploratório"
+crescimento dup_pct,variância do intercepto da cadeia,5.872079218824837e-05,True,ajuste singular: o efeito de cadeia não aparece nos dados; resultado ≈ OLS
+crescimento dup_pct,normalidade dos resíduos (Shapiro p),2.5216644243994386e-11,False,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)
+crescimento dup_pct,assimetria dos resíduos,1.0607968492304916,False,contagens assimétricas: conferir com a diferença pareada (não paramétrica) e com log(1+y)

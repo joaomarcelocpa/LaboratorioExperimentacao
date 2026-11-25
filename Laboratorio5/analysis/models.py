@@ -19,20 +19,33 @@ from scipy import stats
 from statsmodels.stats.multitest import multipletests
 
 
+def ordem_das_cadeias(df: pd.DataFrame) -> pd.Series:
+    """Ordem de cada (chain_id, mode), deduzida do pedido do passo 1.
+
+    O esquema congelado não tem coluna de ordem; o protocolo (seção 3) define
+    a Ordem A começando por P1 e a Ordem B começando por P2.
+    """
+    p1 = df[df["step"] == 1].set_index(["chain_id", "mode"])["request_id"]
+    return p1.map({"P1": "A", "P2": "B"}).rename("ordem")
+
+
 def _passos_validos(df: pd.DataFrame) -> pd.DataFrame:
-    """Passos 1..10 com execução concluída (status ok)."""
+    """Passos 1..10 com execução concluída (status ok), com as covariáveis codificadas."""
     d = df[(df["step"] >= 1) & (df["status"] == "ok")].copy()
     for c in ("reg_total", "reg_failed", "step", "chain_id"):
         d[c] = d[c].astype(int)
     d["inc"] = (d["mode"] == "incremental").astype(int)
     d["tensiona"] = (d["request_type"] == "tensiona").astype(int)
+    d["rodou_testes"] = d["agent_ran_tests"].astype(float).fillna(0).astype(int)
+    ordem = ordem_das_cadeias(df)
+    d["ordem_b"] = [int(ordem.get((c, m)) == "B") for c, m in zip(d["chain_id"], d["mode"])]
     return d
 
 
 def expandir_testes(d: pd.DataFrame) -> pd.DataFrame:
     """Uma linha por teste de regressão executado (y = 1 se falhou)."""
     repete = d["reg_total"].to_numpy()
-    base = d.loc[d.index.repeat(repete), ["chain_id", "mode", "inc", "step", "tensiona"]].reset_index(drop=True)
+    base = d.loc[d.index.repeat(repete), ["chain_id", "mode", "inc", "step", "tensiona", "rodou_testes", "ordem_b"]].reset_index(drop=True)
     y = np.zeros(len(base), dtype=int)
     fim = np.cumsum(repete)
     ini = fim - repete
@@ -52,7 +65,7 @@ def _or_table(nome, estimativa, erro) -> dict:
     }
 
 
-def glmm_regressao(df: pd.DataFrame, formula_fixa: str = "y ~ inc * step") -> pd.DataFrame:
+def glmm_regressao(df: pd.DataFrame, formula_fixa: str = "y ~ inc * step", _dados: pd.DataFrame | None = None) -> pd.DataFrame:
     """GLMM binomial com intercepto aleatório por cadeia (Bayes variacional).
 
     statsmodels não traz GLMM por máxima verossimilhança; BinomialBayesMixedGLM
@@ -62,7 +75,9 @@ def glmm_regressao(df: pd.DataFrame, formula_fixa: str = "y ~ inc * step") -> pd
     """
     from statsmodels.genmod.bayes_mixed_glm import BinomialBayesMixedGLM
 
-    t = expandir_testes(_passos_validos(df))
+    t = expandir_testes(_dados if _dados is not None else _passos_validos(df))
+    if t["y"].nunique() < 2:
+        raise ValueError("sem variação no desfecho (nenhum teste falhou, ou todos falharam): GLMM não estimável")
     t["cadeia"] = t["chain_id"].astype(str)
     modelo = BinomialBayesMixedGLM.from_formula(formula_fixa, {"cadeia": "0 + C(cadeia)"}, t)
     with warnings.catch_warnings():
@@ -87,12 +102,28 @@ def glmm_sensibilidade(df: pd.DataFrame, formula_fixa: str = "y ~ inc * step") -
     return pd.DataFrame([_or_table(n, res.params[n], res.bse[n]) for n in res.params.index])
 
 
-def curva_de_crescimento(df: pd.DataFrame, desfecho: str) -> pd.DataFrame:
-    """Modelo misto: desfecho ~ modo × passo, intercepto e inclinação aleatórios por cadeia.
+FORMULA_COVARIAVEIS = "y ~ inc * step + rodou_testes + ordem_b"
 
-    Se a inclinação aleatória não converge (poucas cadeias), cai para só
-    intercepto aleatório e marca `modelo` na saída.
+
+def glmm_covariaveis(df: pd.DataFrame) -> pd.DataFrame:
+    """GLMM de H1/H4 ajustado por `agent_ran_tests` e pela ordem dos pedidos (sensibilidade).
+
+    Fica fora do modelo principal porque `agent_ran_tests` é decidido pelo
+    agente durante o passo (pós-tratamento): ajustar por ele pode absorver
+    parte do efeito do modo. Se o termo inc:step muda pouco entre os dois
+    modelos, o resultado não depende dessas covariáveis. Termo que não varia
+    nos dados (ex.: uma ordem só) sai da fórmula.
     """
+    d = _passos_validos(df)
+    formula = FORMULA_COVARIAVEIS
+    for termo in ("rodou_testes", "ordem_b"):
+        if d[termo].nunique() < 2:
+            formula = formula.replace(f" + {termo}", "")
+    return glmm_regressao(df, formula, _dados=d).assign(formula=formula)
+
+
+def ajustar_crescimento(df: pd.DataFrame, desfecho: str):
+    """Ajusta o modelo misto de `curva_de_crescimento`. Devolve (resultado, rótulo dos efeitos aleatórios, dados)."""
     d = df[df["status"] == "ok"].copy()
     d = d[d[desfecho].notna()]
     d[desfecho] = d[desfecho].astype(float)
@@ -100,26 +131,43 @@ def curva_de_crescimento(df: pd.DataFrame, desfecho: str) -> pd.DataFrame:
     d["chain_id"] = d["chain_id"].astype(int)
     d["inc"] = (d["mode"] == "incremental").astype(int)
     formula = f"{desfecho} ~ inc * step"
-    resultado, tipo = None, ""
+    # Ordem de preferência: inclinação aleatória antes de só intercepto; em cada
+    # uma, tenta otimizadores até um convergir. Sem convergência em nenhum, usa o
+    # primeiro ajuste com erros finitos e o diagnóstico acusa.
+    reserva = None
     for re_formula, rotulo in (("~step", "intercepto+inclinação"), ("~1", "intercepto")):
-        try:
-            with warnings.catch_warnings():
-                warnings.simplefilter("ignore")
-                m = smf.mixedlm(formula, d, groups=d["chain_id"], re_formula=re_formula)
-                r = m.fit(method="lbfgs", reml=True)
-            if np.isfinite(r.bse_fe).all():
-                resultado, tipo = r, rotulo
-                break
-        except Exception:
-            continue
-    if resultado is None:
-        raise RuntimeError(f"curva de crescimento de {desfecho} não convergiu")
-    tab = pd.DataFrame({
+        for metodo in ("lbfgs", "powell", "nm", "bfgs"):
+            try:
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore")
+                    m = smf.mixedlm(formula, d, groups=d["chain_id"], re_formula=re_formula)
+                    r = m.fit(method=metodo, reml=True, maxiter=2000)
+            except Exception:
+                continue
+            if not np.isfinite(r.bse_fe).all():
+                continue
+            if getattr(r, "converged", True):
+                return r, f"{rotulo} ({metodo})", d
+            reserva = reserva or (r, f"{rotulo} ({metodo}, sem convergência)", d)
+    if reserva:
+        return reserva
+    raise RuntimeError(f"curva de crescimento de {desfecho} não convergiu")
+
+
+def curva_de_crescimento(df: pd.DataFrame, desfecho: str) -> pd.DataFrame:
+    """Modelo misto: desfecho ~ modo × passo, intercepto e inclinação aleatórios por cadeia.
+
+    Se a inclinação aleatória não converge (poucas cadeias), cai para só
+    intercepto aleatório e marca `efeitos_aleatorios` na saída.
+    """
+    resultado, tipo, _ = ajustar_crescimento(df, desfecho)
+    return pd.DataFrame({
         "desfecho": desfecho, "termo": resultado.fe_params.index, "coef": resultado.fe_params.values,
         "erro_padrao": resultado.bse_fe.values, "p": resultado.pvalues[resultado.fe_params.index].values,
+        "ic95_inf": resultado.fe_params.values - 1.96 * resultado.bse_fe.values,
+        "ic95_sup": resultado.fe_params.values + 1.96 * resultado.bse_fe.values,
         "efeitos_aleatorios": tipo,
     })
-    return tab
 
 
 def efeito_tipo_de_pedido(df: pd.DataFrame) -> pd.DataFrame:

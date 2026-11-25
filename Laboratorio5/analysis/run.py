@@ -22,7 +22,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from analysis import descritiva, figuras, models, survival
+from analysis import descritiva, diagnostico, figuras, models, survival
 from analysis.schema import carregar, validar
 from analysis.synthetic import gerar
 
@@ -32,7 +32,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 PASTAS = {
     "resumo_da_coleta": "descritiva", "por_passo": "descritiva", "por_passo_completa": "descritiva",
     "por_tipo_de_pedido": "descritiva",
-    "glmm": "modelos", "glmm_sensibilidade": "modelos", "crescimento": "modelos",
+    "glmm": "modelos", "glmm_sensibilidade": "modelos", "glmm_covariaveis": "modelos", "diagnostico": "modelos", "crescimento": "modelos",
     "h5_tipo_de_pedido": "modelos", "variancia_entre_cadeias": "modelos", "h3_tendencia": "modelos",
     "tempos_ate_regressao": "sobrevivencia", "kaplan_meier": "sobrevivencia", "log_rank": "sobrevivencia",
     "log_rank_sensibilidade": "sobrevivencia",
@@ -63,8 +63,17 @@ def _sobrevivencia(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
 def analisar(df: pd.DataFrame, saida: Path) -> dict[str, pd.DataFrame]:
     out: dict[str, pd.DataFrame] = dict(descritiva.tabelas(df))
 
-    glmm = models.glmm_regressao(df)
-    out["glmm"], out["glmm_sensibilidade"] = glmm, models.glmm_sensibilidade(df)
+    # Plano B (plano de análise, seção 3): se o GLMM não for estimável, o GEE vira o modelo principal.
+    gee = models.glmm_sensibilidade(df)
+    try:
+        glmm, fonte = models.glmm_regressao(df), "GLMM"
+    except Exception as erro:
+        glmm, fonte = gee.copy(), f"GEE (plano B: {erro})"
+    out["glmm"], out["glmm_sensibilidade"] = glmm.assign(modelo=fonte), gee
+    try:
+        out["glmm_covariaveis"] = models.glmm_covariaveis(df)
+    except Exception as erro:
+        out["glmm_covariaveis"] = pd.DataFrame([{"termo": "(não ajustado)", "erro": str(erro)}])
 
     out.update(_sobrevivencia(df))
     p_lr = float(out["log_rank"]["p"].iloc[0])
@@ -77,6 +86,7 @@ def analisar(df: pd.DataFrame, saida: Path) -> dict[str, pd.DataFrame]:
     var = models.variancia_entre_cadeias(df)
     out["variancia_entre_cadeias"] = var
     out["h3_tendencia"] = var.attrs["tendencia"]
+    out["diagnostico"] = diagnostico.diagnosticar(df, glmm, gee, fonte)
 
     # Holm sobre a família confirmatória, declarada no plano de análise antes dos dados.
     familia = [
