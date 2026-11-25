@@ -12,19 +12,36 @@ import pandas as pd
 from scipy import stats
 
 
-def tempos_ate_regressao(df: pd.DataFrame) -> pd.DataFrame:
-    """Uma linha por (chain_id, mode): tempo (passo) e evento (1 = regrediu)."""
+TRATAMENTOS_DA_FALHA = ("censura", "evento", "exclui")
+
+
+def tempos_ate_regressao(df: pd.DataFrame, falha: str = "censura") -> pd.DataFrame:
+    """Uma linha por (chain_id, mode): tempo (passo) e evento (1 = regrediu).
+
+    `falha` diz o que fazer com a cadeia que terminou por passo falho antes de
+    regredir (análise de sensibilidade da #125):
+      censura  censurada no último passo ok (tratamento principal, PDF 3.6);
+      evento   o passo falho conta como a primeira regressão (pior caso);
+      exclui   a cadeia sai da análise.
+    """
+    if falha not in TRATAMENTOS_DA_FALHA:
+        raise ValueError(f"falha deve ser um de {TRATAMENTOS_DA_FALHA}")
     linhas = []
     for (cadeia, modo), g in df.groupby(["chain_id", "mode"]):
         g = g[g["step"] >= 1].sort_values("step")
         ok = g[g["status"] == "ok"]
         reg = ok[ok["reg_failed"] > 0]
+        falhou = (g["status"] == "falha").any()
         if len(reg):
-            linhas.append((cadeia, modo, int(reg["step"].iloc[0]), 1))
+            linhas.append((cadeia, modo, int(reg["step"].iloc[0]), 1, int(falhou)))
+        elif falhou and falha == "evento":
+            linhas.append((cadeia, modo, int(g[g["status"] == "falha"]["step"].min()), 1, 1))
+        elif falhou and falha == "exclui":
+            continue
         else:
             ultimo = int(ok["step"].max()) if len(ok) else 0
-            linhas.append((cadeia, modo, ultimo, 0))
-    return pd.DataFrame(linhas, columns=["chain_id", "mode", "tempo", "evento"])
+            linhas.append((cadeia, modo, ultimo, 0, int(falhou)))
+    return pd.DataFrame(linhas, columns=["chain_id", "mode", "tempo", "evento", "terminou_por_falha"])
 
 
 def kaplan_meier(tempo, evento) -> pd.DataFrame:

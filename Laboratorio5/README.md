@@ -13,8 +13,8 @@ python -m venv .venv && source .venv/bin/activate && pip install -r requirements
 
 | Comando | O que faz |
 |---|---|
-| `python -m analysis.run --sintetico` | Gera dados sintéticos em `data/synthetic/` e roda toda a análise em `results/sintetico/` |
-| `python -m analysis.run --entrada data/pilot/passos.csv` | A mesma análise sobre o CSV do piloto ou da coleta (mesmo formato) |
+| `python -m analysis.run --sintetico` | Gera dados sintéticos em `data/synthetic/` e roda toda a análise em `results/sintetico/` (subpastas `descritiva/`, `figures/`, `modelos/`, `sobrevivencia/`, `diferenca-pareada/` e `testes_holm.csv`) |
+| `python -m analysis.run --entrada data/pilot/passos.csv` | A mesma análise sobre o CSV do piloto ou da coleta (mesmo formato); na coleta completa, `--saida results` grava em `results/descritiva/` etc. |
 | `python -m analysis.pilot data/pilot/passos.csv` | Tabela dos 5 critérios do piloto (seção 3.12) e sugestão de decisão |
 | `python -m analysis.power` | Simulação de poder (número de cadeias por modo) em `results/power/` |
 | `python -m metrics.coletar <workspace> --csv` | As 8 métricas estruturais de um workspace Java |
@@ -27,7 +27,7 @@ Todas as simulações usam `numpy.random.default_rng(42)`.
 ## Estrutura
 
 ```
-analysis/   esquema do CSV, gerador sintético, modelos, sobrevivência, poder, critérios do piloto, pipeline
+analysis/   esquema do CSV, gerador sintético, descritiva, figuras, modelos, sobrevivência, poder, critérios do piloto, pipeline
 metrics/    métricas estruturais de um workspace (ArchUnit, jdeps, Lizard, jscpd, localidade, deriva documental)
 docs/s01/   plano de análise, esquema de dados, simulação de poder, revisão da semente, relatório do piloto
 seed/       semente do experimento (papel B)

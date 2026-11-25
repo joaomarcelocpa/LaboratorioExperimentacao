@@ -166,11 +166,26 @@ def taxa_de_regressao(df: pd.DataFrame) -> pd.DataFrame:
     return d[["chain_id", "mode", "step", "taxa"]]
 
 
+def _bootstrap_pares(inc, reg, n_boot: int = 2000, seed: int = 42) -> tuple[float, float, float, float]:
+    """IC 95% percentil, reamostrando pares: (cliff_inf, cliff_sup, dif_mediana_inf, dif_mediana_sup)."""
+    inc = np.asarray(inc, dtype=float)
+    reg = np.asarray(reg, dtype=float)
+    if len(inc) < 2:
+        return (np.nan,) * 4
+    rng = np.random.default_rng(seed)
+    idx = rng.integers(0, len(inc), size=(n_boot, len(inc)))
+    cliffs = np.array([cliffs_delta(inc[i], reg[i]) for i in idx])
+    medianas = np.median(inc[idx] - reg[idx], axis=1)
+    return (*np.percentile(cliffs, [2.5, 97.5]), *np.percentile(medianas, [2.5, 97.5]))
+
+
 def diferenca_pareada(df: pd.DataFrame, desfecho: str = "taxa") -> pd.DataFrame:
     """Incremental − regenerado no mesmo passo, pareando por chain_id.
 
-    Wilcoxon de postos sinalizados por passo e delta de Cliff. Passos em que
-    todas as diferenças são zero devolvem p = 1 (nada a testar).
+    Pareamento: a cadeia i incremental com a cadeia i regenerada, que recebem
+    os mesmos pedidos na mesma ordem e terminam no mesmo passo. Wilcoxon de
+    postos sinalizados por passo e delta de Cliff, com IC 95% por bootstrap de
+    pares. Passos em que todas as diferenças são zero devolvem p = 1.
     """
     if desfecho == "taxa":
         base = taxa_de_regressao(df)
@@ -187,10 +202,13 @@ def diferenca_pareada(df: pd.DataFrame, desfecho: str = "taxa") -> pd.DataFrame:
                 p = float(stats.wilcoxon(g["incremental"], g["regenerado"], zero_method="wilcox").pvalue)
         else:
             p = 1.0
+        c_inf, c_sup, m_inf, m_sup = _bootstrap_pares(g["incremental"], g["regenerado"])
         linhas.append({
             "passo": int(passo), "pares": len(g), "dif_media": float(dif.mean()),
-            "dif_mediana": float(dif.median()), "wilcoxon_p": p,
+            "dif_mediana": float(dif.median()), "dif_mediana_ic95_inf": m_inf, "dif_mediana_ic95_sup": m_sup,
+            "wilcoxon_p": p,
             "cliffs_delta": cliffs_delta(g["incremental"], g["regenerado"]),
+            "cliffs_ic95_inf": c_inf, "cliffs_ic95_sup": c_sup,
         })
     return pd.DataFrame(linhas)
 

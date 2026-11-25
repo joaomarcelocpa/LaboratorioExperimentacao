@@ -40,3 +40,13 @@ def test_tempos_primeira_regressao_censura_e_falha():
     assert (t.loc[1, "tempo"], t.loc[1, "evento"]) == (2, 1)
     assert (t.loc[2, "tempo"], t.loc[2, "evento"]) == (2, 0)  # sem regressão até o fim
     assert (t.loc[3, "tempo"], t.loc[3, "evento"]) == (1, 0)  # falha no passo 2: censura no último ok
+
+
+def test_sensibilidade_da_falha_sem_regressao():
+    df = pd.DataFrame([
+        _linha(3, "incremental", 0, 0), _linha(3, "incremental", 1, 0), _linha(3, "incremental", 2, 0, "falha"),
+    ])
+    assert tempos_ate_regressao(df, falha="evento")[["tempo", "evento"]].iloc[0].tolist() == [2, 1]
+    assert tempos_ate_regressao(df, falha="exclui").empty
+    with pytest.raises(ValueError):
+        tempos_ate_regressao(df, falha="outra")

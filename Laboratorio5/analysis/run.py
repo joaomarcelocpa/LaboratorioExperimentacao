@@ -3,7 +3,16 @@
     python -m analysis.run --sintetico                  # dados sintéticos
     python -m analysis.run --entrada data/pilot/passos.csv   # dados do piloto/coleta
 
-O formato do CSV é o mesmo nos dois casos (analysis/schema.py).
+O formato do CSV é o mesmo nos dois casos (analysis/schema.py). Saídas:
+
+    <saida>/descritiva/         tabelas por modo, passo e tipo de pedido (#123)
+    <saida>/figures/            gráficos (#123 e #125)
+    <saida>/modelos/            GLMM, curvas de crescimento, H3 e H5 (#124)
+    <saida>/sobrevivencia/      Kaplan-Meier, log-rank e sensibilidade à censura (#125)
+    <saida>/diferenca-pareada/  Wilcoxon pareado e delta de Cliff com IC (#125)
+    <saida>/testes_holm.csv     família confirmatória com p e p de Holm (#125)
+
+Na coleta completa, `--saida results` grava direto em results/descritiva etc.
 """
 
 from __future__ import annotations
@@ -11,60 +20,54 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
 
-from analysis import models, pilot, survival
+from analysis import descritiva, figuras, models, survival
 from analysis.schema import carregar, validar
 from analysis.synthetic import gerar
 
 RAIZ = Path(__file__).resolve().parent.parent
-CORES = {"incremental": "#c0392b", "regenerado": "#2c6fbb"}
+
+# Subpasta de cada tabela dentro da pasta de saída (issues #123, #124 e #125).
+PASTAS = {
+    "resumo_da_coleta": "descritiva", "por_passo": "descritiva", "por_passo_completa": "descritiva",
+    "por_tipo_de_pedido": "descritiva",
+    "glmm": "modelos", "glmm_sensibilidade": "modelos", "crescimento": "modelos",
+    "h5_tipo_de_pedido": "modelos", "variancia_entre_cadeias": "modelos", "h3_tendencia": "modelos",
+    "tempos_ate_regressao": "sobrevivencia", "kaplan_meier": "sobrevivencia", "log_rank": "sobrevivencia",
+    "log_rank_sensibilidade": "sobrevivencia",
+    "diferenca_pareada": "diferenca-pareada",
+    "testes_holm": ".",
+}
 
 
-def _figuras(df, km, saida: Path) -> None:
-    taxa = models.taxa_de_regressao(df)
-    fig, ax = plt.subplots(figsize=(6, 4))
-    for modo, g in taxa.groupby("mode"):
-        m = g.groupby("step")["taxa"].mean()
-        ax.plot(m.index, m.values * 100, marker="o", label=modo, color=CORES[modo])
-    ax.set_xlabel("passo"); ax.set_ylabel("regressão média (% dos testes)"); ax.legend(); ax.grid(alpha=0.3)
-    fig.tight_layout(); fig.savefig(saida / "regressao_por_passo.png", dpi=150); plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(6, 4))
-    for modo, g in km.groupby("mode"):
-        ax.step(g["tempo"], g["sobrevivencia"], where="post", label=modo, color=CORES[modo])
-        ax.fill_between(g["tempo"], g["ic_inf"], g["ic_sup"], step="post", alpha=0.15, color=CORES[modo])
-    ax.set_xlabel("passo"); ax.set_ylabel("P(sem regressão até o passo)"); ax.set_ylim(0, 1.02); ax.legend(); ax.grid(alpha=0.3)
-    fig.tight_layout(); fig.savefig(saida / "kaplan_meier.png", dpi=150); plt.close(fig)
+def _sobrevivencia(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
+    sens = []
+    for tratamento in survival.TRATAMENTOS_DA_FALHA:
+        t = survival.tempos_ate_regressao(df, falha=tratamento)
+        qui, p = survival.log_rank(t["tempo"], t["evento"], t["mode"])
+        sens.append({"falha_tratada_como": tratamento, "qui_quadrado": qui, "gl": 1, "p": p,
+                     "cadeias": len(t), "eventos": int(t["evento"].sum())})
+        if tratamento == "censura":
+            principal_t, principal_p, principal_q = t, p, qui
+    km = pd.concat([survival.kaplan_meier(g["tempo"], g["evento"]).assign(mode=m) for m, g in principal_t.groupby("mode")])
+    return {
+        "tempos_ate_regressao": principal_t,
+        "kaplan_meier": km,
+        "log_rank": pd.DataFrame([{"qui_quadrado": principal_q, "gl": 1, "p": principal_p, "cadeias": len(principal_t),
+                                   "eventos": int(principal_t["evento"].sum())}]),
+        "log_rank_sensibilidade": pd.DataFrame(sens),
+    }
 
 
 def analisar(df: pd.DataFrame, saida: Path) -> dict[str, pd.DataFrame]:
-    saida.mkdir(parents=True, exist_ok=True)
-    out: dict[str, pd.DataFrame] = {}
-
-    descritiva = (
-        df[df["step"] >= 1].assign(taxa=lambda d: d["reg_failed"].astype(float) / d["reg_total"].astype(float))
-        .groupby(["mode", "step"])
-        .agg(cadeias=("chain_id", "nunique"), taxa_regressao=("taxa", "mean"), arch_violations=("arch_violations", "mean"),
-             files_touched=("files_touched", "mean"), dup_pct=("dup_pct", "mean"), max_ccn=("max_ccn", "mean"),
-             doc_drift=("doc_drift", "mean"))
-        .reset_index()
-    )
-    out["descritiva"] = descritiva
+    out: dict[str, pd.DataFrame] = dict(descritiva.tabelas(df))
 
     glmm = models.glmm_regressao(df)
-    sens = models.glmm_sensibilidade(df)
-    out["glmm"], out["glmm_sensibilidade"] = glmm, sens
+    out["glmm"], out["glmm_sensibilidade"] = glmm, models.glmm_sensibilidade(df)
 
-    t = survival.tempos_ate_regressao(df)
-    km = pd.concat([survival.kaplan_meier(g["tempo"], g["evento"]).assign(mode=m) for m, g in t.groupby("mode")])
-    qui, p_lr = survival.log_rank(t["tempo"], t["evento"], t["mode"])
-    out["kaplan_meier"] = km
-    out["log_rank"] = pd.DataFrame([{"qui_quadrado": qui, "gl": 1, "p": p_lr, "cadeias": len(t), "eventos": int(t["evento"].sum())}])
+    out.update(_sobrevivencia(df))
+    p_lr = float(out["log_rank"]["p"].iloc[0])
 
     crescimento = pd.concat([models.curva_de_crescimento(df, d) for d in ("arch_violations", "files_touched", "dup_pct")])
     out["crescimento"] = crescimento
@@ -75,7 +78,7 @@ def analisar(df: pd.DataFrame, saida: Path) -> dict[str, pd.DataFrame]:
     out["variancia_entre_cadeias"] = var
     out["h3_tendencia"] = var.attrs["tendencia"]
 
-    # Holm sobre a família confirmatória: uma linha por hipótese/teste do plano.
+    # Holm sobre a família confirmatória, declarada no plano de análise antes dos dados.
     familia = [
         ("H1", "GLMM: inclinação do passo (regenerado)", glmm.loc[glmm["termo"] == "step", "p"].iloc[0]),
         ("H4", "GLMM: interação modo × passo", glmm.loc[glmm["termo"] == "inc:step", "p"].iloc[0]),
@@ -89,8 +92,10 @@ def analisar(df: pd.DataFrame, saida: Path) -> dict[str, pd.DataFrame]:
     out["testes_holm"] = models.holm(pd.DataFrame(familia, columns=["hipotese", "teste", "p"]))
 
     for nome, tabela in out.items():
-        tabela.to_csv(saida / f"{nome}.csv", index=False)
-    _figuras(df, km, saida)
+        pasta = saida / PASTAS[nome]
+        pasta.mkdir(parents=True, exist_ok=True)
+        tabela.to_csv(pasta / f"{nome}.csv", index=False)
+    figuras.todas(df, out["kaplan_meier"], pareada, saida / "figures")
     return out
 
 

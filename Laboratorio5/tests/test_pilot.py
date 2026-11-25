@@ -58,4 +58,4 @@ def test_pipeline_completo_gera_saidas(tmp_path):
     from analysis.run import analisar
     out = analisar(gerar(6, seed=9), tmp_path)
     assert {"glmm", "log_rank", "testes_holm", "diferenca_pareada"} <= set(out)
-    assert (tmp_path / "kaplan_meier.png").exists() and (tmp_path / "testes_holm.csv").exists()
+    assert (tmp_path / "figures" / "kaplan_meier.png").exists() and (tmp_path / "testes_holm.csv").exists()
