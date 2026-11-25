@@ -11,6 +11,10 @@ import java.time.Duration;
 
 final class ApiClient {
 
+    // Desde P6 o papel padrao e colaborador, que nao cria, edita nem exclui. A regressao sempre age como
+    // gestor: antes de P6 o cabecalho e ignorado, depois dele e o que mantem os comportamentos antigos testaveis.
+
+
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     record Resposta(int status, String corpo) {
@@ -35,7 +39,8 @@ final class ApiClient {
     }
 
     Resposta enviar(String metodo, String caminho, String corpo) {
-        HttpRequest.Builder b = HttpRequest.newBuilder(URI.create(base + caminho)).timeout(Duration.ofSeconds(30));
+        HttpRequest.Builder b = HttpRequest.newBuilder(URI.create(base + caminho)).timeout(Duration.ofSeconds(30))
+                .header("X-Papel", "gestor");
         if (corpo == null) {
             b.method(metodo, HttpRequest.BodyPublishers.noBody());
         } else {

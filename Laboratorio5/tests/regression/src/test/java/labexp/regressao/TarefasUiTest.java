@@ -43,6 +43,7 @@ class TarefasUiTest extends Base {
             d.dismiss();
         });
         page.navigate(BASE_URL);
+        PapelNaTela.comoGestorSeExistir(page);
     }
 
     @AfterEach
@@ -122,6 +123,7 @@ class TarefasUiTest extends Base {
                 new Browser.NewContextOptions().setTimezoneId("America/Sao_Paulo"))) {
             Page p = ctx.newPage();
             p.navigate(BASE_URL);
+            PapelNaTela.comoGestorSeExistir(p);
             String resp = responsavelUnico();
             p.getByTestId("form-titulo").fill("Fuso");
             p.getByTestId("form-descricao").fill("com descricao");
