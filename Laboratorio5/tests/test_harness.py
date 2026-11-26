@@ -369,3 +369,22 @@ def test_piloto_sem_executar_so_mostra_o_plano(tmp_path, capsys):
     saida = capsys.readouterr().out
     assert rc == 0 and "24 execucao(oes)" in saida and "nada foi executado" in saida
     assert not (tmp_path / "x.csv").exists()
+
+
+def test_carregar_env_nao_sobrescreve_e_tolera_quebras(tmp_path):
+    from harness.config import carregar_env
+    arq = tmp_path / ".env"
+    arq.write_text("# comentario\nA=do_arquivo\nB=parte1 \n  \nC=\"entre aspas\"\nD=\nE=sem igual\nLINHA_SEM_IGUAL\n")
+    arq.chmod(0o600)
+    destino = {"A": "ja_exportada"}
+    carregadas = carregar_env(arq, destino)
+    assert destino["A"] == "ja_exportada"
+    assert destino["B"] == "parte1"
+    assert destino["C"] == "entreaspas"
+    assert "D" not in destino
+    assert set(carregadas) == {"B", "C", "E"}
+
+
+def test_carregar_env_sem_arquivo(tmp_path):
+    from harness.config import carregar_env
+    assert carregar_env(tmp_path / "nao-existe", {}) == []

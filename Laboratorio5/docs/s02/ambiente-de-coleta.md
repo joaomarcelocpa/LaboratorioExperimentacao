@@ -42,7 +42,7 @@ Definidas em `harness/ambiente.pins`, que é a fonte de verdade; esta tabela só
 
 ```bash
 cd Laboratorio5
-export DISABLE_AUTOUPDATER=1 ANTHROPIC_MODEL=claude-sonnet-5-5
+cp .env.example .env && chmod 600 .env   # preencher a credencial; DISABLE_AUTOUPDATER e ANTHROPIC_MODEL já vêm no exemplo
 harness/check-env --maquina A --workspace <pasta que o agente enxerga>
 ```
 
@@ -76,6 +76,7 @@ python -m harness.plano_execucao --cadeias-por-modo 12 --semente 118
 
 | Variável | Valor | Para quê |
 |---|---|---|
+| `CLAUDE_CODE_OAUTH_TOKEN` ou `ANTHROPIC_API_KEY` | em `Laboratorio5/.env` (não versionado; modelo em `.env.example`) | credencial do agente; nunca no repositório |
 | `DISABLE_AUTOUPDATER` | `1` | impede troca de versão do Claude Code durante a janela |
 | `ANTHROPIC_MODEL` | `claude-sonnet-5-5` | modelo fixo |
 | `BASE_URL` | `http://localhost:8080` | alvo dos testes de regressão e aceitação |

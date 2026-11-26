@@ -28,9 +28,9 @@ cd Laboratorio5
 harness/container/construir-imagem.sh
 harness/container/verificar-imagem.sh
 
-# 2. credencial só por variável de ambiente (nunca em arquivo montado)
-export ANTHROPIC_API_KEY=...        # ou CLAUDE_CODE_OAUTH_TOKEN
-export ANTHROPIC_MODEL=claude-sonnet-5-5 DISABLE_AUTOUPDATER=1
+# 2. credencial e modelo: copie o exemplo e preencha (o .env NAO e versionado)
+cp .env.example .env && chmod 600 .env
+$EDITOR .env            # CLAUDE_CODE_OAUTH_TOKEN (ou ANTHROPIC_API_KEY); o token pode ficar em varias linhas
 
 # 3. mostra o plano sem executar nada
 python -m harness.executar piloto
@@ -90,7 +90,7 @@ Variáveis: `DISABLE_AUTOUPDATER=1` e `ANTHROPIC_MODEL`.
 
 - Container por execução (`docker run --rm`), sem privilégios (`--cap-drop ALL`, `no-new-privileges`), usuário do host, 4 GB e 2 CPUs.
 - **Só o workspace é montado.** `tests/acceptance` e `reference` nunca entram no container, e `workspace.verificar_isolamento` barra o passo se alguma pasta `acceptance` ou `reference` aparecer dentro do workspace ou se o workspace estiver dentro delas. A suíte oculta roda do host.
-- Credenciais entram só por variável de ambiente (`ANTHROPIC_API_KEY` ou `CLAUDE_CODE_OAUTH_TOKEN`); nenhum arquivo do usuário é montado.
+- Credenciais entram só por variável de ambiente (`ANTHROPIC_API_KEY` ou `CLAUDE_CODE_OAUTH_TOKEN`), lidas de `Laboratorio5/.env` (não versionado, listado no `.gitignore`; modelo em `.env.example`) ou do terminal, que tem prioridade; nenhum arquivo do usuário é montado no container, e o `.env` fica no host, fora do workspace do agente.
 - `harness/container/verificar-imagem.sh` confere versão, atualização automática e ausência de pastas ocultas na imagem. Deve rodar nas três máquinas.
 - P9: a cadeia que inclui P9 sobe com `compose.override.yml`, que injeta `NOTIFICACAO_URL` no serviço `app`. Se o agente renomear esse serviço, P9 precisa de tratamento manual. P1 a P4 não usam o override.
 

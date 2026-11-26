@@ -13,6 +13,35 @@ PINS = LAB / "harness" / "ambiente.pins"
 PASTAS_OCULTAS = (LAB / "tests" / "acceptance", LAB / "reference")
 
 
+ENV_ARQUIVO = LAB / ".env"
+
+
+def carregar_env(caminho: Path = ENV_ARQUIVO, destino=None) -> list[str]:
+    """Le .env (CHAVE=VALOR) para o ambiente SEM sobrescrever o que ja esta exportado. Devolve as chaves carregadas.
+
+    O arquivo guarda credencial: nao e versionado (.gitignore) e avisa se outros usuarios podem le-lo.
+    Espacos e quebras de linha dentro do valor sao removidos (um token colado em varias linhas continua valido).
+    """
+    destino = os.environ if destino is None else destino
+    if not caminho.is_file():
+        return []
+    if caminho.stat().st_mode & 0o077:
+        import sys
+        print(f"aviso: {caminho} pode ser lido por outros usuarios; rode: chmod 600 {caminho}", file=sys.stderr)
+    carregadas: list[str] = []
+    for linha in caminho.read_text(encoding="utf-8").splitlines():
+        linha = linha.strip()
+        if not linha or linha.startswith("#") or "=" not in linha:
+            continue
+        chave, valor = linha.split("=", 1)
+        chave = chave.strip()
+        valor = "".join(valor.split()).strip("\"'")
+        if valor and not destino.get(chave):
+            destino[chave] = valor
+            carregadas.append(chave)
+    return carregadas
+
+
 def ler_pins(caminho: Path = PINS) -> dict[str, str]:
     pins: dict[str, str] = {}
     for linha in caminho.read_text(encoding="utf-8").splitlines():
@@ -45,6 +74,7 @@ class Config:
 
     @classmethod
     def do_ambiente(cls, **sobrescritas) -> "Config":
+        carregar_env()
         pins = ler_pins()
         env = os.environ
         cfg = cls(

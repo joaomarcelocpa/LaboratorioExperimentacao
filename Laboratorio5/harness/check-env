@@ -20,6 +20,16 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+# credenciais e modelo podem vir de Laboratorio5/.env (nao versionado); o que ja esta exportado tem prioridade
+if [ -f "$lab/.env" ]; then
+  while IFS='=' read -r k v; do
+    k="$(echo "$k" | tr -d ' ')"
+    [[ -z "$k" || "$k" == \#* || -z "$v" ]] && continue
+    v="$(echo "$v" | tr -d ' \t\r\n\"'"'"'')"
+    [ -z "${!k:-}" ] && export "$k=$v"
+  done < "$lab/.env"
+fi
+
 declare -A pin
 while IFS='=' read -r k v; do
   [[ -z "$k" || "$k" == \#* ]] && continue
