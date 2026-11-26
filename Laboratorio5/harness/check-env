@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+# Verifica o ambiente da coleta contra harness/ambiente.pins e grava os metadados junto dos dados.
+#
+# Uso: harness/check-env [--maquina A|B|C] [--saida ARQUIVO.json] [--workspace DIR]
+#   --maquina    rotulo da maquina no plano de execucao (grava nos metadados)
+#   --saida      onde gravar o JSON de metadados (padrao: results/ambiente-<maquina>-<data>.json)
+#   --workspace  pasta que o agente enxerga; falha se ela contiver os testes ocultos ou a referencia
+# Codigo de saida: 0 = tudo conforme; 1 = alguma divergencia (nao inicie a coleta).
+set -uo pipefail
+
+aqui="$(cd "$(dirname "$0")" && pwd)"
+lab="$(cd "$aqui/.." && pwd)"
+maquina="?"; saida=""; workspace=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --maquina) maquina="$2"; shift 2 ;;
+    --saida) saida="$2"; shift 2 ;;
+    --workspace) workspace="$2"; shift 2 ;;
+    *) echo "argumento desconhecido: $1" >&2; exit 2 ;;
+  esac
+done
+
+declare -A pin
+while IFS='=' read -r k v; do
+  [[ -z "$k" || "$k" == \#* ]] && continue
+  pin[$k]="$v"
+done < "$aqui/ambiente.pins"
+
+falhas=0
+declare -A obs
+linhas=""
+
+registrar() { # nome esperado observado
+  local nome="$1" esperado="$2" observado="$3" estado
+  obs[$nome]="$observado"
+  if [ -z "$esperado" ]; then estado="SEM PIN"; falhas=$((falhas+1))
+  elif [ "$observado" = "$esperado" ]; then estado="ok"
+  else estado="DIVERGE"; falhas=$((falhas+1)); fi
+  printf '%-22s %-18s %-18s %s\n' "$nome" "${esperado:-—}" "${observado:-ausente}" "$estado"
+}
+
+printf '%-22s %-18s %-18s %s\n' ferramenta esperado observado estado
+
+registrar claude_code "${pin[CLAUDE_CODE]}" "$(claude --version 2>/dev/null | awk '{print $1}')"
+registrar modelo "${pin[MODELO]}" "${ANTHROPIC_MODEL:-}"
+registrar atualizacao_automatica "desativada" "$([ "${DISABLE_AUTOUPDATER:-}" = "1" ] && echo desativada || echo ativa)"
+registrar java_major "${pin[JAVA_MAJOR]}" "$(java -version 2>&1 | sed -n '1s/.*version "\([0-9]*\).*/\1/p')"
+registrar maven "${pin[MAVEN_MAJOR_MINOR]}" "$(mvn -v 2>/dev/null | sed -n '1s/.*Maven \([0-9]*\.[0-9]*\).*/\1/p')"
+registrar docker_major "${pin[DOCKER_MAJOR]}" "$(docker --version 2>/dev/null | sed -n 's/.*version \([0-9]*\)\..*/\1/p')"
+registrar docker_daemon "ativo" "$(docker info >/dev/null 2>&1 && echo ativo || echo inativo)"
+registrar postgres_imagem "${pin[POSTGRES_IMAGE]}" "$(sed -n 's/^ *image: *\(postgres:[^ ]*\).*/\1/p' "$lab/seed/docker-compose.yml" | head -1)"
+registrar archunit "${pin[ARCHUNIT]}" "$(sed -n 's#.*<archunit.version>\(.*\)</archunit.version>.*#\1#p' "$lab/seed/pom.xml")"
+registrar jdeps_major "${pin[JDEPS_MAJOR]}" "$(jdeps --version 2>/dev/null | cut -d. -f1)"
+registrar lizard "${pin[LIZARD]}" "$( (lizard --version 2>/dev/null || python3 -m lizard --version 2>/dev/null) | head -1)"
+registrar jscpd "${pin[JSCPD]}" "$(jscpd --version 2>/dev/null | head -1)"
+
+if [ -n "$workspace" ]; then
+  oculto="conforme"
+  for p in "$lab/tests/acceptance" "$lab/reference"; do
+    case "$(realpath "$p")" in "$(realpath "$workspace")"/*|"$(realpath "$workspace")") oculto="EXPOSTO: $p" ;; esac
+  done
+  [ -d "$workspace/tests/acceptance" ] || [ -d "$workspace/reference" ] && oculto="EXPOSTO: copia dentro do workspace"
+  registrar testes_ocultos "conforme" "$oculto"
+fi
+
+data="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+[ -n "$saida" ] || saida="$lab/results/ambiente-${maquina}-$(date -u +%Y%m%d).json"
+mkdir -p "$(dirname "$saida")"
+{
+  printf '{\n  "data_utc": "%s",\n  "maquina": "%s",\n  "host": "%s",\n  "commit": "%s",\n  "conforme": %s,\n  "ferramentas": {\n' \
+    "$data" "$maquina" "$(hostname)" "$(git -C "$lab" rev-parse --short HEAD 2>/dev/null)" "$([ $falhas -eq 0 ] && echo true || echo false)"
+  n=0; total=${#obs[@]}
+  for k in $(printf '%s\n' "${!obs[@]}" | sort); do
+    n=$((n+1))
+    printf '    "%s": "%s"%s\n' "$k" "${obs[$k]}" "$([ $n -lt $total ] && echo ,)"
+  done
+  printf '  }\n}\n'
+} > "$saida"
+echo "metadados: $saida"
+
+if [ $falhas -ne 0 ]; then
+  echo "AMBIENTE NAO CONFORME ($falhas item(ns)). Nao inicie a coleta." >&2
+  exit 1
+fi
+echo "ambiente conforme."
