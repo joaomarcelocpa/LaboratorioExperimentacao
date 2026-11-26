@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,6 +20,7 @@ import labexp.semente.adapter.in.web.TarefaController;
 import labexp.semente.adapter.in.web.TratadorDeErros;
 import labexp.semente.application.port.out.TarefaRepositorio;
 import labexp.semente.application.service.TarefaService;
+import labexp.semente.domain.StatusTarefa;
 import labexp.semente.domain.Tarefa;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +46,22 @@ class TarefaControllerTest {
 
         public List<Tarefa> listar() {
             return List.copyOf(tarefas);
+        }
+
+        public List<Tarefa> listar(labexp.semente.domain.FiltroTarefas f) {
+            return listar().stream()
+                    .filter(t -> f.status() == null || t.status() == f.status())
+                    .filter(t -> f.responsavel() == null || t.responsavel().equals(f.responsavel()))
+                    .sorted(f.ordenarPorVencimento() ? Comparator.comparing(Tarefa::vencimento) : (a, b) -> 0)
+                    .toList();
+        }
+
+        public void inserir(List<Tarefa> novas) {
+            tarefas.addAll(novas);
+        }
+
+        public List<Tarefa> pendentesVencidasAte(java.time.Instant limite) {
+            return tarefas.stream().filter(t -> t.status() == StatusTarefa.PENDENTE && t.vencimento().isBefore(limite)).toList();
         }
 
         public boolean excluir(UUID id) {

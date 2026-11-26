@@ -21,6 +21,13 @@ public final class PapelNaTela {
         return v.strip().toLowerCase();
     }
 
+    /** Para testes que nao sao de P6 mas precisam criar/editar pela tela: se o campo de papel existir, vira gestor. */
+    public static void comoGestorSeExistir(Page page) {
+        if (page.getByTestId("papel-usuario").count() > 0) {
+            definir(page, "gestor");
+        }
+    }
+
     /** Deixa a tela no papel pedido; falha com mensagem clara se nenhum mecanismo conhecido funcionar. */
     public static void definir(Page page, String papel) {
         if (tentar(page, papel)) {

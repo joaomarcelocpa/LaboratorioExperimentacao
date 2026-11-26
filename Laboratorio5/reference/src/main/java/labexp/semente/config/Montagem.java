@@ -1,5 +1,6 @@
 package labexp.semente.config;
 
+import labexp.semente.application.port.out.AvisoRepositorio;
 import labexp.semente.application.port.out.HistoricoRepositorio;
 import labexp.semente.application.port.out.IdempotenciaRepositorio;
 import labexp.semente.application.port.out.NotificacaoRepositorio;
@@ -19,7 +20,7 @@ public class Montagem {
     @Bean
     TarefaService tarefaService(TarefaRepositorio repositorio, HistoricoRepositorio historico,
             IdempotenciaRepositorio idempotencia, NotificacaoRepositorio notificacoes,
-            NotificadorExterno notificador) {
-        return new TarefaService(repositorio, historico, idempotencia, notificacoes, notificador);
+            NotificadorExterno notificador, AvisoRepositorio avisos) {
+        return new TarefaService(repositorio, historico, idempotencia, notificacoes, notificador, avisos);
     }
 }

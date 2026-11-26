@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import labexp.semente.application.port.out.AvisoRepositorio;
 import labexp.semente.application.port.out.HistoricoRepositorio;
 import labexp.semente.application.port.out.IdempotenciaRepositorio;
 import labexp.semente.application.port.out.NotificacaoRepositorio;
@@ -13,6 +14,7 @@ import labexp.semente.application.port.out.NotificadorExterno;
 import labexp.semente.application.port.out.TarefaRepositorio;
 import labexp.semente.application.service.TarefaService;
 import labexp.semente.domain.AlteracaoTarefa;
+import labexp.semente.domain.Aviso;
 import labexp.semente.domain.StatusNotificacao;
 import labexp.semente.domain.Tarefa;
 
@@ -69,7 +71,19 @@ public final class Fakes {
         }
     }
 
+    public static final class Avisos implements AvisoRepositorio {
+        final List<Aviso> todos = new ArrayList<>();
+
+        public void salvar(Aviso a) {
+            todos.add(a);
+        }
+
+        public List<Aviso> listar() {
+            return List.copyOf(todos);
+        }
+    }
+
     public static TarefaService servico(TarefaRepositorio repositorio) {
-        return new TarefaService(repositorio, new Historico(), new Idempotencia(), new Notificacoes(), new Notificador());
+        return new TarefaService(repositorio, new Historico(), new Idempotencia(), new Notificacoes(), new Notificador(), new Avisos());
     }
 }

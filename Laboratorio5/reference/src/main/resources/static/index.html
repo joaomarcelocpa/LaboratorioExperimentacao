@@ -10,6 +10,10 @@
   <main>
     <h1>Tarefas</h1>
 
+    <p class="papel">Empresa:
+      <input id="empresa" data-testid="empresa-input" maxlength="80" placeholder="padrao">
+    </p>
+
     <p class="papel">Papel:
       <select id="papel" data-testid="papel-usuario">
         <option value="colaborador">colaborador</option>
@@ -41,7 +45,31 @@
       </div>
     </form>
 
+    <section id="filtros">
+      <label>Status
+        <select id="filtro-status" data-testid="filtro-status">
+          <option value="">todos</option><option value="PENDENTE">pendente</option><option value="CONCLUIDA">concluída</option>
+        </select>
+      </label>
+      <label>Responsável
+        <input id="filtro-responsavel" data-testid="filtro-responsavel">
+      </label>
+      <label><input type="checkbox" id="ordenar-vencimento" data-testid="ordenar-vencimento"> Ordenar por vencimento</label>
+    </section>
+
     <ul id="lista" data-testid="lista-tarefas"></ul>
+
+    <section id="importacao">
+      <h2>Importar CSV</h2>
+      <input type="file" id="importar-csv" data-testid="importar-csv" accept=".csv,text/csv">
+      <button type="button" id="importar-confirmar" data-testid="importar-confirmar">Importar</button>
+      <div id="resultado-importacao" data-testid="resultado-importacao"></div>
+    </section>
+
+    <section id="avisos">
+      <h2>Avisos</h2>
+      <ul id="lista-avisos" data-testid="lista-avisos"></ul>
+    </section>
 
     <section id="relatorio" data-testid="relatorio-tarefas">
       <h2>Relatório</h2>

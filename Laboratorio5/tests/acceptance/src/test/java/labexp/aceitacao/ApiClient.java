@@ -33,19 +33,26 @@ public final class ApiClient {
 
     private final String base;
     private final String papel;
+    private final String empresa;
 
-    private ApiClient(String base, String papel) {
+    private ApiClient(String base, String papel, String empresa) {
         this.base = base;
         this.papel = papel;
+        this.empresa = empresa;
     }
 
     /** Papel nulo significa "sem o cabecalho X-Papel". */
     public static ApiClient comPapel(String base, String papel) {
-        return new ApiClient(base, papel);
+        return new ApiClient(base, papel, null);
     }
 
     public ApiClient papel(String novoPapel) {
-        return new ApiClient(base, novoPapel);
+        return new ApiClient(base, novoPapel, empresa);
+    }
+
+    /** Empresa nula significa "sem o cabecalho X-Empresa" (empresa padrao). */
+    public ApiClient empresa(String novaEmpresa) {
+        return new ApiClient(base, papel, novaEmpresa);
     }
 
     public Resposta enviar(String metodo, String caminho, String corpo) {
@@ -57,6 +64,9 @@ public final class ApiClient {
         Map<String, String> todos = new LinkedHashMap<>();
         if (papel != null) {
             todos.put("X-Papel", papel);
+        }
+        if (empresa != null) {
+            todos.put("X-Empresa", empresa);
         }
         todos.putAll(cabecalhos);
         todos.forEach(b::header);

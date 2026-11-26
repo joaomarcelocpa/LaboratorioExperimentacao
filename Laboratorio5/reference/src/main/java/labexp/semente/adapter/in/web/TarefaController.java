@@ -9,6 +9,9 @@ import labexp.semente.application.port.in.ConsultarTarefa;
 import labexp.semente.application.port.in.CriarTarefa;
 import labexp.semente.application.port.in.ExcluirTarefa;
 import labexp.semente.application.port.in.ListarTarefas;
+import labexp.semente.domain.FiltroTarefas;
+import labexp.semente.domain.StatusTarefa;
+import labexp.semente.domain.TarefaInvalidaException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,8 +53,33 @@ public class TarefaController {
     }
 
     @GetMapping
-    public List<TarefaResponse> listar() {
-        return listar.listar().stream().map(TarefaResponse::de).toList();
+    public List<TarefaResponse> listar(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String responsavel,
+            @RequestParam(required = false) String ordenar,
+            @RequestParam(required = false) String ordem,
+            @RequestParam(required = false) String ordenarPor,
+            @RequestParam(required = false) String sort) {
+        boolean porVencimento = java.util.stream.Stream.of(ordenar, ordem, ordenarPor, sort)
+                .anyMatch(v -> v != null && v.strip().toLowerCase().startsWith("vencimento"));
+        FiltroTarefas filtro = new FiltroTarefas(parseStatus(status),
+                responsavel == null || responsavel.isBlank() ? null : responsavel.strip(), porVencimento);
+        return listar.listar(filtro).stream().map(TarefaResponse::de).toList();
+    }
+
+    private static StatusTarefa parseStatus(String valor) {
+        if (valor == null || valor.isBlank()) {
+            return null;
+        }
+        String n = java.text.Normalizer.normalize(valor.strip(), java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "").toUpperCase();
+        if (n.startsWith("PEND")) {
+            return StatusTarefa.PENDENTE;
+        }
+        if (n.startsWith("CONC")) {
+            return StatusTarefa.CONCLUIDA;
+        }
+        throw new TarefaInvalidaException("status invalido: " + valor);
     }
 
     @GetMapping("/{id}")

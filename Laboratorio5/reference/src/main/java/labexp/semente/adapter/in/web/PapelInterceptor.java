@@ -30,7 +30,7 @@ public class PapelInterceptor implements HandlerInterceptor {
         String metodo = req.getMethod();
         String caminho = req.getRequestURI();
         if ("POST".equals(metodo)) {
-            return caminho.equals("/tarefas");
+            return caminho.equals("/tarefas") || caminho.equals("/tarefas/importacao");
         }
         return ("PUT".equals(metodo) || "DELETE".equals(metodo)) && caminho.matches("/tarefas/[^/]+");
     }

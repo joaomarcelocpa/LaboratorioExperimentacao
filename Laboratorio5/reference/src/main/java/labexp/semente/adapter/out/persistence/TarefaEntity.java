@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
+import labexp.semente.domain.ContextoEmpresa;
 import labexp.semente.domain.StatusTarefa;
 import labexp.semente.domain.Tarefa;
 
@@ -28,6 +29,8 @@ class TarefaEntity {
     @Column(name = "criada_em")
     private Instant criadaEm;
 
+    private String empresa;
+
     protected TarefaEntity() {
     }
 
@@ -40,6 +43,7 @@ class TarefaEntity {
         e.vencimento = t.vencimento();
         e.status = t.status();
         e.criadaEm = t.criadaEm();
+        e.empresa = ContextoEmpresa.atual();
         return e;
     }
 

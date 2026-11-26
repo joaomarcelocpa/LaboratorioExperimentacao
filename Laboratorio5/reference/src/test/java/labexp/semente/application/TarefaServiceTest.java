@@ -41,6 +41,22 @@ class TarefaServiceTest {
                     .toList();
         }
 
+        public List<Tarefa> listar(labexp.semente.domain.FiltroTarefas f) {
+            return listar().stream()
+                    .filter(t -> f.status() == null || t.status() == f.status())
+                    .filter(t -> f.responsavel() == null || t.responsavel().equals(f.responsavel()))
+                    .sorted(f.ordenarPorVencimento() ? Comparator.comparing(Tarefa::vencimento) : (a, b) -> 0)
+                    .toList();
+        }
+
+        public void inserir(List<Tarefa> novas) {
+            tarefas.addAll(novas);
+        }
+
+        public List<Tarefa> pendentesVencidasAte(java.time.Instant limite) {
+            return tarefas.stream().filter(t -> t.status() == StatusTarefa.PENDENTE && t.vencimento().isBefore(limite)).toList();
+        }
+
         public boolean excluir(UUID id) {
             return tarefas.removeIf(x -> x.id().equals(id));
         }
@@ -50,7 +66,7 @@ class TarefaServiceTest {
     private final Fakes.Historico historico = new Fakes.Historico();
     private final Fakes.Notificador notificador = new Fakes.Notificador();
     private final TarefaService servico = new TarefaService(repo, historico, new Fakes.Idempotencia(),
-            new Fakes.Notificacoes(), notificador);
+            new Fakes.Notificacoes(), notificador, new Fakes.Avisos());
 
     private Tarefa criar(String titulo) {
         return servico.criar(new DadosTarefa(titulo, null, "ana", VENC));
@@ -181,5 +197,38 @@ class TarefaServiceTest {
         assertEquals(labexp.semente.domain.StatusNotificacao.FALHOU, servico.notificacao(t.id()));
         notificador.responde = true;
         assertEquals(labexp.semente.domain.StatusNotificacao.ENVIADA, servico.reenviar(t.id()));
+    }
+
+    @Test
+    void avisoNascePraTarefaVencidaPendenteUmaVezSo() {
+        Tarefa vencida = servico.criar(new DadosTarefa("v", null, "ana", Instant.parse("2020-01-01T00:00:00Z")));
+        Tarefa concluida = servico.criar(new DadosTarefa("c", null, "ana", Instant.parse("2020-01-01T00:00:00Z")));
+        servico.concluir(concluida.id());
+        criar("futura");
+        assertEquals(1, servico.avisos().size());
+        assertEquals(1, servico.avisos().size());
+        assertEquals(vencida.id(), servico.avisos().get(0).tarefaId());
+    }
+
+    @Test
+    void filtraPorStatusEResponsavelEOrdenaPorVencimento() {
+        servico.criar(new DadosTarefa("t1", null, "ana", Instant.parse("2030-01-02T00:00:00Z")));
+        servico.criar(new DadosTarefa("t2", null, "ana", Instant.parse("2030-01-01T00:00:00Z")));
+        servico.criar(new DadosTarefa("t3", null, "bia", Instant.parse("2030-01-03T00:00:00Z")));
+        var r = servico.listar(new labexp.semente.domain.FiltroTarefas(StatusTarefa.PENDENTE, "ana", true));
+        assertEquals(java.util.List.of("t2", "t1"), r.stream().map(Tarefa::titulo).toList());
+    }
+
+    @Test
+    void importacaoSalvaValidasEListaErrosComNumeroDaLinha() {
+        String csv = "titulo,responsavel,vencimento\n"
+                + "a,ana,2030-01-01T00:00:00Z\n"
+                + ",ana,2030-01-01T00:00:00Z\n"
+                + "c,ana,amanha\n"
+                + "d,ana,2030-01-01T00:00:00Z\n";
+        var r = servico.importar(csv);
+        assertEquals(2, r.importadas());
+        assertEquals(java.util.List.of(3, 4), r.erros().stream().map(e -> e.linha()).toList());
+        assertEquals(2, servico.listar().size());
     }
 }

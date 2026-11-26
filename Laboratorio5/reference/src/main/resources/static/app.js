@@ -13,6 +13,29 @@ const lista = document.getElementById('lista');
 
 let editando = null;
 
+const campoEmpresa = document.getElementById('empresa');
+function empresaInicial() {
+  const daUrl = new URLSearchParams(location.search).get('empresa');
+  if (daUrl) return daUrl;
+  try { return localStorage.getItem('empresa') || ''; } catch (e) { return ''; }
+}
+let empresa = empresaInicial();
+campoEmpresa.value = empresa;
+function mudarEmpresa() {
+  empresa = campoEmpresa.value.trim();
+  try { localStorage.setItem('empresa', empresa); } catch (e) { /* ignora */ }
+  carregar().then(carregarAvisos).catch((e) => mostrarErro(e.message));
+}
+campoEmpresa.addEventListener('change', mudarEmpresa);
+campoEmpresa.addEventListener('keydown', (ev) => { if (ev.key === 'Enter') mudarEmpresa(); });
+
+const filtroStatus = document.getElementById('filtro-status');
+const filtroResponsavel = document.getElementById('filtro-responsavel');
+const ordenarVencimento = document.getElementById('ordenar-vencimento');
+for (const c of [filtroStatus, filtroResponsavel, ordenarVencimento]) {
+  c.addEventListener('change', () => carregar().catch((e) => mostrarErro(e.message)));
+}
+
 const seletorPapel = document.getElementById('papel');
 const campoChave = document.getElementById('idempotency-key');
 const PAPEIS = ['colaborador', 'gestor'];
@@ -40,8 +63,7 @@ seletorPapel.addEventListener('change', () => {
   papel = seletorPapel.value;
   try { localStorage.setItem('papel', papel); } catch (e) { /* ignora */ }
   aplicarPapel();
-  aplicarPapel();
-carregar().catch((e) => mostrarErro(e.message));
+  
 });
 
 function aplicarPapel() {
@@ -60,8 +82,10 @@ function paraLocal(iso) {
 }
 
 async function chamar(metodo, url, corpo, extras = {}) {
-  const opcoes = { method: metodo, headers: { 'X-Papel': papel, ...extras } };
-  if (corpo) {
+  const opcoes = { method: metodo, headers: { 'X-Papel': papel, ...(empresa ? { 'X-Empresa': empresa } : {}), ...extras } };
+  if (corpo instanceof Blob) {
+    opcoes.body = corpo;
+  } else if (corpo) {
     opcoes.headers['Content-Type'] = 'application/json';
     opcoes.body = JSON.stringify(corpo);
   }
@@ -183,7 +207,11 @@ function blocoNotificacao(t) {
 }
 
 async function carregar() {
-  const tarefas = await chamar('GET', API);
+  const q = new URLSearchParams();
+  if (filtroStatus.value) q.set('status', filtroStatus.value);
+  if (filtroResponsavel.value.trim()) q.set('responsavel', filtroResponsavel.value.trim());
+  if (ordenarVencimento.checked) q.set('ordenar', 'vencimento');
+  const tarefas = await chamar('GET', q.toString() ? `${API}?${q}` : API);
   lista.replaceChildren(...tarefas.map(desenhar));
   await carregarRelatorio();
 }
@@ -214,5 +242,33 @@ form.addEventListener('submit', (evento) => {
 
 cancelar.addEventListener('click', limparFormulario);
 
+
+
+async function carregarAvisos() {
+  const avisos = await chamar('GET', '/avisos');
+  document.getElementById('lista-avisos').replaceChildren(...avisos.map((v) =>
+    elemento('li', `${v.titulo} venceu em ${new Date(v.vencidaEm).toLocaleString('pt-BR')}`,
+      { 'data-testid': 'aviso-item' })));
+}
+
+const resultadoImportacao = document.getElementById('resultado-importacao');
+document.getElementById('importar-confirmar').addEventListener('click', async () => {
+  const arquivo = document.getElementById('importar-csv').files[0];
+  if (!arquivo) { resultadoImportacao.textContent = 'Escolha um arquivo CSV.'; return; }
+  resultadoImportacao.textContent = 'Importando...';
+  try {
+    const r = await chamar('POST', `${API}/importacao`, arquivo, { 'Content-Type': 'text/csv' });
+    const linhas = r.erros.map((e) => `Linha ${e.linha}: ${e.motivo}`);
+    resultadoImportacao.replaceChildren(
+      elemento('p', `${r.importadas} tarefas importadas, ${r.totalErros} linhas com erro.`),
+      ...linhas.map((l) => elemento('div', l, { 'data-testid': 'erro-importacao' })));
+    await carregar();
+  } catch (e) {
+    resultadoImportacao.textContent = e.message;
+  }
+});
+
 aplicarPapel();
 carregar().catch((e) => mostrarErro(e.message));
+carregarAvisos().catch(() => {});
+setInterval(() => carregarAvisos().catch(() => {}), 2000);

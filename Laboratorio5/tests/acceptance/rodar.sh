@@ -2,7 +2,7 @@
 # Roda os testes de aceitacao ocultos (P5 a P10) e, opcionalmente, a regressao.
 #
 # Uso:
-#   ./rodar.sh                          sobe reference/ com H2, roda P5..P10 duas vezes
+#   ./rodar.sh                          sobe reference/ com H2, roda P1..P10 duas vezes
 #   ./rodar.sh --pedidos "P5 P7"        so alguns pedidos
 #   ./rodar.sh --regressao              inclui tests/regression antes das rodadas
 #   ./rodar.sh --rodadas 3              numero de rodadas na MESMA instancia da aplicacao
@@ -15,7 +15,7 @@ set -euo pipefail
 
 aqui="$(cd "$(dirname "$0")" && pwd)"
 lab="$(cd "$aqui/../.." && pwd)"
-pedidos="P5 P6 P7 P8 P9 P10"
+pedidos="P1 P2 P3 P4 P5 P6 P7 P8 P9 P10"
 rodadas=2
 regressao=0
 externo=0
@@ -65,7 +65,7 @@ fi
 filtro=""
 for p in $pedidos; do
   numero="${p#P}"
-  filtro="${filtro:+$filtro,}P${numero}*Test"
+  filtro="${filtro:+$filtro,}**/p${numero}/*Test"
 done
 
 for r in $(seq 1 "$rodadas"); do
