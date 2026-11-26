@@ -61,8 +61,8 @@ registrar docker_daemon "ativo" "$(docker info >/dev/null 2>&1 && echo ativo || 
 registrar postgres_imagem "${pin[POSTGRES_IMAGE]}" "$(sed -n 's/^ *image: *\(postgres:[^ ]*\).*/\1/p' "$lab/seed/docker-compose.yml" | head -1)"
 registrar archunit "${pin[ARCHUNIT]}" "$(sed -n 's#.*<archunit.version>\(.*\)</archunit.version>.*#\1#p' "$lab/seed/pom.xml")"
 registrar jdeps_major "${pin[JDEPS_MAJOR]}" "$(jdeps --version 2>/dev/null | cut -d. -f1)"
-registrar lizard "${pin[LIZARD]}" "$( (lizard --version 2>/dev/null || python3 -m lizard --version 2>/dev/null) | head -1)"
-registrar jscpd "${pin[JSCPD]}" "$(jscpd --version 2>/dev/null | head -1)"
+registrar lizard "${pin[LIZARD]}" "$( (lizard --version 2>/dev/null || python3 -m lizard --version 2>/dev/null) | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
+registrar jscpd "${pin[JSCPD]}" "$(jscpd --version 2>/dev/null | grep -Eo '[0-9]+\.[0-9]+\.[0-9]+' | head -1)"
 
 if [ -n "$workspace" ]; then
   oculto="conforme"
