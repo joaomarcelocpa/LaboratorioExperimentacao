@@ -4,4 +4,4 @@ pandas
 statsmodels
 matplotlib
 pytest
-lizard
+lizard==1.26.1

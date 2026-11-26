@@ -33,10 +33,22 @@ Definidas em `harness/ambiente.pins`, que é a fonte de verdade; esta tabela só
 | Maven | 3.9 | **proposta**: versão da máquina do B |
 | Docker | 29 (versão maior) | **proposta**: versão da máquina do B |
 | jdeps | 21 (vem com o JDK) | decorre do Java |
-| Lizard | **não decidido** | não instalado na máquina do B |
-| jscpd | **não decidido** | não instalado na máquina do B |
+| Lizard | `1.26.1` | `requirements.txt` (instalar no `.venv`, ver abaixo) |
+| jscpd | `5.4.3` | `npm install -g jscpd` na máquina do B |
 
-"Proposta" quer dizer que o valor veio da máquina do B por falta de decisão do grupo; os outros dois precisam confirmar ou trocar. Lizard e jscpd ficam sem pin de propósito: o script os reporta como `SEM PIN` e falha até alguém fixar a versão.
+"Proposta" quer dizer que o valor veio da máquina do B por falta de decisão do grupo; os outros dois precisam confirmar ou trocar. Lizard e jscpd foram fixados nas versões instaladas na máquina do B; os outros dois membros instalam as mesmas.
+
+## Python do harness
+
+O Python do sistema (Debian/Ubuntu) recusa `pip install` global. Use um ambiente virtual na pasta do laboratório (`.venv/` já está no `.gitignore`) e ative-o antes de rodar o harness e o `check-env`:
+
+```bash
+cd Laboratorio5
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt   # inclui lizard==1.26.1
+source .venv/bin/activate
+npm install -g jscpd@5.4.3
+```
 
 ## Verificar o ambiente
 
