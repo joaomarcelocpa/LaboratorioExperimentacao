@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tarefas</title>
+  <link rel="stylesheet" href="estilo.css">
+</head>
+<body>
+  <main>
+    <h1>Tarefas</h1>
+
+    <p class="papel">Papel:
+      <select id="papel" data-testid="papel-usuario">
+        <option value="colaborador">colaborador</option>
+        <option value="gestor">gestor</option>
+      </select>
+    </p>
+
+    <form id="form" novalidate>
+      <h2 id="form-titulo-secao">Nova tarefa</h2>
+      <label>Título
+        <input id="titulo" data-testid="form-titulo" maxlength="120">
+      </label>
+      <label>Descrição
+        <textarea id="descricao" data-testid="form-descricao" maxlength="2000" rows="2"></textarea>
+      </label>
+      <label>Responsável
+        <input id="responsavel" data-testid="form-responsavel" maxlength="80">
+      </label>
+      <label>Vencimento
+        <input id="vencimento" data-testid="form-vencimento" type="datetime-local">
+      </label>
+      <label>Chave de idempotência
+        <input id="idempotency-key" data-testid="idempotency-key" readonly>
+      </label>
+      <p id="erro" class="erro" data-testid="form-erro" role="alert" hidden></p>
+      <div class="acoes">
+        <button type="submit" data-testid="form-salvar">Salvar</button>
+        <button type="button" id="cancelar" data-testid="form-cancelar" hidden>Cancelar</button>
+      </div>
+    </form>
+
+    <ul id="lista" data-testid="lista-tarefas"></ul>
+
+    <section id="relatorio" data-testid="relatorio-tarefas">
+      <h2>Relatório</h2>
+      <p>Pendentes: <span data-testid="relatorio-pendentes">0</span> ·
+         Concluídas: <span data-testid="relatorio-concluidas">0</span> ·
+         Vencidas: <span data-testid="relatorio-vencidas">0</span></p>
+      <ul id="vencidas" data-testid="relatorio-lista-vencidas"></ul>
+      <div id="distribuicao" data-testid="distribuicao-responsavel"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
