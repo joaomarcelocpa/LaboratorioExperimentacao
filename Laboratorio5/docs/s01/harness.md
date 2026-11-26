@@ -67,7 +67,7 @@ O texto enviado é o do arquivo do pedido entre os dois primeiros `---`, ou seja
 
 ## Execução do agente
 
-Flags conferidas em `claude --help` na versão 2.1.238 (instalada na máquina onde o harness foi escrito; conferir de novo na versão fixada, 2.1.323):
+Flags conferidas em `claude --help` na versão 2.1.238 (a versão fixada em `ambiente.pins`, a mesma da máquina onde o harness foi escrito):
 
 | Flag | Uso |
 |---|---|

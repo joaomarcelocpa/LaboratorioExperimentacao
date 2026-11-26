@@ -1,6 +1,6 @@
 # Versoes fixas da coleta. Iguais nas tres maquinas; mudar qualquer valor depois da tag protocolo-v1 e desvio.
 # Linha vazia = ainda nao decidida pelo grupo: o check-env FALHA ate ser preenchida (ver docs/s02/ambiente-de-coleta.md).
-CLAUDE_CODE=2.1.323
+CLAUDE_CODE=2.1.238
 MODELO=claude-sonnet-5-5
 JAVA_MAJOR=21
 MAVEN_MAJOR_MINOR=3.9

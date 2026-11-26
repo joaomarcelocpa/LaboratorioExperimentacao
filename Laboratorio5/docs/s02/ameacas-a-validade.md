@@ -86,7 +86,7 @@ com metade das cadeias em cada ordem por modo. A ordem é uma covariável na an�
 **Ameaça:** se a versão do Claude Code ou o modelo subjacente mudar entre cadeias, cadeias
 coletadas em datas diferentes não são comparáveis.
 
-**Mitigação:** versão `2.1.323` fixada com atualização automática desativada; modelo
+**Mitigação:** versão `2.1.238` fixada com atualização automática desativada; modelo
 `claude-sonnet-5-5` fixado no comando de cada execução. Versão e modelo são registrados em
 cada execução no transcript.
 

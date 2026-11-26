@@ -13,7 +13,7 @@ Base: PLANEJAMENTO.pdf, seções 3.2, 3.4 e 4.1.
 
 | Item | Valor |
 |---|---|
-| Versão do Claude Code | `2.1.323` (atualização automática desativada) |
+| Versão do Claude Code | `2.1.238` (atualização automática desativada) |
 | Modelo | `claude-sonnet-5-5` |
 | Modo de execução | `claude -p`, saída em JSON, sessão nova a cada passo |
 | Limite de turnos por passo | `_a preencher — decisão do grupo antes da coleta_` |

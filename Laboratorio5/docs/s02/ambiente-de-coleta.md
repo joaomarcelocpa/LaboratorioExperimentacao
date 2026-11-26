@@ -24,7 +24,7 @@ Definidas em `harness/ambiente.pins`, que é a fonte de verdade; esta tabela só
 
 | Item | Valor | Origem |
 |---|---|---|
-| Claude Code | `2.1.323` | protocolo congelado, seção 1 |
+| Claude Code | `2.1.238` | versão instalada na máquina do B; o grupo decidiu que ela serve só de **registro**, e que o que importa fixar é o modelo (`claude-sonnet-5-5`) |
 | Modelo | `claude-sonnet-5-5` | protocolo congelado, seção 1 |
 | Atualização automática | desativada (`DISABLE_AUTOUPDATER=1`) | protocolo congelado |
 | Java | 21 | `seed/pom.xml` |
@@ -52,11 +52,10 @@ Execução na máquina do B (primeira conferência, a título de exemplo do que 
 
 | Item | Esperado | Observado | Estado |
 |---|---|---|---|
-| Claude Code | 2.1.323 | 2.1.238 | diverge |
 | Modelo (`ANTHROPIC_MODEL`) | claude-sonnet-5-5 | não definido | diverge |
 | Docker (daemon) | ativo | inativo | diverge |
 | Lizard, jscpd | a decidir | não instalados | sem pin |
-| Java, Maven, Docker, PostgreSQL, ArchUnit, jdeps, atualização automática | conforme pins | conformes | ok |
+| Claude Code, Java, Maven, Docker, PostgreSQL, ArchUnit, jdeps, atualização automática | conforme pins | conformes | ok |
 
 Ou seja, esta máquina **ainda não está pronta** para a coleta.
 

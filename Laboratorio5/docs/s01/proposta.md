@@ -22,7 +22,7 @@ e modelo fixados. Não é um repositório público do GitHub nem um dataset est�
 
 ### 1.2 Está em operação
 
-- **Versão da CLI fixada para o experimento:** `2.1.323` (instalada no ambiente do grupo)
+- **Versão da CLI fixada para o experimento:** `2.1.238` (instalada no ambiente do grupo)
 - **Versão mais recente no npm em 2026-11-18:** `2.1.328`
 - **Modelo fixado explicitamente:** `claude-sonnet-5-5`
 - **Atualização automática:** desativada durante a coleta para garantir reprodutibilidade
@@ -127,7 +127,7 @@ tamanhos diferentes) e permite controlar o estado inicial e os pedidos.
 | Decisão | Escolha | Motivo |
 |---|---|---|
 | Stack | Java 21, Spring Boot 3, Maven, PostgreSQL em Docker | ArchUnit é maduro para regras de arquitetura; tipagem forte; stack conhecida do trio |
-| Software estudado | Claude Code `2.1.323`, modelo `claude-sonnet-5-5`, atualização automática desativada | Versão e modelo fixos evitam mudança durante a coleta |
+| Software estudado | Claude Code `2.1.238`, modelo `claude-sonnet-5-5`, atualização automática desativada | Versão e modelo fixos evitam mudança durante a coleta |
 | Execução do agente | Modo não interativo (`claude -p`) com saída em JSON, sessão nova a cada passo, limite de turnos e tempo | O estado entre passos é o próprio repositório, como no uso real |
 | Isolamento | Container descartável por execução, sem acesso à pasta de testes ocultos | Evita ajuste ao teste (Goodhart); permite medir a localidade pelo diff |
 | Registro por execução | Transcript, tokens, custo, duração, turnos, `agent_ran_tests`; sem CLAUDE.md na semente | Variáveis explicativas e auditoria das decisões |
