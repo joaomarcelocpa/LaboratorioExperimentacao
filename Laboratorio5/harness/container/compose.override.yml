@@ -1,0 +1,8 @@
+# Usado so quando a cadeia inclui P9: injeta NOTIFICACAO_URL (stub dos testes, no host) no servico `app`.
+# Pressupoe o nome de servico da semente; se o agente renomear o servico, P9 precisa de tratamento manual.
+services:
+  app:
+    environment:
+      NOTIFICACAO_URL: ${NOTIFICACAO_URL:-http://host.docker.internal:9099/notificacoes}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
