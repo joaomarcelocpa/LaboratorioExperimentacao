@@ -46,7 +46,7 @@ python -m harness.executar cadeia --cadeia 1 --modo incremental --executar
 - Saídas: `results/pilot/passos.csv` (uma linha por passo), `results/pilot/execucoes.jsonl` (log bruto de cada tentativa), `results/pilot/transcripts/` (transcript de cada tentativa e seu `.stderr`).
 - **Retomada:** rodar de novo ignora cadeias completas ou censuradas e continua uma cadeia parcial do próximo passo. Se o CSV tem linhas de uma cadeia mas o workspace sumiu ou não confere, o harness para: dado bruto não se sobrescreve, então o caso vira desvio e usa outro `chain_id`.
 - As cadeias rodam em sequência na máquina, na porta 8080 do contrato. `BASE_URL` muda o endereço usado pelos testes.
-- Os testes ocultos (`tests/regression` e `tests/acceptance`, esta última com classes `P<n>*Test`) rodam do host contra a aplicação do workspace.
+- Os testes ocultos (`tests/regression` e `tests/acceptance`, esta última com uma classe `*Test` por pacote `p<n>`) rodam do host contra a aplicação do workspace.
 
 ## O que cada passo faz (seção 3.5)
 
@@ -121,6 +121,6 @@ Variáveis: `DISABLE_AUTOUPDATER=1` e `ANTHROPIC_MODEL`.
 - **Nenhuma execução real do Claude Code.** O formato do `stream-json` e os nomes dos campos do evento final (`usage`, `total_cost_usd`, `num_turns`, `is_error`, `subtype`) seguem o formato que o `claude -p` documenta, mas foram exercitados só contra o falso. Antes do piloto, rode **um** passo real e confira o transcript.
 - **Todo o caminho de container:** `Dockerfile`, `construir-imagem.sh`, `verificar-imagem.sh`, `docker run` e `docker compose` (daemon desligado). Nada disso foi construído nem executado.
 - **A medição real por testes:** `mvn test` das suítes de regressão e aceitação contra a aplicação do workspace via `Medidor`, e a espera de `/health`. Os testes usam um medidor falso com a mesma interface.
-- **Os testes de aceitação de P1 a P4:** este harness procura classes `P<n>*Test` em `tests/acceptance`. Elas são entrega separada; sem elas o harness para com erro.
+- **Os testes de aceitação de P1 a P4:** este harness roda as classes `*Test` do pacote `p<n>` em `tests/acceptance` (padrão por pacote, porque `P1*Test` casaria também `P10BancoTest`). Sem elas o harness para com erro.
 - **jscpd e Lizard** não estão instalados na máquina de desenvolvimento (Lizard só no ambiente virtual dos testes), então `dup_pct` não foi medido de verdade (`check-env` também falha por isso).
 - O piloto em si: nenhuma das 24 execuções foi feita, não há `results/pilot/` e o relatório do piloto (#109) continua sem dados.

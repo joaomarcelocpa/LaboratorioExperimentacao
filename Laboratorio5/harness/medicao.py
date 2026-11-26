@@ -133,7 +133,8 @@ class Medidor:
         return self._suite("REGRESSAO", self.cfg.lab / "tests" / "regression", [])
 
     def aceitacao(self, pedido: str) -> dict[str, bool]:
-        filtro = f"-Dtest={pedido}*Test"
+        # um padrao por pacote: "P1*Test" casaria tambem P10BancoTest
+        filtro = f"-Dtest=**/{pedido.lower()}/*Test"
         return self._suite("ACEITACAO", self.cfg.lab / "tests" / "acceptance",
                            [filtro, "-Dsurefire.failIfNoSpecifiedTests=false"])
 

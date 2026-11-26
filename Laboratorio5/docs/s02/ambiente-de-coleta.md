@@ -9,14 +9,14 @@ Issue #118 (papel B). Objetivo: o mesmo ambiente, verificável por script, nas t
 | Script de verificação do ambiente | feito: `harness/check-env` |
 | Metadados gravados junto dos dados | feito: JSON em `results/ambiente-<máquina>-<data>.json` |
 | Plano de execução sorteado com semente fixa | feito, **com número de cadeias provisório** (abaixo) |
-| Ajustes do relatório do piloto | **bloqueado**: o relatório do piloto (#109) está sem dados e sem decisão |
+| Ajustes do relatório do piloto | **bloqueado**: o piloto não foi executado e o relatório (#109) está sem dados e sem decisão |
 | Mini-piloto | **bloqueado** pelo mesmo motivo; só se a decisão for GO com ajustes |
 | Mesmas versões nas três máquinas | **não verificado**: o script existe, falta rodá-lo em cada máquina |
 | Orçamento e limites do plano no dia | **pendente**: depende do consumo medido no piloto e da conferência no dia |
-| Container sem acesso aos testes ocultos nas três máquinas | **parcial**: o script confere a pasta do workspace; a conferência do container depende do harness |
+| Container sem acesso aos testes ocultos nas três máquinas | **parcial**: o `check-env` confere a pasta do workspace e o harness traz `container/verificar-imagem.sh`, mas o container nunca foi construído (Docker desligado) |
 | Janela de poucos dias para a coleta | **pendente**: decisão do grupo |
 
-O `harness/` do piloto (container descartável, execução do Claude Code, registro por passo) não existe no repositório, apesar de a issue #105 estar fechada. Esta issue adiciona só `harness/check-env`, `harness/ambiente.pins` e `harness/plano_execucao.py`. O ajuste "no harness" e a conferência do container só podem ser feitos quando o harness for versionado.
+O **piloto não foi executado** (não há `results/pilot/` nem relatório com dados). O harness agora existe (`harness/`, `docs/s01/harness.md`) e os testes de aceitação e a referência de P1 a P4 também (`docs/s01/testes-p1-p4.md`), mas nenhuma execução real do Claude Code foi feita. Por isso os ajustes pós-piloto e o mini-piloto continuam bloqueados: dependem do piloto e do relatório (#109) com decisão. Esta issue segue de `harness/check-env`, `harness/ambiente.pins` e `harness/plano_execucao.py`.
 
 ## Versões fixas
 
@@ -91,6 +91,6 @@ Limites de turnos e de tempo por passo, orçamento por cadeia e janela da coleta
 1. Grupo decide Lizard, jscpd, Maven e Docker e preenche `harness/ambiente.pins`.
 2. Cada máquina roda `harness/check-env --maquina <A|B|C> --workspace ...` e termina com "ambiente conforme".
 3. Relatório do piloto com decisão; ajustes aplicados (e mini-piloto, se GO com ajustes).
-4. Um passo de ponta a ponta rodado igual nas três máquinas (depende do harness).
+4. Um passo de ponta a ponta rodado igual nas três máquinas (o harness existe, mas nunca rodou com o Claude Code de verdade).
 5. Número de cadeias fixado e plano regerado; orçamento conferido no dia.
 6. Tag `protocolo-v1`.
